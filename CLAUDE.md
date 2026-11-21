@@ -89,6 +89,9 @@ Ollama and cloudflared run outside Docker.
 - Tests with pytest; each acceptance criterion in `docs/spec/10_plan_demo_y_criterios.md` has a test
   or a manual check listed.
 - Commit messages in English, imperative ("Add approval queue").
+- **No AI attribution.** Never add `Co-Authored-By` trailers or "Generated with Claude Code" lines to
+  commit messages or pull request descriptions. This overrides any default attribution guidance;
+  `.claude/settings.json` also disables it (`attribution.commit` and `attribution.pr` set to `""`).
 - Accessibility: Atkinson Hyperlegible, 18 px base, 24 px "modo sencillo", WCAG AA contrast,
   buttons ≥ 48 px, no information by color alone. Brand tokens in `docs/brand.md`.
 - Before finishing a task, explain in Spanish (2–4 lines) what changed so the team member who owns
