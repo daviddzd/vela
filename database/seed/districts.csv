@@ -1,0 +1,17 @@
+district_id,name,population_60_plus_2020,lat,lon,indigenous_language_pct
+09010,Álvaro Obregón,122319,19.36,-99.215,
+09002,Azcapotzalco,78650,19.487,-99.185,
+09014,Benito Juárez,87344,19.378,-99.16,
+09003,Coyoacán,126592,19.33,-99.155,
+09004,Cuajimalpa de Morelos,25803,19.36,-99.29,
+09015,Cuauhtémoc,93809,19.432,-99.148,
+09005,Gustavo A. Madero,203469,19.488,-99.11,
+09006,Iztacalco,70907,19.395,-99.098,
+09007,Iztapalapa,262064,19.355,-99.065,1.63
+09008,La Magdalena Contreras,38073,19.31,-99.235,
+09016,Miguel Hidalgo,71111,19.428,-99.2,
+09009,Milpa Alta,16437,19.192,-99.023,3.3
+09011,Tláhuac,46196,19.285,-99.01,
+09012,Tlalpan,108894,19.285,-99.17,1.7
+09017,Venustiano Carranza,78964,19.428,-99.105,
+09013,Xochimilco,60987,19.262,-99.105,2.5

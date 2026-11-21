@@ -1,0 +1,1527 @@
+phrase_id,text,label,category,speaker,hard_case,split
+PHR-00001,"Disculpe, se me olvidó si me tomé la pastilla. Estoy preocupada.",routine,medication_question,patient,False,train
+PHR-00002,"Hola, ayer me dolía el pecho pero ya se me quitó, quiero que me revisen desde el domingo",urgent,chest_pain_resolved,patient,True,train
+PHR-00003,"Buenas tardes, ya no quiero vivir",emergency,self_harm,patient,False,train
+PHR-00004,Me salió la azúcar en 300,urgent,glucose,patient,False,train
+PHR-00005,"Hola, doña Rosa anda cansada desde el domingo",routine,fatigue,family,False,train
+PHR-00006,"Disculpe, a mi abuelita le duele el pecho muy fuerte desde hace rato",emergency,chest_pain,family,False,train
+PHR-00007,"Señorita, a mi tía le arde al hacer pipí desde anoche",urgent,urinary,family,False,train
+PHR-00008,"Señorita, mi esposa ha vomitado varias veces",urgent,vomiting,family,False,train
+PHR-00009,"Buenas tardes, mi abuelita sangra mucho de la pierna y no para desde la mañana",emergency,severe_bleeding,family,False,train
+PHR-00010,"Disculpe, me siento un poco triste desde anoche",routine,mood,patient,False,train
+PHR-00011,"Doctora, don Pepe tuvo una convulsión",emergency,seizure,family,False,train
+PHR-00012,"Hola, mi mamá anda con poco apetito",routine,appetite,family,False,train
+PHR-00013,Tengo calentura,urgent,fever,patient,False,train
+PHR-00014,"Disculpe, me duele mucho la rodilla, no puedo caminar, ayúdenme por favor",urgent,pain,patient,False,train
+PHR-00015,"Hola, a mi papá le salió el azúcar muy alta desde hace rato. Estoy preocupada.",urgent,glucose,family,False,train
+PHR-00016,"Hola, a doña Rosa le arde al hacer pipí desde ayer, ¿qué hago?",urgent,urinary,family,False,train
+PHR-00017,"Señorita, se me olvidó si me tomé la pastilla.",routine,medication_question,patient,False,train
+PHR-00018,"Buenos días, mi abuelito no puede respirar",emergency,severe_breathing,family,False,train
+PHR-00019,"Disculpe, me duele mucho la rodilla, no puedo caminar desde hace rato, ayúdenme por favor",urgent,pain,patient,False,train
+PHR-00020,"Señorita, a mi esposo se le va el aire",emergency,severe_breathing,family,False,train
+PHR-00021,Mi esposo anda con poco apetito desde hace rato.,routine,appetite,family,False,train
+PHR-00022,"Oiga, me estoy ahogando",emergency,severe_breathing,patient,False,train
+PHR-00023,"Doctora, mi abuelita no recuerda si se tomó la pastilla hace como una hora",routine,medication_question,family,False,train
+PHR-00024,"Señorita, vomité sangre.",emergency,severe_bleeding,patient,False,train
+PHR-00025,"Buenos días, mi tía perdió el conocimiento desde la mañana",emergency,unconscious,family,False,train
+PHR-00026,"Señorita, me duele muy fuerte el pecho",emergency,chest_pain,patient,False,train
+PHR-00027,"Disculpe, mi suegra tiene los pies hinchados",urgent,swelling,family,False,train
+PHR-00028,"Buenas tardes, a doña Rosa se le hinchó la pierna",urgent,swelling,family,False,train
+PHR-00029,"Señorita, a doña Rosa le duele el pecho muy fuerte",emergency,chest_pain,family,False,train
+PHR-00030,"Doctora, don Pepe habla arrastrado y no se le entiende lo que dice.",emergency,stroke_signs,family,False,train
+PHR-00031,"Buenos días, a mi abuelita le salió la presión en 170",urgent,blood_pressure,family,False,train
+PHR-00032,"Hola, a mi esposa le supura la herida.",urgent,wound,family,False,train
+PHR-00033,"Disculpe, tengo la piel reseca",routine,skin,patient,False,train
+PHR-00034,"Señorita, a don Pepe le dio un ataque y se sacudía",emergency,seizure,family,False,train
+PHR-00035,Me salió la azúcar en 300. Estoy preocupada.,urgent,glucose,patient,False,train
+PHR-00036,"Buenos días, mi abuelita se resbaló pero no se pegó fuerte desde ayer",urgent,minor_fall,family,False,train
+PHR-00037,"Buenas tardes, a doña Rosa ya se le acaban sus medicinas, por favor manden a alguien",routine,medication_refill,family,False,train
+PHR-00038,"Señorita, he vomitado varias veces desde el domingo",urgent,vomiting,patient,False,train
+PHR-00039,"Hola, vomité sangre hace como una hora",emergency,severe_bleeding,patient,False,train
+PHR-00040,"Hola, tengo fiebre y escalofríos",urgent,fever,patient,False,train
+PHR-00041,"Buenos días, a don Pepe le duele la cadera y no quiere caminar",urgent,pain,family,False,train
+PHR-00042,"Oiga, mi esposa no ha dormido bien",routine,sleep,family,False,train
+PHR-00043,"Disculpe, tengo diarrea, ¿qué hago?",urgent,diarrhea,patient,False,train
+PHR-00044,"Mi suegra no responde, no despierta desde ayer, ¿qué hago?",emergency,unconscious,family,False,train
+PHR-00045,"Señorita, quería saber a qué hora viene la enfermera",routine,schedule_question,patient,False,train
+PHR-00046,¿a qué hora viene la enfermera con mi tía?,routine,schedule_question,family,False,train
+PHR-00047,"Doctora, he vomitado varias veces",urgent,vomiting,patient,False,train
+PHR-00048,"Hola, mi mamá tiene diarrea y está débil, ¿qué hago?",urgent,diarrhea,family,False,train
+PHR-00049,"Hola, mi abuelita anda cansada",routine,fatigue,family,False,train
+PHR-00050,A mi abuelito le supura la herida. Estoy preocupada.,urgent,wound,family,False,train
+PHR-00051,"Oiga, todo bien, solo quería avisar. Estoy preocupada.",routine,check_in,patient,False,train
+PHR-00052,"Doctora, don Pepe no recuerda si se tomó la pastilla desde ayer",routine,medication_question,family,False,train
+PHR-00053,"Oiga, mi abuelita no ha comido ni tomado agua hace como una hora",urgent,not_eating,family,False,train
+PHR-00054,Don Pepe anda con poco apetito,routine,appetite,family,False,train
+PHR-00055,"Hola, ya no puede respirar bien, se está poniendo morado. Estoy preocupada.",emergency,severe_breathing,patient,True,train
+PHR-00056,"Hola, me salió la azúcar en 300 desde ayer",urgent,glucose,patient,False,train
+PHR-00057,"Disculpe, tengo mucha tos con flemas",urgent,cough,patient,False,train
+PHR-00058,"Buenos días, a mi suegra le salió el azúcar muy alta",urgent,glucose,family,False,train
+PHR-00059,"Oiga, quería cambiar la cita del jueves desde la mañana",routine,appointment,patient,False,train
+PHR-00060,"Hola, mi abuelita ha vomitado varias veces, ¿qué hago?",urgent,vomiting,family,False,train
+PHR-00061,"Disculpe, ya se me están acabando las pastillas de la presión desde hace dos días, ayúdenme por favor",routine,medication_refill,patient,False,train
+PHR-00062,"Señorita, mi tía está bien, solo quería avisar hace como una hora",routine,check_in,family,False,train
+PHR-00063,"Señorita, tengo la piel reseca. Estoy preocupada.",routine,skin,patient,False,train
+PHR-00064,"Hola, me salió la azúcar en 300 desde ayer, ¿qué hago?",urgent,glucose,patient,False,train
+PHR-00065,"Disculpe, tengo los pies muy hinchados",urgent,swelling,patient,False,train
+PHR-00066,"Oiga, mi tía tiene tos con flemas desde hace rato",urgent,cough,family,False,train
+PHR-00067,"Hola, me duele el estómago desde la mañana desde ayer.",urgent,abdominal_pain,patient,False,train
+PHR-00068,"Disculpe, me duele el estómago desde la mañana, ayúdenme por favor",urgent,abdominal_pain,patient,False,train
+PHR-00069,"Señorita, tengo diarrea",urgent,diarrhea,patient,False,train
+PHR-00070,"Oiga, mi abuelita se cayó y se pegó en la cabeza",emergency,serious_fall,family,False,train
+PHR-00071,"Buenas tardes, gracias por atender a mi abuelita",routine,thanks,family,False,train
+PHR-00072,"Hola, de repente mi suegra no me reconoce desde hace dos días",emergency,sudden_confusion,family,False,train
+PHR-00073,"Doctora, de repente mi papá no me reconoce desde ayer",emergency,sudden_confusion,family,False,train
+PHR-00074,"Buenos días, me siento un poco triste desde anoche",routine,mood,patient,False,train
+PHR-00075,"Hola, a mi esposo le supura la herida desde ayer",urgent,wound,family,False,train
+PHR-00076,"Buenas tardes, mi esposo no responde, no despierta desde anoche.",emergency,unconscious,family,False,train
+PHR-00077,"Buenas tardes, tengo calentura desde hace rato",urgent,fever,patient,False,train
+PHR-00078,"Buenas tardes, a mi mamá le arde al hacer pipí desde hace rato",urgent,urinary,family,False,train
+PHR-00079,"Oiga, me duele la herida y está roja desde hace rato, por favor manden a alguien",urgent,wound,patient,False,train
+PHR-00080,"Disculpe, mi suegra vomitó sangre",emergency,severe_bleeding,family,False,train
+PHR-00081,"Doctora, mi papá anda cansada desde anoche",routine,fatigue,family,False,train
+PHR-00082,"Buenos días, me siento cansado desde la mañana, por favor manden a alguien",routine,fatigue,patient,False,train
+PHR-00083,"Buenas tardes, tengo fiebre y escalofríos desde hace dos días",urgent,fever,patient,False,train
+PHR-00084,"Oiga, a mi esposo se le cayó la cara de un lado",emergency,stroke_signs,family,False,train
+PHR-00085,"Buenos días, mi papá se resbaló pero no se pegó fuerte",urgent,minor_fall,family,False,train
+PHR-00086,"Oiga, no he querido comer nada",urgent,not_eating,patient,False,train
+PHR-00087,"Disculpe, tengo poca hambre estos días desde hace rato. Estoy preocupada.",routine,appetite,patient,False,train
+PHR-00088,"Hola, a mi papá le salió la presión en 170 desde hace dos días",urgent,blood_pressure,family,False,train
+PHR-00089,"Buenos días, me arde al orinar desde hace rato. Estoy preocupada.",urgent,urinary,patient,False,train
+PHR-00090,"Disculpe, a mi esposo le aprieta el pecho y está sudando frío",emergency,chest_pain,family,False,train
+PHR-00091,"Buenos días, mi esposa se desmayó",emergency,unconscious,family,False,train
+PHR-00092,"Gracias por atender a mi esposo hace como una hora, ayúdenme por favor",routine,thanks,family,False,train
+PHR-00093,"Disculpe, tengo fiebre y escalofríos",urgent,fever,patient,False,train
+PHR-00094,"Hola, mi papá anda más confundida que otros días",urgent,confusion_mild,family,False,train
+PHR-00095,"Disculpe, a mi esposa se le hinchó la pierna hace como una hora",urgent,swelling,family,False,train
+PHR-00096,"Oiga, mi abuelita anda muy mareada desde la mañana",urgent,dizziness,family,False,train
+PHR-00097,"Doctora, me duelen las rodillas como siempre",routine,chronic_pain,patient,False,train
+PHR-00098,"Hola, mi esposo se privó en la sala desde hace dos días.",emergency,unconscious,family,False,train
+PHR-00099,"Oiga, mi abuelita no ha comido ni tomado agua. Estoy preocupada.",urgent,not_eating,family,False,train
+PHR-00100,"Buenas tardes, mi tía está estreñida desde la mañana",routine,constipation,family,False,train
+PHR-00101,"Disculpe, mi mamá ya no quiere comer ni vivir, dice que está cansada de todo",emergency,self_harm,family,True,train
+PHR-00102,"Señorita, me falta mucho el aire, ayúdenme por favor",emergency,severe_breathing,patient,False,train
+PHR-00103,Don Pepe vomitó sangre desde hace dos días,emergency,severe_bleeding,family,False,train
+PHR-00104,"Señorita, tengo la presión alta, me salió en 170 desde ayer",urgent,blood_pressure,patient,False,train
+PHR-00105,"Buenas tardes, mi esposa está estreñida",routine,constipation,family,False,train
+PHR-00106,"Disculpe, doña Rosa se está ahogando, ¿qué hago?",emergency,severe_breathing,family,False,train
+PHR-00107,"Señorita, tengo fiebre y escalofríos",urgent,fever,patient,False,train
+PHR-00108,"Oiga, siento opresión en el pecho y el dolor se me va al brazo",emergency,chest_pain,patient,False,train
+PHR-00109,"Oiga, mi suegra ha vomitado varias veces desde el domingo. Estoy preocupada.",urgent,vomiting,family,False,train
+PHR-00110,"Buenos días, tengo poca hambre estos días",routine,appetite,patient,False,train
+PHR-00111,"Señorita, mi abuelita perdió el conocimiento",emergency,unconscious,family,False,train
+PHR-00112,"Señorita, doña Rosa dice que tiene opresión en el pecho",emergency,chest_pain,family,False,train
+PHR-00113,"Hola, mi abuelito tiene los pies hinchados desde ayer, por favor manden a alguien",urgent,swelling,family,False,train
+PHR-00114,"Oiga, mi esposo está estreñida, ayúdenme por favor",routine,constipation,family,False,train
+PHR-00115,"Buenos días, siento opresión en el pecho y el dolor se me va al brazo desde anoche",emergency,chest_pain,patient,False,train
+PHR-00116,"Disculpe, doña Rosa está bien, solo quería avisar",routine,check_in,family,False,train
+PHR-00117,A mi mamá ya se le acaban sus medicinas,routine,medication_refill,family,False,train
+PHR-00118,"Hola, a mi mamá le salió normal la presión hace como una hora",routine,normal_reading,family,False,train
+PHR-00119,"Doctora, me siento cansado desde hace dos días, por favor manden a alguien",routine,fatigue,patient,False,train
+PHR-00120,"Hola, gracias por atender a don Pepe",routine,thanks,family,False,train
+PHR-00121,"Buenas tardes, siento opresión en el pecho y el dolor se me va al brazo desde ayer",emergency,chest_pain,patient,False,train
+PHR-00122,"Oiga, tengo los pies muy hinchados",urgent,swelling,patient,False,train
+PHR-00123,"Hola, no he dormido bien",routine,sleep,patient,False,train
+PHR-00124,"Buenos días, mi suegra no sabe dónde está, de repente se puso así desde la mañana",emergency,sudden_confusion,family,False,train
+PHR-00125,Doña Rosa perdió el conocimiento,emergency,unconscious,family,False,train
+PHR-00126,"Doctora, mi abuelito se cayó y no se puede levantar",emergency,serious_fall,family,False,train
+PHR-00127,"Buenos días, mi tía no tiene dolor en el pecho, solo tos. Estoy preocupada.",urgent,cough,family,True,train
+PHR-00128,"Oiga, mi papá no ha dormido bien hace como una hora",routine,sleep,family,False,train
+PHR-00129,"Buenas tardes, don Pepe no recuerda si se tomó la pastilla.",routine,medication_question,family,False,train
+PHR-00130,"Doctora, a mi esposo se le cayó la cara de un lado",emergency,stroke_signs,family,False,train
+PHR-00131,"Hola, queremos cambiar la cita de mi mamá hace como una hora. Estoy preocupada.",routine,appointment,family,False,train
+PHR-00132,"Hola, mi mamá anda triste hace como una hora",routine,mood,family,False,train
+PHR-00133,"Disculpe, a mi abuelito le salió normal la presión",routine,normal_reading,family,False,train
+PHR-00134,"Señorita, mi papá dice que ya no quiere vivir, ayúdenme por favor",emergency,self_harm,family,False,train
+PHR-00135,"Señorita, mi tía no puede respirar",emergency,severe_breathing,family,False,train
+PHR-00136,Mi suegra está estreñida desde ayer,routine,constipation,family,False,train
+PHR-00137,"Buenos días, tengo la piel reseca",routine,skin,patient,False,train
+PHR-00138,"Señorita, mi mamá se privó en la sala. Estoy preocupada.",emergency,unconscious,family,False,train
+PHR-00139,"Disculpe, a mi tía le duele la cadera y no quiere caminar",urgent,pain,family,False,train
+PHR-00140,"Oiga, me salió la azúcar en 300",urgent,glucose,patient,False,train
+PHR-00141,"Disculpe, mi esposa tiene diarrea y está débil desde la mañana",urgent,diarrhea,family,False,train
+PHR-00142,"Oiga, mi tía no ha dormido bien desde anoche",routine,sleep,family,False,train
+PHR-00143,"Disculpe, a mi papá le aprieta el pecho y está sudando frío. Estoy preocupada.",emergency,chest_pain,family,False,train
+PHR-00144,"Doctora, mi esposo tiene los pies hinchados desde la mañana",urgent,swelling,family,False,train
+PHR-00145,"Doctora, don Pepe dice que tiene opresión en el pecho",emergency,chest_pain,family,False,train
+PHR-00146,"Oiga, se me olvidó si me tomé la pastilla",routine,medication_question,patient,False,train
+PHR-00147,"Doctora, mi papá tuvo una convulsión. Estoy preocupada.",emergency,seizure,family,False,train
+PHR-00148,Me duelen las rodillas como siempre,routine,chronic_pain,patient,False,train
+PHR-00149,"Hola, mi esposa vomitó sangre desde ayer",emergency,severe_bleeding,family,False,train
+PHR-00150,"Oiga, a mi mamá le supura la herida desde hace rato",urgent,wound,family,False,train
+PHR-00151,Don Pepe anda más confundida que otros días desde el domingo,urgent,confusion_mild,family,False,train
+PHR-00152,"Doctora, mi esposo perdió el conocimiento hace como una hora",emergency,unconscious,family,False,train
+PHR-00153,"Disculpe, doña Rosa anda más confundida que otros días",urgent,confusion_mild,family,False,train
+PHR-00154,"Doctora, ando más confundido que de costumbre desde el domingo, ayúdenme por favor",urgent,confusion_mild,patient,False,train
+PHR-00155,"Hola, mi abuelito dice que se quiere quitar la vida desde el domingo",emergency,self_harm,family,False,train
+PHR-00156,"Buenos días, ando más confundido que de costumbre desde hace dos días",urgent,confusion_mild,patient,False,train
+PHR-00157,"Doctora, mi esposa se desmayó hace como una hora",emergency,unconscious,family,False,train
+PHR-00158,Queremos cambiar la cita de mi esposo,routine,appointment,family,False,train
+PHR-00159,"Mi esposa no responde, no despierta desde hace rato",emergency,unconscious,family,False,train
+PHR-00160,"Buenas tardes, gracias por atender a don Pepe desde ayer",routine,thanks,family,False,train
+PHR-00161,"Señorita, a mi abuelito ya se le acaban sus medicinas desde anoche",routine,medication_refill,family,False,train
+PHR-00162,"Oiga, mi esposa no puede mover el lado derecho, ayúdenme por favor",emergency,stroke_signs,family,False,train
+PHR-00163,Me arde al orinar desde la mañana,urgent,urinary,patient,False,train
+PHR-00164,"Disculpe, me falta mucho el aire hace como una hora",emergency,severe_breathing,patient,False,train
+PHR-00165,"Buenos días, mi esposo tiene fiebre desde hace dos días",urgent,fever,family,False,train
+PHR-00166,"Disculpe, vomité sangre",emergency,severe_bleeding,patient,False,train
+PHR-00167,"Buenos días, mi abuelita se cayó la semana pasada pero ya está bien desde el domingo",routine,past_fall,family,True,train
+PHR-00168,"Buenas tardes, mi abuelita tiene calentura desde la mañana",urgent,fever,family,False,train
+PHR-00169,"Buenas tardes, mi tía no ha dormido bien desde hace dos días, ¿qué hago?",routine,sleep,family,False,train
+PHR-00170,A mi papá le salió normal la presión.,routine,normal_reading,family,False,train
+PHR-00171,"Hola, don Pepe no puede mover el lado derecho",emergency,stroke_signs,family,False,train
+PHR-00172,"Doctora, doña Rosa no puede mover el lado derecho desde la mañana.",emergency,stroke_signs,family,False,train
+PHR-00173,"Buenos días, tengo la presión alta, me salió en 170.",urgent,blood_pressure,patient,False,train
+PHR-00174,"Doctora, mi abuelita se cayó y se pegó en la cabeza desde la mañana",emergency,serious_fall,family,False,train
+PHR-00175,"Disculpe, mi tía está estreñida. Estoy preocupada.",routine,constipation,family,False,train
+PHR-00176,Estoy estreñido,routine,constipation,patient,False,train
+PHR-00177,"Doctora, ando más confundido que de costumbre. Estoy preocupada.",urgent,confusion_mild,patient,False,train
+PHR-00178,"Hola, no puedo mover el brazo izquierdo desde ayer",emergency,stroke_signs,patient,False,train
+PHR-00179,"Doctora, don Pepe tiene fiebre desde la mañana",urgent,fever,family,False,train
+PHR-00180,"Buenas tardes, a mi abuelita se le hinchó la pierna desde la mañana",urgent,swelling,family,False,train
+PHR-00181,"Hola, mi esposo ya no quiere comer ni vivir, dice que está cansada de todo",emergency,self_harm,family,True,train
+PHR-00182,"Oiga, mi esposa no tiene dolor en el pecho, solo tos desde ayer",urgent,cough,family,True,train
+PHR-00183,"Oiga, todo bien, solo quería avisar desde anoche",routine,check_in,patient,False,train
+PHR-00184,"Doctora, tengo diarrea desde el domingo",urgent,diarrhea,patient,False,train
+PHR-00185,"Hola, ya me tomé la presión y salió normal, ¿qué hago?",routine,normal_reading,patient,False,train
+PHR-00186,"Buenos días, mi abuelito anda triste desde hace dos días",routine,mood,family,False,train
+PHR-00187,"Hola, quería cambiar la cita del jueves.",routine,appointment,patient,False,train
+PHR-00188,"Me duele mucho la rodilla, no puedo caminar",urgent,pain,patient,False,train
+PHR-00189,"Hola, mi abuelito está bien, solo quería avisar desde ayer. Estoy preocupada.",routine,check_in,family,False,train
+PHR-00190,"Buenos días, mi mamá habla arrastrado y no se le entiende lo que dice desde la mañana",emergency,stroke_signs,family,False,train
+PHR-00191,"Doctora, mi papá habla arrastrado y no se le entiende lo que dice, por favor manden a alguien",emergency,stroke_signs,family,False,train
+PHR-00192,"Buenos días, mi abuelito anda muy mareada desde la mañana",urgent,dizziness,family,False,train
+PHR-00193,"Señorita, a mi mamá le cuesta más respirar cuando camina desde hace rato",urgent,breathing_mild,family,False,train
+PHR-00194,"Buenas tardes, ¿a qué hora viene la enfermera con mi tía?",routine,schedule_question,family,False,train
+PHR-00195,"Señorita, gracias por la visita de ayer, ¿qué hago?",routine,thanks,patient,False,train
+PHR-00196,"Doctora, tengo fiebre y escalofríos desde ayer, ¿qué hago?",urgent,fever,patient,False,train
+PHR-00197,"Doctora, mi esposa anda con poco apetito",routine,appetite,family,False,train
+PHR-00198,"Disculpe, mi mamá tiene diarrea y está débil",urgent,diarrhea,family,False,train
+PHR-00199,"Hola, don Pepe no ha dormido bien desde anoche",routine,sleep,family,False,train
+PHR-00200,"Buenas tardes, me corté y no para de sangrar, ayúdenme por favor",emergency,severe_bleeding,patient,False,train
+PHR-00201,"Oiga, doña Rosa perdió el conocimiento desde hace dos días. Estoy preocupada.",emergency,unconscious,family,False,train
+PHR-00202,"Mi esposo anda con poco apetito desde ayer, ayúdenme por favor",routine,appetite,family,False,train
+PHR-00203,"Señorita, mi esposo se privó en la sala desde ayer",emergency,unconscious,family,False,train
+PHR-00204,"Hola, mi tía no responde, no despierta desde el domingo",emergency,unconscious,family,False,train
+PHR-00205,"Buenos días, tengo fiebre y escalofríos",urgent,fever,patient,False,train
+PHR-00206,"Oiga, mi papá no recuerda si se tomó la pastilla",routine,medication_question,family,False,train
+PHR-00207,"Buenas tardes, no he dormido bien desde el domingo",routine,sleep,patient,False,train
+PHR-00208,"Señorita, quería cambiar la cita del jueves desde la mañana",routine,appointment,patient,False,train
+PHR-00209,"Buenas tardes, a doña Rosa le cuesta más respirar cuando camina",urgent,breathing_mild,family,False,train
+PHR-00210,Siento opresión en el pecho y el dolor se me va al brazo desde anoche,emergency,chest_pain,patient,False,train
+PHR-00211,"Buenas tardes, me desmayé en el baño.",emergency,unconscious,patient,False,train
+PHR-00212,"Doctora, tengo mucha tos con flemas",urgent,cough,patient,False,train
+PHR-00213,"Disculpe, me siento cansado desde anoche",routine,fatigue,patient,False,train
+PHR-00214,"Me salió la azúcar en 300 desde el domingo, ¿qué hago?",urgent,glucose,patient,False,train
+PHR-00215,"Hola, gracias por atender a mi abuelito desde hace dos días",routine,thanks,family,False,train
+PHR-00216,"Disculpe, tengo mucha tos con flemas desde la mañana",urgent,cough,patient,False,train
+PHR-00217,"Señorita, a mi tía le aprieta el pecho y está sudando frío desde anoche, ¿qué hago?",emergency,chest_pain,family,False,train
+PHR-00218,"Señorita, todo bien, solo quería avisar",routine,check_in,patient,False,train
+PHR-00219,"Señorita, mi papá anda cansada desde el domingo, por favor manden a alguien",routine,fatigue,family,False,train
+PHR-00220,"Doctora, mi esposa tiene los pies hinchados",urgent,swelling,family,False,train
+PHR-00221,"Buenos días, mi abuelita se resbaló pero no se pegó fuerte",urgent,minor_fall,family,False,train
+PHR-00222,"Buenas tardes, gracias por atender a mi esposo desde hace rato",routine,thanks,family,False,train
+PHR-00223,"Oiga, todo bien, solo quería avisar desde hace rato",routine,check_in,patient,False,train
+PHR-00224,"Disculpe, me siento mareado",urgent,dizziness,patient,False,train
+PHR-00225,"Hola, mi suegra no ha dormido bien desde anoche",routine,sleep,family,False,train
+PHR-00226,"Hola, mi papá se desmayó",emergency,unconscious,family,False,train
+PHR-00227,"Oiga, mi tía se desmayó desde ayer",emergency,unconscious,family,False,train
+PHR-00228,"Buenas tardes, mi papá anda cansada desde el domingo",routine,fatigue,family,False,train
+PHR-00229,Doña Rosa tiene tos con flemas desde el domingo,urgent,cough,family,False,train
+PHR-00230,"Hola, me siento un poco triste",routine,mood,patient,False,train
+PHR-00231,"Hola, a mi mamá le duele la panza desde el domingo. Estoy preocupada.",urgent,abdominal_pain,family,False,train
+PHR-00232,"Hola, mi esposo anda cansada hace como una hora",routine,fatigue,family,False,train
+PHR-00233,"Oiga, se me va el aire y no lo recupero",emergency,severe_breathing,patient,False,train
+PHR-00234,"Buenos días, a don Pepe le falta el aire y tiene los labios morados.",emergency,severe_breathing,family,False,train
+PHR-00235,"Buenos días, mi esposa no recuerda si se tomó la pastilla desde anoche",routine,medication_question,family,False,train
+PHR-00236,"Buenos días, tengo mucha tos con flemas desde hace dos días, ¿qué hago?",urgent,cough,patient,False,train
+PHR-00237,"Buenos días, tengo los pies muy hinchados desde hace rato, por favor manden a alguien",urgent,swelling,patient,False,train
+PHR-00238,"Hola, siento opresión en el pecho y el dolor se me va al brazo",emergency,chest_pain,patient,False,train
+PHR-00239,"Buenas tardes, mi esposo perdió el conocimiento",emergency,unconscious,family,False,train
+PHR-00240,"Disculpe, doña Rosa se cayó y se pegó en la cabeza desde la mañana, ayúdenme por favor",emergency,serious_fall,family,False,train
+PHR-00241,"Oiga, mi suegra tiene diarrea y está débil",urgent,diarrhea,family,False,train
+PHR-00242,"Buenos días, me corté y no para de sangrar desde la mañana, ¿qué hago?",emergency,severe_bleeding,patient,False,train
+PHR-00243,"Doctora, tengo la piel reseca desde hace rato",routine,skin,patient,False,train
+PHR-00244,"Disculpe, a don Pepe le supura la herida hace como una hora.",urgent,wound,family,False,train
+PHR-00245,"Buenos días, a mi tía le duele la panza",urgent,abdominal_pain,family,False,train
+PHR-00246,"Oiga, mi mamá tiene fiebre. Estoy preocupada.",urgent,fever,family,False,train
+PHR-00247,"Hola, a mi tía le falta el aire y tiene los labios morados desde el domingo",emergency,severe_breathing,family,False,train
+PHR-00248,"Doctora, mi esposo perdió el conocimiento",emergency,unconscious,family,False,train
+PHR-00249,"Oiga, a mi abuelita le falta el aire y tiene los labios morados",emergency,severe_breathing,family,False,train
+PHR-00250,"Buenos días, a mi esposa le salió normal la presión desde la mañana",routine,normal_reading,family,False,train
+PHR-00251,"Señorita, mi mamá está estreñida. Estoy preocupada.",routine,constipation,family,False,train
+PHR-00252,"Doctora, de repente mi tía no me reconoce, ayúdenme por favor",emergency,sudden_confusion,family,False,train
+PHR-00253,"Doctora, todo bien, solo quería avisar, por favor manden a alguien",routine,check_in,patient,False,train
+PHR-00254,"Buenos días, tengo la presión alta, me salió en 170 desde ayer",urgent,blood_pressure,patient,False,train
+PHR-00255,"Hola, gracias por atender a doña Rosa hace como una hora",routine,thanks,family,False,train
+PHR-00256,"Buenos días, doña Rosa anda cansada desde anoche",routine,fatigue,family,False,train
+PHR-00257,"A mi abuelita le duele el pecho muy fuerte desde ayer, ayúdenme por favor",emergency,chest_pain,family,False,train
+PHR-00258,"Buenas tardes, mi tía ha vomitado varias veces",urgent,vomiting,family,False,train
+PHR-00259,Ya no quiero vivir,emergency,self_harm,patient,False,train
+PHR-00260,"Oiga, a mi suegra le duele la panza. Estoy preocupada.",urgent,abdominal_pain,family,False,train
+PHR-00261,Me siento cansado desde el domingo,routine,fatigue,patient,False,train
+PHR-00262,"Disculpe, mi mamá se privó en la sala hace como una hora",emergency,unconscious,family,False,train
+PHR-00263,"Doctora, mi esposa no responde, no despierta desde hace rato, ayúdenme por favor",emergency,unconscious,family,False,train
+PHR-00264,"Señorita, tengo la piel reseca",routine,skin,patient,False,train
+PHR-00265,"Oiga, todo bien, solo quería avisar",routine,check_in,patient,False,train
+PHR-00266,"Buenos días, me siento mareado desde hace dos días",urgent,dizziness,patient,False,train
+PHR-00267,"Oiga, a mi abuelito le arde al hacer pipí hace como una hora, por favor manden a alguien",urgent,urinary,family,False,train
+PHR-00268,"Ya se me están acabando las pastillas de la presión, por favor manden a alguien",routine,medication_refill,patient,False,train
+PHR-00269,"Hola, don Pepe no ha dormido bien desde hace dos días",routine,sleep,family,False,train
+PHR-00270,Gracias por la visita de ayer,routine,thanks,patient,False,train
+PHR-00271,"Buenos días, a mi suegra se le hinchó la pierna, ayúdenme por favor",urgent,swelling,family,False,train
+PHR-00272,"Oiga, a mi suegra se le cayó la cara de un lado",emergency,stroke_signs,family,False,train
+PHR-00273,"Buenos días, doña Rosa tiene los pies hinchados, ayúdenme por favor",urgent,swelling,family,False,train
+PHR-00274,"Oiga, me estoy ahogando desde hace rato",emergency,severe_breathing,patient,False,train
+PHR-00275,Me salió la azúcar en 300 hace como una hora,urgent,glucose,patient,False,train
+PHR-00276,"A don Pepe le salió la presión en 170 desde anoche, ayúdenme por favor",urgent,blood_pressure,family,False,train
+PHR-00277,"Buenos días, ya no puede respirar bien, se está poniendo morado",emergency,severe_breathing,patient,True,train
+PHR-00278,"Buenas tardes, a mi tía le salió la presión en 170",urgent,blood_pressure,family,False,train
+PHR-00279,"No he dormido bien desde la mañana, por favor manden a alguien",routine,sleep,patient,False,train
+PHR-00280,"Doctora, quería cambiar la cita del jueves desde hace dos días",routine,appointment,patient,False,train
+PHR-00281,No puedo mover el brazo izquierdo,emergency,stroke_signs,patient,False,train
+PHR-00282,"Señorita, mi abuelita no tiene dolor en el pecho, solo tos",urgent,cough,family,True,train
+PHR-00283,"Oiga, doña Rosa está estreñida",routine,constipation,family,False,train
+PHR-00284,"Señorita, me salió la azúcar en 300. Estoy preocupada.",urgent,glucose,patient,False,train
+PHR-00285,"Señorita, mi abuelito anda más confundida que otros días",urgent,confusion_mild,family,False,train
+PHR-00286,"Buenas tardes, tengo poca hambre estos días",routine,appetite,patient,False,train
+PHR-00287,"Oiga, mi abuelito anda cansada desde anoche",routine,fatigue,family,False,train
+PHR-00288,"Doctora, mi esposa tiene diarrea y está débil desde anoche",urgent,diarrhea,family,False,train
+PHR-00289,"Buenas tardes, mi suegra se privó en la sala, ¿qué hago?",emergency,unconscious,family,False,train
+PHR-00290,"Oiga, mi mamá ha vomitado varias veces desde ayer",urgent,vomiting,family,False,train
+PHR-00291,"Buenas tardes, a mi papá ya se le acaban sus medicinas desde ayer. Estoy preocupada.",routine,medication_refill,family,False,train
+PHR-00292,"A mi abuelito le falta el aire y tiene los labios morados, por favor manden a alguien",emergency,severe_breathing,family,False,train
+PHR-00293,"Buenos días, mi papá tiene diarrea y está débil, por favor manden a alguien",urgent,diarrhea,family,False,train
+PHR-00294,"Hola, tengo la presión alta, me salió en 170, ayúdenme por favor",urgent,blood_pressure,patient,False,train
+PHR-00295,"Señorita, mi suegra no ha dormido bien desde ayer",routine,sleep,family,False,train
+PHR-00296,"Oiga, me duele la herida y está roja",urgent,wound,patient,False,train
+PHR-00297,"Hola, a don Pepe le supura la herida desde anoche",urgent,wound,family,False,train
+PHR-00298,"Señorita, he vomitado varias veces hace como una hora",urgent,vomiting,patient,False,train
+PHR-00299,"Buenos días, a mi suegra le arde al hacer pipí, ayúdenme por favor",urgent,urinary,family,False,train
+PHR-00300,"Disculpe, ayer me dolía el pecho pero ya se me quitó, quiero que me revisen desde hace rato",urgent,chest_pain_resolved,patient,True,train
+PHR-00301,"Disculpe, a mi abuelita se le hinchó la pierna",urgent,swelling,family,False,train
+PHR-00302,"Oiga, mi tía no sabe dónde está, de repente se puso así desde el domingo",emergency,sudden_confusion,family,False,train
+PHR-00303,"Buenas tardes, don Pepe no ha dormido bien",routine,sleep,family,False,train
+PHR-00304,"Buenas tardes, a mi mamá se le va el aire desde el domingo",emergency,severe_breathing,family,False,train
+PHR-00305,"Buenos días, tengo mucha tos con flemas. Estoy preocupada.",urgent,cough,patient,False,train
+PHR-00306,Me falta el aire cuando camino,urgent,breathing_mild,patient,False,train
+PHR-00307,"Hola, a doña Rosa le salió normal la presión desde hace dos días.",routine,normal_reading,family,False,train
+PHR-00308,"Doctora, a mi abuelita le arde al hacer pipí desde hace rato. Estoy preocupada.",urgent,urinary,family,False,train
+PHR-00309,"Buenos días, mi esposo tiene los pies hinchados",urgent,swelling,family,False,train
+PHR-00310,"Buenos días, doña Rosa tiene la piel reseca desde la mañana, ¿qué hago?",routine,skin,family,False,train
+PHR-00311,Mi mamá no ha comido ni tomado agua,urgent,not_eating,family,False,train
+PHR-00312,"Disculpe, me falta el aire cuando camino desde la mañana",urgent,breathing_mild,patient,False,train
+PHR-00313,"Buenos días, mi esposa no recuerda si se tomó la pastilla",routine,medication_question,family,False,train
+PHR-00314,"Doctora, me duelen las rodillas como siempre desde la mañana, ayúdenme por favor",routine,chronic_pain,patient,False,train
+PHR-00315,"Doctora, me desmayé en el baño",emergency,unconscious,patient,False,train
+PHR-00316,"Todo bien, solo quería avisar",routine,check_in,patient,False,train
+PHR-00317,"Señorita, don Pepe no recuerda si se tomó la pastilla",routine,medication_question,family,False,train
+PHR-00318,"Señorita, me falta mucho el aire",emergency,severe_breathing,patient,False,train
+PHR-00319,"Señorita, me siento mareado desde hace dos días. Estoy preocupada.",urgent,dizziness,patient,False,train
+PHR-00320,Doña Rosa tuvo una convulsión,emergency,seizure,family,False,train
+PHR-00321,"Doctora, a mi suegra le cuesta más respirar cuando camina hace como una hora, ¿qué hago?",urgent,breathing_mild,family,False,train
+PHR-00322,"Hola, me siento cansado desde el domingo, por favor manden a alguien",routine,fatigue,patient,False,train
+PHR-00323,"Buenos días, me desmayé en el baño desde la mañana",emergency,unconscious,patient,False,train
+PHR-00324,"Señorita, a mi esposa le dio un ataque y se sacudía",emergency,seizure,family,False,train
+PHR-00325,"Buenas tardes, mi esposo anda con poco apetito",routine,appetite,family,False,train
+PHR-00326,"Buenos días, me duele la herida y está roja desde la mañana, ayúdenme por favor",urgent,wound,patient,False,train
+PHR-00327,"Señorita, mi tía se cayó la semana pasada pero ya está bien desde anoche",routine,past_fall,family,True,train
+PHR-00328,"Señorita, me siento cansado",routine,fatigue,patient,False,train
+PHR-00329,"Mi mamá está bien, solo quería avisar desde anoche",routine,check_in,family,False,train
+PHR-00330,"Oiga, a mi abuelito le falta el aire y tiene los labios morados, ayúdenme por favor",emergency,severe_breathing,family,False,train
+PHR-00331,"Hola, me siento cansado",routine,fatigue,patient,False,train
+PHR-00332,"Oiga, no puedo respirar bien",emergency,severe_breathing,patient,False,train
+PHR-00333,"Oiga, de repente mi abuelita no me reconoce desde hace dos días",emergency,sudden_confusion,family,False,train
+PHR-00334,"Oiga, mi abuelito tiene la piel reseca desde anoche",routine,skin,family,False,train
+PHR-00335,"Hola, gracias por atender a mi tía",routine,thanks,family,False,train
+PHR-00336,"Oiga, mi suegra no ha comido ni tomado agua desde el domingo",urgent,not_eating,family,False,train
+PHR-00337,Tengo fiebre y escalofríos hace como una hora,urgent,fever,patient,False,train
+PHR-00338,"Doctora, mi esposo tiene fiebre",urgent,fever,family,False,train
+PHR-00339,"Buenos días, a mi mamá le dio un ataque y se sacudía desde ayer",emergency,seizure,family,False,train
+PHR-00340,"Hola, ¿a qué hora viene la enfermera con don Pepe? desde ayer, por favor manden a alguien",routine,schedule_question,family,False,train
+PHR-00341,"Buenas tardes, tengo mucha tos con flemas",urgent,cough,patient,False,train
+PHR-00342,"Hola, mi suegra tiene calentura, ¿qué hago?",urgent,fever,family,False,train
+PHR-00343,"Hola, quería saber a qué hora viene la enfermera",routine,schedule_question,patient,False,train
+PHR-00344,"Buenas tardes, me duele mucho la rodilla, no puedo caminar desde hace rato",urgent,pain,patient,False,train
+PHR-00345,"Mi esposo no responde, no despierta desde hace dos días, por favor manden a alguien",emergency,unconscious,family,False,train
+PHR-00346,"Señorita, a don Pepe le cuesta más respirar cuando camina desde la mañana, por favor manden a alguien",urgent,breathing_mild,family,False,train
+PHR-00347,"Hola, he vomitado varias veces, ayúdenme por favor",urgent,vomiting,patient,False,train
+PHR-00348,"Señorita, mi abuelita no sabe dónde está, de repente se puso así desde hace dos días",emergency,sudden_confusion,family,False,train
+PHR-00349,"Señorita, mi esposo tiene fiebre",urgent,fever,family,False,train
+PHR-00350,"Señorita, a don Pepe le salió normal la presión desde hace dos días",routine,normal_reading,family,False,train
+PHR-00351,"Disculpe, mi papá tiene calentura desde hace dos días, ¿qué hago?",urgent,fever,family,False,train
+PHR-00352,"Buenas tardes, tengo mucha tos con flemas desde la mañana",urgent,cough,patient,False,train
+PHR-00353,"Buenos días, ando más confundido que de costumbre",urgent,confusion_mild,patient,False,train
+PHR-00354,"Oiga, me arde al orinar",urgent,urinary,patient,False,train
+PHR-00355,"Oiga, mi esposo tiene calentura, por favor manden a alguien",urgent,fever,family,False,train
+PHR-00356,"Buenos días, a mi mamá le duele el pecho muy fuerte",emergency,chest_pain,family,False,train
+PHR-00357,"Me arde al orinar, ayúdenme por favor",urgent,urinary,patient,False,train
+PHR-00358,"Oiga, don Pepe ha vomitado varias veces. Estoy preocupada.",urgent,vomiting,family,False,train
+PHR-00359,"Señorita, queremos cambiar la cita de mi esposa",routine,appointment,family,False,train
+PHR-00360,Mi esposo tiene diarrea y está débil,urgent,diarrhea,family,False,train
+PHR-00361,"Hola, a mi abuelita le dio un ataque y se sacudía desde ayer",emergency,seizure,family,False,train
+PHR-00362,"Buenas tardes, mi esposa tiene calentura",urgent,fever,family,False,train
+PHR-00363,"Señorita, estoy estreñido",routine,constipation,patient,False,train
+PHR-00364,"Buenos días, me aprieta el pecho.",emergency,chest_pain,patient,False,train
+PHR-00365,"Oiga, me siento cansado desde hace dos días",routine,fatigue,patient,False,train
+PHR-00366,"Disculpe, me siento mareado desde el domingo",urgent,dizziness,patient,False,train
+PHR-00367,"Buenos días, mi tía se desmayó, por favor manden a alguien",emergency,unconscious,family,False,train
+PHR-00368,"Oiga, mi suegra habla arrastrado y no se le entiende lo que dice",emergency,stroke_signs,family,False,train
+PHR-00369,"Hola, me duele muy fuerte el pecho hace como una hora",emergency,chest_pain,patient,False,train
+PHR-00370,"Disculpe, mi abuelita tiene calentura desde el domingo",urgent,fever,family,False,train
+PHR-00371,"Disculpe, mi tía se resbaló pero no se pegó fuerte desde hace dos días",urgent,minor_fall,family,False,train
+PHR-00372,"Tengo la presión alta, me salió en 170 desde anoche",urgent,blood_pressure,patient,False,train
+PHR-00373,"Disculpe, a mi abuelita se le hinchó la pierna desde anoche",urgent,swelling,family,False,train
+PHR-00374,"Buenas tardes, me duele la herida y está roja hace como una hora",urgent,wound,patient,False,train
+PHR-00375,"Señorita, mi mamá está bien, solo quería avisar hace como una hora",routine,check_in,family,False,train
+PHR-00376,"Doctora, a don Pepe le duele la cadera y no quiere caminar hace como una hora. Estoy preocupada.",urgent,pain,family,False,train
+PHR-00377,"Buenos días, me salió la azúcar en 300",urgent,glucose,patient,False,train
+PHR-00378,"Señorita, tengo fiebre y escalofríos desde anoche",urgent,fever,patient,False,train
+PHR-00379,"Disculpe, me duele el estómago desde la mañana",urgent,abdominal_pain,patient,False,train
+PHR-00380,"Oiga, ya me tomé la presión y salió normal",routine,normal_reading,patient,False,train
+PHR-00381,"Señorita, me salió la azúcar en 300",urgent,glucose,patient,False,train
+PHR-00382,"Buenas tardes, me falta el aire cuando camino desde el domingo",urgent,breathing_mild,patient,False,train
+PHR-00383,"Señorita, a doña Rosa ya se le acaban sus medicinas, ayúdenme por favor",routine,medication_refill,family,False,train
+PHR-00384,"Oiga, mi papá ya no quiere comer ni vivir, dice que está cansada de todo desde hace rato",emergency,self_harm,family,True,train
+PHR-00385,"Oiga, se me hinchó la pierna, por favor manden a alguien",urgent,swelling,patient,False,train
+PHR-00386,"Doctora, mi abuelita no ha dormido bien desde el domingo",routine,sleep,family,False,train
+PHR-00387,"Doctora, mi tía se cayó la semana pasada pero ya está bien hace como una hora.",routine,past_fall,family,True,train
+PHR-00388,"Doctora, a don Pepe le dio un ataque y se sacudía desde ayer",emergency,seizure,family,False,train
+PHR-00389,"Oiga, mi mamá no responde, no despierta desde hace dos días",emergency,unconscious,family,False,train
+PHR-00390,"Buenos días, quería cambiar la cita del jueves desde la mañana, ayúdenme por favor",routine,appointment,patient,False,train
+PHR-00391,"Buenas tardes, mi abuelito no responde, no despierta desde anoche",emergency,unconscious,family,False,train
+PHR-00392,"Disculpe, he vomitado varias veces desde anoche",urgent,vomiting,patient,False,train
+PHR-00393,"Buenos días, a don Pepe le duele la cadera y no quiere caminar desde hace dos días",urgent,pain,family,False,train
+PHR-00394,"Disculpe, tengo calentura desde hace dos días",urgent,fever,patient,False,train
+PHR-00395,"Oiga, mi suegra se resbaló pero no se pegó fuerte desde el domingo",urgent,minor_fall,family,False,train
+PHR-00396,"Buenas tardes, se me hinchó la pierna desde el domingo",urgent,swelling,patient,False,train
+PHR-00397,Me caí y me pegué en la cabeza desde el domingo,emergency,serious_fall,patient,False,train
+PHR-00398,Tengo calentura.,urgent,fever,patient,False,train
+PHR-00399,"Doctora, a mi mamá se le cayó la cara de un lado desde hace rato",emergency,stroke_signs,family,False,train
+PHR-00400,"Doctora, a mi esposo ya se le acaban sus medicinas",routine,medication_refill,family,False,train
+PHR-00401,"Buenos días, ando más confundido que de costumbre desde anoche",urgent,confusion_mild,patient,False,train
+PHR-00402,"Señorita, a mi esposo se le cayó la cara de un lado",emergency,stroke_signs,family,False,train
+PHR-00403,"Disculpe, a mi tía le dio un ataque y se sacudía",emergency,seizure,family,False,train
+PHR-00404,"Oiga, me aprieta el pecho desde la mañana",emergency,chest_pain,patient,False,train
+PHR-00405,"Buenos días, gracias por la visita de ayer",routine,thanks,patient,False,train
+PHR-00406,"Disculpe, mi esposo anda más confundida que otros días, ayúdenme por favor",urgent,confusion_mild,family,False,train
+PHR-00407,"Doctora, me duele la herida y está roja",urgent,wound,patient,False,train
+PHR-00408,"Señorita, a mi esposo le supura la herida.",urgent,wound,family,False,train
+PHR-00409,"Buenas tardes, mi abuelito no puede respirar",emergency,severe_breathing,family,False,train
+PHR-00410,"Buenas tardes, no puedo respirar bien",emergency,severe_breathing,patient,False,train
+PHR-00411,"Oiga, a mi abuelito le salió normal la presión",routine,normal_reading,family,False,train
+PHR-00412,"Buenos días, estoy estreñido desde hace dos días",routine,constipation,patient,False,train
+PHR-00413,"Oiga, ya me tomé la presión y salió normal desde anoche",routine,normal_reading,patient,False,train
+PHR-00414,"Disculpe, a mi mamá le dio un ataque y se sacudía",emergency,seizure,family,False,train
+PHR-00415,Tengo los pies muy hinchados,urgent,swelling,patient,False,train
+PHR-00416,"Buenos días, a mi abuelita le duele la panza",urgent,abdominal_pain,family,False,train
+PHR-00417,"Doctora, mi abuelito tiene calentura desde hace rato",urgent,fever,family,False,train
+PHR-00418,"Buenos días, gracias por la visita de ayer desde hace dos días, ayúdenme por favor",routine,thanks,patient,False,train
+PHR-00419,"Doctora, mi mamá tiene tos con flemas",urgent,cough,family,False,train
+PHR-00420,"Disculpe, a mi tía le supura la herida hace como una hora",urgent,wound,family,False,train
+PHR-00421,"Disculpe, mi mamá habla arrastrado y no se le entiende lo que dice desde anoche",emergency,stroke_signs,family,False,train
+PHR-00422,"Disculpe, tengo la presión alta, me salió en 170 desde el domingo, por favor manden a alguien",urgent,blood_pressure,patient,False,train
+PHR-00423,"Disculpe, a mi papá le supura la herida desde ayer",urgent,wound,family,False,train
+PHR-00424,"Buenas tardes, me siento un poco triste desde el domingo, ¿qué hago?",routine,mood,patient,False,train
+PHR-00425,"Buenos días, a mi esposa le salió la presión en 170, por favor manden a alguien",urgent,blood_pressure,family,False,train
+PHR-00426,"Hola, mi esposa anda triste, por favor manden a alguien",routine,mood,family,False,train
+PHR-00427,"Hola, tengo poca hambre estos días desde hace rato, ¿qué hago?",routine,appetite,patient,False,train
+PHR-00428,"Señorita, me siento mareado",urgent,dizziness,patient,False,train
+PHR-00429,"Hola, vomité sangre",emergency,severe_bleeding,patient,False,train
+PHR-00430,"Buenas tardes, mi esposa está estreñida, ¿qué hago?",routine,constipation,family,False,train
+PHR-00431,"Doctora, tengo los pies muy hinchados, por favor manden a alguien",urgent,swelling,patient,False,train
+PHR-00432,"Doctora, don Pepe está bien, solo quería avisar",routine,check_in,family,False,train
+PHR-00433,"Señorita, gracias por la visita de ayer desde la mañana",routine,thanks,patient,False,train
+PHR-00434,"Hola, tengo mucha tos con flemas",urgent,cough,patient,False,train
+PHR-00435,"Buenos días, a mi suegra le duele el pecho muy fuerte desde hace dos días",emergency,chest_pain,family,False,train
+PHR-00436,"Buenos días, a doña Rosa le duele la panza",urgent,abdominal_pain,family,False,train
+PHR-00437,"Oiga, quería saber a qué hora viene la enfermera",routine,schedule_question,patient,False,train
+PHR-00438,"Buenos días, a mi esposa ya se le acaban sus medicinas",routine,medication_refill,family,False,train
+PHR-00439,Tengo fiebre y escalofríos,urgent,fever,patient,False,train
+PHR-00440,"Doctora, tengo la presión alta, me salió en 170 hace como una hora",urgent,blood_pressure,patient,False,train
+PHR-00441,"Disculpe, a mi tía le falta el aire y tiene los labios morados desde hace rato",emergency,severe_breathing,family,False,train
+PHR-00442,"Doctora, a mi esposo se le cayó la cara de un lado desde el domingo",emergency,stroke_signs,family,False,train
+PHR-00443,"Buenas tardes, mi suegra tiene fiebre, por favor manden a alguien",urgent,fever,family,False,train
+PHR-00444,"Buenos días, a mi esposa le duele la cadera y no quiere caminar, ayúdenme por favor",urgent,pain,family,False,train
+PHR-00445,Mi abuelita se resbaló pero no se pegó fuerte,urgent,minor_fall,family,False,train
+PHR-00446,"Hola, mi papá anda con poco apetito desde la mañana",routine,appetite,family,False,train
+PHR-00447,"Señorita, mi papá se desmayó desde ayer",emergency,unconscious,family,False,train
+PHR-00448,"Buenos días, tengo calentura",urgent,fever,patient,False,train
+PHR-00449,"Buenas tardes, no he querido comer nada desde anoche",urgent,not_eating,patient,False,train
+PHR-00450,Mi mamá anda triste,routine,mood,family,False,train
+PHR-00451,"Disculpe, a mi esposa se le cayó la cara de un lado, por favor manden a alguien",emergency,stroke_signs,family,False,train
+PHR-00452,"Disculpe, mi esposa sangra mucho de la pierna y no para desde el domingo, ¿qué hago?",emergency,severe_bleeding,family,False,train
+PHR-00453,"Buenas tardes, me duele la herida y está roja",urgent,wound,patient,False,train
+PHR-00454,"Doctora, mi mamá tiene tos con flemas, ¿qué hago?",urgent,cough,family,False,train
+PHR-00455,"Oiga, me duele mucho la rodilla, no puedo caminar desde hace dos días",urgent,pain,patient,False,train
+PHR-00456,"Oiga, me duele el estómago desde la mañana",urgent,abdominal_pain,patient,False,train
+PHR-00457,"Buenos días, me caí y no me puedo levantar del piso hace como una hora, ayúdenme por favor",emergency,serious_fall,patient,False,train
+PHR-00458,"Oiga, a mi papá ya se le acaban sus medicinas desde hace dos días",routine,medication_refill,family,False,train
+PHR-00459,Ya me tomé la presión y salió normal. Estoy preocupada.,routine,normal_reading,patient,False,train
+PHR-00460,"Señorita, tengo poca hambre estos días desde el domingo",routine,appetite,patient,False,train
+PHR-00461,"Doctora, mi abuelita no responde, no despierta desde la mañana, ayúdenme por favor",emergency,unconscious,family,False,train
+PHR-00462,"Hola, me duele muy fuerte el pecho desde hace dos días, por favor manden a alguien",emergency,chest_pain,patient,False,train
+PHR-00463,A doña Rosa le duelen las rodillas como siempre desde ayer,routine,chronic_pain,family,False,train
+PHR-00464,"Oiga, ya me tomé la presión y salió normal desde hace dos días",routine,normal_reading,patient,False,train
+PHR-00465,"Señorita, tengo fiebre y escalofríos desde la mañana",urgent,fever,patient,False,train
+PHR-00466,Gracias por la visita de ayer desde hace dos días,routine,thanks,patient,False,train
+PHR-00467,"Hola, mi abuelito no responde, no despierta, por favor manden a alguien",emergency,unconscious,family,False,train
+PHR-00468,"Oiga, mi esposa tiene tos con flemas.",urgent,cough,family,False,train
+PHR-00469,Mi abuelito se privó en la sala,emergency,unconscious,family,False,train
+PHR-00470,"Buenas tardes, a mi suegra le dio un ataque y se sacudía",emergency,seizure,family,False,train
+PHR-00471,"Buenos días, tengo mucha tos con flemas desde anoche",urgent,cough,patient,False,train
+PHR-00472,Me siento un poco triste,routine,mood,patient,False,train
+PHR-00473,"Señorita, gracias por la visita de ayer",routine,thanks,patient,False,train
+PHR-00474,"Señorita, mi mamá no puede mover el lado derecho desde hace rato.",emergency,stroke_signs,family,False,train
+PHR-00475,"Oiga, tengo poca hambre estos días desde la mañana",routine,appetite,patient,False,train
+PHR-00476,"Señorita, a mi abuelita le duele la panza",urgent,abdominal_pain,family,False,train
+PHR-00477,"Buenos días, se me va el aire y no lo recupero hace como una hora",emergency,severe_breathing,patient,False,train
+PHR-00478,"Buenos días, mi papá habla arrastrado y no se le entiende lo que dice desde hace dos días",emergency,stroke_signs,family,False,train
+PHR-00479,"Buenos días, doña Rosa anda cansada hace como una hora",routine,fatigue,family,False,train
+PHR-00480,"Oiga, mi papá tiene la piel reseca.",routine,skin,family,False,train
+PHR-00481,"Disculpe, a mi esposo le duele la cadera y no quiere caminar desde hace dos días",urgent,pain,family,False,train
+PHR-00482,Mi abuelito no ha comido ni tomado agua,urgent,not_eating,family,False,train
+PHR-00483,"Hola, don Pepe anda más confundida que otros días desde la mañana",urgent,confusion_mild,family,False,train
+PHR-00484,"Doctora, mi mamá tuvo una convulsión desde hace dos días",emergency,seizure,family,False,train
+PHR-00485,"Disculpe, mi papá está bien, solo quería avisar",routine,check_in,family,False,train
+PHR-00486,"Oiga, ¿a qué hora viene la enfermera con mi esposa?",routine,schedule_question,family,False,train
+PHR-00487,"Disculpe, me falta el aire cuando camino",urgent,breathing_mild,patient,False,train
+PHR-00488,"Hola, a mi mamá le cuesta más respirar cuando camina desde anoche, ¿qué hago?",urgent,breathing_mild,family,False,train
+PHR-00489,"Señorita, me duele el estómago desde la mañana",urgent,abdominal_pain,patient,False,train
+PHR-00490,"Señorita, gracias por atender a doña Rosa hace como una hora",routine,thanks,family,False,train
+PHR-00491,"Señorita, me estoy ahogando desde hace rato. Estoy preocupada.",emergency,severe_breathing,patient,False,train
+PHR-00492,"Disculpe, me desmayé en el baño",emergency,unconscious,patient,False,train
+PHR-00493,Mi esposo dice que tiene opresión en el pecho desde hace dos días. Estoy preocupada.,emergency,chest_pain,family,False,train
+PHR-00494,"Disculpe, doña Rosa está estreñida desde anoche",routine,constipation,family,False,train
+PHR-00495,"Buenas tardes, doña Rosa anda más confundida que otros días desde el domingo",urgent,confusion_mild,family,False,train
+PHR-00496,A mi abuelito le salió la presión en 170,urgent,blood_pressure,family,False,train
+PHR-00497,"Doctora, mi esposo está bien, solo quería avisar desde ayer, ayúdenme por favor",routine,check_in,family,False,train
+PHR-00498,"Doctora, me duelen las rodillas como siempre desde la mañana, por favor manden a alguien",routine,chronic_pain,patient,False,train
+PHR-00499,"Buenas tardes, a don Pepe le salió normal la presión",routine,normal_reading,family,False,train
+PHR-00500,"Señorita, me aprieta el pecho",emergency,chest_pain,patient,False,train
+PHR-00501,"Buenas tardes, don Pepe tiene la piel reseca desde hace dos días",routine,skin,family,False,train
+PHR-00502,"Hola, tengo poca hambre estos días desde el domingo. Estoy preocupada.",routine,appetite,patient,False,train
+PHR-00503,"Oiga, mi abuelita anda cansada desde anoche.",routine,fatigue,family,False,train
+PHR-00504,"Hola, a mi papá le salió la presión en 170 desde ayer",urgent,blood_pressure,family,False,train
+PHR-00505,"Buenos días, vomité sangre desde anoche",emergency,severe_bleeding,patient,False,train
+PHR-00506,"Señorita, gracias por atender a mi tía desde hace rato",routine,thanks,family,False,train
+PHR-00507,"Disculpe, mi esposo está bien, solo quería avisar",routine,check_in,family,False,train
+PHR-00508,"Buenos días, quería saber a qué hora viene la enfermera desde ayer, por favor manden a alguien",routine,schedule_question,patient,False,train
+PHR-00509,"Me siento un poco triste desde hace dos días, ayúdenme por favor",routine,mood,patient,False,train
+PHR-00510,"Buenos días, me falta el aire cuando camino",urgent,breathing_mild,patient,False,train
+PHR-00511,"Buenas tardes, mi tía dice que ya no quiere vivir, ayúdenme por favor",emergency,self_harm,family,False,train
+PHR-00512,"Disculpe, mi papá está estreñida",routine,constipation,family,False,train
+PHR-00513,"Buenas tardes, no puedo respirar bien desde hace rato, ¿qué hago?",emergency,severe_breathing,patient,False,train
+PHR-00514,"Buenos días, mi tía habla arrastrado y no se le entiende lo que dice hace como una hora",emergency,stroke_signs,family,False,train
+PHR-00515,No he querido comer nada desde ayer,urgent,not_eating,patient,False,train
+PHR-00516,"Oiga, a mi suegra le falta el aire y tiene los labios morados desde hace dos días",emergency,severe_breathing,family,False,train
+PHR-00517,"Buenas tardes, mi suegra anda con poco apetito, ayúdenme por favor",routine,appetite,family,False,train
+PHR-00518,"Buenas tardes, mi esposo no puede respirar desde ayer",emergency,severe_breathing,family,False,train
+PHR-00519,"Se me hinchó la pierna, ¿qué hago?",urgent,swelling,patient,False,train
+PHR-00520,"Disculpe, mi abuelita anda con poco apetito",routine,appetite,family,False,train
+PHR-00521,"De repente mi abuelita no me reconoce desde hace dos días, ayúdenme por favor",emergency,sudden_confusion,family,False,train
+PHR-00522,"Buenos días, a mi abuelito le supura la herida, ¿qué hago?",urgent,wound,family,False,train
+PHR-00523,"Oiga, de repente doña Rosa no me reconoce desde hace rato",emergency,sudden_confusion,family,False,train
+PHR-00524,"Hola, mi papá dice que ya no quiere vivir",emergency,self_harm,family,False,train
+PHR-00525,¿a qué hora viene la enfermera con doña Rosa?,routine,schedule_question,family,False,train
+PHR-00526,"Oiga, me estoy ahogando, ayúdenme por favor",emergency,severe_breathing,patient,False,train
+PHR-00527,"Tengo poca hambre estos días, ¿qué hago?",routine,appetite,patient,False,train
+PHR-00528,"Señorita, mi suegra anda cansada desde la mañana",routine,fatigue,family,False,train
+PHR-00529,"Oiga, mi suegra tiene calentura hace como una hora",urgent,fever,family,False,train
+PHR-00530,"Doctora, mi tía sangra mucho de la pierna y no para desde hace dos días",emergency,severe_bleeding,family,False,train
+PHR-00531,"Buenas tardes, me duele el estómago desde la mañana, ayúdenme por favor",urgent,abdominal_pain,patient,False,train
+PHR-00532,"Señorita, mi suegra no puede respirar desde el domingo",emergency,severe_breathing,family,False,train
+PHR-00533,"Doctora, se me olvidó si me tomé la pastilla desde anoche, por favor manden a alguien",routine,medication_question,patient,False,train
+PHR-00534,"Disculpe, no he querido comer nada.",urgent,not_eating,patient,False,train
+PHR-00535,Se me hinchó la pierna desde hace dos días,urgent,swelling,patient,False,train
+PHR-00536,"Hola, gracias por atender a doña Rosa",routine,thanks,family,False,train
+PHR-00537,"Disculpe, ¿a qué hora viene la enfermera con mi tía? desde hace dos días",routine,schedule_question,family,False,train
+PHR-00538,"Hola, a mi abuelita le duele el pecho muy fuerte",emergency,chest_pain,family,False,train
+PHR-00539,"Oiga, tengo la presión alta, me salió en 170 desde hace rato",urgent,blood_pressure,patient,False,train
+PHR-00540,"Hola, se me va el aire y no lo recupero desde la mañana.",emergency,severe_breathing,patient,False,train
+PHR-00541,"Hola, mi abuelito tiene fiebre.",urgent,fever,family,False,train
+PHR-00542,"Doctora, de repente mi mamá no me reconoce desde hace dos días",emergency,sudden_confusion,family,False,train
+PHR-00543,"Doctora, mi papá anda cansada desde anoche, ¿qué hago?",routine,fatigue,family,False,train
+PHR-00544,"Señorita, a mi papá le dio un ataque y se sacudía desde hace rato",emergency,seizure,family,False,train
+PHR-00545,"Doctora, a mi tía le salió normal la presión desde hace rato",routine,normal_reading,family,False,train
+PHR-00546,"Hola, don Pepe dice que tiene opresión en el pecho desde hace dos días",emergency,chest_pain,family,False,train
+PHR-00547,"Oiga, mi suegra dice que ya no quiere vivir desde el domingo, por favor manden a alguien",emergency,self_harm,family,False,train
+PHR-00548,"Señorita, mi tía no ha dormido bien desde anoche",routine,sleep,family,False,train
+PHR-00549,"Señorita, doña Rosa se resbaló pero no se pegó fuerte",urgent,minor_fall,family,False,train
+PHR-00550,"Buenas tardes, doña Rosa no responde, no despierta desde ayer",emergency,unconscious,family,False,train
+PHR-00551,Mi abuelita se privó en la sala desde ayer.,emergency,unconscious,family,False,train
+PHR-00552,"Señorita, a don Pepe le salió normal la presión",routine,normal_reading,family,False,train
+PHR-00553,"Buenos días, doña Rosa anda más confundida que otros días desde ayer",urgent,confusion_mild,family,False,train
+PHR-00554,"Doctora, a mi esposo le duele la cadera y no quiere caminar",urgent,pain,family,False,train
+PHR-00555,"Buenas tardes, me duele la herida y está roja desde anoche",urgent,wound,patient,False,train
+PHR-00556,"Señorita, tengo fiebre y escalofríos, por favor manden a alguien",urgent,fever,patient,False,train
+PHR-00557,No puedo respirar bien. Estoy preocupada.,emergency,severe_breathing,patient,False,train
+PHR-00558,"Buenos días, mi mamá habla arrastrado y no se le entiende lo que dice.",emergency,stroke_signs,family,False,train
+PHR-00559,Ando más confundido que de costumbre desde hace dos días,urgent,confusion_mild,patient,False,train
+PHR-00560,"Buenas tardes, me falta mucho el aire, por favor manden a alguien",emergency,severe_breathing,patient,False,train
+PHR-00561,"Señorita, no puedo mover el brazo izquierdo desde ayer",emergency,stroke_signs,patient,False,train
+PHR-00562,"Hola, doña Rosa no recuerda si se tomó la pastilla desde el domingo",routine,medication_question,family,False,train
+PHR-00563,"Hola, mi esposa se privó en la sala",emergency,unconscious,family,False,train
+PHR-00564,"Buenas tardes, a mi esposa le falta el aire y tiene los labios morados desde hace dos días, ¿qué hago?",emergency,severe_breathing,family,False,train
+PHR-00565,"Oiga, mi abuelita tiene fiebre",urgent,fever,family,False,train
+PHR-00566,"Doctora, tengo diarrea desde hace dos días. Estoy preocupada.",urgent,diarrhea,patient,False,train
+PHR-00567,"Buenos días, no he dormido bien",routine,sleep,patient,False,train
+PHR-00568,Doña Rosa dice que ya no quiere vivir,emergency,self_harm,family,False,train
+PHR-00569,"Buenos días, mi abuelito anda triste",routine,mood,family,False,train
+PHR-00570,A mi papá le supura la herida desde el domingo,urgent,wound,family,False,train
+PHR-00571,"Buenos días, tengo calentura desde hace dos días",urgent,fever,patient,False,train
+PHR-00572,"Oiga, mi mamá se resbaló pero no se pegó fuerte. Estoy preocupada.",urgent,minor_fall,family,False,train
+PHR-00573,"Buenos días, de repente mi esposa no me reconoce",emergency,sudden_confusion,family,False,train
+PHR-00574,"Oiga, a mi esposa se le va el aire desde hace dos días",emergency,severe_breathing,family,False,train
+PHR-00575,"Oiga, me duele mucho la rodilla, no puedo caminar desde ayer",urgent,pain,patient,False,train
+PHR-00576,"Hola, no he querido comer nada hace como una hora",urgent,not_eating,patient,False,train
+PHR-00577,"Señorita, me arde al orinar desde la mañana",urgent,urinary,patient,False,train
+PHR-00578,"Hola, mi mamá no recuerda si se tomó la pastilla desde hace rato",routine,medication_question,family,False,train
+PHR-00579,"Buenos días, quería saber a qué hora viene la enfermera",routine,schedule_question,patient,False,train
+PHR-00580,"Señorita, a doña Rosa se le va el aire",emergency,severe_breathing,family,False,train
+PHR-00581,"Señorita, ya me tomé la presión y salió normal",routine,normal_reading,patient,False,train
+PHR-00582,"Disculpe, tengo diarrea desde el domingo",urgent,diarrhea,patient,False,train
+PHR-00583,"Buenas tardes, mi abuelito tiene calentura desde hace dos días",urgent,fever,family,False,train
+PHR-00584,"Doctora, mi esposo no recuerda si se tomó la pastilla desde ayer",routine,medication_question,family,False,train
+PHR-00585,"Señorita, a mi esposa le duele la cadera y no quiere caminar desde el domingo",urgent,pain,family,False,train
+PHR-00586,"Disculpe, no he dormido bien",routine,sleep,patient,False,train
+PHR-00587,"Disculpe, tengo calentura, ayúdenme por favor",urgent,fever,patient,False,train
+PHR-00588,"Oiga, mi esposa anda con poco apetito desde hace dos días",routine,appetite,family,False,train
+PHR-00589,A don Pepe le duele la cadera y no quiere caminar desde anoche,urgent,pain,family,False,train
+PHR-00590,"Señorita, mi papá no puede mover el lado derecho",emergency,stroke_signs,family,False,train
+PHR-00591,"Buenos días, tengo los pies muy hinchados.",urgent,swelling,patient,False,train
+PHR-00592,"De repente don Pepe no me reconoce hace como una hora, por favor manden a alguien",emergency,sudden_confusion,family,False,train
+PHR-00593,"Señorita, me estoy ahogando desde el domingo",emergency,severe_breathing,patient,False,train
+PHR-00594,"Disculpe, me falta mucho el aire desde el domingo",emergency,severe_breathing,patient,False,train
+PHR-00595,"Doctora, mi tía se resbaló pero no se pegó fuerte desde anoche",urgent,minor_fall,family,False,train
+PHR-00596,"Buenos días, doña Rosa no ha dormido bien",routine,sleep,family,False,train
+PHR-00597,Ya se me están acabando las pastillas de la presión desde la mañana,routine,medication_refill,patient,False,train
+PHR-00598,"Disculpe, me estoy ahogando",emergency,severe_breathing,patient,False,train
+PHR-00599,A mi mamá le duele el pecho muy fuerte desde la mañana,emergency,chest_pain,family,False,train
+PHR-00600,"Señorita, mi esposo anda triste, ayúdenme por favor",routine,mood,family,False,train
+PHR-00601,"Doctora, estoy estreñido desde ayer",routine,constipation,patient,False,train
+PHR-00602,"Buenas tardes, mi mamá dice que tiene opresión en el pecho",emergency,chest_pain,family,False,train
+PHR-00603,"Doctora, doña Rosa dice que tiene opresión en el pecho desde la mañana.",emergency,chest_pain,family,False,train
+PHR-00604,"Disculpe, se me olvidó si me tomé la pastilla",routine,medication_question,patient,False,train
+PHR-00605,"Buenos días, don Pepe sangra mucho de la pierna y no para",emergency,severe_bleeding,family,False,train
+PHR-00606,"Buenas tardes, mi abuelito ha vomitado varias veces desde el domingo",urgent,vomiting,family,False,train
+PHR-00607,"Doctora, de repente mi mamá no me reconoce. Estoy preocupada.",emergency,sudden_confusion,family,False,train
+PHR-00608,"Buenas tardes, gracias por atender a mi papá desde la mañana",routine,thanks,family,False,train
+PHR-00609,"Doctora, mi tía vomitó sangre desde la mañana",emergency,severe_bleeding,family,False,train
+PHR-00610,"Doctora, quería saber a qué hora viene la enfermera desde la mañana, ¿qué hago?",routine,schedule_question,patient,False,train
+PHR-00611,"Doctora, mi suegra se cayó y no se puede levantar",emergency,serious_fall,family,False,train
+PHR-00612,"Señorita, doña Rosa dice que tiene opresión en el pecho, ¿qué hago?",emergency,chest_pain,family,False,train
+PHR-00613,A mi mamá le dio un ataque y se sacudía desde hace dos días,emergency,seizure,family,False,train
+PHR-00614,"Hola, quería cambiar la cita del jueves desde el domingo, ¿qué hago?",routine,appointment,patient,False,train
+PHR-00615,"Oiga, don Pepe anda cansada",routine,fatigue,family,False,train
+PHR-00616,Mi suegra tuvo una convulsión desde ayer,emergency,seizure,family,False,train
+PHR-00617,"Disculpe, mi papá dice que se quiere quitar la vida hace como una hora",emergency,self_harm,family,False,train
+PHR-00618,"Disculpe, quería saber a qué hora viene la enfermera hace como una hora",routine,schedule_question,patient,False,train
+PHR-00619,"Buenas tardes, doña Rosa tiene fiebre",urgent,fever,family,False,train
+PHR-00620,"Oiga, a mi tía le duelen las rodillas como siempre, ayúdenme por favor",routine,chronic_pain,family,False,train
+PHR-00621,"Señorita, mi papá tuvo una convulsión desde la mañana",emergency,seizure,family,False,train
+PHR-00622,Mi esposa ha vomitado varias veces desde hace rato,urgent,vomiting,family,False,train
+PHR-00623,"Mi mamá está bien, solo quería avisar, por favor manden a alguien",routine,check_in,family,False,train
+PHR-00624,"Buenas tardes, a mi abuelito le dio un ataque y se sacudía",emergency,seizure,family,False,train
+PHR-00625,"Buenos días, mi abuelito ha vomitado varias veces desde la mañana",urgent,vomiting,family,False,train
+PHR-00626,Mi abuelita tiene diarrea y está débil desde ayer,urgent,diarrhea,family,False,train
+PHR-00627,"Mi papá no responde, no despierta desde hace rato",emergency,unconscious,family,False,train
+PHR-00628,"Oiga, no he querido comer nada desde hace rato, por favor manden a alguien",urgent,not_eating,patient,False,train
+PHR-00629,"Hola, me siento un poco triste desde anoche",routine,mood,patient,False,train
+PHR-00630,"Buenas tardes, me falta mucho el aire desde anoche",emergency,severe_breathing,patient,False,train
+PHR-00631,"Buenos días, queremos cambiar la cita de mi abuelita desde ayer",routine,appointment,family,False,train
+PHR-00632,"Señorita, no he querido comer nada desde hace rato",urgent,not_eating,patient,False,train
+PHR-00633,"Buenas tardes, doña Rosa anda con poco apetito hace como una hora",routine,appetite,family,False,train
+PHR-00634,"Disculpe, tengo la presión alta, me salió en 170",urgent,blood_pressure,patient,False,train
+PHR-00635,Tengo la piel reseca desde la mañana,routine,skin,patient,False,train
+PHR-00636,"Oiga, gracias por atender a mi tía desde la mañana",routine,thanks,family,False,train
+PHR-00637,"Disculpe, queremos cambiar la cita de mi abuelita desde ayer",routine,appointment,family,False,train
+PHR-00638,"Buenas tardes, mi tía no recuerda si se tomó la pastilla, por favor manden a alguien",routine,medication_question,family,False,train
+PHR-00639,"Buenas tardes, mi papá se resbaló pero no se pegó fuerte, por favor manden a alguien",urgent,minor_fall,family,False,train
+PHR-00640,"Hola, a mi abuelito le cuesta más respirar cuando camina desde anoche",urgent,breathing_mild,family,False,train
+PHR-00641,"Disculpe, me falta el aire cuando camino hace como una hora",urgent,breathing_mild,patient,False,train
+PHR-00642,"Buenas tardes, mi tía dice que tiene opresión en el pecho",emergency,chest_pain,family,False,train
+PHR-00643,"Hola, mi esposo tiene los pies hinchados desde la mañana",urgent,swelling,family,False,train
+PHR-00644,"Oiga, mi abuelito no ha dormido bien",routine,sleep,family,False,train
+PHR-00645,"Señorita, ya se me están acabando las pastillas de la presión hace como una hora, ayúdenme por favor",routine,medication_refill,patient,False,train
+PHR-00646,"Hola, mi mamá anda cansada",routine,fatigue,family,False,train
+PHR-00647,"Señorita, mi suegra perdió el conocimiento hace como una hora",emergency,unconscious,family,False,train
+PHR-00648,"Doctora, ya se me están acabando las pastillas de la presión desde ayer",routine,medication_refill,patient,False,train
+PHR-00649,"Disculpe, a mi esposa le salió el azúcar muy alta hace como una hora",urgent,glucose,family,False,train
+PHR-00650,"Buenas tardes, me duele el estómago desde la mañana",urgent,abdominal_pain,patient,False,train
+PHR-00651,"Doctora, me duele mucho la rodilla, no puedo caminar desde anoche",urgent,pain,patient,False,train
+PHR-00652,"Hola, he vomitado varias veces",urgent,vomiting,patient,False,train
+PHR-00653,"Buenas tardes, me estoy ahogando",emergency,severe_breathing,patient,False,train
+PHR-00654,"Disculpe, quería saber a qué hora viene la enfermera desde anoche",routine,schedule_question,patient,False,train
+PHR-00655,"Buenas tardes, a mi esposo se le cayó la cara de un lado desde el domingo",emergency,stroke_signs,family,False,train
+PHR-00656,"Buenos días, no puedo respirar bien desde ayer",emergency,severe_breathing,patient,False,train
+PHR-00657,"Señorita, gracias por la visita de ayer desde hace dos días",routine,thanks,patient,False,train
+PHR-00658,"Buenas tardes, tengo la piel reseca desde ayer",routine,skin,patient,False,train
+PHR-00659,"Buenas tardes, mi esposo anda con poco apetito desde hace rato.",routine,appetite,family,False,train
+PHR-00660,"Doctora, ¿a qué hora viene la enfermera con mi suegra? desde hace dos días",routine,schedule_question,family,False,train
+PHR-00661,"Disculpe, ya me tomé la presión y salió normal desde el domingo, ayúdenme por favor",routine,normal_reading,patient,False,train
+PHR-00662,"Oiga, mi mamá dice que tiene opresión en el pecho desde hace dos días",emergency,chest_pain,family,False,train
+PHR-00663,"Buenos días, me siento un poco triste desde hace rato",routine,mood,patient,False,train
+PHR-00664,"Señorita, tengo poca hambre estos días, ¿qué hago?",routine,appetite,patient,False,train
+PHR-00665,Mi abuelita se cayó y se pegó en la cabeza,emergency,serious_fall,family,False,train
+PHR-00666,"Doctora, a don Pepe le falta el aire y tiene los labios morados desde anoche.",emergency,severe_breathing,family,False,train
+PHR-00667,"Doctora, todo bien, solo quería avisar desde hace rato",routine,check_in,patient,False,train
+PHR-00668,"Buenas tardes, me siento cansado desde ayer, ayúdenme por favor",routine,fatigue,patient,False,train
+PHR-00669,"Disculpe, mi esposo se cayó y se pegó en la cabeza",emergency,serious_fall,family,False,train
+PHR-00670,"Hola, mi esposa tuvo una convulsión desde la mañana, por favor manden a alguien",emergency,seizure,family,False,train
+PHR-00671,"Hola, me desmayé en el baño desde la mañana",emergency,unconscious,patient,False,train
+PHR-00672,"Buenos días, a mi tía le salió normal la presión desde hace dos días",routine,normal_reading,family,False,train
+PHR-00673,"Buenas tardes, doña Rosa anda triste. Estoy preocupada.",routine,mood,family,False,train
+PHR-00674,"Señorita, quería saber a qué hora viene la enfermera desde hace dos días, por favor manden a alguien",routine,schedule_question,patient,False,train
+PHR-00675,Don Pepe tiene la piel reseca. Estoy preocupada.,routine,skin,family,False,train
+PHR-00676,"Oiga, doña Rosa anda cansada desde ayer.",routine,fatigue,family,False,train
+PHR-00677,"Doctora, mi papá no recuerda si se tomó la pastilla desde el domingo",routine,medication_question,family,False,train
+PHR-00678,"Señorita, quería saber a qué hora viene la enfermera desde hace rato.",routine,schedule_question,patient,False,train
+PHR-00679,"Señorita, tengo la piel reseca desde la mañana",routine,skin,patient,False,train
+PHR-00680,"Buenos días, a mi esposo le duele la cadera y no quiere caminar desde hace rato",urgent,pain,family,False,train
+PHR-00681,"Doctora, quería saber a qué hora viene la enfermera desde el domingo",routine,schedule_question,patient,False,train
+PHR-00682,"Oiga, mi suegra sangra mucho de la pierna y no para",emergency,severe_bleeding,family,False,train
+PHR-00683,"Hola, mi mamá sangra mucho de la pierna y no para desde hace rato",emergency,severe_bleeding,family,False,train
+PHR-00684,"Señorita, a doña Rosa le duelen las rodillas como siempre desde anoche",routine,chronic_pain,family,False,train
+PHR-00685,"Doctora, mi tía anda cansada, ¿qué hago?",routine,fatigue,family,False,train
+PHR-00686,"Quería cambiar la cita del jueves, ayúdenme por favor",routine,appointment,patient,False,train
+PHR-00687,"Oiga, a mi suegra se le hinchó la pierna, ¿qué hago?",urgent,swelling,family,False,train
+PHR-00688,"Señorita, mi papá tiene la piel reseca desde hace rato",routine,skin,family,False,train
+PHR-00689,"Hola, me falta el aire cuando camino desde la mañana, ¿qué hago?",urgent,breathing_mild,patient,False,train
+PHR-00690,"Oiga, mi esposo tiene fiebre",urgent,fever,family,False,train
+PHR-00691,"Hola, mi mamá dice que se quiere quitar la vida",emergency,self_harm,family,False,train
+PHR-00692,"Hola, me duelen las rodillas como siempre",routine,chronic_pain,patient,False,train
+PHR-00693,"Buenos días, a mi papá le salió normal la presión",routine,normal_reading,family,False,train
+PHR-00694,"Buenas tardes, a mi abuelita ya se le acaban sus medicinas, por favor manden a alguien",routine,medication_refill,family,False,train
+PHR-00695,"Señorita, ¿a qué hora viene la enfermera con mi abuelito? desde hace rato",routine,schedule_question,family,False,train
+PHR-00696,"Buenos días, mi esposa sangra mucho de la pierna y no para, ayúdenme por favor",emergency,severe_bleeding,family,False,train
+PHR-00697,"Oiga, a mi abuelita le supura la herida, por favor manden a alguien",urgent,wound,family,False,train
+PHR-00698,"Doctora, mi esposo tiene tos con flemas desde la mañana, ayúdenme por favor",urgent,cough,family,False,train
+PHR-00699,"Buenas tardes, gracias por atender a mi tía desde ayer",routine,thanks,family,False,train
+PHR-00700,"A mi papá le duelen las rodillas como siempre desde la mañana, ¿qué hago?",routine,chronic_pain,family,False,train
+PHR-00701,"Hola, a don Pepe le salió normal la presión desde ayer",routine,normal_reading,family,False,train
+PHR-00702,"Doña Rosa habla arrastrado y no se le entiende lo que dice desde hace dos días, ¿qué hago?",emergency,stroke_signs,family,False,train
+PHR-00703,"Disculpe, a mi suegra le dio un ataque y se sacudía, por favor manden a alguien",emergency,seizure,family,False,train
+PHR-00704,"Buenas tardes, de repente don Pepe no me reconoce desde hace rato",emergency,sudden_confusion,family,False,train
+PHR-00705,"Buenas tardes, me siento cansado desde anoche, ayúdenme por favor",routine,fatigue,patient,False,train
+PHR-00706,"Buenas tardes, tengo fiebre y escalofríos desde ayer",urgent,fever,patient,False,train
+PHR-00707,"Doctora, no he querido comer nada desde ayer",urgent,not_eating,patient,False,train
+PHR-00708,Don Pepe no ha comido ni tomado agua,urgent,not_eating,family,False,train
+PHR-00709,"Hola, mi abuelito no ha dormido bien desde el domingo, ayúdenme por favor",routine,sleep,family,False,train
+PHR-00710,"Buenos días, a mi mamá le dio un ataque y se sacudía desde anoche",emergency,seizure,family,False,train
+PHR-00711,"Mi esposo habla arrastrado y no se le entiende lo que dice desde anoche, ¿qué hago?",emergency,stroke_signs,family,False,train
+PHR-00712,"Buenas tardes, de repente mi papá no me reconoce desde la mañana",emergency,sudden_confusion,family,False,train
+PHR-00713,"Disculpe, me salió la azúcar en 300 desde hace rato.",urgent,glucose,patient,False,train
+PHR-00714,Me siento cansado desde hace rato,routine,fatigue,patient,False,train
+PHR-00715,"Hola, mi tía perdió el conocimiento desde hace dos días",emergency,unconscious,family,False,train
+PHR-00716,"Disculpe, mi esposa anda con poco apetito desde ayer",routine,appetite,family,False,train
+PHR-00717,"Buenos días, me siento cansado desde ayer",routine,fatigue,patient,False,train
+PHR-00718,A mi esposa le duelen las rodillas como siempre,routine,chronic_pain,family,False,train
+PHR-00719,"Disculpe, siento opresión en el pecho y el dolor se me va al brazo",emergency,chest_pain,patient,False,train
+PHR-00720,"Mi abuelito se resbaló pero no se pegó fuerte, ayúdenme por favor",urgent,minor_fall,family,False,train
+PHR-00721,"Señorita, a mi papá le supura la herida desde el domingo",urgent,wound,family,False,train
+PHR-00722,"Doctora, vomité sangre desde el domingo",emergency,severe_bleeding,patient,False,train
+PHR-00723,"Doctora, a mi tía ya se le acaban sus medicinas desde anoche",routine,medication_refill,family,False,train
+PHR-00724,"Buenas tardes, ando más confundido que de costumbre, por favor manden a alguien",urgent,confusion_mild,patient,False,train
+PHR-00725,"Buenas tardes, mi tía no recuerda si se tomó la pastilla hace como una hora",routine,medication_question,family,False,train
+PHR-00726,"Buenas tardes, siento opresión en el pecho y el dolor se me va al brazo desde el domingo. Estoy preocupada.",emergency,chest_pain,patient,False,train
+PHR-00727,"Señorita, mi abuelita tiene diarrea y está débil hace como una hora, por favor manden a alguien",urgent,diarrhea,family,False,train
+PHR-00728,"Oiga, tengo diarrea desde hace dos días, ayúdenme por favor",urgent,diarrhea,patient,False,train
+PHR-00729,"Hola, mi tía anda triste",routine,mood,family,False,train
+PHR-00730,"Oiga, no puedo respirar bien desde hace rato",emergency,severe_breathing,patient,False,train
+PHR-00731,"Señorita, queremos cambiar la cita de mi papá desde hace dos días",routine,appointment,family,False,train
+PHR-00732,"Buenos días, me duelen las rodillas como siempre hace como una hora, ¿qué hago?",routine,chronic_pain,patient,False,train
+PHR-00733,"Buenas tardes, ya no puede respirar bien, se está poniendo morado desde la mañana",emergency,severe_breathing,patient,True,train
+PHR-00734,"Señorita, a mi abuelito le dio un ataque y se sacudía hace como una hora",emergency,seizure,family,False,train
+PHR-00735,"Buenos días, mi esposo no responde, no despierta hace como una hora",emergency,unconscious,family,False,train
+PHR-00736,"Doctora, a mi tía le duelen las rodillas como siempre",routine,chronic_pain,family,False,train
+PHR-00737,"Hola, a mi tía le supura la herida hace como una hora, ¿qué hago?",urgent,wound,family,False,train
+PHR-00738,"Hola, estoy estreñido",routine,constipation,patient,False,train
+PHR-00739,"Disculpe, a don Pepe le supura la herida desde anoche, ¿qué hago?",urgent,wound,family,False,train
+PHR-00740,"Disculpe, tengo poca hambre estos días",routine,appetite,patient,False,train
+PHR-00741,Queremos cambiar la cita de mi tía desde hace rato,routine,appointment,family,False,train
+PHR-00742,"Buenos días, todo bien, solo quería avisar",routine,check_in,patient,False,train
+PHR-00743,"Hola, mi tía habla arrastrado y no se le entiende lo que dice",emergency,stroke_signs,family,False,train
+PHR-00744,"Hola, mi abuelita no responde, no despierta",emergency,unconscious,family,False,train
+PHR-00745,"Oiga, a mi abuelita le duelen las rodillas como siempre desde anoche, por favor manden a alguien",routine,chronic_pain,family,False,train
+PHR-00746,"Doctora, a mi mamá se le va el aire",emergency,severe_breathing,family,False,train
+PHR-00747,"Señorita, a doña Rosa le arde al hacer pipí desde anoche",urgent,urinary,family,False,train
+PHR-00748,"Buenas tardes, no he querido comer nada desde hace dos días",urgent,not_eating,patient,False,train
+PHR-00749,Me duele muy fuerte el pecho,emergency,chest_pain,patient,False,train
+PHR-00750,"Buenos días, a mi papá se le cayó la cara de un lado",emergency,stroke_signs,family,False,train
+PHR-00751,"A don Pepe le salió el azúcar muy alta, por favor manden a alguien",urgent,glucose,family,False,train
+PHR-00752,"Disculpe, me duele el estómago desde la mañana desde la mañana",urgent,abdominal_pain,patient,False,train
+PHR-00753,"Doctora, tengo poca hambre estos días desde ayer",routine,appetite,patient,False,train
+PHR-00754,"Doctora, me siento cansado",routine,fatigue,patient,False,train
+PHR-00755,"Disculpe, me falta mucho el aire, ¿qué hago?",emergency,severe_breathing,patient,False,train
+PHR-00756,"Buenas tardes, me desmayé en el baño desde ayer, ayúdenme por favor",emergency,unconscious,patient,False,train
+PHR-00757,"Buenas tardes, ya no puede respirar bien, se está poniendo morado desde hace rato.",emergency,severe_breathing,patient,True,train
+PHR-00758,"Señorita, ¿a qué hora viene la enfermera con mi esposa? desde hace dos días",routine,schedule_question,family,False,train
+PHR-00759,"Buenas tardes, me aprieta el pecho. Estoy preocupada.",emergency,chest_pain,patient,False,train
+PHR-00760,"Buenas tardes, mi tía tiene los pies hinchados",urgent,swelling,family,False,train
+PHR-00761,"Buenas tardes, se me olvidó si me tomé la pastilla desde hace dos días",routine,medication_question,patient,False,train
+PHR-00762,"Señorita, me estoy ahogando",emergency,severe_breathing,patient,False,train
+PHR-00763,No puedo mover el brazo izquierdo hace como una hora,emergency,stroke_signs,patient,False,train
+PHR-00764,"Buenas tardes, me corté y no para de sangrar. Estoy preocupada.",emergency,severe_bleeding,patient,False,train
+PHR-00765,"Doctora, a don Pepe le aprieta el pecho y está sudando frío desde hace rato",emergency,chest_pain,family,False,train
+PHR-00766,"Señorita, vomité sangre, ¿qué hago?",emergency,severe_bleeding,patient,False,train
+PHR-00767,"Oiga, todo bien, solo quería avisar desde el domingo, por favor manden a alguien",routine,check_in,patient,False,train
+PHR-00768,"Oiga, gracias por atender a don Pepe",routine,thanks,family,False,train
+PHR-00769,"Hola, gracias por atender a mi abuelita desde anoche",routine,thanks,family,False,train
+PHR-00770,"Me arde al orinar desde hace rato, ¿qué hago?",urgent,urinary,patient,False,train
+PHR-00771,"Oiga, tengo poca hambre estos días. Estoy preocupada.",routine,appetite,patient,False,train
+PHR-00772,Mi abuelita tiene calentura hace como una hora. Estoy preocupada.,urgent,fever,family,False,train
+PHR-00773,"Buenas tardes, mi mamá no puede respirar",emergency,severe_breathing,family,False,train
+PHR-00774,Don Pepe no puede mover el lado derecho,emergency,stroke_signs,family,False,train
+PHR-00775,Me duelen las rodillas como siempre desde hace dos días. Estoy preocupada.,routine,chronic_pain,patient,False,train
+PHR-00776,"Disculpe, mi tía se cayó y no se puede levantar",emergency,serious_fall,family,False,train
+PHR-00777,Doña Rosa tiene la piel reseca,routine,skin,family,False,train
+PHR-00778,"Buenos días, se me hinchó la pierna",urgent,swelling,patient,False,train
+PHR-00779,"Buenas tardes, he vomitado varias veces desde ayer",urgent,vomiting,patient,False,train
+PHR-00780,"Hola, todo bien, solo quería avisar desde la mañana",routine,check_in,patient,False,train
+PHR-00781,"Señorita, a don Pepe le falta el aire y tiene los labios morados, ¿qué hago?",emergency,severe_breathing,family,False,train
+PHR-00782,"Disculpe, mi abuelita se cayó y no se puede levantar desde el domingo. Estoy preocupada.",emergency,serious_fall,family,False,train
+PHR-00783,"Disculpe, me duele la herida y está roja, ¿qué hago?",urgent,wound,patient,False,train
+PHR-00784,"Disculpe, ¿a qué hora viene la enfermera con mi abuelito? desde hace dos días.",routine,schedule_question,family,False,train
+PHR-00785,"Mi abuelito vomitó sangre desde la mañana, ¿qué hago?",emergency,severe_bleeding,family,False,train
+PHR-00786,A mi abuelita se le va el aire desde ayer,emergency,severe_breathing,family,False,train
+PHR-00787,"Disculpe, mi tía anda muy mareada. Estoy preocupada.",urgent,dizziness,family,False,train
+PHR-00788,"Doctora, me falta el aire cuando camino desde hace dos días. Estoy preocupada.",urgent,breathing_mild,patient,False,train
+PHR-00789,"Disculpe, queremos cambiar la cita de mi papá",routine,appointment,family,False,train
+PHR-00790,"Doctora, mi tía anda más confundida que otros días",urgent,confusion_mild,family,False,train
+PHR-00791,"Doctora, doña Rosa no responde, no despierta hace como una hora",emergency,unconscious,family,False,train
+PHR-00792,"Doctora, mi esposa se resbaló pero no se pegó fuerte desde anoche, por favor manden a alguien",urgent,minor_fall,family,False,train
+PHR-00793,"Doctora, tengo la presión alta, me salió en 170",urgent,blood_pressure,patient,False,train
+PHR-00794,"Oiga, mi abuelito anda triste hace como una hora",routine,mood,family,False,train
+PHR-00795,"Buenos días, me corté y no para de sangrar hace como una hora",emergency,severe_bleeding,patient,False,train
+PHR-00796,"Hola, me caí pero no me pegué fuerte desde ayer",urgent,minor_fall,patient,False,train
+PHR-00797,"Disculpe, me duelen las rodillas como siempre",routine,chronic_pain,patient,False,train
+PHR-00798,"Doctora, mi papá anda cansada hace como una hora. Estoy preocupada.",routine,fatigue,family,False,train
+PHR-00799,"Señorita, mi papá no puede mover el lado derecho desde la mañana",emergency,stroke_signs,family,False,train
+PHR-00800,"Oiga, vomité sangre",emergency,severe_bleeding,patient,False,train
+PHR-00801,"Buenas tardes, doña Rosa tiene los pies hinchados desde hace rato",urgent,swelling,family,False,train
+PHR-00802,"Señorita, no he dormido bien desde ayer",routine,sleep,patient,False,train
+PHR-00803,"Señorita, todo bien, solo quería avisar desde ayer",routine,check_in,patient,False,train
+PHR-00804,"Oiga, mi esposo anda triste desde hace rato",routine,mood,family,False,train
+PHR-00805,"Oiga, doña Rosa tiene fiebre hace como una hora",urgent,fever,family,False,train
+PHR-00806,"Oiga, he vomitado varias veces",urgent,vomiting,patient,False,train
+PHR-00807,Quería saber a qué hora viene la enfermera desde ayer,routine,schedule_question,patient,False,train
+PHR-00808,"Buenos días, don Pepe se está ahogando",emergency,severe_breathing,family,False,train
+PHR-00809,"Oiga, no he querido comer nada.",urgent,not_eating,patient,False,train
+PHR-00810,"Señorita, a mi esposo se le hinchó la pierna",urgent,swelling,family,False,train
+PHR-00811,"Hola, gracias por la visita de ayer desde ayer, por favor manden a alguien",routine,thanks,patient,False,train
+PHR-00812,"Oiga, a mi esposa le duele la cadera y no quiere caminar",urgent,pain,family,False,train
+PHR-00813,"Buenos días, estoy estreñido desde anoche",routine,constipation,patient,False,train
+PHR-00814,"Disculpe, no he querido comer nada",urgent,not_eating,patient,False,train
+PHR-00815,"Señorita, mi suegra dice que ya no quiere vivir",emergency,self_harm,family,False,train
+PHR-00816,"Buenas tardes, me duele mucho la rodilla, no puedo caminar desde hace dos días",urgent,pain,patient,False,train
+PHR-00817,"Disculpe, me duele la herida y está roja desde anoche. Estoy preocupada.",urgent,wound,patient,False,train
+PHR-00818,"Buenas tardes, gracias por la visita de ayer",routine,thanks,patient,False,train
+PHR-00819,"Señorita, tengo la presión alta, me salió en 170. Estoy preocupada.",urgent,blood_pressure,patient,False,train
+PHR-00820,"Oiga, mi esposa se cayó la semana pasada pero ya está bien",routine,past_fall,family,True,train
+PHR-00821,"Oiga, a mi esposo le aprieta el pecho y está sudando frío desde anoche.",emergency,chest_pain,family,False,train
+PHR-00822,Vomité sangre desde anoche.,emergency,severe_bleeding,patient,False,train
+PHR-00823,"Buenas tardes, ayer me dolía el pecho pero ya se me quitó, quiero que me revisen",urgent,chest_pain_resolved,patient,True,train
+PHR-00824,"Disculpe, tengo la piel reseca, ayúdenme por favor",routine,skin,patient,False,train
+PHR-00825,"Oiga, ¿a qué hora viene la enfermera con mi suegra?",routine,schedule_question,family,False,train
+PHR-00826,"Doctora, quería cambiar la cita del jueves desde hace dos días.",routine,appointment,patient,False,train
+PHR-00827,"Disculpe, a mi abuelito se le hinchó la pierna.",urgent,swelling,family,False,train
+PHR-00828,"Disculpe, quería saber a qué hora viene la enfermera desde hace dos días",routine,schedule_question,patient,False,train
+PHR-00829,"Doctora, me estoy ahogando desde el domingo",emergency,severe_breathing,patient,False,train
+PHR-00830,"Doctora, mi tía anda más confundida que otros días hace como una hora",urgent,confusion_mild,family,False,train
+PHR-00831,"Buenas tardes, mi esposa habla arrastrado y no se le entiende lo que dice",emergency,stroke_signs,family,False,train
+PHR-00832,"Buenos días, me duele el estómago desde la mañana desde el domingo",urgent,abdominal_pain,patient,False,train
+PHR-00833,"Disculpe, a doña Rosa se le cayó la cara de un lado desde hace dos días",emergency,stroke_signs,family,False,train
+PHR-00834,"Buenas tardes, de repente doña Rosa no me reconoce hace como una hora",emergency,sudden_confusion,family,False,train
+PHR-00835,"Señorita, ya no quiero vivir desde hace rato, por favor manden a alguien",emergency,self_harm,patient,False,train
+PHR-00836,"Buenas tardes, a mi mamá le supura la herida",urgent,wound,family,False,train
+PHR-00837,"Hola, mi papá anda cansada",routine,fatigue,family,False,train
+PHR-00838,"Oiga, ¿a qué hora viene la enfermera con mi abuelita? desde ayer",routine,schedule_question,family,False,train
+PHR-00839,"Oiga, a mi abuelita le salió la presión en 170 hace como una hora",urgent,blood_pressure,family,False,train
+PHR-00840,Mi suegra vomitó sangre,emergency,severe_bleeding,family,False,train
+PHR-00841,"Hola, se me olvidó si me tomé la pastilla desde ayer. Estoy preocupada.",routine,medication_question,patient,False,train
+PHR-00842,"Disculpe, a mi esposa le salió el azúcar muy alta",urgent,glucose,family,False,train
+PHR-00843,"Señorita, mi esposo sangra mucho de la pierna y no para desde la mañana",emergency,severe_bleeding,family,False,train
+PHR-00844,"Doctora, mi suegra está bien, solo quería avisar hace como una hora, por favor manden a alguien",routine,check_in,family,False,train
+PHR-00845,"Señorita, ya se me están acabando las pastillas de la presión",routine,medication_refill,patient,False,train
+PHR-00846,"Buenas tardes, don Pepe dice que se quiere quitar la vida",emergency,self_harm,family,False,train
+PHR-00847,"Doctora, a don Pepe le aprieta el pecho y está sudando frío.",emergency,chest_pain,family,False,train
+PHR-00848,"Oiga, ¿a qué hora viene la enfermera con mi esposa? desde la mañana",routine,schedule_question,family,False,train
+PHR-00849,"Buenos días, tengo mucha tos con flemas",urgent,cough,patient,False,train
+PHR-00850,"Buenos días, ¿a qué hora viene la enfermera con mi tía? desde anoche",routine,schedule_question,family,False,train
+PHR-00851,Me duele la herida y está roja,urgent,wound,patient,False,train
+PHR-00852,"Disculpe, a mi papá le cuesta más respirar cuando camina desde la mañana. Estoy preocupada.",urgent,breathing_mild,family,False,train
+PHR-00853,"Buenos días, ya no me falta el aire, el medicamento funcionó hace como una hora.",routine,breathing_resolved,patient,True,train
+PHR-00854,"Oiga, ¿a qué hora viene la enfermera con doña Rosa? desde la mañana",routine,schedule_question,family,False,train
+PHR-00855,"Buenos días, a mi suegra le dio un ataque y se sacudía",emergency,seizure,family,False,train
+PHR-00856,"Disculpe, me siento cansado desde ayer",routine,fatigue,patient,False,train
+PHR-00857,"Doctora, quería saber a qué hora viene la enfermera, ayúdenme por favor",routine,schedule_question,patient,False,train
+PHR-00858,"Buenas tardes, a mi papá le duelen las rodillas como siempre desde hace rato",routine,chronic_pain,family,False,train
+PHR-00859,"Oiga, a mi esposa se le cayó la cara de un lado desde hace dos días. Estoy preocupada.",emergency,stroke_signs,family,False,train
+PHR-00860,"Buenas tardes, queremos cambiar la cita de mi suegra desde hace rato",routine,appointment,family,False,train
+PHR-00861,"Señorita, doña Rosa no ha comido ni tomado agua",urgent,not_eating,family,False,train
+PHR-00862,"Doctora, se me va el aire y no lo recupero",emergency,severe_breathing,patient,False,train
+PHR-00863,"Hola, mi abuelito anda con poco apetito desde ayer",routine,appetite,family,False,train
+PHR-00864,"Buenas tardes, mi abuelita tuvo una convulsión",emergency,seizure,family,False,train
+PHR-00865,"Hola, me falta el aire cuando camino",urgent,breathing_mild,patient,False,train
+PHR-00866,"Buenos días, a mi esposo ya se le acaban sus medicinas.",routine,medication_refill,family,False,train
+PHR-00867,"Doctora, mi esposa no recuerda si se tomó la pastilla desde ayer",routine,medication_question,family,False,train
+PHR-00868,"Oiga, tengo fiebre y escalofríos hace como una hora",urgent,fever,patient,False,train
+PHR-00869,Mi tía tiene la piel reseca desde la mañana.,routine,skin,family,False,train
+PHR-00870,"Disculpe, mi abuelita perdió el conocimiento",emergency,unconscious,family,False,train
+PHR-00871,"Doctora, a mi tía le dio un ataque y se sacudía desde hace dos días",emergency,seizure,family,False,train
+PHR-00872,"Doctora, mi tía habla arrastrado y no se le entiende lo que dice, ¿qué hago?",emergency,stroke_signs,family,False,train
+PHR-00873,"Buenos días, don Pepe anda cansada",routine,fatigue,family,False,train
+PHR-00874,"Buenas tardes, me duele el estómago desde la mañana, ¿qué hago?",urgent,abdominal_pain,patient,False,train
+PHR-00875,"Disculpe, me siento mareado hace como una hora, ayúdenme por favor",urgent,dizziness,patient,False,train
+PHR-00876,Quería cambiar la cita del jueves desde la mañana. Estoy preocupada.,routine,appointment,patient,False,train
+PHR-00877,"Disculpe, ya no quiero vivir desde el domingo",emergency,self_harm,patient,False,train
+PHR-00878,"Doctora, mi tía está estreñida",routine,constipation,family,False,train
+PHR-00879,"Disculpe, ando más confundido que de costumbre",urgent,confusion_mild,patient,False,train
+PHR-00880,"Oiga, mi papá se cayó y se pegó en la cabeza desde hace dos días.",emergency,serious_fall,family,False,train
+PHR-00881,"Buenas tardes, mi mamá se privó en la sala",emergency,unconscious,family,False,train
+PHR-00882,"Disculpe, quería cambiar la cita del jueves, ayúdenme por favor",routine,appointment,patient,False,train
+PHR-00883,"Disculpe, todo bien, solo quería avisar",routine,check_in,patient,False,train
+PHR-00884,"Buenas tardes, doña Rosa está estreñida desde hace rato",routine,constipation,family,False,train
+PHR-00885,"Buenas tardes, todo bien, solo quería avisar desde ayer",routine,check_in,patient,False,train
+PHR-00886,"Hola, a mi tía le dio un ataque y se sacudía desde la mañana",emergency,seizure,family,False,train
+PHR-00887,"Buenos días, mi esposa está bien, solo quería avisar",routine,check_in,family,False,train
+PHR-00888,"Doctora, se me hinchó la pierna desde hace rato",urgent,swelling,patient,False,train
+PHR-00889,Mi tía anda con poco apetito,routine,appetite,family,False,train
+PHR-00890,"Buenas tardes, mi tía anda más confundida que otros días desde la mañana",urgent,confusion_mild,family,False,train
+PHR-00891,"Señorita, queremos cambiar la cita de mi papá desde la mañana",routine,appointment,family,False,train
+PHR-00892,"Disculpe, a mi mamá se le hinchó la pierna desde anoche",urgent,swelling,family,False,train
+PHR-00893,"Disculpe, no he dormido bien hace como una hora",routine,sleep,patient,False,train
+PHR-00894,"Señorita, a mi abuelito le duelen las rodillas como siempre",routine,chronic_pain,family,False,train
+PHR-00895,"Hola, mi suegra sangra mucho de la pierna y no para desde el domingo, por favor manden a alguien",emergency,severe_bleeding,family,False,train
+PHR-00896,"Doctora, mi abuelito se resbaló pero no se pegó fuerte desde hace dos días",urgent,minor_fall,family,False,train
+PHR-00897,"Doctora, a mi papá le cuesta más respirar cuando camina desde el domingo. Estoy preocupada.",urgent,breathing_mild,family,False,train
+PHR-00898,¿a qué hora viene la enfermera con don Pepe? desde el domingo.,routine,schedule_question,family,False,train
+PHR-00899,"Buenas tardes, mi abuelita se está ahogando",emergency,severe_breathing,family,False,train
+PHR-00900,Mi suegra está estreñida desde la mañana,routine,constipation,family,False,train
+PHR-00901,"Buenos días, mi esposo dice que tiene opresión en el pecho",emergency,chest_pain,family,False,train
+PHR-00902,"Doctora, he vomitado varias veces desde ayer",urgent,vomiting,patient,False,train
+PHR-00903,"Buenos días, tengo la piel reseca. Estoy preocupada.",routine,skin,patient,False,train
+PHR-00904,"Señorita, me corté y no para de sangrar desde hace rato, ¿qué hago?",emergency,severe_bleeding,patient,False,train
+PHR-00905,Mi suegra tuvo una convulsión desde hace dos días,emergency,seizure,family,False,train
+PHR-00906,"Buenas tardes, a mi esposa le duele la panza, por favor manden a alguien",urgent,abdominal_pain,family,False,train
+PHR-00907,"Disculpe, me duele muy fuerte el pecho desde el domingo, ayúdenme por favor",emergency,chest_pain,patient,False,train
+PHR-00908,"Oiga, don Pepe está bien, solo quería avisar hace como una hora",routine,check_in,family,False,train
+PHR-00909,Don Pepe tiene diarrea y está débil desde ayer.,urgent,diarrhea,family,False,train
+PHR-00910,"Señorita, tengo poca hambre estos días desde anoche",routine,appetite,patient,False,train
+PHR-00911,"Señorita, a mi tía ya se le acaban sus medicinas desde anoche",routine,medication_refill,family,False,train
+PHR-00912,"Oiga, mi abuelito anda cansada desde hace rato.",routine,fatigue,family,False,train
+PHR-00913,"A mi esposa ya se le acaban sus medicinas, por favor manden a alguien",routine,medication_refill,family,False,train
+PHR-00914,"Buenos días, mi papá está bien, solo quería avisar, por favor manden a alguien",routine,check_in,family,False,train
+PHR-00915,"Oiga, me duele el estómago desde la mañana desde hace rato",urgent,abdominal_pain,patient,False,train
+PHR-00916,"Buenas tardes, ya me tomé la presión y salió normal",routine,normal_reading,patient,False,train
+PHR-00917,"Oiga, a mi suegra le dio un ataque y se sacudía, ¿qué hago?",emergency,seizure,family,False,train
+PHR-00918,"Oiga, mi mamá está bien, solo quería avisar",routine,check_in,family,False,train
+PHR-00919,"Doctora, mi mamá está estreñida, por favor manden a alguien",routine,constipation,family,False,train
+PHR-00920,"Oiga, mi esposo anda cansada. Estoy preocupada.",routine,fatigue,family,False,train
+PHR-00921,Mi tía se cayó y no se puede levantar,emergency,serious_fall,family,False,train
+PHR-00922,"Señorita, mi esposo vomitó sangre desde el domingo",emergency,severe_bleeding,family,False,train
+PHR-00923,"Buenas tardes, doña Rosa dice que tiene opresión en el pecho, ayúdenme por favor",emergency,chest_pain,family,False,train
+PHR-00924,"Hola, me caí pero no me pegué fuerte desde hace dos días.",urgent,minor_fall,patient,False,train
+PHR-00925,"Oiga, mi abuelito tuvo una convulsión desde ayer, ¿qué hago?",emergency,seizure,family,False,train
+PHR-00926,Ando más confundido que de costumbre,urgent,confusion_mild,patient,False,train
+PHR-00927,"Buenas tardes, don Pepe perdió el conocimiento desde la mañana",emergency,unconscious,family,False,train
+PHR-00928,"Hola, mi esposo anda con poco apetito desde anoche, ayúdenme por favor",routine,appetite,family,False,train
+PHR-00929,"Señorita, don Pepe no ha comido ni tomado agua desde ayer",urgent,not_eating,family,False,train
+PHR-00930,"Señorita, me aprieta el pecho hace como una hora",emergency,chest_pain,patient,False,train
+PHR-00931,"Disculpe, me duele la herida y está roja",urgent,wound,patient,False,train
+PHR-00932,"Doctora, a don Pepe le falta el aire y tiene los labios morados. Estoy preocupada.",emergency,severe_breathing,family,False,train
+PHR-00933,"Buenas tardes, a mi tía le falta el aire y tiene los labios morados",emergency,severe_breathing,family,False,train
+PHR-00934,"Hola, ¿a qué hora viene la enfermera con mi abuelito?",routine,schedule_question,family,False,train
+PHR-00935,"Hola, gracias por atender a mi abuelita desde ayer",routine,thanks,family,False,train
+PHR-00936,"Doctora, gracias por atender a doña Rosa",routine,thanks,family,False,train
+PHR-00937,"Oiga, me falta el aire cuando camino, ayúdenme por favor",urgent,breathing_mild,patient,False,train
+PHR-00938,"Oiga, a mi esposo ya se le acaban sus medicinas",routine,medication_refill,family,False,train
+PHR-00939,"Disculpe, ya no me falta el aire, el medicamento funcionó desde hace rato. Estoy preocupada.",routine,breathing_resolved,patient,True,train
+PHR-00940,"Buenos días, a mi esposo se le hinchó la pierna desde hace rato",urgent,swelling,family,False,train
+PHR-00941,"Disculpe, doña Rosa se desmayó",emergency,unconscious,family,False,train
+PHR-00942,"Buenas tardes, a mi tía le salió el azúcar muy alta desde anoche",urgent,glucose,family,False,train
+PHR-00943,"Buenos días, mi papá dice que tiene opresión en el pecho desde anoche",emergency,chest_pain,family,False,train
+PHR-00944,"Oiga, mi tía tiene la piel reseca desde el domingo",routine,skin,family,False,train
+PHR-00945,"Buenos días, mi abuelito anda cansada",routine,fatigue,family,False,train
+PHR-00946,"Disculpe, mi esposo tiene fiebre desde hace dos días",urgent,fever,family,False,train
+PHR-00947,"Disculpe, mi tía ha vomitado varias veces",urgent,vomiting,family,False,train
+PHR-00948,"Oiga, doña Rosa vomitó sangre",emergency,severe_bleeding,family,False,train
+PHR-00949,"Doctora, a don Pepe le salió el azúcar muy alta desde el domingo",urgent,glucose,family,False,train
+PHR-00950,Mi papá tiene tos con flemas.,urgent,cough,family,False,train
+PHR-00951,"Hola, a mi esposo ya se le acaban sus medicinas desde hace rato",routine,medication_refill,family,False,train
+PHR-00952,"Buenas tardes, tengo la piel reseca desde el domingo",routine,skin,patient,False,train
+PHR-00953,"Hola, ya se me están acabando las pastillas de la presión desde hace rato, ayúdenme por favor",routine,medication_refill,patient,False,train
+PHR-00954,"Doctora, me duele mucho la rodilla, no puedo caminar, ¿qué hago?",urgent,pain,patient,False,train
+PHR-00955,"Hola, tengo calentura desde el domingo",urgent,fever,patient,False,train
+PHR-00956,"Buenos días, a mi esposa le salió la presión en 170",urgent,blood_pressure,family,False,train
+PHR-00957,"Buenos días, me estoy ahogando",emergency,severe_breathing,patient,False,train
+PHR-00958,"Buenas tardes, mi suegra no responde, no despierta desde la mañana",emergency,unconscious,family,False,train
+PHR-00959,"Hola, mi mamá anda más confundida que otros días hace como una hora",urgent,confusion_mild,family,False,train
+PHR-00960,"Doctora, mi mamá tiene diarrea y está débil",urgent,diarrhea,family,False,train
+PHR-00961,"Hola, a mi esposa le falta el aire y tiene los labios morados",emergency,severe_breathing,family,False,train
+PHR-00962,"Buenos días, mi mamá se privó en la sala desde ayer",emergency,unconscious,family,False,train
+PHR-00963,"Disculpe, don Pepe está estreñida",routine,constipation,family,False,train
+PHR-00964,"Buenos días, don Pepe anda más confundida que otros días desde hace rato",urgent,confusion_mild,family,False,train
+PHR-00965,Tengo mucha tos con flemas hace como una hora,urgent,cough,patient,False,train
+PHR-00966,"Doctora, ya no me falta el aire, el medicamento funcionó hace como una hora",routine,breathing_resolved,patient,True,train
+PHR-00967,"Doctora, mi abuelito habla arrastrado y no se le entiende lo que dice",emergency,stroke_signs,family,False,train
+PHR-00968,"Buenas tardes, doña Rosa está bien, solo quería avisar desde el domingo",routine,check_in,family,False,train
+PHR-00969,"Doctora, mi esposo no ha dormido bien desde anoche",routine,sleep,family,False,train
+PHR-00970,A mi mamá ya se le acaban sus medicinas hace como una hora,routine,medication_refill,family,False,train
+PHR-00971,"Buenos días, a mi esposa le duele el pecho muy fuerte",emergency,chest_pain,family,False,train
+PHR-00972,"Doctora, a mi esposa le arde al hacer pipí hace como una hora. Estoy preocupada.",urgent,urinary,family,False,train
+PHR-00973,"Doctora, doña Rosa está estreñida desde anoche",routine,constipation,family,False,train
+PHR-00974,"Buenos días, me siento cansado, ayúdenme por favor",routine,fatigue,patient,False,train
+PHR-00975,"Disculpe, ya no quiero vivir desde la mañana",emergency,self_harm,patient,False,train
+PHR-00976,"Hola, quería cambiar la cita del jueves",routine,appointment,patient,False,train
+PHR-00977,A doña Rosa le dio un ataque y se sacudía desde la mañana,emergency,seizure,family,False,train
+PHR-00978,"Doctora, mi mamá se está ahogando",emergency,severe_breathing,family,False,train
+PHR-00979,De repente don Pepe no me reconoce desde hace dos días,emergency,sudden_confusion,family,False,train
+PHR-00980,"Doctora, a don Pepe le duele la cadera y no quiere caminar.",urgent,pain,family,False,train
+PHR-00981,"Doctora, mi suegra tuvo una convulsión",emergency,seizure,family,False,train
+PHR-00982,"Buenas tardes, mi esposa se desmayó, por favor manden a alguien",emergency,unconscious,family,False,train
+PHR-00983,"Hola, a mi tía se le hinchó la pierna desde hace rato",urgent,swelling,family,False,train
+PHR-00984,"Señorita, mi abuelita perdió el conocimiento desde hace dos días",emergency,unconscious,family,False,train
+PHR-00985,"Buenas tardes, mi esposa no responde, no despierta desde hace dos días",emergency,unconscious,family,False,train
+PHR-00986,"Oiga, tengo poca hambre estos días",routine,appetite,patient,False,train
+PHR-00987,Me salió la azúcar en 300 desde el domingo,urgent,glucose,patient,False,train
+PHR-00988,"Buenas tardes, mi papá tiene diarrea y está débil",urgent,diarrhea,family,False,train
+PHR-00989,"Hola, mi suegra no recuerda si se tomó la pastilla",routine,medication_question,family,False,train
+PHR-00990,"Señorita, mi suegra se cayó la semana pasada pero ya está bien desde anoche. Estoy preocupada.",routine,past_fall,family,True,train
+PHR-00991,"Hola, mi esposa perdió el conocimiento hace como una hora",emergency,unconscious,family,False,train
+PHR-00992,"Oiga, me siento un poco triste",routine,mood,patient,False,train
+PHR-00993,"Disculpe, de repente mi abuelito no me reconoce desde anoche",emergency,sudden_confusion,family,False,train
+PHR-00994,"Doctora, me siento mareado desde la mañana",urgent,dizziness,patient,False,train
+PHR-00995,"Doctora, quería saber a qué hora viene la enfermera desde hace dos días",routine,schedule_question,patient,False,train
+PHR-00996,"Buenas tardes, mi esposa se está ahogando desde hace dos días",emergency,severe_breathing,family,False,train
+PHR-00997,"Disculpe, quería saber a qué hora viene la enfermera desde el domingo",routine,schedule_question,patient,False,train
+PHR-00998,"Oiga, mi esposo no ha dormido bien hace como una hora",routine,sleep,family,False,train
+PHR-00999,"Señorita, ya no me falta el aire, el medicamento funcionó. Estoy preocupada.",routine,breathing_resolved,patient,True,train
+PHR-01000,"Buenas tardes, ya me tomé la presión y salió normal hace como una hora, por favor manden a alguien",routine,normal_reading,patient,False,train
+PHR-01001,"Buenas tardes, a doña Rosa ya se le acaban sus medicinas desde anoche",routine,medication_refill,family,False,train
+PHR-01002,"Disculpe, mi papá anda triste",routine,mood,family,False,train
+PHR-01003,"Buenos días, me duele muy fuerte el pecho desde hace rato, ¿qué hago?",emergency,chest_pain,patient,False,train
+PHR-01004,"Buenas tardes, estoy estreñido desde la mañana",routine,constipation,patient,False,train
+PHR-01005,"Disculpe, tengo fiebre y escalofríos desde ayer, ayúdenme por favor",urgent,fever,patient,False,train
+PHR-01006,"Hola, mi suegra habla arrastrado y no se le entiende lo que dice desde hace rato",emergency,stroke_signs,family,False,train
+PHR-01007,"Señorita, me aprieta el pecho desde ayer, ayúdenme por favor",emergency,chest_pain,patient,False,train
+PHR-01008,De repente mi esposa no me reconoce desde ayer,emergency,sudden_confusion,family,False,train
+PHR-01009,"Doctora, no he querido comer nada, ¿qué hago?",urgent,not_eating,patient,False,train
+PHR-01010,"Doctora, me caí pero no me pegué fuerte desde anoche.",urgent,minor_fall,patient,False,train
+PHR-01011,"Estoy estreñido desde la mañana, ayúdenme por favor",routine,constipation,patient,False,train
+PHR-01012,"Buenos días, ¿a qué hora viene la enfermera con mi esposo? desde el domingo",routine,schedule_question,family,False,train
+PHR-01013,"Buenas tardes, ya me tomé la presión y salió normal desde anoche",routine,normal_reading,patient,False,train
+PHR-01014,"Hola, tengo los pies muy hinchados desde hace rato.",urgent,swelling,patient,False,train
+PHR-01015,"Buenas tardes, a mi abuelita le dio un ataque y se sacudía.",emergency,seizure,family,False,train
+PHR-01016,"Doctora, mi abuelita no tiene dolor en el pecho, solo tos, ¿qué hago?",urgent,cough,family,True,train
+PHR-01017,"Disculpe, mi papá no recuerda si se tomó la pastilla",routine,medication_question,family,False,train
+PHR-01018,"Disculpe, mi abuelito no recuerda si se tomó la pastilla",routine,medication_question,family,False,train
+PHR-01019,"Mi abuelita no recuerda si se tomó la pastilla desde hace dos días, ¿qué hago?",routine,medication_question,family,False,train
+PHR-01020,"Buenas tardes, quería saber a qué hora viene la enfermera",routine,schedule_question,patient,False,train
+PHR-01021,"Hola, tengo poca hambre estos días hace como una hora. Estoy preocupada.",routine,appetite,patient,False,train
+PHR-01022,"Doctora, mi suegra ha vomitado varias veces desde anoche",urgent,vomiting,family,False,train
+PHR-01023,"Buenos días, me siento un poco triste desde ayer, ¿qué hago?",routine,mood,patient,False,train
+PHR-01024,"Oiga, gracias por atender a mi mamá",routine,thanks,family,False,train
+PHR-01025,"Señorita, me caí pero no me pegué fuerte",urgent,minor_fall,patient,False,train
+PHR-01026,"Hola, ayer me dolía el pecho pero ya se me quitó, quiero que me revisen, ayúdenme por favor",urgent,chest_pain_resolved,patient,True,train
+PHR-01027,"Buenos días, tengo la presión alta, me salió en 170 hace como una hora, por favor manden a alguien",urgent,blood_pressure,patient,False,train
+PHR-01028,"Doctora, a mi abuelita le salió la presión en 170 desde hace rato",urgent,blood_pressure,family,False,train
+PHR-01029,"Señorita, a mi esposa le falta el aire y tiene los labios morados hace como una hora",emergency,severe_breathing,family,False,train
+PHR-01030,"Disculpe, ya no me falta el aire, el medicamento funcionó",routine,breathing_resolved,patient,True,train
+PHR-01031,"Buenos días, mi abuelita anda cansada desde anoche",routine,fatigue,family,False,train
+PHR-01032,"Oiga, a doña Rosa se le cayó la cara de un lado desde ayer",emergency,stroke_signs,family,False,train
+PHR-01033,"Oiga, a mi abuelito le arde al hacer pipí desde el domingo",urgent,urinary,family,False,train
+PHR-01034,A mi abuelito le salió normal la presión hace como una hora,routine,normal_reading,family,False,train
+PHR-01035,Mi tía dice que ya no quiere vivir,emergency,self_harm,family,False,train
+PHR-01036,Me falta mucho el aire hace como una hora,emergency,severe_breathing,patient,False,train
+PHR-01037,"Señorita, mi esposa no ha comido ni tomado agua",urgent,not_eating,family,False,train
+PHR-01038,"Doctora, mi esposo perdió el conocimiento hace como una hora, por favor manden a alguien",emergency,unconscious,family,False,train
+PHR-01039,"Oiga, a mi suegra le duelen las rodillas como siempre desde la mañana, ayúdenme por favor",routine,chronic_pain,family,False,validation
+PHR-01040,"Disculpe, mi esposo ha vomitado varias veces",urgent,vomiting,family,False,train
+PHR-01041,"Disculpe, me quiero morir. Estoy preocupada.",emergency,self_harm,patient,False,train
+PHR-01042,"Buenas tardes, ando más confundido que de costumbre",urgent,confusion_mild,patient,False,train
+PHR-01043,"Hola, mi esposa tiene la piel reseca",routine,skin,family,False,validation
+PHR-01044,"Oiga, mi esposa se cayó y se pegó en la cabeza hace como una hora",emergency,serious_fall,family,False,train
+PHR-01045,"Hola, me siento mareado desde ayer",urgent,dizziness,patient,False,train
+PHR-01046,"Oiga, a mi abuelita le arde al hacer pipí",urgent,urinary,family,False,train
+PHR-01047,A mi abuelita se le cayó la cara de un lado desde hace dos días. Estoy preocupada.,emergency,stroke_signs,family,False,train
+PHR-01048,"Doctora, me quiero morir, ¿qué hago?",emergency,self_harm,patient,False,train
+PHR-01049,"Buenos días, a mi tía le falta el aire y tiene los labios morados desde ayer",emergency,severe_breathing,family,False,train
+PHR-01050,"Doctora, mi papá habla arrastrado y no se le entiende lo que dice desde el domingo, ¿qué hago?",emergency,stroke_signs,family,False,train
+PHR-01051,"Doctora, a mi papá le aprieta el pecho y está sudando frío desde anoche",emergency,chest_pain,family,False,train
+PHR-01052,"Hola, me duele mucho la rodilla, no puedo caminar",urgent,pain,patient,False,train
+PHR-01053,"Oiga, tengo mucha tos con flemas, ayúdenme por favor",urgent,cough,patient,False,train
+PHR-01054,"Doctora, ya no quiero vivir",emergency,self_harm,patient,False,train
+PHR-01055,"Buenos días, don Pepe no recuerda si se tomó la pastilla",routine,medication_question,family,False,validation
+PHR-01056,"Señorita, tengo diarrea desde ayer",urgent,diarrhea,patient,False,train
+PHR-01057,"Oiga, tengo poca hambre estos días desde hace rato",routine,appetite,patient,False,validation
+PHR-01058,"Doctora, siento opresión en el pecho y el dolor se me va al brazo desde el domingo, ¿qué hago?",emergency,chest_pain,patient,False,train
+PHR-01059,"Oiga, me duele mucho la rodilla, no puedo caminar desde hace dos días. Estoy preocupada.",urgent,pain,patient,False,train
+PHR-01060,"Disculpe, a mi esposa le duelen las rodillas como siempre, por favor manden a alguien",routine,chronic_pain,family,False,validation
+PHR-01061,"Buenos días, me salió la azúcar en 300 desde el domingo",urgent,glucose,patient,False,train
+PHR-01062,"Doctora, mi suegra dice que tiene opresión en el pecho desde ayer",emergency,chest_pain,family,False,validation
+PHR-01063,"Doctora, mi abuelita se privó en la sala desde la mañana",emergency,unconscious,family,False,validation
+PHR-01064,"Buenas tardes, ¿a qué hora viene la enfermera con mi suegra? desde el domingo",routine,schedule_question,family,False,validation
+PHR-01065,"Señorita, tengo diarrea desde la mañana",urgent,diarrhea,patient,False,train
+PHR-01066,"Señorita, quería cambiar la cita del jueves desde hace dos días",routine,appointment,patient,False,validation
+PHR-01067,"Disculpe, a mi papá se le hinchó la pierna",urgent,swelling,family,False,train
+PHR-01068,"Oiga, mi mamá tuvo una convulsión",emergency,seizure,family,False,validation
+PHR-01069,"Buenos días, ya no puede respirar bien, se está poniendo morado desde ayer",emergency,severe_breathing,patient,True,validation
+PHR-01070,"Señorita, ¿a qué hora viene la enfermera con mi abuelito?, ayúdenme por favor",routine,schedule_question,family,False,validation
+PHR-01071,"Tengo fiebre y escalofríos, ¿qué hago?",urgent,fever,patient,False,train
+PHR-01072,"Señorita, me duele el estómago desde la mañana desde el domingo",urgent,abdominal_pain,patient,False,train
+PHR-01073,"Doctora, a mi esposo le duele la cadera y no quiere caminar desde hace rato",urgent,pain,family,False,train
+PHR-01074,"Buenos días, mi abuelita tiene la piel reseca",routine,skin,family,False,validation
+PHR-01075,"Oiga, mi suegra anda cansada desde anoche",routine,fatigue,family,False,validation
+PHR-01076,"Oiga, mi tía no responde, no despierta desde el domingo",emergency,unconscious,family,False,validation
+PHR-01077,"Buenos días, mi papá dice que tiene opresión en el pecho desde hace dos días. Estoy preocupada.",emergency,chest_pain,family,False,validation
+PHR-01078,"Disculpe, doña Rosa anda cansada",routine,fatigue,family,False,validation
+PHR-01079,"Buenas tardes, mi tía se cayó y se pegó en la cabeza",emergency,serious_fall,family,False,validation
+PHR-01080,"Buenas tardes, mi abuelito se resbaló pero no se pegó fuerte desde el domingo",urgent,minor_fall,family,False,train
+PHR-01081,"Me duele muy fuerte el pecho, ¿qué hago?",emergency,chest_pain,patient,False,validation
+PHR-01082,"Disculpe, gracias por la visita de ayer desde la mañana, ¿qué hago?",routine,thanks,patient,False,validation
+PHR-01083,"Doctora, mi mamá no responde, no despierta desde hace rato",emergency,unconscious,family,False,validation
+PHR-01084,"A mi abuelita le salió normal la presión, por favor manden a alguien",routine,normal_reading,family,False,validation
+PHR-01085,"Hola, siento opresión en el pecho y el dolor se me va al brazo desde anoche",emergency,chest_pain,patient,False,validation
+PHR-01086,"Señorita, a mi esposa le arde al hacer pipí desde el domingo",urgent,urinary,family,False,train
+PHR-01087,"Señorita, no he querido comer nada desde anoche",urgent,not_eating,patient,False,train
+PHR-01088,"Hola, tengo poca hambre estos días",routine,appetite,patient,False,validation
+PHR-01089,"Doctora, quería saber a qué hora viene la enfermera desde el domingo. Estoy preocupada.",routine,schedule_question,patient,False,validation
+PHR-01090,"Señorita, a mi suegra ya se le acaban sus medicinas hace como una hora",routine,medication_refill,family,False,validation
+PHR-01091,"Doña Rosa se resbaló pero no se pegó fuerte desde ayer, ayúdenme por favor",urgent,minor_fall,family,False,train
+PHR-01092,"Hola, me salió la azúcar en 300",urgent,glucose,patient,False,train
+PHR-01093,"Buenas tardes, me siento cansado desde anoche",routine,fatigue,patient,False,validation
+PHR-01094,"Disculpe, mi abuelito no ha comido ni tomado agua",urgent,not_eating,family,False,train
+PHR-01095,"Buenas tardes, mi esposo no puede respirar desde el domingo.",emergency,severe_breathing,family,False,validation
+PHR-01096,"Buenas tardes, a mi esposo ya se le acaban sus medicinas",routine,medication_refill,family,False,validation
+PHR-01097,"Oiga, mi mamá se resbaló pero no se pegó fuerte, por favor manden a alguien",urgent,minor_fall,family,False,validation
+PHR-01098,"Doctora, mi suegra habla arrastrado y no se le entiende lo que dice",emergency,stroke_signs,family,False,validation
+PHR-01099,"Hola, me aprieta el pecho hace como una hora",emergency,chest_pain,patient,False,validation
+PHR-01100,"Doctora, mi suegra tiene tos con flemas",urgent,cough,family,False,validation
+PHR-01101,"Buenos días, tengo los pies muy hinchados hace como una hora, ayúdenme por favor",urgent,swelling,patient,False,validation
+PHR-01102,"Señorita, ¿a qué hora viene la enfermera con mi tía?",routine,schedule_question,family,False,validation
+PHR-01103,Me arde al orinar hace como una hora. Estoy preocupada.,urgent,urinary,patient,False,validation
+PHR-01104,"Doctora, estoy estreñido desde hace rato",routine,constipation,patient,False,validation
+PHR-01105,A doña Rosa le salió normal la presión desde ayer. Estoy preocupada.,routine,normal_reading,family,False,validation
+PHR-01106,"Hola, mi esposa anda con poco apetito hace como una hora",routine,appetite,family,False,validation
+PHR-01107,Mi papá se cayó y se pegó en la cabeza,emergency,serious_fall,family,False,validation
+PHR-01108,"Disculpe, a mi papá se le va el aire desde el domingo, por favor manden a alguien",emergency,severe_breathing,family,False,validation
+PHR-01109,"Ya no puede respirar bien, se está poniendo morado desde la mañana",emergency,severe_breathing,patient,True,validation
+PHR-01110,"Doctora, me duele muy fuerte el pecho desde el domingo",emergency,chest_pain,patient,False,validation
+PHR-01111,"Doctora, mi esposa está estreñida desde anoche",routine,constipation,family,False,validation
+PHR-01112,"Hola, a mi esposa le dio un ataque y se sacudía hace como una hora",emergency,seizure,family,False,validation
+PHR-01113,Me siento mareado,urgent,dizziness,patient,False,validation
+PHR-01114,"Doctora, me siento mareado desde ayer",urgent,dizziness,patient,False,validation
+PHR-01115,"Buenas tardes, me falta mucho el aire",emergency,severe_breathing,patient,False,validation
+PHR-01116,"Oiga, mi abuelito se está ahogando desde la mañana",emergency,severe_breathing,family,False,validation
+PHR-01117,Se me olvidó si me tomé la pastilla,routine,medication_question,patient,False,validation
+PHR-01118,"Mi abuelita no responde, no despierta desde anoche",emergency,unconscious,family,False,validation
+PHR-01119,"Buenas tardes, doña Rosa tuvo una convulsión desde hace rato",emergency,seizure,family,False,validation
+PHR-01120,"Señorita, ya no quiero vivir, ¿qué hago?",emergency,self_harm,patient,False,validation
+PHR-01121,"Doctora, mi mamá se privó en la sala desde ayer",emergency,unconscious,family,False,validation
+PHR-01122,"Disculpe, mi esposo ha vomitado varias veces desde ayer, ayúdenme por favor",urgent,vomiting,family,False,validation
+PHR-01123,"Disculpe, se me hinchó la pierna desde el domingo",urgent,swelling,patient,False,validation
+PHR-01124,"Disculpe, a mi tía le supura la herida desde ayer",urgent,wound,family,False,validation
+PHR-01125,"Hola, quería saber a qué hora viene la enfermera desde la mañana, por favor manden a alguien",routine,schedule_question,patient,False,validation
+PHR-01126,"Hola, gracias por la visita de ayer hace como una hora",routine,thanks,patient,False,validation
+PHR-01127,"Buenos días, se me hinchó la pierna desde la mañana",urgent,swelling,patient,False,validation
+PHR-01128,"Señorita, me caí pero no me pegué fuerte, por favor manden a alguien",urgent,minor_fall,patient,False,validation
+PHR-01129,"Oiga, me siento mareado hace como una hora",urgent,dizziness,patient,False,validation
+PHR-01130,"Señorita, me siento cansado desde hace dos días",routine,fatigue,patient,False,validation
+PHR-01131,"Oiga, mi esposa no sabe dónde está, de repente se puso así hace como una hora",emergency,sudden_confusion,family,False,validation
+PHR-01132,Tengo poca hambre estos días desde hace dos días,routine,appetite,patient,False,validation
+PHR-01133,"Doctora, mi suegra no sabe dónde está, de repente se puso así desde el domingo",emergency,sudden_confusion,family,False,validation
+PHR-01134,"Señorita, de repente mi abuelita no me reconoce, por favor manden a alguien",emergency,sudden_confusion,family,False,validation
+PHR-01135,"Buenas tardes, me siento cansado",routine,fatigue,patient,False,validation
+PHR-01136,"Hola, mi esposo no ha dormido bien",routine,sleep,family,False,validation
+PHR-01137,"Buenas tardes, a mi suegra le cuesta más respirar cuando camina",urgent,breathing_mild,family,False,validation
+PHR-01138,"Buenos días, a mi papá le duele la panza desde anoche",urgent,abdominal_pain,family,False,validation
+PHR-01139,"Buenas tardes, ya no me falta el aire, el medicamento funcionó desde anoche",routine,breathing_resolved,patient,True,validation
+PHR-01140,"Señorita, mi abuelita tiene tos con flemas",urgent,cough,family,False,validation
+PHR-01141,"Señorita, me estoy ahogando desde hace dos días",emergency,severe_breathing,patient,False,validation
+PHR-01142,"Doctora, ando más confundido que de costumbre desde hace dos días, por favor manden a alguien",urgent,confusion_mild,patient,False,validation
+PHR-01143,Quería cambiar la cita del jueves,routine,appointment,patient,False,validation
+PHR-01144,"Buenos días, ya me tomé la presión y salió normal desde anoche",routine,normal_reading,patient,False,validation
+PHR-01145,Me duele la herida y está roja desde ayer,urgent,wound,patient,False,validation
+PHR-01146,"Disculpe, quería cambiar la cita del jueves desde hace rato",routine,appointment,patient,False,validation
+PHR-01147,"Oiga, me siento cansado desde anoche",routine,fatigue,patient,False,validation
+PHR-01148,He vomitado varias veces desde el domingo.,urgent,vomiting,patient,False,validation
+PHR-01149,"Buenos días, mi mamá sangra mucho de la pierna y no para",emergency,severe_bleeding,family,False,validation
+PHR-01150,"Doctora, mi esposo habla arrastrado y no se le entiende lo que dice desde hace rato",emergency,stroke_signs,family,False,validation
+PHR-01151,"Doctora, doña Rosa habla arrastrado y no se le entiende lo que dice, por favor manden a alguien",emergency,stroke_signs,family,False,validation
+PHR-01152,"Buenos días, queremos cambiar la cita de don Pepe desde el domingo, ayúdenme por favor",routine,appointment,family,False,validation
+PHR-01153,"Buenas tardes, me arde al orinar, ayúdenme por favor",urgent,urinary,patient,False,validation
+PHR-01154,"Oiga, ando más confundido que de costumbre desde anoche",urgent,confusion_mild,patient,False,validation
+PHR-01155,"Doctora, a doña Rosa le salió el azúcar muy alta desde hace dos días",urgent,glucose,family,False,validation
+PHR-01156,"Doctora, a mi esposa le duelen las rodillas como siempre desde la mañana, ayúdenme por favor",routine,chronic_pain,family,False,validation
+PHR-01157,"Buenas tardes, ¿a qué hora viene la enfermera con don Pepe?",routine,schedule_question,family,False,validation
+PHR-01158,Mi abuelito anda con poco apetito,routine,appetite,family,False,validation
+PHR-01159,"Señorita, a mi mamá le duelen las rodillas como siempre hace como una hora",routine,chronic_pain,family,False,validation
+PHR-01160,"Buenas tardes, ando más confundido que de costumbre hace como una hora",urgent,confusion_mild,patient,False,validation
+PHR-01161,"Hola, mi abuelita no puede mover el lado derecho desde hace rato, ¿qué hago?",emergency,stroke_signs,family,False,validation
+PHR-01162,"Hola, no he querido comer nada desde el domingo",urgent,not_eating,patient,False,validation
+PHR-01163,"Buenos días, me duele mucho la rodilla, no puedo caminar",urgent,pain,patient,False,validation
+PHR-01164,"Buenos días, ayer me dolía el pecho pero ya se me quitó, quiero que me revisen",urgent,chest_pain_resolved,patient,True,validation
+PHR-01165,"Buenos días, mi mamá se está ahogando desde la mañana, ayúdenme por favor",emergency,severe_breathing,family,False,validation
+PHR-01166,"Señorita, no he dormido bien",routine,sleep,patient,False,validation
+PHR-01167,"A mi mamá le duele el pecho muy fuerte, por favor manden a alguien",emergency,chest_pain,family,False,validation
+PHR-01168,"Doctora, doña Rosa ya no quiere comer ni vivir, dice que está cansada de todo desde el domingo",emergency,self_harm,family,True,validation
+PHR-01169,"Hola, gracias por la visita de ayer desde el domingo",routine,thanks,patient,False,validation
+PHR-01170,"Hola, ayer me dolía el pecho pero ya se me quitó, quiero que me revisen.",urgent,chest_pain_resolved,patient,True,validation
+PHR-01171,"Oiga, me aprieta el pecho, ayúdenme por favor",emergency,chest_pain,patient,False,validation
+PHR-01172,"Buenas tardes, mi papá habla arrastrado y no se le entiende lo que dice",emergency,stroke_signs,family,False,validation
+PHR-01173,"Disculpe, mi abuelito se cayó y no se puede levantar desde hace dos días, ayúdenme por favor",emergency,serious_fall,family,False,validation
+PHR-01174,"Disculpe, don Pepe se resbaló pero no se pegó fuerte",urgent,minor_fall,family,False,validation
+PHR-01175,"Disculpe, mi tía se cayó y se pegó en la cabeza desde hace dos días, ayúdenme por favor",emergency,serious_fall,family,False,validation
+PHR-01176,"Oiga, queremos cambiar la cita de mi suegra hace como una hora",routine,appointment,family,False,validation
+PHR-01177,"Doctora, doña Rosa perdió el conocimiento hace como una hora. Estoy preocupada.",emergency,unconscious,family,False,validation
+PHR-01178,"Doctora, no puedo respirar bien",emergency,severe_breathing,patient,False,validation
+PHR-01179,"Buenos días, me duelen las rodillas como siempre desde la mañana, ¿qué hago?",routine,chronic_pain,patient,False,validation
+PHR-01180,"Señorita, tengo fiebre y escalofríos hace como una hora",urgent,fever,patient,False,validation
+PHR-01181,"Oiga, todo bien, solo quería avisar, ayúdenme por favor",routine,check_in,patient,False,validation
+PHR-01182,"Buenas tardes, me caí pero no me pegué fuerte, por favor manden a alguien",urgent,minor_fall,patient,False,validation
+PHR-01183,"Oiga, mi mamá anda triste desde ayer",routine,mood,family,False,validation
+PHR-01184,"Hola, doña Rosa se cayó y se pegó en la cabeza desde anoche",emergency,serious_fall,family,False,validation
+PHR-01185,"Señorita, a mi tía ya se le acaban sus medicinas hace como una hora",routine,medication_refill,family,False,validation
+PHR-01186,"Doctora, a mi mamá le salió la presión en 170 desde anoche",urgent,blood_pressure,family,False,validation
+PHR-01187,"Buenas tardes, a mi mamá se le hinchó la pierna. Estoy preocupada.",urgent,swelling,family,False,validation
+PHR-01188,Tengo calentura desde ayer,urgent,fever,patient,False,validation
+PHR-01189,"Hola, tengo diarrea desde hace dos días, ¿qué hago?",urgent,diarrhea,patient,False,validation
+PHR-01190,"Buenas tardes, tengo fiebre y escalofríos desde la mañana",urgent,fever,patient,False,validation
+PHR-01191,"Disculpe, a don Pepe le arde al hacer pipí, por favor manden a alguien",urgent,urinary,family,False,validation
+PHR-01192,Ya no quiero vivir desde el domingo,emergency,self_harm,patient,False,validation
+PHR-01193,"Doctora, mi suegra se cayó y se pegó en la cabeza",emergency,serious_fall,family,False,validation
+PHR-01194,"Buenas tardes, a don Pepe le duele el pecho muy fuerte",emergency,chest_pain,family,False,validation
+PHR-01195,"Hola, mi esposa se está ahogando desde la mañana",emergency,severe_breathing,family,False,validation
+PHR-01196,"Oiga, a doña Rosa le falta el aire y tiene los labios morados desde ayer",emergency,severe_breathing,family,False,validation
+PHR-01197,"Disculpe, ando más confundido que de costumbre desde hace dos días. Estoy preocupada.",urgent,confusion_mild,patient,False,validation
+PHR-01198,"Oiga, me arde al orinar desde hace rato",urgent,urinary,patient,False,validation
+PHR-01199,"Doctora, mi papá se resbaló pero no se pegó fuerte desde anoche",urgent,minor_fall,family,False,validation
+PHR-01200,"Doctora, se me olvidó si me tomé la pastilla",routine,medication_question,patient,False,validation
+PHR-01201,"Oiga, siento opresión en el pecho y el dolor se me va al brazo.",emergency,chest_pain,patient,False,validation
+PHR-01202,"Disculpe, mi mamá tiene diarrea y está débil desde ayer, por favor manden a alguien",urgent,diarrhea,family,False,validation
+PHR-01203,Don Pepe anda más confundida que otros días,urgent,confusion_mild,family,False,validation
+PHR-01204,"Doctora, a doña Rosa se le hinchó la pierna.",urgent,swelling,family,False,validation
+PHR-01205,"Buenas tardes, quería cambiar la cita del jueves",routine,appointment,patient,False,validation
+PHR-01206,"Disculpe, mi suegra ya no quiere comer ni vivir, dice que está cansada de todo. Estoy preocupada.",emergency,self_harm,family,True,validation
+PHR-01207,"Disculpe, a mi tía le salió la presión en 170 desde el domingo",urgent,blood_pressure,family,False,validation
+PHR-01208,"Oiga, siento opresión en el pecho y el dolor se me va al brazo desde el domingo, ¿qué hago?",emergency,chest_pain,patient,False,validation
+PHR-01209,Tengo la piel reseca,routine,skin,patient,False,validation
+PHR-01210,"Señorita, mi esposa está bien, solo quería avisar desde hace rato",routine,check_in,family,False,validation
+PHR-01211,Mi esposo anda triste desde la mañana,routine,mood,family,False,validation
+PHR-01212,"Buenas tardes, tengo calentura desde anoche",urgent,fever,patient,False,validation
+PHR-01213,"Hola, a mi suegra le salió la presión en 170",urgent,blood_pressure,family,False,validation
+PHR-01214,"Doctora, don Pepe anda con poco apetito",routine,appetite,family,False,validation
+PHR-01215,"Señorita, se me va el aire y no lo recupero",emergency,severe_breathing,patient,False,validation
+PHR-01216,"Disculpe, ya no quiero vivir desde la mañana, ¿qué hago?",emergency,self_harm,patient,False,validation
+PHR-01217,"Buenos días, tengo mucha tos con flemas desde la mañana",urgent,cough,patient,False,validation
+PHR-01218,"Buenos días, mi tía no responde, no despierta",emergency,unconscious,family,False,validation
+PHR-01219,"Doctora, mi tía se está ahogando desde hace dos días",emergency,severe_breathing,family,False,validation
+PHR-01220,"Doctora, me arde al orinar desde hace dos días",urgent,urinary,patient,False,validation
+PHR-01221,"Hola, me caí y no me puedo levantar del piso desde ayer",emergency,serious_fall,patient,False,validation
+PHR-01222,"Señorita, se me olvidó si me tomé la pastilla desde hace dos días",routine,medication_question,patient,False,validation
+PHR-01223,"Doctora, gracias por atender a mi papá",routine,thanks,family,False,validation
+PHR-01224,"Hola, tengo diarrea",urgent,diarrhea,patient,False,validation
+PHR-01225,"Oiga, mi abuelita se cayó la semana pasada pero ya está bien, ayúdenme por favor",routine,past_fall,family,True,validation
+PHR-01226,A mi suegra le aprieta el pecho y está sudando frío,emergency,chest_pain,family,False,validation
+PHR-01227,"Oiga, me duelen las rodillas como siempre desde anoche",routine,chronic_pain,patient,False,validation
+PHR-01228,"Señorita, a mi mamá le salió la presión en 170.",urgent,blood_pressure,family,False,validation
+PHR-01229,"Disculpe, quería saber a qué hora viene la enfermera desde hace rato",routine,schedule_question,patient,False,validation
+PHR-01230,"Señorita, se me olvidó si me tomé la pastilla. Estoy preocupada.",routine,medication_question,patient,False,validation
+PHR-01231,"Buenas tardes, a mi abuelita se le va el aire, ayúdenme por favor",emergency,severe_breathing,family,False,validation
+PHR-01232,"Ya se me están acabando las pastillas de la presión hace como una hora, por favor manden a alguien",routine,medication_refill,patient,False,validation
+PHR-01233,"Hola, don Pepe no ha dormido bien hace como una hora",routine,sleep,family,False,validation
+PHR-01234,"Hola, a mi tía le duele la panza",urgent,abdominal_pain,family,False,validation
+PHR-01235,"Señorita, ya me tomé la presión y salió normal desde hace rato, por favor manden a alguien",routine,normal_reading,patient,False,validation
+PHR-01236,"Oiga, mi papá tiene tos con flemas desde la mañana",urgent,cough,family,False,validation
+PHR-01237,"Vomité sangre desde hace rato, ¿qué hago?",emergency,severe_bleeding,patient,False,validation
+PHR-01238,"Hola, mi mamá no ha dormido bien hace como una hora",routine,sleep,family,False,validation
+PHR-01239,"Oiga, mi esposa no ha comido ni tomado agua",urgent,not_eating,family,False,validation
+PHR-01240,"Buenas tardes, a mi abuelito le duelen las rodillas como siempre",routine,chronic_pain,family,False,validation
+PHR-01241,"Buenas tardes, me falta el aire cuando camino desde hace rato, ayúdenme por favor",urgent,breathing_mild,patient,False,validation
+PHR-01242,"Disculpe, gracias por la visita de ayer desde anoche, por favor manden a alguien",routine,thanks,patient,False,validation
+PHR-01243,"Buenas tardes, me siento mareado",urgent,dizziness,patient,False,validation
+PHR-01244,"Señorita, me duele mucho la rodilla, no puedo caminar desde ayer",urgent,pain,patient,False,validation
+PHR-01245,Gracias por atender a don Pepe,routine,thanks,family,False,validation
+PHR-01246,"Doctora, a doña Rosa le duele la cadera y no quiere caminar desde ayer",urgent,pain,family,False,validation
+PHR-01247,"Buenas tardes, mi papá tiene tos con flemas desde el domingo, por favor manden a alguien",urgent,cough,family,False,validation
+PHR-01248,"Señorita, tengo mucha tos con flemas",urgent,cough,patient,False,validation
+PHR-01249,"Doctora, don Pepe no sabe dónde está, de repente se puso así desde la mañana",emergency,sudden_confusion,family,False,validation
+PHR-01250,"Buenas tardes, mi esposo se cayó y no se puede levantar desde hace rato",emergency,serious_fall,family,False,validation
+PHR-01251,"Señorita, tengo poca hambre estos días desde ayer, ayúdenme por favor",routine,appetite,patient,False,validation
+PHR-01252,"Buenas tardes, quería saber a qué hora viene la enfermera hace como una hora",routine,schedule_question,patient,False,validation
+PHR-01253,"Buenas tardes, mi suegra no puede mover el lado derecho",emergency,stroke_signs,family,False,validation
+PHR-01254,"Hola, mi suegra tiene fiebre",urgent,fever,family,False,validation
+PHR-01255,"Buenas tardes, mi esposa se privó en la sala desde el domingo",emergency,unconscious,family,False,validation
+PHR-01256,"Doctora, don Pepe está estreñida",routine,constipation,family,False,validation
+PHR-01257,"Buenos días, me duele el estómago desde la mañana",urgent,abdominal_pain,patient,False,validation
+PHR-01258,"Doctora, a don Pepe le salió el azúcar muy alta desde la mañana",urgent,glucose,family,False,validation
+PHR-01259,"Doctora, me duele mucho la rodilla, no puedo caminar",urgent,pain,patient,False,validation
+PHR-01260,"Oiga, don Pepe no puede mover el lado derecho",emergency,stroke_signs,family,False,validation
+PHR-01261,"Señorita, mi abuelito no puede respirar desde hace rato",emergency,severe_breathing,family,False,validation
+PHR-01262,"Disculpe, he vomitado varias veces desde el domingo",urgent,vomiting,patient,False,validation
+PHR-01263,"Oiga, mi mamá se resbaló pero no se pegó fuerte, ¿qué hago?",urgent,minor_fall,family,False,validation
+PHR-01264,Se me va el aire y no lo recupero,emergency,severe_breathing,patient,False,validation
+PHR-01265,Mi abuelita anda más confundida que otros días.,urgent,confusion_mild,family,False,validation
+PHR-01266,"Señorita, ando más confundido que de costumbre hace como una hora, ayúdenme por favor",urgent,confusion_mild,patient,False,validation
+PHR-01267,A mi esposo le salió el azúcar muy alta desde ayer,urgent,glucose,family,False,validation
+PHR-01268,Mi abuelito se resbaló pero no se pegó fuerte desde la mañana,urgent,minor_fall,family,False,validation
+PHR-01269,"Buenas tardes, doña Rosa anda muy mareada, por favor manden a alguien",urgent,dizziness,family,False,validation
+PHR-01270,"Señorita, a mi mamá le supura la herida desde el domingo",urgent,wound,family,False,validation
+PHR-01271,"Doctora, a mi abuelita ya se le acaban sus medicinas",routine,medication_refill,family,False,validation
+PHR-01272,"Buenas tardes, doña Rosa no puede mover el lado derecho desde el domingo",emergency,stroke_signs,family,False,validation
+PHR-01273,"Buenos días, mi suegra anda más confundida que otros días desde la mañana",urgent,confusion_mild,family,False,validation
+PHR-01274,"Señorita, mi abuelito tiene diarrea y está débil desde hace rato",urgent,diarrhea,family,False,validation
+PHR-01275,"Oiga, mi abuelito no ha comido ni tomado agua desde hace rato",urgent,not_eating,family,False,validation
+PHR-01276,"Señorita, a mi abuelito le salió la presión en 170 hace como una hora",urgent,blood_pressure,family,False,validation
+PHR-01277,"Doctora, a mi papá le arde al hacer pipí desde hace dos días",urgent,urinary,family,False,validation
+PHR-01278,"Doctora, mi abuelito ya no quiere comer ni vivir, dice que está cansada de todo desde el domingo",emergency,self_harm,family,True,validation
+PHR-01279,"Señorita, tengo diarrea desde el domingo",urgent,diarrhea,patient,False,validation
+PHR-01280,"Doctora, a don Pepe le salió la presión en 170",urgent,blood_pressure,family,False,validation
+PHR-01281,"Buenos días, me arde al orinar hace como una hora",urgent,urinary,patient,False,validation
+PHR-01282,"Buenas tardes, siento opresión en el pecho y el dolor se me va al brazo desde el domingo",emergency,chest_pain,patient,False,validation
+PHR-01283,"Hola, me duele el estómago desde la mañana",urgent,abdominal_pain,patient,False,validation
+PHR-01284,"Buenos días, mi suegra dice que ya no quiere vivir desde el domingo",emergency,self_harm,family,False,validation
+PHR-01285,"Hola, mi abuelito no responde, no despierta desde el domingo",emergency,unconscious,family,False,test
+PHR-01286,"Señorita, mi tía no ha dormido bien hace como una hora, por favor manden a alguien",routine,sleep,family,False,validation
+PHR-01287,"Señorita, gracias por la visita de ayer hace como una hora",routine,thanks,patient,False,validation
+PHR-01288,"Buenos días, mi suegra está bien, solo quería avisar desde la mañana",routine,check_in,family,False,validation
+PHR-01289,"Doctora, tengo mucha tos con flemas desde anoche",urgent,cough,patient,False,validation
+PHR-01290,"Buenas tardes, no he querido comer nada",urgent,not_eating,patient,False,validation
+PHR-01291,"Hola, mi suegra tiene tos con flemas desde la mañana",urgent,cough,family,False,test
+PHR-01292,"Hola, me estoy ahogando",emergency,severe_breathing,patient,False,test
+PHR-01293,"Disculpe, tengo calentura",urgent,fever,patient,False,test
+PHR-01294,"Buenas tardes, a mi abuelito le cuesta más respirar cuando camina.",urgent,breathing_mild,family,False,test
+PHR-01295,"Buenos días, don Pepe tiene los pies hinchados desde anoche",urgent,swelling,family,False,test
+PHR-01296,Mi suegra tiene fiebre,urgent,fever,family,False,test
+PHR-01297,"Señorita, tengo poca hambre estos días",routine,appetite,patient,False,validation
+PHR-01298,"Hola, don Pepe anda más confundida que otros días. Estoy preocupada.",urgent,confusion_mild,family,False,test
+PHR-01299,"Hola, mi papá anda con poco apetito desde hace dos días, por favor manden a alguien",routine,appetite,family,False,validation
+PHR-01300,"Buenas tardes, don Pepe está bien, solo quería avisar desde la mañana",routine,check_in,family,False,validation
+PHR-01301,"Hola, me siento cansado desde la mañana, ayúdenme por favor",routine,fatigue,patient,False,validation
+PHR-01302,"Doctora, a mi suegra le aprieta el pecho y está sudando frío desde ayer",emergency,chest_pain,family,False,test
+PHR-01303,"Buenas tardes, mi abuelita se cayó y se pegó en la cabeza desde el domingo",emergency,serious_fall,family,False,test
+PHR-01304,"Oiga, mi suegra no ha comido ni tomado agua",urgent,not_eating,family,False,test
+PHR-01305,Quería saber a qué hora viene la enfermera desde hace rato,routine,schedule_question,patient,False,validation
+PHR-01306,"Oiga, no he dormido bien",routine,sleep,patient,False,validation
+PHR-01307,"Doctora, mi mamá tiene los pies hinchados desde hace rato, ¿qué hago?",urgent,swelling,family,False,test
+PHR-01308,"Oiga, me arde al orinar desde el domingo",urgent,urinary,patient,False,test
+PHR-01309,"Buenas tardes, me falta el aire cuando camino desde ayer",urgent,breathing_mild,patient,False,test
+PHR-01310,"Oiga, queremos cambiar la cita de mi esposa hace como una hora",routine,appointment,family,False,validation
+PHR-01311,Me siento cansado desde la mañana,routine,fatigue,patient,False,test
+PHR-01312,"Me duelen las rodillas como siempre, ayúdenme por favor",routine,chronic_pain,patient,False,test
+PHR-01313,Se me olvidó si me tomé la pastilla desde ayer,routine,medication_question,patient,False,test
+PHR-01314,"Oiga, a mi tía le duele la cadera y no quiere caminar desde hace rato. Estoy preocupada.",urgent,pain,family,False,test
+PHR-01315,"Señorita, a doña Rosa le duelen las rodillas como siempre",routine,chronic_pain,family,False,test
+PHR-01316,"Hola, tengo la piel reseca",routine,skin,patient,False,test
+PHR-01317,"Oiga, ya no quiero vivir desde anoche, ¿qué hago?",emergency,self_harm,patient,False,test
+PHR-01318,"Oiga, a mi mamá le cuesta más respirar cuando camina desde hace dos días. Estoy preocupada.",urgent,breathing_mild,family,False,test
+PHR-01319,"Buenos días, ¿a qué hora viene la enfermera con mi abuelito? desde hace dos días",routine,schedule_question,family,False,test
+PHR-01320,"Oiga, me duelen las rodillas como siempre desde anoche, ayúdenme por favor",routine,chronic_pain,patient,False,test
+PHR-01321,"Buenas tardes, estoy estreñido hace como una hora.",routine,constipation,patient,False,test
+PHR-01322,"Buenas tardes, a mi abuelita le salió normal la presión desde hace dos días, ayúdenme por favor",routine,normal_reading,family,False,test
+PHR-01323,"Disculpe, no puedo respirar bien",emergency,severe_breathing,patient,False,test
+PHR-01324,"Disculpe, don Pepe no tiene dolor en el pecho, solo tos",urgent,cough,family,True,test
+PHR-01325,"Buenas tardes, me duele la herida y está roja, ayúdenme por favor",urgent,wound,patient,False,test
+PHR-01326,"Señorita, quería saber a qué hora viene la enfermera desde la mañana. Estoy preocupada.",routine,schedule_question,patient,False,test
+PHR-01327,"Oiga, mi suegra anda con poco apetito desde ayer",routine,appetite,family,False,test
+PHR-01328,"Oiga, gracias por atender a mi esposa desde el domingo",routine,thanks,family,False,test
+PHR-01329,"Buenas tardes, a mi esposa le duelen las rodillas como siempre",routine,chronic_pain,family,False,test
+PHR-01330,"Señorita, don Pepe no recuerda si se tomó la pastilla desde anoche",routine,medication_question,family,False,test
+PHR-01331,"Buenas tardes, mi abuelita anda con poco apetito desde anoche",routine,appetite,family,False,test
+PHR-01332,Mi esposo se está ahogando,emergency,severe_breathing,family,False,test
+PHR-01333,"Buenas tardes, a mi abuelito le salió normal la presión",routine,normal_reading,family,False,test
+PHR-01334,Mi suegra anda muy mareada,urgent,dizziness,family,False,test
+PHR-01335,"Oiga, queremos cambiar la cita de mi mamá desde el domingo",routine,appointment,family,False,test
+PHR-01336,"Señorita, mi esposo tiene los pies hinchados, ¿qué hago?",urgent,swelling,family,False,test
+PHR-01337,No he querido comer nada,urgent,not_eating,patient,False,test
+PHR-01338,"Oiga, mi papá tiene tos con flemas",urgent,cough,family,False,test
+PHR-01339,"Buenos días, doña Rosa tiene los pies hinchados",urgent,swelling,family,False,test
+PHR-01340,"Buenos días, gracias por atender a mi tía",routine,thanks,family,False,test
+PHR-01341,"Buenas tardes, me duelen las rodillas como siempre desde ayer",routine,chronic_pain,patient,False,test
+PHR-01342,"Hola, don Pepe tuvo una convulsión desde hace rato",emergency,seizure,family,False,test
+PHR-01343,"Disculpe, mi esposa se está ahogando desde hace dos días, ¿qué hago?",emergency,severe_breathing,family,False,test
+PHR-01344,"Oiga, a mi mamá le duele la cadera y no quiere caminar",urgent,pain,family,False,test
+PHR-01345,"Buenas tardes, a mi mamá le duele la cadera y no quiere caminar.",urgent,pain,family,False,test
+PHR-01346,"Doctora, ando más confundido que de costumbre desde hace rato, ¿qué hago?",urgent,confusion_mild,patient,False,test
+PHR-01347,"Buenos días, mi papá tiene calentura desde anoche",urgent,fever,family,False,test
+PHR-01348,"Oiga, me duele mucho la rodilla, no puedo caminar",urgent,pain,patient,False,test
+PHR-01349,"Disculpe, me duele muy fuerte el pecho",emergency,chest_pain,patient,False,test
+PHR-01350,"Señorita, a doña Rosa le duele la cadera y no quiere caminar. Estoy preocupada.",urgent,pain,family,False,test
+PHR-01351,"Doctora, a mi esposa le supura la herida",urgent,wound,family,False,test
+PHR-01352,"Disculpe, se me hinchó la pierna desde la mañana",urgent,swelling,patient,False,test
+PHR-01353,"Doctora, a mi abuelito le salió la presión en 170 hace como una hora",urgent,blood_pressure,family,False,test
+PHR-01354,"Buenas tardes, me caí y no me puedo levantar del piso",emergency,serious_fall,patient,False,test
+PHR-01355,Me duele muy fuerte el pecho desde ayer.,emergency,chest_pain,patient,False,test
+PHR-01356,"Disculpe, mi esposa está estreñida",routine,constipation,family,False,test
+PHR-01357,"Señorita, don Pepe anda más confundida que otros días hace como una hora.",urgent,confusion_mild,family,False,test
+PHR-01358,"Buenos días, se me olvidó si me tomé la pastilla",routine,medication_question,patient,False,test
+PHR-01359,"Disculpe, mi suegra se privó en la sala",emergency,unconscious,family,False,test
+PHR-01360,"Señorita, mi papá no ha dormido bien desde hace rato, por favor manden a alguien",routine,sleep,family,False,test
+PHR-01361,"Buenos días, a mi abuelito le supura la herida.",urgent,wound,family,False,test
+PHR-01362,"Oiga, mi esposo está bien, solo quería avisar",routine,check_in,family,False,test
+PHR-01363,"Doctora, me aprieta el pecho",emergency,chest_pain,patient,False,test
+PHR-01364,"Doctora, doña Rosa perdió el conocimiento",emergency,unconscious,family,False,test
+PHR-01365,"Buenos días, tengo fiebre y escalofríos desde anoche",urgent,fever,patient,False,test
+PHR-01366,"Ya me tomé la presión y salió normal, por favor manden a alguien",routine,normal_reading,patient,False,test
+PHR-01367,"Disculpe, mi abuelita está estreñida hace como una hora",routine,constipation,family,False,test
+PHR-01368,"Buenos días, estoy estreñido",routine,constipation,patient,False,test
+PHR-01369,"Mi suegra tiene fiebre desde hace rato, ¿qué hago?",urgent,fever,family,False,test
+PHR-01370,"Buenas tardes, mi tía habla arrastrado y no se le entiende lo que dice.",emergency,stroke_signs,family,False,test
+PHR-01371,"Oiga, a mi esposo le arde al hacer pipí hace como una hora",urgent,urinary,family,False,test
+PHR-01372,"Oiga, me falta mucho el aire",emergency,severe_breathing,patient,False,test
+PHR-01373,"Buenos días, me duele mucho la rodilla, no puedo caminar desde el domingo",urgent,pain,patient,False,test
+PHR-01374,"Disculpe, mi suegra tiene diarrea y está débil desde ayer. Estoy preocupada.",urgent,diarrhea,family,False,test
+PHR-01375,"Doctora, todo bien, solo quería avisar desde anoche",routine,check_in,patient,False,test
+PHR-01376,"Hola, mi abuelito anda muy mareada",urgent,dizziness,family,False,test
+PHR-01377,"Oiga, mi papá tuvo una convulsión",emergency,seizure,family,False,test
+PHR-01378,"Hola, gracias por la visita de ayer",routine,thanks,patient,False,test
+PHR-01379,"Buenos días, mi abuelito tuvo una convulsión",emergency,seizure,family,False,test
+PHR-01380,"Señorita, mi tía tiene tos con flemas",urgent,cough,family,False,test
+PHR-01381,"Hola, doña Rosa tiene la piel reseca",routine,skin,family,False,test
+PHR-01382,"Buenos días, mi esposo no puede respirar",emergency,severe_breathing,family,False,test
+PHR-01383,"Disculpe, mi mamá anda triste desde hace rato",routine,mood,family,False,test
+PHR-01384,"Disculpe, a don Pepe le duele el pecho muy fuerte desde ayer, por favor manden a alguien",emergency,chest_pain,family,False,test
+PHR-01385,"Disculpe, a mi esposa le arde al hacer pipí",urgent,urinary,family,False,test
+PHR-01386,"Señorita, siento opresión en el pecho y el dolor se me va al brazo desde el domingo, ayúdenme por favor",emergency,chest_pain,patient,False,test
+PHR-01387,"Hola, a doña Rosa le cuesta más respirar cuando camina desde la mañana",urgent,breathing_mild,family,False,test
+PHR-01388,"Hola, tengo calentura hace como una hora.",urgent,fever,patient,False,test
+PHR-01389,"Disculpe, a mi esposa le duele el pecho muy fuerte desde ayer",emergency,chest_pain,family,False,test
+PHR-01390,"Hola, he vomitado varias veces desde hace dos días",urgent,vomiting,patient,False,test
+PHR-01391,"Doctora, he vomitado varias veces desde la mañana",urgent,vomiting,patient,False,test
+PHR-01392,"Buenos días, me falta el aire cuando camino. Estoy preocupada.",urgent,breathing_mild,patient,False,test
+PHR-01393,"Hola, mi tía está estreñida",routine,constipation,family,False,test
+PHR-01394,"Oiga, mi papá ha vomitado varias veces",urgent,vomiting,family,False,test
+PHR-01395,"Buenos días, me aprieta el pecho",emergency,chest_pain,patient,False,test
+PHR-01396,"Buenas tardes, doña Rosa no puede mover el lado derecho desde ayer",emergency,stroke_signs,family,False,test
+PHR-01397,"Hola, doña Rosa ha vomitado varias veces",urgent,vomiting,family,False,test
+PHR-01398,"Buenos días, a mi abuelito se le cayó la cara de un lado hace como una hora, ayúdenme por favor",emergency,stroke_signs,family,False,test
+PHR-01399,Mi esposo se desmayó,emergency,unconscious,family,False,test
+PHR-01400,"Señorita, mi tía se privó en la sala desde el domingo",emergency,unconscious,family,False,test
+PHR-01401,"Buenas tardes, no puedo mover el brazo izquierdo. Estoy preocupada.",emergency,stroke_signs,patient,False,test
+PHR-01402,"Buenas tardes, doña Rosa se desmayó",emergency,unconscious,family,False,test
+PHR-01403,"Oiga, mi abuelita tuvo una convulsión",emergency,seizure,family,False,test
+PHR-01404,"Hola, me salió la azúcar en 300 hace como una hora, por favor manden a alguien",urgent,glucose,patient,False,test
+PHR-01405,"Doctora, don Pepe no puede mover el lado derecho",emergency,stroke_signs,family,False,test
+PHR-01406,"Buenos días, queremos cambiar la cita de mi esposa, por favor manden a alguien",routine,appointment,family,False,test
+PHR-01407,"Buenos días, a doña Rosa le cuesta más respirar cuando camina desde la mañana",urgent,breathing_mild,family,False,test
+PHR-01408,"Buenas tardes, a mi papá le duelen las rodillas como siempre, ¿qué hago?",routine,chronic_pain,family,False,test
+PHR-01409,"Disculpe, doña Rosa dice que se quiere quitar la vida",emergency,self_harm,family,False,test
+PHR-01410,"Oiga, a don Pepe ya se le acaban sus medicinas, ayúdenme por favor",routine,medication_refill,family,False,test
+PHR-01411,"Me caí y me pegué en la cabeza desde anoche, por favor manden a alguien",emergency,serious_fall,patient,False,test
+PHR-01412,"Doctora, estoy estreñido desde anoche, ¿qué hago?",routine,constipation,patient,False,test
+PHR-01413,"Buenas tardes, me duele mucho la rodilla, no puedo caminar",urgent,pain,patient,False,test
+PHR-01414,"Hola, a mi suegra le duelen las rodillas como siempre desde anoche",routine,chronic_pain,family,False,test
+PHR-01415,A mi abuelito le dio un ataque y se sacudía hace como una hora.,emergency,seizure,family,False,test
+PHR-01416,"Buenos días, a doña Rosa le duele la panza desde hace rato",urgent,abdominal_pain,family,False,test
+PHR-01417,"Disculpe, se me olvidó si me tomé la pastilla desde hace rato",routine,medication_question,patient,False,test
+PHR-01418,"Señorita, no he querido comer nada",urgent,not_eating,patient,False,test
+PHR-01419,"Señorita, me caí y no me puedo levantar del piso",emergency,serious_fall,patient,False,test
+PHR-01420,"Buenas tardes, todo bien, solo quería avisar",routine,check_in,patient,False,test
+PHR-01421,"Oiga, gracias por la visita de ayer desde anoche",routine,thanks,patient,False,test
+PHR-01422,"Señorita, a mi abuelito le duelen las rodillas como siempre desde hace dos días.",routine,chronic_pain,family,False,test
+PHR-01423,"Hola, a mi abuelita le dio un ataque y se sacudía",emergency,seizure,family,False,test
+PHR-01424,"Doctora, mi papá tiene los pies hinchados desde el domingo. Estoy preocupada.",urgent,swelling,family,False,test
+PHR-01425,Me duelen las rodillas como siempre desde hace rato,routine,chronic_pain,patient,False,test
+PHR-01426,"Hola, doña Rosa no ha dormido bien desde la mañana",routine,sleep,family,False,test
+PHR-01427,"Señorita, a mi papá le aprieta el pecho y está sudando frío desde la mañana. Estoy preocupada.",emergency,chest_pain,family,False,test
+PHR-01428,"Buenos días, mi esposa se privó en la sala. Estoy preocupada.",emergency,unconscious,family,False,test
+PHR-01429,"Señorita, mi abuelita tuvo una convulsión desde la mañana",emergency,seizure,family,False,test
+PHR-01430,"Hola, todo bien, solo quería avisar",routine,check_in,patient,False,test
+PHR-01431,Mi abuelita vomitó sangre desde hace dos días,emergency,severe_bleeding,family,False,test
+PHR-01432,"Oiga, mi esposa habla arrastrado y no se le entiende lo que dice desde el domingo",emergency,stroke_signs,family,False,test
+PHR-01433,Don Pepe se resbaló pero no se pegó fuerte desde el domingo,urgent,minor_fall,family,False,test
+PHR-01434,"Hola, ya se me están acabando las pastillas de la presión",routine,medication_refill,patient,False,test
+PHR-01435,"Hola, mi papá se desmayó hace como una hora",emergency,unconscious,family,False,test
+PHR-01436,"Hola, ya me tomé la presión y salió normal desde anoche, por favor manden a alguien",routine,normal_reading,patient,False,test
+PHR-01437,"Buenos días, me duele la herida y está roja",urgent,wound,patient,False,test
+PHR-01438,"Buenos días, tengo diarrea. Estoy preocupada.",urgent,diarrhea,patient,False,test
+PHR-01439,Mi esposo anda cansada,routine,fatigue,family,False,test
+PHR-01440,"Mi suegra sangra mucho de la pierna y no para, ayúdenme por favor",emergency,severe_bleeding,family,False,test
+PHR-01441,"Doctora, vomité sangre hace como una hora",emergency,severe_bleeding,patient,False,test
+PHR-01442,"Oiga, todo bien, solo quería avisar desde ayer",routine,check_in,patient,False,test
+PHR-01443,"Hola, don Pepe sangra mucho de la pierna y no para hace como una hora",emergency,severe_bleeding,family,False,test
+PHR-01444,"Doctora, me falta mucho el aire desde el domingo",emergency,severe_breathing,patient,False,test
+PHR-01445,"Buenos días, quería saber a qué hora viene la enfermera hace como una hora",routine,schedule_question,patient,False,test
+PHR-01446,"Doctora, tengo fiebre y escalofríos desde ayer",urgent,fever,patient,False,test
+PHR-01447,"Buenos días, a mi abuelito le salió normal la presión",routine,normal_reading,family,False,test
+PHR-01448,"Disculpe, tengo diarrea",urgent,diarrhea,patient,False,test
+PHR-01449,Mi esposo anda más confundida que otros días desde el domingo,urgent,confusion_mild,family,False,test
+PHR-01450,"Buenas tardes, no puedo respirar bien desde hace dos días. Estoy preocupada.",emergency,severe_breathing,patient,False,test
+PHR-01451,"Oiga, mi suegra está bien, solo quería avisar desde hace dos días, ayúdenme por favor",routine,check_in,family,False,test
+PHR-01452,"Oiga, a doña Rosa le duelen las rodillas como siempre desde anoche",routine,chronic_pain,family,False,test
+PHR-01453,"Oiga, a mi esposa le supura la herida desde el domingo",urgent,wound,family,False,test
+PHR-01454,Mi esposa se privó en la sala desde la mañana,emergency,unconscious,family,False,test
+PHR-01455,"Buenas tardes, me aprieta el pecho",emergency,chest_pain,patient,False,test
+PHR-01456,"Señorita, tengo la piel reseca desde hace rato, por favor manden a alguien",routine,skin,patient,False,test
+PHR-01457,"Doctora, gracias por la visita de ayer. Estoy preocupada.",routine,thanks,patient,False,test
+PHR-01458,Tengo mucha tos con flemas,urgent,cough,patient,False,test
+PHR-01459,"Hola, tengo los pies muy hinchados desde el domingo.",urgent,swelling,patient,False,test
+PHR-01460,"Disculpe, me quiero morir",emergency,self_harm,patient,False,test
+PHR-01461,Mi papá está estreñida hace como una hora. Estoy preocupada.,routine,constipation,family,False,test
+PHR-01462,"Disculpe, mi tía anda muy mareada desde anoche",urgent,dizziness,family,False,test
+PHR-01463,"A don Pepe le falta el aire y tiene los labios morados desde anoche, por favor manden a alguien",emergency,severe_breathing,family,False,test
+PHR-01464,"Doctora, me siento un poco triste desde anoche",routine,mood,patient,False,test
+PHR-01465,"Disculpe, mi esposo tiene calentura",urgent,fever,family,False,test
+PHR-01466,"Hola, don Pepe se cayó y se pegó en la cabeza, ¿qué hago?",emergency,serious_fall,family,False,test
+PHR-01467,"Señorita, de repente mi suegra no me reconoce desde ayer",emergency,sudden_confusion,family,False,test
+PHR-01468,"Disculpe, mi abuelito está bien, solo quería avisar",routine,check_in,family,False,test
+PHR-01469,A doña Rosa le salió normal la presión desde anoche,routine,normal_reading,family,False,test
+PHR-01470,"Señorita, tengo la presión alta, me salió en 170 desde el domingo",urgent,blood_pressure,patient,False,test
+PHR-01471,"Buenas tardes, don Pepe tiene la piel reseca desde la mañana",routine,skin,family,False,test
+PHR-01472,"Buenas tardes, a mi esposo le arde al hacer pipí hace como una hora, por favor manden a alguien",urgent,urinary,family,False,test
+PHR-01473,"Buenos días, mi abuelita se cayó y no se puede levantar",emergency,serious_fall,family,False,test
+PHR-01474,"Disculpe, doña Rosa anda triste desde anoche",routine,mood,family,False,test
+PHR-01475,"Doctora, mi tía no tiene dolor en el pecho, solo tos desde la mañana. Estoy preocupada.",urgent,cough,family,True,test
+PHR-01476,"Doctora, mi esposo se privó en la sala desde hace dos días",emergency,unconscious,family,False,test
+PHR-01477,"Buenas tardes, siento opresión en el pecho y el dolor se me va al brazo desde la mañana",emergency,chest_pain,patient,False,test
+PHR-01478,"Disculpe, mi esposa no recuerda si se tomó la pastilla",routine,medication_question,family,False,test
+PHR-01479,No he dormido bien desde el domingo,routine,sleep,patient,False,test
+PHR-01480,"Buenos días, mi abuelita no puede mover el lado derecho. Estoy preocupada.",emergency,stroke_signs,family,False,test
+PHR-01481,"Disculpe, se me va el aire y no lo recupero, ¿qué hago?",emergency,severe_breathing,patient,False,test
+PHR-01482,"Señorita, a mi tía ya se le acaban sus medicinas",routine,medication_refill,family,False,test
+PHR-01483,"Señorita, me duelen las rodillas como siempre desde el domingo",routine,chronic_pain,patient,False,test
+PHR-01484,"Doctora, mi tía tiene calentura, por favor manden a alguien",urgent,fever,family,False,test
+PHR-01485,"Buenos días, siento opresión en el pecho y el dolor se me va al brazo",emergency,chest_pain,patient,False,test
+PHR-01486,"Señorita, tengo poca hambre estos días desde ayer",routine,appetite,patient,False,test
+PHR-01487,"Oiga, tengo la piel reseca desde hace dos días.",routine,skin,patient,False,test
+PHR-01488,"Disculpe, mi esposa habla arrastrado y no se le entiende lo que dice",emergency,stroke_signs,family,False,test
+PHR-01489,"Señorita, mi tía no recuerda si se tomó la pastilla desde hace dos días",routine,medication_question,family,False,test
+PHR-01490,"Buenas tardes, queremos cambiar la cita de mi esposa",routine,appointment,family,False,test
+PHR-01491,"Oiga, ya no quiero vivir, ayúdenme por favor",emergency,self_harm,patient,False,test
+PHR-01492,"Disculpe, tengo fiebre y escalofríos desde ayer",urgent,fever,patient,False,test
+PHR-01493,"Señorita, mi mamá no recuerda si se tomó la pastilla desde el domingo, por favor manden a alguien",routine,medication_question,family,False,test
+PHR-01494,"Señorita, me falta el aire cuando camino",urgent,breathing_mild,patient,False,test
+PHR-01495,"Buenos días, me siento cansado",routine,fatigue,patient,False,test
+PHR-01496,"Señorita, ya se me están acabando las pastillas de la presión desde hace dos días",routine,medication_refill,patient,False,test
+PHR-01497,"Buenos días, a mi esposa se le va el aire desde anoche.",emergency,severe_breathing,family,False,test
+PHR-01498,"Hola, a mi suegra le aprieta el pecho y está sudando frío",emergency,chest_pain,family,False,test
+PHR-01499,"Señorita, a mi abuelito le salió normal la presión desde el domingo",routine,normal_reading,family,False,test
+PHR-01500,"Doctora, ya me tomé la presión y salió normal desde ayer",routine,normal_reading,patient,False,test
+PHR-01501,A mi esposo le salió normal la presión desde el domingo,routine,normal_reading,family,False,test
+PHR-01502,"Buenas tardes, a mi abuelita ya se le acaban sus medicinas desde el domingo",routine,medication_refill,family,False,test
+PHR-01503,"Disculpe, a doña Rosa le supura la herida desde el domingo, ¿qué hago?",urgent,wound,family,False,test
+PHR-01504,"Hola, mi papá tuvo una convulsión desde anoche",emergency,seizure,family,False,test
+PHR-01505,"Hola, mi esposo tiene calentura desde el domingo",urgent,fever,family,False,test
+PHR-01506,"Doctora, doña Rosa anda muy mareada",urgent,dizziness,family,False,test
+PHR-01507,"Oiga, a don Pepe le duelen las rodillas como siempre",routine,chronic_pain,family,False,test
+PHR-01508,"Disculpe, mi esposo tiene fiebre",urgent,fever,family,False,test
+PHR-01509,"Disculpe, a mi mamá le duele la cadera y no quiere caminar hace como una hora, por favor manden a alguien",urgent,pain,family,False,test
+PHR-01510,"Buenos días, me duele la herida y está roja desde hace rato, por favor manden a alguien",urgent,wound,patient,False,test
+PHR-01511,"Buenas tardes, me salió la azúcar en 300",urgent,glucose,patient,False,test
+PHR-01512,"Buenos días, estoy estreñido desde hace rato. Estoy preocupada.",routine,constipation,patient,False,test
+PHR-01513,"Tengo la presión alta, me salió en 170. Estoy preocupada.",urgent,blood_pressure,patient,False,test
+PHR-01514,"Buenos días, mi papá dice que ya no quiere vivir, ayúdenme por favor",emergency,self_harm,family,False,test
+PHR-01515,"Oiga, mi papá tiene tos con flemas desde hace dos días",urgent,cough,family,False,test
+PHR-01516,"Doctora, a mi mamá se le va el aire desde anoche",emergency,severe_breathing,family,False,test
+PHR-01517,"Buenas tardes, se me olvidó si me tomé la pastilla",routine,medication_question,patient,False,test
+PHR-01518,A mi suegra le salió normal la presión,routine,normal_reading,family,False,test
+PHR-01519,"Disculpe, don Pepe tiene la piel reseca. Estoy preocupada.",routine,skin,family,False,test
+PHR-01520,"Buenas tardes, a mi abuelita le arde al hacer pipí",urgent,urinary,family,False,test
+PHR-01521,"Hola, a don Pepe se le cayó la cara de un lado",emergency,stroke_signs,family,False,test
+PHR-01522,"Oiga, de repente doña Rosa no me reconoce hace como una hora",emergency,sudden_confusion,family,False,test
+PHR-01523,"Buenas tardes, tengo calentura",urgent,fever,patient,False,test
+PHR-01524,He vomitado varias veces desde hace rato,urgent,vomiting,patient,False,test
+PHR-01525,"Buenas tardes, ya se me están acabando las pastillas de la presión",routine,medication_refill,patient,False,test
+PHR-01526,"Buenas tardes, me aprieta el pecho desde ayer",emergency,chest_pain,patient,False,test

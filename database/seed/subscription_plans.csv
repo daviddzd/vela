@@ -1,0 +1,4 @@
+plan_id,name,patient_limit,monthly_price_mxn
+basic,Básico,50,2500
+professional,Profesional,150,6000
+institutional,Institucional,,12000

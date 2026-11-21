@@ -1,0 +1,80 @@
+# ORACLE-Voz emergency rules. Text is normalized before matching: lowercase, accents removed, repeated spaces collapsed.
+# Any match => emergency => show "Llama al 911" screen, alert the institution, stop the conversation.
+# Must be reviewed by a health professional before real use.
+
+emergency_number: "911"
+user_message: "Esto puede ser una emergencia. Llama al 911 ahora."
+institution_alert_level: critical
+
+categories:
+  severe_breathing:
+    label_es: Dificultad grave para respirar
+    patterns:
+      - "no (puedo|puede|podia|podemos) respirar"
+      - "no le entra (el )?aire"
+      - "se (me|le) (va|fue|esta yendo) el aire"
+      - "ahogando"
+      - "(me|le) falta (mucho )?el aire"
+      - "no (puedo|puede) resollar"
+      - "(labios|cara|unas) (morad|azul)"
+      - "poniendo morad"
+  chest_pain:
+    label_es: Dolor fuerte en el pecho
+    patterns:
+      - "(duele|dolia|dolor|aprieta|oprime|opresion)\\b.{0,25}\\bpecho"
+      - "dolor que (baja|se va|se me va|se le va) al brazo"
+  unconscious:
+    label_es: Pérdida de la conciencia
+    patterns:
+      - "desmay"
+      - "perdio el (conocimiento|sentido)"
+      - "no (responde|reacciona|despierta)"
+      - "se privo"
+      - "inconsciente"
+  stroke_signs:
+    label_es: Signos de embolia
+    patterns:
+      - "(cayo|chueca|torcida|caida).{0,15}(la cara|la boca)"
+      - "no (puede|puedo) mover (el|la|un|una) (brazo|pierna|lado|mano)"
+      - "habla (raro|arrastrado|trabado)"
+      - "no se le entiende"
+  seizure:
+    label_es: Convulsiones
+    patterns:
+      - "convulsion"
+      - "(dio|esta dando) un ataque"
+      - "se (sacudia|sacude)"
+  severe_bleeding:
+    label_es: Sangrado abundante
+    patterns:
+      - "sangra (mucho|un buen|sin parar)"
+      - "no (para|se para|deja) de sangrar"
+      - "vomit\\w* sangre"
+  serious_fall:
+    label_es: Caída con golpe o que no puede levantarse
+    patterns:
+      - "(cayo|cai)\\b.{0,20}(pego|pegue|golpeo|golpee).{0,12}cabeza"
+      - "(cayo|cai)\\b.{0,20}no (se |me )?(puede|puedo) (levantar|parar)"
+      - "no (se puede|me puedo) levantar del piso"
+  sudden_confusion:
+    label_es: Confusión súbita grave
+    patterns:
+      - "de repente.{0,30}no (me |nos )?(sabe|reconoce)"
+      - "no me reconoce"
+      - "no sabe (donde|quien) (esta|es)"
+      - "desorientad[oa] de repente"
+  self_harm:
+    label_es: Intención de hacerse daño
+    patterns:
+      - "(quiero|quiere) (matarme|matarse|morir|morirme)"
+      - "me quiero (matar|morir)"
+      - "se quiere (matar|morir)"
+      - "quit(ar|arse|arme|arle) la vida"
+      - "(no quiero|no quiere|ni) vivir"
+      - "(hacerme|hacerse) dano"
+
+# Safety policy: rules favor sensitivity. There is NO negation handling here on purpose
+# ("ya no puede respirar" and "ya no quiero vivir" are emergencies). A false alarm is acceptable;
+# a missed emergency is not. The TensorFlow classifier may UPGRADE a message to emergency,
+# but it can never downgrade a rule match.
+classifier_can_downgrade_rule_match: false

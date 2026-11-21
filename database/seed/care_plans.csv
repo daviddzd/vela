@@ -1,0 +1,928 @@
+care_plan_id,patient_id,institution_id,service_id,times_per_week,reason,active
+PLN-00001,PAC-0001,INS-A,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00002,PAC-0001,INS-A,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00003,PAC-0001,INS-A,SRV-02,1.0,Dependencia severa (revisión de enfermería),true
+PLN-00004,PAC-0002,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00005,PAC-0002,INS-A,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00006,PAC-0002,INS-A,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00007,PAC-0003,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00008,PAC-0003,INS-A,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00009,PAC-0004,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00010,PAC-0005,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00011,PAC-0005,INS-A,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00012,PAC-0006,INS-A,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00013,PAC-0006,INS-A,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00014,PAC-0006,INS-A,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00015,PAC-0007,INS-A,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00016,PAC-0007,INS-A,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00017,PAC-0007,INS-A,SRV-09,0.25,Seguimiento de función renal,true
+PLN-00018,PAC-0008,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00019,PAC-0008,INS-A,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00020,PAC-0009,INS-A,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00021,PAC-0009,INS-A,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00022,PAC-0009,INS-A,SRV-08,1.0,Enfermedad pulmonar crónica,true
+PLN-00023,PAC-0009,INS-A,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00024,PAC-0010,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00025,PAC-0010,INS-A,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00026,PAC-0010,INS-A,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00027,PAC-0011,INS-A,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00028,PAC-0011,INS-A,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00029,PAC-0011,INS-A,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00030,PAC-0012,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00031,PAC-0013,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00032,PAC-0013,INS-A,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00033,PAC-0013,INS-A,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00034,PAC-0013,INS-A,SRV-02,1.0,Dependencia severa (revisión de enfermería),true
+PLN-00035,PAC-0014,INS-A,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00036,PAC-0014,INS-A,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00037,PAC-0014,INS-A,SRV-02,1.0,Dependencia severa (revisión de enfermería),true
+PLN-00038,PAC-0015,INS-A,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00039,PAC-0015,INS-A,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00040,PAC-0016,INS-A,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00041,PAC-0016,INS-A,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00042,PAC-0016,INS-A,SRV-09,0.25,Seguimiento de función renal,true
+PLN-00043,PAC-0017,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00044,PAC-0017,INS-A,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00045,PAC-0018,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00046,PAC-0019,INS-A,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00047,PAC-0019,INS-A,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00048,PAC-0019,INS-A,SRV-08,1.0,Enfermedad pulmonar crónica,true
+PLN-00049,PAC-0019,INS-A,SRV-09,0.25,Seguimiento de función renal,true
+PLN-00050,PAC-0020,INS-A,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00051,PAC-0020,INS-A,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00052,PAC-0021,INS-A,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00053,PAC-0021,INS-A,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00054,PAC-0021,INS-A,SRV-09,0.25,Seguimiento de función renal,true
+PLN-00055,PAC-0022,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00056,PAC-0022,INS-A,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00057,PAC-0023,INS-A,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00058,PAC-0023,INS-A,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00059,PAC-0024,INS-A,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00060,PAC-0024,INS-A,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00061,PAC-0025,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00062,PAC-0025,INS-A,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00063,PAC-0026,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00064,PAC-0027,INS-A,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00065,PAC-0028,INS-A,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00066,PAC-0028,INS-A,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00067,PAC-0028,INS-A,SRV-09,0.25,Seguimiento de función renal,true
+PLN-00068,PAC-0029,INS-A,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00069,PAC-0029,INS-A,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00070,PAC-0029,INS-A,SRV-09,0.25,Seguimiento de función renal,true
+PLN-00071,PAC-0030,INS-A,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00072,PAC-0030,INS-A,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00073,PAC-0030,INS-A,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00074,PAC-0030,INS-A,SRV-09,0.25,Seguimiento de función renal,true
+PLN-00075,PAC-0031,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00076,PAC-0032,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00077,PAC-0032,INS-A,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00078,PAC-0033,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00079,PAC-0033,INS-A,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00080,PAC-0034,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00081,PAC-0034,INS-A,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00082,PAC-0035,INS-A,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00083,PAC-0035,INS-A,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00084,PAC-0035,INS-A,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00085,PAC-0036,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00086,PAC-0037,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00087,PAC-0037,INS-A,SRV-09,0.25,Seguimiento de función renal,true
+PLN-00088,PAC-0038,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00089,PAC-0038,INS-A,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00090,PAC-0039,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00091,PAC-0040,INS-A,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00092,PAC-0040,INS-A,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00093,PAC-0041,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00094,PAC-0042,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00095,PAC-0042,INS-A,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00096,PAC-0043,INS-A,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00097,PAC-0043,INS-A,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00098,PAC-0043,INS-A,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00099,PAC-0043,INS-A,SRV-09,0.25,Seguimiento de función renal,true
+PLN-00100,PAC-0044,INS-A,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00101,PAC-0044,INS-A,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00102,PAC-0044,INS-A,SRV-02,1.0,Dependencia severa (revisión de enfermería),true
+PLN-00103,PAC-0045,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00104,PAC-0046,INS-A,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00105,PAC-0046,INS-A,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00106,PAC-0046,INS-A,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00107,PAC-0047,INS-A,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00108,PAC-0047,INS-A,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00109,PAC-0047,INS-A,SRV-09,0.25,Seguimiento de función renal,true
+PLN-00110,PAC-0048,INS-A,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00111,PAC-0048,INS-A,SRV-09,0.25,Seguimiento de función renal,true
+PLN-00112,PAC-0049,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00113,PAC-0049,INS-A,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00114,PAC-0050,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00115,PAC-0050,INS-A,SRV-02,1.0,Dependencia severa (revisión de enfermería),true
+PLN-00116,PAC-0050,INS-A,SRV-09,0.25,Seguimiento de función renal,true
+PLN-00117,PAC-0051,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00118,PAC-0052,INS-A,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00119,PAC-0052,INS-A,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00120,PAC-0052,INS-A,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00121,PAC-0053,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00122,PAC-0053,INS-A,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00123,PAC-0054,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00124,PAC-0055,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00125,PAC-0055,INS-A,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00126,PAC-0055,INS-A,SRV-02,1.0,Dependencia severa (revisión de enfermería),true
+PLN-00127,PAC-0056,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00128,PAC-0056,INS-A,SRV-02,1.0,Dependencia severa (revisión de enfermería),true
+PLN-00129,PAC-0056,INS-A,SRV-09,0.25,Seguimiento de función renal,true
+PLN-00130,PAC-0057,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00131,PAC-0058,INS-A,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00132,PAC-0058,INS-A,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00133,PAC-0058,INS-A,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00134,PAC-0059,INS-A,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00135,PAC-0059,INS-A,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00136,PAC-0060,INS-A,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00137,PAC-0060,INS-A,SRV-08,1.0,Enfermedad pulmonar crónica,true
+PLN-00138,PAC-0060,INS-A,SRV-09,0.25,Seguimiento de función renal,true
+PLN-00139,PAC-0061,INS-A,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00140,PAC-0061,INS-A,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00141,PAC-0061,INS-A,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00142,PAC-0062,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00143,PAC-0063,INS-A,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00144,PAC-0063,INS-A,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00145,PAC-0063,INS-A,SRV-08,1.0,Enfermedad pulmonar crónica,true
+PLN-00146,PAC-0063,INS-A,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00147,PAC-0064,INS-A,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00148,PAC-0064,INS-A,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00149,PAC-0064,INS-A,SRV-09,0.25,Seguimiento de función renal,true
+PLN-00150,PAC-0065,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00151,PAC-0066,INS-A,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00152,PAC-0066,INS-A,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00153,PAC-0067,INS-A,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00154,PAC-0067,INS-A,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00155,PAC-0067,INS-A,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00156,PAC-0067,INS-A,SRV-02,1.0,Dependencia severa (revisión de enfermería),true
+PLN-00157,PAC-0067,INS-A,SRV-09,0.25,Seguimiento de función renal,true
+PLN-00158,PAC-0068,INS-A,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00159,PAC-0068,INS-A,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00160,PAC-0068,INS-A,SRV-09,0.25,Seguimiento de función renal,true
+PLN-00161,PAC-0069,INS-A,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00162,PAC-0069,INS-A,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00163,PAC-0070,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00164,PAC-0071,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00165,PAC-0072,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00166,PAC-0072,INS-A,SRV-09,0.25,Seguimiento de función renal,true
+PLN-00167,PAC-0073,INS-A,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00168,PAC-0073,INS-A,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00169,PAC-0074,INS-A,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00170,PAC-0074,INS-A,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00171,PAC-0075,INS-A,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00172,PAC-0075,INS-A,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00173,PAC-0076,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00174,PAC-0076,INS-A,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00175,PAC-0077,INS-A,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00176,PAC-0078,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00177,PAC-0079,INS-A,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00178,PAC-0079,INS-A,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00179,PAC-0079,INS-A,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00180,PAC-0080,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00181,PAC-0081,INS-A,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00182,PAC-0082,INS-A,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00183,PAC-0082,INS-A,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00184,PAC-0082,INS-A,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00185,PAC-0082,INS-A,SRV-02,1.0,Dependencia severa (revisión de enfermería),true
+PLN-00186,PAC-0082,INS-A,SRV-09,0.25,Seguimiento de función renal,true
+PLN-00187,PAC-0083,INS-A,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00188,PAC-0083,INS-A,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00189,PAC-0083,INS-A,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00190,PAC-0083,INS-A,SRV-02,1.0,Dependencia severa (revisión de enfermería),true
+PLN-00191,PAC-0084,INS-A,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00192,PAC-0084,INS-A,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00193,PAC-0084,INS-A,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00194,PAC-0084,INS-A,SRV-09,0.25,Seguimiento de función renal,true
+PLN-00195,PAC-0085,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00196,PAC-0085,INS-A,SRV-02,1.0,Dependencia severa (revisión de enfermería),true
+PLN-00197,PAC-0086,INS-A,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00198,PAC-0086,INS-A,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00199,PAC-0086,INS-A,SRV-09,0.25,Seguimiento de función renal,true
+PLN-00200,PAC-0087,INS-A,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00201,PAC-0087,INS-A,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00202,PAC-0087,INS-A,SRV-09,0.25,Seguimiento de función renal,true
+PLN-00203,PAC-0088,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00204,PAC-0088,INS-A,SRV-02,1.0,Dependencia severa (revisión de enfermería),true
+PLN-00205,PAC-0089,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00206,PAC-0089,INS-A,SRV-09,0.25,Seguimiento de función renal,true
+PLN-00207,PAC-0090,INS-A,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00208,PAC-0090,INS-A,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00209,PAC-0090,INS-A,SRV-09,0.25,Seguimiento de función renal,true
+PLN-00210,PAC-0091,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00211,PAC-0092,INS-A,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00212,PAC-0092,INS-A,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00213,PAC-0092,INS-A,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00214,PAC-0092,INS-A,SRV-09,0.25,Seguimiento de función renal,true
+PLN-00215,PAC-0093,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00216,PAC-0094,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00217,PAC-0095,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00218,PAC-0096,INS-A,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00219,PAC-0096,INS-A,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00220,PAC-0096,INS-A,SRV-08,1.0,Enfermedad pulmonar crónica,true
+PLN-00221,PAC-0096,INS-A,SRV-09,0.25,Seguimiento de función renal,true
+PLN-00222,PAC-0097,INS-A,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00223,PAC-0097,INS-A,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00224,PAC-0098,INS-A,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00225,PAC-0098,INS-A,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00226,PAC-0098,INS-A,SRV-02,1.0,Dependencia severa (revisión de enfermería),true
+PLN-00227,PAC-0098,INS-A,SRV-09,0.25,Seguimiento de función renal,true
+PLN-00228,PAC-0099,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00229,PAC-0099,INS-A,SRV-02,1.0,Dependencia severa (revisión de enfermería),true
+PLN-00230,PAC-0100,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00231,PAC-0100,INS-A,SRV-02,1.0,Dependencia severa (revisión de enfermería),true
+PLN-00232,PAC-0101,INS-A,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00233,PAC-0101,INS-A,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00234,PAC-0102,INS-A,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00235,PAC-0102,INS-A,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00236,PAC-0102,INS-A,SRV-08,1.0,Enfermedad pulmonar crónica,true
+PLN-00237,PAC-0102,INS-A,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00238,PAC-0103,INS-A,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00239,PAC-0103,INS-A,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00240,PAC-0104,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00241,PAC-0105,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00242,PAC-0105,INS-A,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00243,PAC-0105,INS-A,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00244,PAC-0105,INS-A,SRV-02,1.0,Dependencia severa (revisión de enfermería),true
+PLN-00245,PAC-0106,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00246,PAC-0106,INS-A,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00247,PAC-0107,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00248,PAC-0107,INS-A,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00249,PAC-0108,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00250,PAC-0109,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00251,PAC-0110,INS-A,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00252,PAC-0110,INS-A,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00253,PAC-0110,INS-A,SRV-09,0.25,Seguimiento de función renal,true
+PLN-00254,PAC-0111,INS-A,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00255,PAC-0111,INS-A,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00256,PAC-0111,INS-A,SRV-09,0.25,Seguimiento de función renal,true
+PLN-00257,PAC-0112,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00258,PAC-0112,INS-A,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00259,PAC-0113,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00260,PAC-0114,INS-A,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00261,PAC-0114,INS-A,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00262,PAC-0115,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00263,PAC-0115,INS-A,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00264,PAC-0116,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00265,PAC-0117,INS-A,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00266,PAC-0117,INS-A,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00267,PAC-0117,INS-A,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00268,PAC-0117,INS-A,SRV-09,0.25,Seguimiento de función renal,true
+PLN-00269,PAC-0118,INS-A,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00270,PAC-0118,INS-A,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00271,PAC-0118,INS-A,SRV-09,0.25,Seguimiento de función renal,true
+PLN-00272,PAC-0119,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00273,PAC-0119,INS-A,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00274,PAC-0120,INS-A,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00275,PAC-0120,INS-A,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00276,PAC-0120,INS-A,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00277,PAC-0120,INS-A,SRV-09,0.25,Seguimiento de función renal,true
+PLN-00278,PAC-0121,INS-A,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00279,PAC-0121,INS-A,SRV-09,0.25,Seguimiento de función renal,true
+PLN-00280,PAC-0122,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00281,PAC-0123,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00282,PAC-0123,INS-A,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00283,PAC-0124,INS-A,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00284,PAC-0125,INS-A,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00285,PAC-0125,INS-A,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00286,PAC-0125,INS-A,SRV-09,0.25,Seguimiento de función renal,true
+PLN-00287,PAC-0126,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00288,PAC-0126,INS-A,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00289,PAC-0126,INS-A,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00290,PAC-0127,INS-A,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00291,PAC-0127,INS-A,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00292,PAC-0128,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00293,PAC-0128,INS-A,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00294,PAC-0128,INS-A,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00295,PAC-0129,INS-A,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00296,PAC-0129,INS-A,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00297,PAC-0129,INS-A,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00298,PAC-0130,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00299,PAC-0130,INS-A,SRV-02,1.0,Dependencia severa (revisión de enfermería),true
+PLN-00300,PAC-0131,INS-A,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00301,PAC-0131,INS-A,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00302,PAC-0131,INS-A,SRV-08,1.0,Enfermedad pulmonar crónica,true
+PLN-00303,PAC-0132,INS-A,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00304,PAC-0132,INS-A,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00305,PAC-0132,INS-A,SRV-09,0.25,Seguimiento de función renal,true
+PLN-00306,PAC-0133,INS-A,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00307,PAC-0133,INS-A,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00308,PAC-0133,INS-A,SRV-09,0.25,Seguimiento de función renal,true
+PLN-00309,PAC-0134,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00310,PAC-0134,INS-A,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00311,PAC-0135,INS-A,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00312,PAC-0135,INS-A,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00313,PAC-0136,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00314,PAC-0136,INS-A,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00315,PAC-0137,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00316,PAC-0137,INS-A,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00317,PAC-0138,INS-A,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00318,PAC-0138,INS-A,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00319,PAC-0139,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00320,PAC-0139,INS-A,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00321,PAC-0139,INS-A,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00322,PAC-0140,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00323,PAC-0141,INS-A,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00324,PAC-0141,INS-A,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00325,PAC-0141,INS-A,SRV-09,0.25,Seguimiento de función renal,true
+PLN-00326,PAC-0142,INS-A,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00327,PAC-0142,INS-A,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00328,PAC-0142,INS-A,SRV-09,0.25,Seguimiento de función renal,true
+PLN-00329,PAC-0143,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00330,PAC-0143,INS-A,SRV-02,1.0,Dependencia severa (revisión de enfermería),true
+PLN-00331,PAC-0143,INS-A,SRV-09,0.25,Seguimiento de función renal,true
+PLN-00332,PAC-0144,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00333,PAC-0145,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00334,PAC-0145,INS-A,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00335,PAC-0146,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00336,PAC-0146,INS-A,SRV-02,1.0,Dependencia severa (revisión de enfermería),true
+PLN-00337,PAC-0147,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00338,PAC-0147,INS-A,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00339,PAC-0148,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00340,PAC-0148,INS-A,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00341,PAC-0148,INS-A,SRV-02,1.0,Dependencia severa (revisión de enfermería),true
+PLN-00342,PAC-0149,INS-A,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00343,PAC-0149,INS-A,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00344,PAC-0149,INS-A,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00345,PAC-0150,INS-A,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00346,PAC-0150,INS-A,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00347,PAC-0151,INS-B,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00348,PAC-0151,INS-B,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00349,PAC-0152,INS-B,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00350,PAC-0152,INS-B,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00351,PAC-0152,INS-B,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00352,PAC-0152,INS-B,SRV-06,1.0,Dependencia severa (apoyo de cuidador),true
+PLN-00353,PAC-0152,INS-B,SRV-02,1.0,Dependencia severa (revisión de enfermería),true
+PLN-00354,PAC-0153,INS-B,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00355,PAC-0153,INS-B,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00356,PAC-0153,INS-B,SRV-06,0.5,Dependencia moderada o demencia,true
+PLN-00357,PAC-0154,INS-B,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00358,PAC-0154,INS-B,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00359,PAC-0155,INS-B,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00360,PAC-0155,INS-B,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00361,PAC-0156,INS-B,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00362,PAC-0156,INS-B,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00363,PAC-0157,INS-B,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00364,PAC-0157,INS-B,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00365,PAC-0157,INS-B,SRV-06,0.5,Dependencia moderada o demencia,true
+PLN-00366,PAC-0158,INS-B,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00367,PAC-0158,INS-B,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00368,PAC-0159,INS-B,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00369,PAC-0159,INS-B,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00370,PAC-0160,INS-B,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00371,PAC-0160,INS-B,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00372,PAC-0161,INS-B,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00373,PAC-0162,INS-B,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00374,PAC-0162,INS-B,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00375,PAC-0163,INS-B,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00376,PAC-0163,INS-B,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00377,PAC-0163,INS-B,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00378,PAC-0163,INS-B,SRV-06,0.5,Dependencia moderada o demencia,true
+PLN-00379,PAC-0164,INS-B,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00380,PAC-0164,INS-B,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00381,PAC-0165,INS-B,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00382,PAC-0165,INS-B,SRV-06,1.0,Dependencia severa (apoyo de cuidador),true
+PLN-00383,PAC-0165,INS-B,SRV-02,1.0,Dependencia severa (revisión de enfermería),true
+PLN-00384,PAC-0166,INS-B,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00385,PAC-0167,INS-B,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00386,PAC-0167,INS-B,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00387,PAC-0168,INS-B,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00388,PAC-0168,INS-B,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00389,PAC-0168,INS-B,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00390,PAC-0168,INS-B,SRV-06,0.5,Dependencia moderada o demencia,true
+PLN-00391,PAC-0169,INS-B,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00392,PAC-0170,INS-B,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00393,PAC-0170,INS-B,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00394,PAC-0171,INS-B,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00395,PAC-0171,INS-B,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00396,PAC-0171,INS-B,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00397,PAC-0171,INS-B,SRV-06,0.5,Dependencia moderada o demencia,true
+PLN-00398,PAC-0172,INS-B,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00399,PAC-0172,INS-B,SRV-06,1.0,Dependencia severa (apoyo de cuidador),true
+PLN-00400,PAC-0172,INS-B,SRV-02,1.0,Dependencia severa (revisión de enfermería),true
+PLN-00401,PAC-0173,INS-B,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00402,PAC-0173,INS-B,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00403,PAC-0173,INS-B,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00404,PAC-0173,INS-B,SRV-06,1.0,Dependencia severa (apoyo de cuidador),true
+PLN-00405,PAC-0173,INS-B,SRV-02,1.0,Dependencia severa (revisión de enfermería),true
+PLN-00406,PAC-0174,INS-B,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00407,PAC-0174,INS-B,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00408,PAC-0174,INS-B,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00409,PAC-0174,INS-B,SRV-06,0.5,Dependencia moderada o demencia,true
+PLN-00410,PAC-0175,INS-B,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00411,PAC-0175,INS-B,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00412,PAC-0176,INS-B,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00413,PAC-0177,INS-B,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00414,PAC-0177,INS-B,SRV-06,1.0,Dependencia severa (apoyo de cuidador),true
+PLN-00415,PAC-0177,INS-B,SRV-02,1.0,Dependencia severa (revisión de enfermería),true
+PLN-00416,PAC-0177,INS-B,SRV-07,0.5,Vigilancia nocturna,true
+PLN-00417,PAC-0178,INS-B,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00418,PAC-0178,INS-B,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00419,PAC-0179,INS-B,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00420,PAC-0179,INS-B,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00421,PAC-0179,INS-B,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00422,PAC-0179,INS-B,SRV-06,1.0,Dependencia severa (apoyo de cuidador),true
+PLN-00423,PAC-0179,INS-B,SRV-02,1.0,Dependencia severa (revisión de enfermería),true
+PLN-00424,PAC-0180,INS-B,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00425,PAC-0180,INS-B,SRV-06,1.0,Dependencia severa (apoyo de cuidador),true
+PLN-00426,PAC-0180,INS-B,SRV-02,1.0,Dependencia severa (revisión de enfermería),true
+PLN-00427,PAC-0180,INS-B,SRV-07,0.5,Vigilancia nocturna,true
+PLN-00428,PAC-0181,INS-B,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00429,PAC-0181,INS-B,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00430,PAC-0182,INS-B,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00431,PAC-0182,INS-B,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00432,PAC-0183,INS-B,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00433,PAC-0183,INS-B,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00434,PAC-0184,INS-B,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00435,PAC-0184,INS-B,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00436,PAC-0184,INS-B,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00437,PAC-0184,INS-B,SRV-06,0.5,Dependencia moderada o demencia,true
+PLN-00438,PAC-0185,INS-B,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00439,PAC-0185,INS-B,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00440,PAC-0186,INS-B,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00441,PAC-0186,INS-B,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00442,PAC-0186,INS-B,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00443,PAC-0187,INS-B,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00444,PAC-0188,INS-B,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00445,PAC-0189,INS-B,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00446,PAC-0190,INS-B,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00447,PAC-0190,INS-B,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00448,PAC-0190,INS-B,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00449,PAC-0191,INS-B,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00450,PAC-0191,INS-B,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00451,PAC-0192,INS-B,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00452,PAC-0193,INS-B,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00453,PAC-0193,INS-B,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00454,PAC-0194,INS-B,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00455,PAC-0194,INS-B,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00456,PAC-0194,INS-B,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00457,PAC-0195,INS-B,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00458,PAC-0195,INS-B,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00459,PAC-0195,INS-B,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00460,PAC-0195,INS-B,SRV-06,1.0,Dependencia severa (apoyo de cuidador),true
+PLN-00461,PAC-0195,INS-B,SRV-02,1.0,Dependencia severa (revisión de enfermería),true
+PLN-00462,PAC-0196,INS-B,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00463,PAC-0196,INS-B,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00464,PAC-0197,INS-B,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00465,PAC-0198,INS-B,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00466,PAC-0198,INS-B,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00467,PAC-0198,INS-B,SRV-06,0.5,Dependencia moderada o demencia,true
+PLN-00468,PAC-0199,INS-B,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00469,PAC-0199,INS-B,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00470,PAC-0200,INS-B,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00471,PAC-0200,INS-B,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00472,PAC-0201,INS-B,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00473,PAC-0201,INS-B,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00474,PAC-0202,INS-B,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00475,PAC-0202,INS-B,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00476,PAC-0203,INS-B,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00477,PAC-0204,INS-B,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00478,PAC-0205,INS-B,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00479,PAC-0205,INS-B,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00480,PAC-0206,INS-B,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00481,PAC-0206,INS-B,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00482,PAC-0206,INS-B,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00483,PAC-0207,INS-B,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00484,PAC-0208,INS-B,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00485,PAC-0208,INS-B,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00486,PAC-0208,INS-B,SRV-06,0.5,Dependencia moderada o demencia,true
+PLN-00487,PAC-0209,INS-B,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00488,PAC-0209,INS-B,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00489,PAC-0210,INS-B,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00490,PAC-0210,INS-B,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00491,PAC-0210,INS-B,SRV-06,1.0,Dependencia severa (apoyo de cuidador),true
+PLN-00492,PAC-0210,INS-B,SRV-02,1.0,Dependencia severa (revisión de enfermería),true
+PLN-00493,PAC-0211,INS-B,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00494,PAC-0211,INS-B,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00495,PAC-0212,INS-B,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00496,PAC-0212,INS-B,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00497,PAC-0212,INS-B,SRV-06,1.0,Dependencia severa (apoyo de cuidador),true
+PLN-00498,PAC-0212,INS-B,SRV-02,1.0,Dependencia severa (revisión de enfermería),true
+PLN-00499,PAC-0213,INS-B,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00500,PAC-0213,INS-B,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00501,PAC-0214,INS-B,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00502,PAC-0214,INS-B,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00503,PAC-0214,INS-B,SRV-06,0.5,Dependencia moderada o demencia,true
+PLN-00504,PAC-0215,INS-B,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00505,PAC-0215,INS-B,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00506,PAC-0216,INS-B,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00507,PAC-0216,INS-B,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00508,PAC-0217,INS-B,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00509,PAC-0217,INS-B,SRV-06,1.0,Dependencia severa (apoyo de cuidador),true
+PLN-00510,PAC-0217,INS-B,SRV-02,1.0,Dependencia severa (revisión de enfermería),true
+PLN-00511,PAC-0218,INS-B,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00512,PAC-0218,INS-B,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00513,PAC-0218,INS-B,SRV-06,1.0,Dependencia severa (apoyo de cuidador),true
+PLN-00514,PAC-0218,INS-B,SRV-02,1.0,Dependencia severa (revisión de enfermería),true
+PLN-00515,PAC-0219,INS-B,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00516,PAC-0219,INS-B,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00517,PAC-0219,INS-B,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00518,PAC-0219,INS-B,SRV-06,1.0,Dependencia severa (apoyo de cuidador),true
+PLN-00519,PAC-0219,INS-B,SRV-02,1.0,Dependencia severa (revisión de enfermería),true
+PLN-00520,PAC-0220,INS-B,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00521,PAC-0221,INS-B,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00522,PAC-0222,INS-B,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00523,PAC-0222,INS-B,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00524,PAC-0223,INS-B,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00525,PAC-0223,INS-B,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00526,PAC-0224,INS-B,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00527,PAC-0225,INS-B,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00528,PAC-0225,INS-B,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00529,PAC-0226,INS-B,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00530,PAC-0226,INS-B,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00531,PAC-0227,INS-B,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00532,PAC-0228,INS-B,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00533,PAC-0228,INS-B,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00534,PAC-0228,INS-B,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00535,PAC-0229,INS-B,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00536,PAC-0229,INS-B,SRV-06,1.0,Dependencia severa (apoyo de cuidador),true
+PLN-00537,PAC-0229,INS-B,SRV-02,1.0,Dependencia severa (revisión de enfermería),true
+PLN-00538,PAC-0229,INS-B,SRV-07,0.5,Vigilancia nocturna,true
+PLN-00539,PAC-0230,INS-B,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00540,PAC-0231,INS-C,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00541,PAC-0231,INS-C,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00542,PAC-0232,INS-C,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00543,PAC-0232,INS-C,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00544,PAC-0233,INS-C,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00545,PAC-0234,INS-C,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00546,PAC-0234,INS-C,SRV-06,1.0,Dependencia severa (apoyo de cuidador),true
+PLN-00547,PAC-0234,INS-C,SRV-02,1.0,Dependencia severa (revisión de enfermería),true
+PLN-00548,PAC-0235,INS-C,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00549,PAC-0235,INS-C,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00550,PAC-0236,INS-C,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00551,PAC-0237,INS-C,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00552,PAC-0237,INS-C,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00553,PAC-0237,INS-C,SRV-06,0.5,Dependencia moderada o demencia,true
+PLN-00554,PAC-0238,INS-C,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00555,PAC-0238,INS-C,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00556,PAC-0238,INS-C,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00557,PAC-0238,INS-C,SRV-06,1.0,Dependencia severa (apoyo de cuidador),true
+PLN-00558,PAC-0238,INS-C,SRV-02,1.0,Dependencia severa (revisión de enfermería),true
+PLN-00559,PAC-0239,INS-C,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00560,PAC-0239,INS-C,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00561,PAC-0239,INS-C,SRV-06,0.5,Dependencia moderada o demencia,true
+PLN-00562,PAC-0240,INS-C,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00563,PAC-0240,INS-C,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00564,PAC-0240,INS-C,SRV-06,0.5,Dependencia moderada o demencia,true
+PLN-00565,PAC-0241,INS-C,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00566,PAC-0241,INS-C,SRV-06,1.0,Dependencia severa (apoyo de cuidador),true
+PLN-00567,PAC-0241,INS-C,SRV-02,1.0,Dependencia severa (revisión de enfermería),true
+PLN-00568,PAC-0242,INS-C,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00569,PAC-0242,INS-C,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00570,PAC-0243,INS-C,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00571,PAC-0243,INS-C,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00572,PAC-0244,INS-C,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00573,PAC-0244,INS-C,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00574,PAC-0244,INS-C,SRV-06,0.5,Dependencia moderada o demencia,true
+PLN-00575,PAC-0245,INS-C,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00576,PAC-0245,INS-C,SRV-09,0.25,Seguimiento de función renal,true
+PLN-00577,PAC-0246,INS-C,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00578,PAC-0246,INS-C,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00579,PAC-0247,INS-C,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00580,PAC-0247,INS-C,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00581,PAC-0247,INS-C,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00582,PAC-0248,INS-C,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00583,PAC-0248,INS-C,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00584,PAC-0248,INS-C,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00585,PAC-0248,INS-C,SRV-06,0.5,Dependencia moderada o demencia,true
+PLN-00586,PAC-0248,INS-C,SRV-09,0.25,Seguimiento de función renal,true
+PLN-00587,PAC-0249,INS-C,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00588,PAC-0250,INS-C,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00589,PAC-0250,INS-C,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00590,PAC-0250,INS-C,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00591,PAC-0250,INS-C,SRV-06,0.5,Dependencia moderada o demencia,true
+PLN-00592,PAC-0250,INS-C,SRV-09,0.25,Seguimiento de función renal,true
+PLN-00593,PAC-0251,INS-C,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00594,PAC-0251,INS-C,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00595,PAC-0251,INS-C,SRV-09,0.25,Seguimiento de función renal,true
+PLN-00596,PAC-0252,INS-C,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00597,PAC-0252,INS-C,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00598,PAC-0252,INS-C,SRV-06,0.5,Dependencia moderada o demencia,true
+PLN-00599,PAC-0252,INS-C,SRV-09,0.25,Seguimiento de función renal,true
+PLN-00600,PAC-0253,INS-C,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00601,PAC-0254,INS-C,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00602,PAC-0255,INS-C,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00603,PAC-0255,INS-C,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00604,PAC-0255,INS-C,SRV-09,0.25,Seguimiento de función renal,true
+PLN-00605,PAC-0256,INS-C,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00606,PAC-0256,INS-C,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00607,PAC-0257,INS-C,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00608,PAC-0258,INS-C,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00609,PAC-0258,INS-C,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00610,PAC-0259,INS-C,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00611,PAC-0259,INS-C,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00612,PAC-0259,INS-C,SRV-06,0.5,Dependencia moderada o demencia,true
+PLN-00613,PAC-0260,INS-C,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00614,PAC-0261,INS-C,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00615,PAC-0261,INS-C,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00616,PAC-0262,INS-C,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00617,PAC-0262,INS-C,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00618,PAC-0262,INS-C,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00619,PAC-0262,INS-C,SRV-06,1.0,Dependencia severa (apoyo de cuidador),true
+PLN-00620,PAC-0262,INS-C,SRV-02,1.0,Dependencia severa (revisión de enfermería),true
+PLN-00621,PAC-0263,INS-C,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00622,PAC-0264,INS-C,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00623,PAC-0265,INS-C,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00624,PAC-0265,INS-C,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00625,PAC-0265,INS-C,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00626,PAC-0265,INS-C,SRV-06,1.0,Dependencia severa (apoyo de cuidador),true
+PLN-00627,PAC-0265,INS-C,SRV-02,1.0,Dependencia severa (revisión de enfermería),true
+PLN-00628,PAC-0266,INS-C,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00629,PAC-0266,INS-C,SRV-09,0.25,Seguimiento de función renal,true
+PLN-00630,PAC-0267,INS-C,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00631,PAC-0267,INS-C,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00632,PAC-0267,INS-C,SRV-09,0.25,Seguimiento de función renal,true
+PLN-00633,PAC-0268,INS-C,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00634,PAC-0269,INS-C,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00635,PAC-0269,INS-C,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00636,PAC-0269,INS-C,SRV-06,0.5,Dependencia moderada o demencia,true
+PLN-00637,PAC-0270,INS-C,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00638,PAC-0270,INS-C,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00639,PAC-0271,INS-C,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00640,PAC-0272,INS-C,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00641,PAC-0272,INS-C,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00642,PAC-0272,INS-C,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00643,PAC-0272,INS-C,SRV-06,0.5,Dependencia moderada o demencia,true
+PLN-00644,PAC-0273,INS-C,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00645,PAC-0273,INS-C,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00646,PAC-0274,INS-C,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00647,PAC-0275,INS-C,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00648,PAC-0276,INS-C,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00649,PAC-0276,INS-C,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00650,PAC-0277,INS-C,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00651,PAC-0277,INS-C,SRV-06,1.0,Dependencia severa (apoyo de cuidador),true
+PLN-00652,PAC-0277,INS-C,SRV-02,1.0,Dependencia severa (revisión de enfermería),true
+PLN-00653,PAC-0278,INS-C,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00654,PAC-0278,INS-C,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00655,PAC-0278,INS-C,SRV-06,1.0,Dependencia severa (apoyo de cuidador),true
+PLN-00656,PAC-0278,INS-C,SRV-02,1.0,Dependencia severa (revisión de enfermería),true
+PLN-00657,PAC-0279,INS-C,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00658,PAC-0279,INS-C,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00659,PAC-0279,INS-C,SRV-09,0.25,Seguimiento de función renal,true
+PLN-00660,PAC-0280,INS-C,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00661,PAC-0280,INS-C,SRV-06,1.0,Dependencia severa (apoyo de cuidador),true
+PLN-00662,PAC-0280,INS-C,SRV-02,1.0,Dependencia severa (revisión de enfermería),true
+PLN-00663,PAC-0281,INS-C,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00664,PAC-0282,INS-C,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00665,PAC-0282,INS-C,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00666,PAC-0282,INS-C,SRV-06,0.5,Dependencia moderada o demencia,true
+PLN-00667,PAC-0283,INS-C,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00668,PAC-0284,INS-C,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00669,PAC-0285,INS-C,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00670,PAC-0285,INS-C,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00671,PAC-0285,INS-C,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00672,PAC-0286,INS-C,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00673,PAC-0287,INS-C,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00674,PAC-0287,INS-C,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00675,PAC-0287,INS-C,SRV-09,0.25,Seguimiento de función renal,true
+PLN-00676,PAC-0288,INS-C,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00677,PAC-0288,INS-C,SRV-06,0.5,Dependencia moderada o demencia,true
+PLN-00678,PAC-0289,INS-C,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00679,PAC-0289,INS-C,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00680,PAC-0289,INS-C,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00681,PAC-0290,INS-C,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00682,PAC-0290,INS-C,SRV-06,1.0,Dependencia severa (apoyo de cuidador),true
+PLN-00683,PAC-0290,INS-C,SRV-02,1.0,Dependencia severa (revisión de enfermería),true
+PLN-00684,PAC-0291,INS-D,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00685,PAC-0291,INS-D,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00686,PAC-0292,INS-D,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00687,PAC-0293,INS-D,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00688,PAC-0294,INS-D,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00689,PAC-0294,INS-D,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00690,PAC-0295,INS-D,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00691,PAC-0295,INS-D,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00692,PAC-0296,INS-D,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00693,PAC-0296,INS-D,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00694,PAC-0297,INS-D,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00695,PAC-0297,INS-D,SRV-08,1.0,Enfermedad pulmonar crónica,true
+PLN-00696,PAC-0297,INS-D,SRV-06,1.0,Dependencia severa (apoyo de cuidador),true
+PLN-00697,PAC-0297,INS-D,SRV-02,1.0,Dependencia severa (revisión de enfermería),true
+PLN-00698,PAC-0298,INS-D,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00699,PAC-0298,INS-D,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00700,PAC-0298,INS-D,SRV-09,0.25,Seguimiento de función renal,true
+PLN-00701,PAC-0299,INS-D,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00702,PAC-0299,INS-D,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00703,PAC-0299,INS-D,SRV-09,0.25,Seguimiento de función renal,true
+PLN-00704,PAC-0300,INS-D,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00705,PAC-0300,INS-D,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00706,PAC-0300,INS-D,SRV-09,0.25,Seguimiento de función renal,true
+PLN-00707,PAC-0301,INS-D,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00708,PAC-0301,INS-D,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00709,PAC-0301,INS-D,SRV-06,0.5,Dependencia moderada o demencia,true
+PLN-00710,PAC-0301,INS-D,SRV-09,0.25,Seguimiento de función renal,true
+PLN-00711,PAC-0302,INS-D,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00712,PAC-0302,INS-D,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00713,PAC-0303,INS-D,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00714,PAC-0303,INS-D,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00715,PAC-0303,INS-D,SRV-06,0.5,Dependencia moderada o demencia,true
+PLN-00716,PAC-0303,INS-D,SRV-09,0.25,Seguimiento de función renal,true
+PLN-00717,PAC-0304,INS-D,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00718,PAC-0304,INS-D,SRV-08,1.0,Enfermedad pulmonar crónica,true
+PLN-00719,PAC-0304,INS-D,SRV-06,1.0,Dependencia severa (apoyo de cuidador),true
+PLN-00720,PAC-0304,INS-D,SRV-02,1.0,Dependencia severa (revisión de enfermería),true
+PLN-00721,PAC-0304,INS-D,SRV-07,0.5,Vigilancia nocturna,true
+PLN-00722,PAC-0305,INS-D,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00723,PAC-0306,INS-D,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00724,PAC-0306,INS-D,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00725,PAC-0306,INS-D,SRV-06,0.5,Dependencia moderada o demencia,true
+PLN-00726,PAC-0306,INS-D,SRV-09,0.25,Seguimiento de función renal,true
+PLN-00727,PAC-0307,INS-D,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00728,PAC-0307,INS-D,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00729,PAC-0307,INS-D,SRV-06,0.5,Dependencia moderada o demencia,true
+PLN-00730,PAC-0307,INS-D,SRV-09,0.25,Seguimiento de función renal,true
+PLN-00731,PAC-0308,INS-D,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00732,PAC-0309,INS-D,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00733,PAC-0309,INS-D,SRV-08,1.0,Enfermedad pulmonar crónica,true
+PLN-00734,PAC-0309,INS-D,SRV-06,1.0,Dependencia severa (apoyo de cuidador),true
+PLN-00735,PAC-0309,INS-D,SRV-02,1.0,Dependencia severa (revisión de enfermería),true
+PLN-00736,PAC-0309,INS-D,SRV-07,0.5,Vigilancia nocturna,true
+PLN-00737,PAC-0310,INS-D,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00738,PAC-0311,INS-D,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00739,PAC-0311,INS-D,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00740,PAC-0312,INS-D,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00741,PAC-0313,INS-D,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00742,PAC-0313,INS-D,SRV-06,1.0,Dependencia severa (apoyo de cuidador),true
+PLN-00743,PAC-0313,INS-D,SRV-02,1.0,Dependencia severa (revisión de enfermería),true
+PLN-00744,PAC-0314,INS-D,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00745,PAC-0314,INS-D,SRV-06,0.5,Dependencia moderada o demencia,true
+PLN-00746,PAC-0315,INS-D,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00747,PAC-0315,INS-D,SRV-06,1.0,Dependencia severa (apoyo de cuidador),true
+PLN-00748,PAC-0315,INS-D,SRV-02,1.0,Dependencia severa (revisión de enfermería),true
+PLN-00749,PAC-0315,INS-D,SRV-07,0.5,Vigilancia nocturna,true
+PLN-00750,PAC-0315,INS-D,SRV-09,0.25,Seguimiento de función renal,true
+PLN-00751,PAC-0316,INS-D,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00752,PAC-0316,INS-D,SRV-08,1.0,Enfermedad pulmonar crónica,true
+PLN-00753,PAC-0316,INS-D,SRV-06,0.5,Dependencia moderada o demencia,true
+PLN-00754,PAC-0316,INS-D,SRV-09,0.25,Seguimiento de función renal,true
+PLN-00755,PAC-0317,INS-D,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00756,PAC-0318,INS-D,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00757,PAC-0318,INS-D,SRV-06,1.0,Dependencia severa (apoyo de cuidador),true
+PLN-00758,PAC-0318,INS-D,SRV-02,1.0,Dependencia severa (revisión de enfermería),true
+PLN-00759,PAC-0318,INS-D,SRV-09,0.25,Seguimiento de función renal,true
+PLN-00760,PAC-0319,INS-D,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00761,PAC-0319,INS-D,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00762,PAC-0319,INS-D,SRV-09,0.25,Seguimiento de función renal,true
+PLN-00763,PAC-0320,INS-D,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00764,PAC-0320,INS-D,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00765,PAC-0321,INS-D,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00766,PAC-0321,INS-D,SRV-06,0.5,Dependencia moderada o demencia,true
+PLN-00767,PAC-0322,INS-D,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00768,PAC-0322,INS-D,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00769,PAC-0322,INS-D,SRV-09,0.25,Seguimiento de función renal,true
+PLN-00770,PAC-0323,INS-D,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00771,PAC-0324,INS-D,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00772,PAC-0324,INS-D,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00773,PAC-0324,INS-D,SRV-06,1.0,Dependencia severa (apoyo de cuidador),true
+PLN-00774,PAC-0324,INS-D,SRV-02,1.0,Dependencia severa (revisión de enfermería),true
+PLN-00775,PAC-0325,INS-D,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00776,PAC-0325,INS-D,SRV-08,1.0,Enfermedad pulmonar crónica,true
+PLN-00777,PAC-0325,INS-D,SRV-06,0.5,Dependencia moderada o demencia,true
+PLN-00778,PAC-0326,INS-D,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00779,PAC-0326,INS-D,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00780,PAC-0326,INS-D,SRV-09,0.25,Seguimiento de función renal,true
+PLN-00781,PAC-0327,INS-D,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00782,PAC-0327,INS-D,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00783,PAC-0327,INS-D,SRV-06,0.5,Dependencia moderada o demencia,true
+PLN-00784,PAC-0328,INS-D,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00785,PAC-0328,INS-D,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00786,PAC-0328,INS-D,SRV-06,0.5,Dependencia moderada o demencia,true
+PLN-00787,PAC-0329,INS-D,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00788,PAC-0329,INS-D,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00789,PAC-0330,INS-D,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00790,PAC-0330,INS-D,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00791,PAC-0331,INS-D,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00792,PAC-0332,INS-D,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00793,PAC-0332,INS-D,SRV-06,1.0,Dependencia severa (apoyo de cuidador),true
+PLN-00794,PAC-0332,INS-D,SRV-02,1.0,Dependencia severa (revisión de enfermería),true
+PLN-00795,PAC-0332,INS-D,SRV-07,0.5,Vigilancia nocturna,true
+PLN-00796,PAC-0333,INS-D,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00797,PAC-0333,INS-D,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00798,PAC-0334,INS-D,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00799,PAC-0334,INS-D,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00800,PAC-0334,INS-D,SRV-06,1.0,Dependencia severa (apoyo de cuidador),true
+PLN-00801,PAC-0334,INS-D,SRV-02,1.0,Dependencia severa (revisión de enfermería),true
+PLN-00802,PAC-0335,INS-D,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00803,PAC-0335,INS-D,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00804,PAC-0336,INS-D,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00805,PAC-0336,INS-D,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00806,PAC-0337,INS-D,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00807,PAC-0338,INS-D,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00808,PAC-0338,INS-D,SRV-06,1.0,Dependencia severa (apoyo de cuidador),true
+PLN-00809,PAC-0338,INS-D,SRV-02,1.0,Dependencia severa (revisión de enfermería),true
+PLN-00810,PAC-0339,INS-D,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00811,PAC-0340,INS-D,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00812,PAC-0340,INS-D,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00813,PAC-0340,INS-D,SRV-06,1.0,Dependencia severa (apoyo de cuidador),true
+PLN-00814,PAC-0340,INS-D,SRV-02,1.0,Dependencia severa (revisión de enfermería),true
+PLN-00815,PAC-0341,INS-D,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00816,PAC-0341,INS-D,SRV-06,0.5,Dependencia moderada o demencia,true
+PLN-00817,PAC-0342,INS-D,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00818,PAC-0342,INS-D,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00819,PAC-0343,INS-D,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00820,PAC-0343,INS-D,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00821,PAC-0344,INS-D,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00822,PAC-0344,INS-D,SRV-06,1.0,Dependencia severa (apoyo de cuidador),true
+PLN-00823,PAC-0344,INS-D,SRV-02,1.0,Dependencia severa (revisión de enfermería),true
+PLN-00824,PAC-0345,INS-D,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00825,PAC-0345,INS-D,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00826,PAC-0345,INS-D,SRV-06,1.0,Dependencia severa (apoyo de cuidador),true
+PLN-00827,PAC-0345,INS-D,SRV-02,1.0,Dependencia severa (revisión de enfermería),true
+PLN-00828,PAC-0346,INS-D,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00829,PAC-0346,INS-D,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00830,PAC-0346,INS-D,SRV-06,0.5,Dependencia moderada o demencia,true
+PLN-00831,PAC-0347,INS-D,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00832,PAC-0347,INS-D,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00833,PAC-0347,INS-D,SRV-09,0.25,Seguimiento de función renal,true
+PLN-00834,PAC-0348,INS-D,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00835,PAC-0348,INS-D,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00836,PAC-0349,INS-D,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00837,PAC-0349,INS-D,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00838,PAC-0349,INS-D,SRV-06,1.0,Dependencia severa (apoyo de cuidador),true
+PLN-00839,PAC-0349,INS-D,SRV-02,1.0,Dependencia severa (revisión de enfermería),true
+PLN-00840,PAC-0349,INS-D,SRV-07,0.5,Vigilancia nocturna,true
+PLN-00841,PAC-0349,INS-D,SRV-09,0.25,Seguimiento de función renal,true
+PLN-00842,PAC-0350,INS-D,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00843,PAC-0350,INS-D,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00844,PAC-0350,INS-D,SRV-06,1.0,Dependencia severa (apoyo de cuidador),true
+PLN-00845,PAC-0350,INS-D,SRV-02,1.0,Dependencia severa (revisión de enfermería),true
+PLN-00846,PAC-0350,INS-D,SRV-07,0.5,Vigilancia nocturna,true
+PLN-00847,PAC-0351,INS-D,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00848,PAC-0352,INS-D,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00849,PAC-0352,INS-D,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00850,PAC-0353,INS-D,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00851,PAC-0353,INS-D,SRV-06,0.5,Dependencia moderada o demencia,true
+PLN-00852,PAC-0354,INS-D,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00853,PAC-0354,INS-D,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00854,PAC-0354,INS-D,SRV-06,1.0,Dependencia severa (apoyo de cuidador),true
+PLN-00855,PAC-0354,INS-D,SRV-02,1.0,Dependencia severa (revisión de enfermería),true
+PLN-00856,PAC-0355,INS-D,SRV-01,0.25,Control geriátrico periódico,true
+PLN-00857,PAC-0355,INS-D,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00858,PAC-0355,INS-D,SRV-06,1.0,Dependencia severa (apoyo de cuidador),true
+PLN-00859,PAC-0355,INS-D,SRV-02,1.0,Dependencia severa (revisión de enfermería),true
+PLN-00860,PAC-0355,INS-D,SRV-09,0.25,Seguimiento de función renal,true
+PLN-00861,PAC-0356,INS-D,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00862,PAC-0356,INS-D,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00863,PAC-0356,INS-D,SRV-06,1.0,Dependencia severa (apoyo de cuidador),true
+PLN-00864,PAC-0356,INS-D,SRV-02,1.0,Dependencia severa (revisión de enfermería),true
+PLN-00865,PAC-0357,INS-D,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00866,PAC-0357,INS-D,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00867,PAC-0358,INS-D,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00868,PAC-0358,INS-D,SRV-06,0.5,Dependencia moderada o demencia,true
+PLN-00869,PAC-0359,INS-D,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00870,PAC-0359,INS-D,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00871,PAC-0360,INS-D,SRV-01,0.125,Control geriátrico periódico,true
+PLN-00872,PAC-0360,INS-D,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00873,PAC-0361,INS-E,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00874,PAC-0362,INS-E,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00875,PAC-0363,INS-E,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00876,PAC-0363,INS-E,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00877,PAC-0364,INS-E,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00878,PAC-0365,INS-E,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00879,PAC-0365,INS-E,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00880,PAC-0365,INS-E,SRV-06,0.5,Dependencia moderada o demencia,true
+PLN-00881,PAC-0367,INS-E,SRV-06,0.5,Dependencia moderada o demencia,true
+PLN-00882,PAC-0368,INS-E,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00883,PAC-0368,INS-E,SRV-06,1.0,Dependencia severa (apoyo de cuidador),true
+PLN-00884,PAC-0368,INS-E,SRV-02,1.0,Dependencia severa (revisión de enfermería),true
+PLN-00885,PAC-0369,INS-E,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00886,PAC-0371,INS-E,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00887,PAC-0372,INS-E,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00888,PAC-0372,INS-E,SRV-06,1.0,Dependencia severa (apoyo de cuidador),true
+PLN-00889,PAC-0372,INS-E,SRV-02,1.0,Dependencia severa (revisión de enfermería),true
+PLN-00890,PAC-0374,INS-E,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00891,PAC-0375,INS-E,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00892,PAC-0375,INS-E,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00893,PAC-0375,INS-E,SRV-06,0.5,Dependencia moderada o demencia,true
+PLN-00894,PAC-0376,INS-E,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00895,PAC-0376,INS-E,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00896,PAC-0376,INS-E,SRV-06,0.5,Dependencia moderada o demencia,true
+PLN-00897,PAC-0377,INS-E,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00898,PAC-0377,INS-E,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00899,PAC-0378,INS-E,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00900,PAC-0379,INS-E,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00901,PAC-0380,INS-E,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00902,PAC-0380,INS-E,SRV-06,1.0,Dependencia severa (apoyo de cuidador),true
+PLN-00903,PAC-0380,INS-E,SRV-02,1.0,Dependencia severa (revisión de enfermería),true
+PLN-00904,PAC-0382,INS-E,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00905,PAC-0383,INS-E,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00906,PAC-0383,INS-E,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00907,PAC-0383,INS-E,SRV-06,1.0,Dependencia severa (apoyo de cuidador),true
+PLN-00908,PAC-0383,INS-E,SRV-02,1.0,Dependencia severa (revisión de enfermería),true
+PLN-00909,PAC-0384,INS-E,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00910,PAC-0384,INS-E,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00911,PAC-0384,INS-E,SRV-06,1.0,Dependencia severa (apoyo de cuidador),true
+PLN-00912,PAC-0384,INS-E,SRV-02,1.0,Dependencia severa (revisión de enfermería),true
+PLN-00913,PAC-0385,INS-E,SRV-06,1.0,Dependencia severa (apoyo de cuidador),true
+PLN-00914,PAC-0385,INS-E,SRV-02,1.0,Dependencia severa (revisión de enfermería),true
+PLN-00915,PAC-0386,INS-E,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00916,PAC-0388,INS-E,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00917,PAC-0389,INS-E,SRV-05,1.0,"Fragilidad, caídas o artritis",true
+PLN-00918,PAC-0389,INS-E,SRV-06,0.5,Dependencia moderada o demencia,true
+PLN-00919,PAC-0390,INS-E,SRV-06,1.0,Dependencia severa (apoyo de cuidador),true
+PLN-00920,PAC-0390,INS-E,SRV-02,1.0,Dependencia severa (revisión de enfermería),true
+PLN-00921,PAC-0391,INS-E,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00922,PAC-0392,INS-E,SRV-06,0.5,Dependencia moderada o demencia,true
+PLN-00923,PAC-0396,INS-E,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00924,PAC-0397,INS-E,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00925,PAC-0399,INS-E,SRV-02,2.0,Control de glucosa / presión arterial,true
+PLN-00926,PAC-0400,INS-E,SRV-02,1.0,Control de glucosa / presión arterial,true
+PLN-00927,PAC-0400,INS-E,SRV-05,1.0,"Fragilidad, caídas o artritis",true

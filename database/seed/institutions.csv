@@ -1,0 +1,6 @@
+institution_id,name,type,district_id,schedule,plan_id,contract_date,active
+INS-A,Clínica Oriente,clinic,09007,day,professional,2025-03-01,true
+INS-B,Residencia Coyoacán,residence,09003,24h,professional,2025-05-15,true
+INS-C,Centro de Día Aragón,day_center,09005,day,professional,2025-08-01,true
+INS-D,Red Cuidar Tlalpan,home_care_network,09012,24h,professional,2025-09-10,true
+INS-E,Red Vecinal Iztacalco,home_care_network,09006,day,basic,2026-01-20,true

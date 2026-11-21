@@ -1,0 +1,23 @@
+# Starter compose: only the database exists today. Claude Code adds api, web, worker and proxy
+# (see CLAUDE.md → "Compose services"). Everything public goes through proxy on port 8080.
+services:
+  db:
+    image: postgis/postgis:16-3.4
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      TZ: America/Mexico_City
+      PGTZ: America/Mexico_City
+    ports:
+      - "127.0.0.1:5432:5432"   # only reachable from this laptop
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./:/repo:ro
+      - ./infra/db-init.sh:/docker-entrypoint-initdb.d/10-init.sh:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      retries: 20
+
+volumes:
+  pgdata:

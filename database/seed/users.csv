@@ -1,0 +1,32 @@
+user_id,role,institution_id,caregiver_id,family_member_id,display_name,email,password_hash,active
+USR-001,owner,,,,Dirección Vela,owner@ejemplo.test,$2a$10$9a988E7ejwdKGMipcye1juKATbDerxGS1aVIlcHGqQSJP1Wgiqmy.,true
+USR-002,coordinator,INS-A,,,Coordinación Clínica Oriente,coordinacion.a@ejemplo.test,$2a$10$CFaTZgEeTG0PKtpKdiZfu.Mt.mmAOYjScoszOpBYwMYnfLwy.lYt6,true
+USR-003,physician,INS-A,CUI-001,,Laura Medina Díaz,cui-001@ejemplo.test,$2a$10$Gz5Er7ILNi.1fcqrSY5B9u9wAhN/Rj4onr.MRbMKuZN45iwjTYKfS,true
+USR-004,physician,INS-A,CUI-002,,Paola Vargas Salazar,cui-002@ejemplo.test,$2a$10$JHdsO796Zq4/.mdUqQ6skuRz584FlCQcdeGr55MI88YIwbS.8ra.6,true
+USR-005,coordinator,INS-B,,,Coordinación Residencia Coyoacán,coordinacion.b@ejemplo.test,$2a$10$VhU1qIxMbgTMxh1cz3f6nO6c6YYsirNbJzaxto.RA75MATmZ0WlmK,true
+USR-006,physician,INS-B,CUI-016,,Verónica Álvarez Ortega,cui-016@ejemplo.test,$2a$10$.qTtlbqOVJSsnYrC2JAL1.IwlPV4nh.cjq0KfAbe/UuLNhmH/d6O2,true
+USR-007,coordinator,INS-C,,,Coordinación Centro de Día Aragón,coordinacion.c@ejemplo.test,$2a$10$tydq4cbuTCa9rzjRLbCCKu1f9KG30u032hesnydD26iOyzwrukTiK,true
+USR-008,physician,INS-C,CUI-026,,Alejandro Herrera Ruiz,cui-026@ejemplo.test,$2a$10$ObQsBfswWbxSTunl5yXrmullM5kIDCqPG0TTm/f1FQODb5NN0Vbpy,true
+USR-009,coordinator,INS-D,,,Coordinación Red Cuidar Tlalpan,coordinacion.d@ejemplo.test,$2a$10$OQJHGoLkTM267pb4S5Mshe.zSs3W7Wk7UYEesDTIzmD/qyx1h3DuW,true
+USR-010,physician,INS-D,CUI-032,,Gabriela Soto Contreras,cui-032@ejemplo.test,$2a$10$nst18sKGFu.E4Wno1Q4qEOAujaJPFGNg323FMFgRteI8t9aN9UHFK,true
+USR-011,coordinator,INS-E,,,Coordinación Red Vecinal Iztacalco,coordinacion.e@ejemplo.test,$2a$10$rRnbJtR7reSSh63ewfW8du8hCrFQbPT5hfW4fNM1ENW2Yd4iDbZOa,true
+USR-012,caregiver,INS-A,CUI-003,,Alejandro González Bautista,cui-003@ejemplo.test,$2a$10$PogJx4E5RwB.HgQae.26zOYThHxOL8OVDCr/jw9T.vBeYFEeKfg46,true
+USR-013,caregiver,INS-A,CUI-004,,Diana Ramírez Castro,cui-004@ejemplo.test,$2a$10$rSDDcWzYSQs1lLmXvmzCxO95BWKow1DBSRMGpAfiFf1DeWLsdN5AW,true
+USR-014,caregiver,INS-B,CUI-017,,Daniela Moreno Torres,cui-017@ejemplo.test,$2a$10$kM3wrReUeVH4A.ugAjIE3uRoK.rxbBXQ0NsEpwd8g7Go1T0vC3WvG,true
+USR-015,caregiver,INS-B,CUI-018,,Fernanda López López,cui-018@ejemplo.test,$2a$10$GokAGUvo7jVzcCx.0Cww5.3tK3vQb3iP1jPgR3.QVehlFJOfNeszG,true
+USR-016,caregiver,INS-C,CUI-027,,Alejandro Rojas Torres,cui-027@ejemplo.test,$2a$10$wNuqIaStMuiBSBOyKlA4/efucIMLh9jwQ/ULxA8kXB7k/fGhfLHR2,true
+USR-017,caregiver,INS-C,CUI-028,,Gabriela Sánchez Sánchez,cui-028@ejemplo.test,$2a$10$WE662cGu0/QCbCd2PNm1quAreK9gWRB5hPeUAQUD4ALVUuB4Ym0hW,true
+USR-018,caregiver,INS-D,CUI-033,,Alejandra Domínguez Velázquez,cui-033@ejemplo.test,$2a$10$a0Kd717Ze1lSN1SdtI9WYe6w0s5XS4HetmD.iVzI9OMSR50OFHXFS,true
+USR-019,caregiver,INS-D,CUI-034,,Mónica García Contreras,cui-034@ejemplo.test,$2a$10$XNlHGA0spmx5GMaLlo1ANuBeodwpNIdqvhIh8fXK8w8gWbDzXieB.,true
+USR-020,caregiver,INS-E,CUI-040,,Karla Vázquez Reyes,cui-040@ejemplo.test,$2a$10$xnNm82L8.JMOidLG9q305O0S.4d7Bgf8GKrZvHFgOXAc5b04LD3xK,true
+USR-021,caregiver,INS-E,CUI-041,,Fernanda Romero Moreno,cui-041@ejemplo.test,$2a$10$AKJW2iRMFrn5t5ahA5cw9OO5qAW4xxDnWEEOR70F.DAxCE3OLvT8O,true
+USR-022,family,INS-A,,FAM-0001,Daniela Romero Díaz,fam-0001@ejemplo.test,$2a$10$ckzXRy5AlZivI4047l3.Yev2JO0TSdm4.1ipVdz30GL02gknLLwIe,true
+USR-023,family,INS-A,,FAM-0002,Claudia Chávez Chávez,fam-0002@ejemplo.test,$2a$10$HCaIoGK6kJXrTaqiuL5hXOldoFq/KJoCnZ9o5I7l7Tcwlk5mFqlTe,true
+USR-024,family,INS-B,,FAM-0151,Catalina Ruiz Torres,fam-0151@ejemplo.test,$2a$10$kYQukzJHHiyCHUdfVF96OOlE4vLStOGkbxnrIIrqR8uZ7QOIquxNi,true
+USR-025,family,INS-B,,FAM-0152,Paola Vargas Álvarez,fam-0152@ejemplo.test,$2a$10$OPqGFaNzvWnyutzSNaZEFubNLtqWmNreYP371IO3F2R2SPnTiZqv6,true
+USR-026,family,INS-C,,FAM-0231,Fernanda Salazar Chávez,fam-0231@ejemplo.test,$2a$10$HfQ0c2EE90RbdM6IowR8ueewix5zsCWRSgKl2V.0xCKH8yQCi7KW6,true
+USR-027,family,INS-C,,FAM-0232,Iván Salazar Velázquez,fam-0232@ejemplo.test,$2a$10$ep4YtfvRgiwy4Imhsb1sf.DGD9WPQZ0Uyzf0YPZsEkknL6q4wWFL2,true
+USR-028,family,INS-D,,FAM-0291,Adriana González Martínez,fam-0291@ejemplo.test,$2a$10$Y8FAIbdqYtRU4NdYwbNvS.Q7n4kLXuUr71plTUFi7B6FAsiWBxC0i,true
+USR-029,family,INS-D,,FAM-0292,Leticia Rojas Velázquez,fam-0292@ejemplo.test,$2a$10$qKClurLj7LNB5ezJb1QotuJtMV6oTOAK1WN5eIwn2D9GeI8GWaf2u,true
+USR-030,family,INS-E,,FAM-0361,Rodrigo Gómez Contreras,fam-0361@ejemplo.test,$2a$10$gfBszxrZPCSUbO3o3pwG.e6BUCOL/sRDRdQnCyFis2V8u.zqUfaeG,true
+USR-031,family,INS-E,,FAM-0362,Claudia Ortiz Estrada,fam-0362@ejemplo.test,$2a$10$tUwKbrLVtTG5uyYcRsxpYOLW73ZzHZm4H6zsJ8QTk1vC41PFy.TBy,true

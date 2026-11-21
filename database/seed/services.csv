@@ -1,0 +1,10 @@
+service_id,name,required_skill,duration_min,reference_price_mxn,min_price_mxn,max_price_mxn
+SRV-01,Consulta geriátrica a domicilio,physician,60,2200,1800,2800
+SRV-02,"Visita de enfermería (inyección, curación, signos vitales)",nursing,30,300,200,350
+SRV-03,Turno de enfermería 8 h,nursing,480,1300,980,1650
+SRV-04,Turno de enfermería 12 h,nursing,720,1950,1460,2480
+SRV-05,Terapia física o masaje terapéutico,therapy,60,900,600,1200
+SRV-06,Cuidador diurno 8 h,caregiving,480,1050,900,1200
+SRV-07,Cuidador nocturno 12 h,caregiving,720,1500,1300,1700
+SRV-08,Atención respiratoria / oxigenoterapia (visita),nursing,45,650,,
+SRV-09,Toma de muestras a domicilio,nursing,20,,,

@@ -1,0 +1,52 @@
+"""Check that the database loaded correctly. Run on the laptop after `docker compose up -d db`.
+
+python scripts/verify_db.py         (uses docker compose exec, so no Python DB driver is needed)
+"""
+import subprocess
+import sys
+
+EXPECTED = {
+    "districts": 16, "subscription_plans": 3, "institutions": 5, "services": 9, "institution_services": 30,
+    "persons": 20000, "patients": 400, "family_members": 400, "consents": 1200, "caregivers": 44,
+    "caregiver_skills": 49, "care_plans": 927, "users": 31, "service_requests": 2864, "assignments": 2597,
+    "air_quality_stations": 17, "air_quality_readings": 12240, "traffic_hourly_profile": 48,
+}
+
+OVERLAPS = """SELECT count(*) FROM assignments a JOIN assignments b
+  ON a.caregiver_id = b.caregiver_id AND a.assignment_id < b.assignment_id
+ AND a.arrived_at < b.finished_at AND b.arrived_at < a.finished_at"""
+
+
+def sql(query: str, api_role: bool = False) -> str:
+    """Run a query inside the db container. api_role=True connects as vela_api (subject to RLS)."""
+    login = 'PGPASSWORD="$VELA_API_DB_PASSWORD" psql -U vela_api' if api_role else 'psql -U "$POSTGRES_USER"'
+    cmd = ["docker", "compose", "exec", "-T", "db", "sh", "-c",
+           f'{login} -h localhost -At -d "$POSTGRES_DB" -c "{query}"']
+    out = subprocess.run(cmd, capture_output=True, text=True)
+    if out.returncode:
+        sys.exit(f"Error: {out.stderr.strip()}")
+    return out.stdout.strip().splitlines()[-1]
+
+
+def main() -> None:
+    ok = True
+    for table, n in EXPECTED.items():
+        got = int(sql(f"SELECT count(*) FROM {table}"))
+        flag = "ok" if got == n else "FALLA"
+        ok &= got == n
+        print(f"{flag:5} {table:24} {got:>6} (esperado {n})")
+    overlaps = int(sql(OVERLAPS))
+    print(f"{'ok' if overlaps == 0 else 'FALLA':5} traslapes de cuidadores: {overlaps}")
+    ok &= overlaps == 0
+    # vela_api is subject to row-level security: without a tenant setting it must see nothing.
+    hidden = int(sql("SELECT count(*) FROM patients", api_role=True))
+    one = int(sql("SET app.institution_id = 'INS-A'; SELECT count(*) FROM patients", api_role=True))
+    rls_ok = hidden == 0 and 0 < one < EXPECTED["patients"]
+    print(f"{'ok' if rls_ok else 'FALLA':5} aislamiento: sin institución {hidden} pacientes, INS-A {one}")
+    ok &= rls_ok
+    print("\nTodo correcto." if ok else "\nHay diferencias: revisa los mensajes de arriba.")
+    sys.exit(0 if ok else 1)
+
+
+if __name__ == "__main__":
+    main()

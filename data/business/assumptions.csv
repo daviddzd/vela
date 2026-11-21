@@ -1,0 +1,30 @@
+key,value,unit,description_es,source,url,type
+market_care_residences_cdmx,109,establishments,"Asilos y otras residencias para el cuidado de ancianos en CDMX (DENUE mayo 2026)",DataMéxico / INEGI DENUE,https://www.economia.gob.mx/datamexico/es/profile/industry/continuing-care-retirement-communities-and-assisted-living-facilities-for-the-elderly,real
+market_residential_care_cdmx,319,establishments,"Residencias de asistencia social y para el cuidado de la salud en CDMX (DENUE 2026)",DataMéxico / INEGI DENUE,https://www.economia.gob.mx/datamexico/es/profile/industry/nursing-and-residential-care-facilities,real
+market_care_spaces_cdmx_2024,206,establishments,"Espacios de cuidado de personas mayores en CDMX: 109 asilos (20 públicos, 89 privados) y 97 centros de atención",Expansión Política 2024,https://politica.expansion.mx/cdmx/2024/11/23/bj-coyoacan-y-azcapotzalco-concentran-retos-para-poblacion-de-65-anos-y-mas,real
+market_jap_residences_2020,174,establishments,"Asilos supervisados por la Junta de Asistencia Privada en CDMX (29 instituciones y 145 residencias privadas)",Milenio 2020,https://www.milenio.com/politica/comunidad/cdmx-adultos-mayores-albergues-sector-afectado-covid-19,real
+population_60_plus_cdmx_2020,1491619,people,"Personas de 60 años y más en CDMX",INEGI Censo 2020,https://trabajosocial.unam.mx/politicasocial/material/vivienda/2021/vivie_feb_c_adultos_mayores_cdmx.pdf,real
+salary_software_developer_cdmx,17678,MXN/month,"Sueldo promedio de desarrollador(a) de software en CDMX (oct 2026)",Indeed México,https://mx.indeed.com/career/developer/salaries/DIF,real
+salary_software_developer_national,11000,MXN/month,"Salario promedio de desarrolladores y analistas de software (ENOE 2026-T1)",DataMéxico,https://www.economia.gob.mx/datamexico/es/profile/occupation/desarrolladores-y-analistas-de-software-y-multimedia,real
+salary_nurse_technical,9330,MXN/month,"Salario promedio de enfermeras técnicas (2026-T1)",DataMéxico,https://www.economia.gob.mx/datamexico/es/profile/occupation/enfermeras-tecnicas,real
+salary_residential_care_sector,7560,MXN/month,"Salario promedio en residencias de asistencia social y cuidado de la salud (2026-T1)",DataMéxico,https://www.economia.gob.mx/datamexico/es/profile/industry/nursing-and-residential-care-facilities,real
+banxico_target_rate,6.25,percent,"Tasa objetivo de Banxico tras el recorte del 5 de noviembre de 2026",El Siglo de Torreón,https://www.elsiglodetorreon.com.mx/noticia/2026/los-supuestos-del-modelo.2527378.html,real
+tiie_28_days,6.5147,percent,"TIIE a 28 días publicada en el DOF (noviembre 2026)",DOF / Banxico,https://sidof.segob.gob.mx/notas/docFuente/5803553,real
+inflation_annual_oct_2026,3.75,percent,"Inflación general anual, octubre de 2026",INEGI vía Animal Político,https://grupoanimal.mx/economia/inflacion-anual-3-75-octubre-tres-meses-alza,real
+discount_rate_base,25,percent,"Tasa de descuento para VAN: tasa libre de riesgo (~6.5 %) + prima de riesgo de startup en etapa temprana",Supuesto del equipo,,assumption
+discount_rate_low,15,percent,"Escenario de sensibilidad bajo",Supuesto del equipo,,assumption
+discount_rate_high,35,percent,"Escenario de sensibilidad alto",Supuesto del equipo,,assumption
+plan_basic_price,2500,MXN/month,"Plan Básico (hasta 50 pacientes)",Supuesto del equipo (pendiente de validar),,assumption
+plan_professional_price,6000,MXN/month,"Plan Profesional (hasta 150 pacientes)",Supuesto del equipo (pendiente de validar),,assumption
+plan_institutional_price,12000,MXN/month,"Plan Institucional (más de 150 pacientes o varias sedes)",Supuesto del equipo (pendiente de validar),,assumption
+competitor_hulipractice_min,490,MXN/month,"Precio mínimo de HuliPractice (por médico, + IVA)",Medesk,https://www.medesk.net/es/blog/hulipractice-vs-medesk-comparativa/,real
+competitor_hulipractice_max,2540,MXN/month,"Precio máximo de HuliPractice (por médico, + IVA)",Medesk,https://www.medesk.net/es/blog/hulipractice-vs-medesk-comparativa/,real
+commission_alternative,5,percent,"Comisión por servicio coordinado (escenario alternativo)",Supuesto del equipo,,assumption
+founders,4,people,"Equipo fundador: dirección y ventas, tecnología, datos e IA, operación y ética",Supuesto del equipo,,assumption
+founder_salary_year1,17678,MXN/month,"Sueldo por fundador el año 1 (igual al promedio de desarrollador en CDMX)",Derivado de Indeed México,,assumption
+employer_cost_factor,1.35,multiplier,"Costo patronal sobre sueldo (IMSS, INFONAVIT, prestaciones de ley)",Supuesto del equipo,,assumption
+infra_monthly_year1,3000,MXN/month,"Servidor, dominio, respaldos y servicios en la nube el primer año",Supuesto del equipo,,assumption
+customers_year1,5,institutions,"Instituciones cliente al cierre del año 1 (las 5 del piloto)",Supuesto del equipo,,assumption
+customer_growth_year2_5,"15,30,50,75",institutions,"Clientes acumulados al cierre de los años 2 a 5 (CDMX primero, luego zona metropolitana)",Supuesto del equipo,,assumption
+monthly_churn,1.5,percent,"Bajas mensuales de clientes",Supuesto del equipo,,assumption
+expansion_order,"CDMX > Edomex conurbado > Jalisco > Nuevo León",text,"Orden de expansión regional; Jalisco y Nuevo León están entre las entidades con más residencias (DENUE)",DataMéxico / INEGI DENUE,https://www.economia.gob.mx/datamexico/es/profile/industry/continuing-care-retirement-communities-and-assisted-living-facilities-for-the-elderly,assumption

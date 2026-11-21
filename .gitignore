@@ -1,0 +1,31 @@
+# secrets
+.env
+*.pem
+*.key
+cloudflared/*.json
+
+# python
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# node
+node_modules/
+frontend/dist/
+
+# large / generated
+data/reference/official/*
+!data/reference/official/README.md
+voice/models/*.keras
+voice/eval/audio/
+simulation/results/raw/
+*.wav
+*.mp3
+
+# os / editors
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

@@ -1,0 +1,85 @@
+# SIRAG-D simulation parameters. Every value has a source or is marked as an assumption.
+# Units: probabilities per hour unless stated; concentrations in ppb (O3) and ug/m3 (PM2.5).
+
+clock:
+  mode: real_time            # the platform runs on the real wall clock (Mexico City time)
+  timezone: America/Mexico_City
+  batch_experiments_speedup: max   # offline experiments run as fast as possible
+
+health_markov:
+  # States: stable -> at_risk -> crisis. ASSUMPTION calibrated so that a multimorbid, dependent
+  # older adult has ~0.9 crisis episodes per year under normal air quality.
+  states: [stable, at_risk, crisis]
+  base_transition_per_hour:
+    stable_to_at_risk: 0.0006
+    at_risk_to_stable: 0.05
+    at_risk_to_crisis: 0.01
+    crisis_resolves_after_service: true
+  risk_multipliers:            # ASSUMPTION; multiply stable_to_at_risk
+    chronic_lung_disease: 1.5
+    heart_disease: 1.4
+    stroke: 1.3
+    diabetes: 1.15
+    dependency_severe: 1.6
+    dependency_moderate: 1.25
+    age_80_plus: 1.3
+    no_chronic_disease: 0.5
+  pollution_effects:           # relative increase per +10 ug/m3 PM2.5 above the station's 30-day baseline
+    respiratory: 0.022         # elderly respiratory admissions +2.2 % (Bell et al. 2014, PLoS One 9:e88578)
+    copd: 0.016                # COPD hospitalization +1.6 % (BMC Public Health 2023;23:2229)
+    cardiovascular: 0.0078     # elderly CVD admissions +0.78 % (Bell et al. 2014)
+    natural_causes: 0.0091     # 65+ admissions, natural causes +0.91 % (BMJ 2024;384:e076322)
+    apply_respiratory_to: [chronic_lung_disease]
+    apply_cardiovascular_to: [heart_disease, stroke]
+  stress_test_multiplier: 1.0  # ASSUMPTION knob for sensitivity analysis only (never used in the "real" scenarios)
+
+traffic:
+  profile_file: data/reference/traffic_hourly_profile.csv   # TomTom Traffic Index 2025, CDMX
+  distance_model: haversine
+  road_circuity_factor: 1.4    # ASSUMPTION: straight-line distance x 1.4 = road distance
+  blockade_extra_minutes: 15   # ASSUMPTION per trip crossing a blocked zone (roadblock scenario)
+
+contingency:
+  # Programa para Contingencias Ambientales Atmosféricas (PCAA). Verify against the current official program.
+  thresholds:
+    o3_phase1_ppb_1h: 155            # last activation level recorded since 2016 (aire.zmvm package history)
+    pm25_phase1_ugm3_24h_avg: 97.5   # Phase I activated with 99.5 ug/m3 at SAC, Jan 2024 (SSA weekly report)
+    watch_fraction: 0.85             # ASSUMPTION: "watch" alert at 85 % of a threshold
+  detection_interval_minutes: 5
+  requires_coordinator_approval: true
+
+scenarios:
+  normal:
+    description: Condiciones habituales (serie calibrada de 30 días)
+  contingency_east:
+    description: Contingencia por PM2.5 en el oriente (referencia real enero 2024, SAC 99.5 ug/m3)
+    pm25_targets_ugm3: {SAC: 105, UIZ: 98, TAH: 92, IZT: 85, MER: 80, GAM: 78, default: 60}
+    o3_factor: 1.0
+    ramp_minutes: 20                 # how fast readings climb after the scenario is triggered from the demo panel
+    duration_hours: 24
+  contingency_east_roadblocks:
+    extends: contingency_east
+    blocked_districts: ["09007"]     # Iztapalapa
+    extra_traffic_factor: 1.25       # ASSUMPTION
+
+dispatch_policies: [nearest, risk_priority, risk_plus_live_traffic, human_dispatcher]
+human_dispatcher_delay_minutes: [5, 20]   # ASSUMPTION uniform range
+
+approval:
+  auto_approve_priorities: [low, medium]   # routine assignments are approved automatically
+  coordinator_approval_priorities: [high]  # urgent/crisis assignments wait for the coordinator
+
+experiments:
+  replications: 30
+  confidence_level: 0.95
+  horizon_days: 7
+  seed: 2026
+  metrics:
+    - crisis_response_p50_min
+    - crisis_response_p90_min
+    - pct_crisis_attended_under_60_min
+    - routine_postponed
+    - travel_km
+    - travel_cost_mxn
+    - caregiver_hours
+    - response_gap_between_districts_min
