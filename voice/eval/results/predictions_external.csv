@@ -1,0 +1,151 @@
+phrase_id,text,label,category,style,rule_hits,rules_only,classifier,final
+EXT-001,"oiga mi jefa no jala aire bien, esta jadeando y se le ven los labios medio moraditos",emergency,severe_breathing,colloquial,['severe_breathing'],emergency,emergency,emergency
+EXT-002,ayudeme porfa mi papa respira bien feo como silbando y no puede ni hablar,emergency,severe_breathing,colloquial,['severe_breathing'],emergency,emergency,emergency
+EXT-003,mi abuelita dice q se esta asfixiando q no le llega el aire,emergency,severe_breathing,typo,['severe_breathing'],emergency,emergency,emergency
+EXT-004,"está boqueando como pescadito y no le entra nada de aire, ya lo senté y nada",emergency,severe_breathing,colloquial,['severe_breathing'],emergency,emergency,emergency
+EXT-005,"desde hace rato se le cerró el pecho y no puede respirar, ya no habla",emergency,severe_breathing,colloquial,['severe_breathing'],emergency,emergency,emergency
+EXT-006,"no puede jalar aire, se agarra el cuello y se puso gris",emergency,severe_breathing,colloquial,['severe_breathing'],emergency,emergency,emergency
+EXT-007,le aprieta el pecho bien feo como si le hubieran puesto una piedra encima y esta sudando frio,emergency,chest_pain,colloquial,['chest_pain'],emergency,emergency,emergency
+EXT-008,mi apá dice que trae un dolorsote en el pecho que se le corre al brazo izquierdo,emergency,chest_pain,regional,['chest_pain'],emergency,emergency,emergency
+EXT-009,tiene una opresion en el pexo muy fuerte desde hace 20 minutos,emergency,chest_pain,typo,['chest_pain'],emergency,emergency,emergency
+EXT-010,"se queja de que le arde el pecho y le baja hasta la quijada, está pálido pálido",emergency,chest_pain,colloquial,['chest_pain'],emergency,emergency,emergency
+EXT-011,siente que le estan aplastando el corazon y no se le quita,emergency,chest_pain,colloquial,['chest_pain'],emergency,emergency,emergency
+EXT-012,"le dio un piquete en el pecho bien fuerte y se doblo, no se puede ni enderezar",emergency,chest_pain,colloquial,['chest_pain'],emergency,emergency,emergency
+EXT-013,mi mamá se quedó tiesa en el sillón y no me contesta aunque le hablo fuerte,emergency,unconscious,colloquial,['unconscious'],emergency,emergency,emergency
+EXT-014,"se nos fue, se quedo como dormida y no despierta por mas que la muevo",emergency,unconscious,colloquial,['unconscious'],emergency,emergency,emergency
+EXT-015,mi tio se cayo redondo y no reacciona,emergency,unconscious,regional,['unconscious'],emergency,emergency,emergency
+EXT-016,"esta como ido, con los ojos en blanco y no me hace caso",emergency,unconscious,colloquial,['unconscious'],emergency,emergency,emergency
+EXT-017,lo encontre en el baño tirado y no abre los ojos,emergency,unconscious,colloquial,['unconscious'],emergency,emergency,emergency
+EXT-018,se le fue el sentido de repente y no vuelve,emergency,unconscious,colloquial,['unconscious'],emergency,emergency,emergency
+EXT-019,de la nada se le chueqio la boca y no puede levantar el brazo derecho,emergency,stroke_signs,typo,['stroke_signs'],emergency,emergency,emergency
+EXT-020,"habla como borracho y no ha tomado nada, se le cae la comida de un lado de la boca",emergency,stroke_signs,colloquial,['stroke_signs'],emergency,emergency,emergency
+EXT-021,se le durmió todo el lado izquierdo del cuerpo hace rato y no se le quita,emergency,stroke_signs,colloquial,['stroke_signs'],emergency,emergency,emergency
+EXT-022,"no le entiendo nada lo que dice, junta las palabras raro y tiene la cara caida",emergency,stroke_signs,colloquial,['stroke_signs'],emergency,emergency,emergency
+EXT-023,de repente ya no puede mover la pierna ni la mano del mismo lado,emergency,stroke_signs,colloquial,['stroke_signs'],emergency,emergency,emergency
+EXT-024,se le jaló la cara de un lado y se le traba la lengua,emergency,stroke_signs,regional,['stroke_signs'],emergency,emergency,emergency
+EXT-025,esta temblando todo el cuerpo bien fuerte y echa espuma por la boca,emergency,seizure,colloquial,['seizure'],emergency,emergency,emergency
+EXT-026,"le dio un ataque, se puso rígido y se sacude sin parar",emergency,seizure,colloquial,['seizure'],emergency,emergency,emergency
+EXT-027,convulsiono hace un momento y sigue como torcido sin responder,emergency,seizure,typo,['seizure'],emergency,emergency,emergency
+EXT-028,se le trabó la quijada y se estaba sacudiendo en el piso,emergency,seizure,colloquial,['seizure'],emergency,emergency,emergency
+EXT-029,le está saliendo un chorro de sangre de la pierna y no para aunque le aprieto,emergency,severe_bleeding,colloquial,['severe_bleeding'],emergency,emergency,emergency
+EXT-030,"vomito sangre bien oscura, como cafe, un montón",emergency,severe_bleeding,colloquial,['severe_bleeding'],emergency,emergency,emergency
+EXT-031,"se corto con un vidrio y sangra muchisimo, ya empapó la toalla",emergency,severe_bleeding,colloquial,['severe_bleeding'],emergency,emergency,emergency
+EXT-032,le sale sangre de la nariz a chorros desde hace media hora y no se detiene,emergency,severe_bleeding,colloquial,['severe_bleeding'],emergency,emergency,emergency
+EXT-033,"esta haciendo popo con sangre roja, mucha, y se siente mareadisimo",emergency,severe_bleeding,colloquial,['severe_bleeding'],emergency,emergency,emergency
+EXT-034,"se resbalo en la regadera, se pego en la cabeza y no se puede parar",emergency,severe_fall,colloquial,['serious_fall'],emergency,emergency,emergency
+EXT-035,"se cayo de las escaleras y tiene la pierna bien chueca, grita de dolor",emergency,severe_fall,colloquial,['serious_fall'],emergency,emergency,emergency
+EXT-036,"se dio un ranazo contra el piso, le sale sangre de la cabeza y esta atarantado",emergency,severe_fall,regional,['serious_fall'],emergency,emergency,emergency
+EXT-037,"se cayó y no se puede levantar, dice que le truena la cadera",emergency,severe_fall,colloquial,['serious_fall'],emergency,emergency,emergency
+EXT-038,la encontre en el piso desde quien sabe cuando y no se puede mover,emergency,severe_fall,colloquial,['serious_fall'],emergency,emergency,emergency
+EXT-039,"de repente no sabe ni quien soy, me dice que me vaya de su casa y esta muy agitado",emergency,sudden_confusion,colloquial,['sudden_confusion'],emergency,emergency,emergency
+EXT-040,ahorita en la mañana estaba bien y de pronto ya no sabe donde esta ni que dia es,emergency,sudden_confusion,colloquial,['sudden_confusion'],emergency,emergency,emergency
+EXT-041,"esta desvariando, ve gente que no esta y no me reconoce, esto empezo hace una hora",emergency,sudden_confusion,colloquial,['sudden_confusion'],emergency,emergency,emergency
+EXT-042,se confundio de golpe y habla puras incoherencias,emergency,sudden_confusion,colloquial,['sudden_confusion'],emergency,emergency,emergency
+EXT-043,dice que ya no quiere seguir aqui y que se va a tomar todas las pastillas,emergency,self_harm,colloquial,['self_harm'],emergency,emergency,emergency
+EXT-044,mi papa dijo que se quiere morir y escondio la soga del tendedero,emergency,self_harm,colloquial,['self_harm'],emergency,emergency,emergency
+EXT-045,"ya no aguanto, me quiero quitar la vida",emergency,self_harm,colloquial,['self_harm'],emergency,emergency,emergency
+EXT-046,"se tomo un monton de pastillas a proposito, encontre los frascos vacios",emergency,self_harm,colloquial,['self_harm'],emergency,emergency,emergency
+EXT-047,"oiga le llamo porque ahorita mi mama se puso bien mal, primero dijo que le dolia la cabeza, luego vomito y ahora no me contesta bien y se le cierran los ojos",emergency,unconscious,long_mixed,['unconscious'],emergency,emergency,emergency
+EXT-048,"buenas, le cuento: mi abuelo amaneció bien, desayunó, pero hace como diez minutos se agarró el pecho, se puso blanco y ahorita está sudando a chorros",emergency,chest_pain,long_mixed,['chest_pain'],emergency,emergency,emergency
+EXT-049,"perdon que llame tan tarde, es que mi tia que usa el oxigeno se le acabo el tanque y ya no puede respirar casi nada",emergency,severe_breathing,long_mixed,['severe_breathing'],emergency,emergency,emergency
+EXT-050,"no se si exagero pero mi suegro de repente dejo de hablar a media frase y se le cayo el vaso, ahora no mueve la mano",emergency,stroke_signs,long_mixed,['stroke_signs'],emergency,emergency,emergency
+EXT-051,desde ayer tiene calentura de 38 y medio y no se le baja con el paracetamol,urgent,fever,colloquial,[],,urgent,urgent
+EXT-052,"trae mucha tos con flemas verdes y anda cansadisima, pero respira bien",urgent,respiratory_infection,colloquial,[],,urgent,urgent
+EXT-053,ha vomitado tres veces hoy y no quiere ni agua,urgent,vomiting,colloquial,[],,urgent,urgent
+EXT-054,se le hincho mucho el pie y lo tiene caliente y rojo,urgent,swelling,colloquial,[],,urgent,urgent
+EXT-055,la herida de la operacion se le ve roja y le sale como pus,urgent,wound_infection,typo,[],,urgent,urgent
+EXT-056,lleva dos dias sin hacer pipi casi nada y esta bien decaido,urgent,urinary,colloquial,[],,urgent,urgent
+EXT-057,"anda con diarrea desde antier y ya se ve deshidratado, tiene la boca seca",urgent,dehydration,colloquial,[],,urgent,urgent
+EXT-058,"se cayo ayer pero se levanto solo, hoy le duele la muñeca y se le hincho",urgent,minor_fall,colloquial,[],,urgent,urgent
+EXT-059,"anoche le dolio el pecho un ratito pero ya se le paso, quiero que lo chequen",urgent,chest_pain_resolved,colloquial,[],,urgent,urgent
+EXT-060,le salio la azucar en 300 en la mañana y anda con mucha sed,urgent,high_glucose,regional,[],,urgent,urgent
+EXT-061,se le olvido tomar la pastilla de la presion dos dias y hoy le duele la cabeza,urgent,missed_medication,colloquial,[],,urgent,urgent
+EXT-062,trae ardor al orinar y anda con escalofrios,urgent,urinary,colloquial,[],,urgent,urgent
+EXT-063,tiene una llaguita en el talon que se esta poniendo negra,urgent,pressure_ulcer,colloquial,[],,urgent,urgent
+EXT-064,"esta mas confundido que de costumbre desde hace unos tres dias, no se si es la medicina nueva",urgent,gradual_confusion,colloquial,[],,urgent,urgent
+EXT-065,"le falta un poco el aire cuando camina al baño, sentado esta bien",urgent,mild_breathing,colloquial,[],,urgent,urgent
+EXT-066,tiene la presion en 170 de alta pero se siente bien,urgent,high_blood_pressure,colloquial,[],,urgent,urgent
+EXT-067,se le acabo el oxigeno de repuesto y el tanque que trae dura hasta la noche,urgent,oxygen_supply,colloquial,[],,urgent,urgent
+EXT-068,no ha querido comer en dos dias y ha bajado de peso,urgent,poor_intake,colloquial,[],,urgent,urgent
+EXT-069,le duele mucho la espalda desde que la cargamos y casi no se puede voltear en la cama,urgent,pain,colloquial,[],,urgent,urgent
+EXT-070,tiene los tobillos bien hinchados y le cuesta un poco respirar acostado,urgent,swelling,colloquial,[],,urgent,urgent
+EXT-071,"se mareo al pararse, se sento y ya se le paso pero le pasa seguido",urgent,dizziness,colloquial,[],,urgent,urgent
+EXT-072,"le salieron unas ronchas por todo el cuerpo despues de la pastilla nueva, no tiene hinchada la cara",urgent,allergy_mild,colloquial,[],,urgent,urgent
+EXT-073,"tiene calentura y esta tosiendo mucho, como que le cuesta un poquito respirar",urgent,respiratory_infection,colloquial,[],,urgent,urgent
+EXT-074,"anda bien triste, llora todo el dia y no quiere levantarse, pero no ha dicho nada de hacerse daño",urgent,depression,colloquial,['self_harm'],emergency,urgent,emergency
+EXT-075,la sonda se le salio en la mañana y no sabemos ponerla,urgent,catheter,colloquial,[],,urgent,urgent
+EXT-076,tiene el ojo rojo y le supura desde ayer,urgent,eye_infection,typo,[],,urgent,urgent
+EXT-077,"esta muy estreñido, lleva cinco dias sin ir al baño y le duele la panza",urgent,constipation,colloquial,[],,urgent,urgent
+EXT-078,"amanecio con la pierna morada pero no se pego, le duele al tocarla",urgent,bruise_unknown,colloquial,[],,urgent,urgent
+EXT-079,le dieron una medicina en el hospital y desde entonces anda bien somnoliento,urgent,drowsiness,colloquial,[],,urgent,urgent
+EXT-080,se le olvidaron sus pastillas del corazon todo el fin de semana,urgent,missed_medication,colloquial,[],,urgent,urgent
+EXT-081,"la azucar le bajo a 60 en la mañana, le dimos jugo y ya esta en 110",urgent,low_glucose_resolved,colloquial,[],,urgent,urgent
+EXT-082,tiene una cortadita en el brazo que ya no sangra pero se ve profunda,urgent,wound,colloquial,[],,urgent,urgent
+EXT-083,"se cayo de la cama anoche, se paro solito, solo trae un raspon pero quiero que lo revisen",urgent,minor_fall,colloquial,[],,urgent,urgent
+EXT-084,le duele el oido y trae calentura,urgent,ear_infection,colloquial,[],,urgent,urgent
+EXT-085,"tiene hipo desde ayer y no se le quita, ya no puede ni dormir",urgent,hiccups,colloquial,[],,emergency,emergency
+EXT-086,esta orinando muy seguido y con olor muy fuerte,urgent,urinary,colloquial,[],,emergency,emergency
+EXT-087,"oiga, mi mama anda con la presion bajita, 90 de alta, y medio mareada pero platica bien",urgent,low_blood_pressure,colloquial,[],,urgent,urgent
+EXT-088,no se si es urgente pero mi papa trae una tos que no se le quita desde hace dos semanas,urgent,chronic_cough,long_mixed,[],,urgent,urgent
+EXT-089,le sale un poquito de sangre de las encias cuando se lava los dientes y tiene moretones,urgent,bleeding_minor,colloquial,[],,urgent,urgent
+EXT-090,"buenas tardes, le hablo porque mi tia la que vive sola dice que se siente muy cansada y que le duelen las piernas al caminar, no quiere ir al hospital",urgent,fatigue,long_mixed,[],,emergency,emergency
+EXT-091,estuvo con nauseas toda la noche y ahorita le duele la boca del estomago,urgent,abdominal_pain,colloquial,[],,urgent,urgent
+EXT-092,"mi abuelo se quejo de dolor de pecho la semana pasada, ya no le ha dado pero me quede preocupada",urgent,chest_pain_resolved,long_mixed,['chest_pain'],emergency,urgent,emergency
+EXT-093,le salio una bolita en el cuello que crecio en dos semanas,urgent,lump,colloquial,[],,urgent,urgent
+EXT-094,"se le olvida todo cada vez mas y hoy se perdio camino a la tienda, ya esta en la casa",urgent,gradual_confusion,long_mixed,[],,urgent,urgent
+EXT-095,anda con dolor de cabeza fuertecito desde ayer y no se le quita con nada,urgent,headache,colloquial,[],,emergency,emergency
+EXT-096,le cambie el parche del dolor y le salio una irritacion fea en la piel,urgent,skin_reaction,colloquial,[],,urgent,urgent
+EXT-097,ya no le quedan pastillas de la insulina y el lunes cierran la farmacia,urgent,medication_supply,colloquial,[],,urgent,urgent
+EXT-098,tiene escaras en la espalda que se ven peor que la semana pasada,urgent,pressure_ulcer,colloquial,[],,urgent,urgent
+EXT-099,"tose cuando come y se atraganta seguido, hoy le costo pasar la comida",urgent,dysphagia,colloquial,[],,urgent,urgent
+EXT-100,respira un poquito mas rapido de lo normal pero platica y esta tranquilo,urgent,mild_breathing,colloquial,[],,urgent,urgent
+EXT-101,"buenos dias, queria saber a que hora llega la enfermera mañana",routine,schedule,colloquial,[],,routine,routine
+EXT-102,me podrian cambiar la cita del jueves para el viernes porfa,routine,schedule,colloquial,[],,routine,routine
+EXT-103,"mi mama ya se tomo sus pastillas y desayuno bien, nomas para avisar",routine,status_update,colloquial,[],,routine,routine
+EXT-104,"oiga, ¿la terapia de rehabilitacion es los lunes o los martes?",routine,schedule,typo,[],,routine,routine
+EXT-105,"gracias a la enfermera de ayer, mi papa quedo muy contento",routine,feedback,colloquial,[],,routine,routine
+EXT-106,quiero saber si puedo darle te de manzanilla con sus medicinas,routine,medication_question,colloquial,[],,routine,routine
+EXT-107,"se nos acabaron las gasas, ¿ustedes las traen o las compro?",routine,supplies,colloquial,[],,routine,routine
+EXT-108,"la factura de este mes salio con otro monto, ¿me la revisan?",routine,billing,colloquial,[],,routine,routine
+EXT-109,"ya le tomamos la presion, salio 125 de alta y 80 de baja",routine,status_update,colloquial,[],,routine,routine
+EXT-110,mi abuelita quiere saber si puede salir al jardin en la tarde,routine,general_question,colloquial,[],,routine,routine
+EXT-111,"le duele tantito la rodilla como siempre, nada nuevo, nomas para que quede anotado",routine,chronic_pain,colloquial,[],,routine,routine
+EXT-112,"la pastilla de la noche es la blanca o la amarilla, ya me revolvi",routine,medication_question,colloquial,[],,routine,routine
+EXT-113,queria pedir que el cuidador llegue un poquito mas temprano el sabado,routine,schedule,colloquial,[],,routine,routine
+EXT-114,"mi tio anda de buen humor hoy, comio bien y salio a caminar con la andadera",routine,status_update,colloquial,[],,routine,routine
+EXT-115,¿me pueden mandar la receta por correo para surtirla?,routine,prescription,colloquial,[],,routine,routine
+EXT-116,"no voy a estar en la casa el miercoles, ¿la visita puede ser en la tarde?",routine,schedule,colloquial,[],,routine,routine
+EXT-117,"la cama de hospital rechina mucho, ¿quien la revisa?",routine,equipment,colloquial,[],,urgent,urgent
+EXT-118,mi mama pregunta si ya le toca la vacuna de la influenza,routine,vaccination,colloquial,[],,routine,routine
+EXT-119,le dio un poquito de tos en la noche pero ya amaneció bien y desayunó,routine,minor_symptom,colloquial,[],,emergency,emergency
+EXT-120,"todo bien por aqui, solo confirmo la visita de mañana",routine,schedule,colloquial,[],,routine,routine
+EXT-121,"el doctor dijo que le bajaran la dosis, ¿eso ya esta anotado?",routine,medication_question,colloquial,[],,routine,routine
+EXT-122,¿cuanto cuesta agregar una sesion mas de terapia a la semana?,routine,billing,colloquial,[],,routine,routine
+EXT-123,"mi papa ya no quiere usar el pañal de noche, ¿que me recomiendan?",routine,general_question,colloquial,[],,routine,routine
+EXT-124,"se le rompio el baston, ¿ustedes tienen uno prestado?",routine,equipment,colloquial,[],,routine,routine
+EXT-125,le cuento que ya duerme mejor desde que le cambiaron la almohada,routine,status_update,colloquial,[],,routine,routine
+EXT-126,quiero dar de alta a mi hermana como contacto tambien,routine,administrative,colloquial,[],,emergency,emergency
+EXT-127,oiga y el oxigeno de repuesto ¿cuando lo vienen a cambiar? todavia tenemos para varios dias,routine,oxygen_supply,colloquial,[],,emergency,emergency
+EXT-128,"la enfermera dejo su chamarra aqui, ¿pasa por ella?",routine,general_question,colloquial,[],,routine,routine
+EXT-129,mi mama pregunta si puede comer tamales en la posada,routine,diet_question,regional,[],,routine,routine
+EXT-130,"ya le hice sus ejercicios de la terapia, los 10 de cada uno",routine,status_update,colloquial,[],,routine,routine
+EXT-131,"se ve un poco cansado hoy pero normal, comio y esta viendo la tele",routine,status_update,colloquial,[],,routine,routine
+EXT-132,"buenas, ¿me recuerda el telefono de la coordinadora?",routine,administrative,colloquial,[],,routine,routine
+EXT-133,"esta semana vamos a salir de viaje, ¿pausamos las visitas?",routine,schedule,colloquial,[],,routine,routine
+EXT-134,"mi papa quiere que la misma enfermera le siga tocando, se lleva bien con ella",routine,feedback,colloquial,[],,routine,routine
+EXT-135,¿el glucometro se queda o se lo llevan?,routine,equipment,typo,[],,routine,routine
+EXT-136,mi abuela pregunta si es normal que le den ganas de dormir despues de comer,routine,general_question,colloquial,[],,routine,routine
+EXT-137,quisiera saber como va su plan de cuidados este mes,routine,general_question,colloquial,[],,routine,routine
+EXT-138,anoche dijo que le dolía el pecho de tanto toser pero ya no tose y está bien,routine,minor_symptom,hard_case,['chest_pain'],emergency,urgent,emergency
+EXT-139,"ayer se cayo el control de la tele y se rompio, jaja, nada grave",routine,general_question,hard_case,[],,routine,routine
+EXT-140,"ella se desmayaba de risa con la novela, esta muy animada",routine,status_update,hard_case,['unconscious'],emergency,routine,emergency
+EXT-141,"ya no le falta el aire como la semana pasada, ya esta mucho mejor",routine,status_update,hard_case,['severe_breathing'],emergency,routine,emergency
+EXT-142,"vi en la tele lo de la contingencia, ¿hay que hacer algo con mi mama?",routine,general_question,colloquial,[],,routine,routine
+EXT-143,"se le cayó la dentadura y se le rompió un diente, ¿quién la arregla?",routine,general_question,hard_case,[],,emergency,emergency
+EXT-144,me pidio que les diga que la comida del centro de dia estuvo muy rica,routine,feedback,colloquial,[],,routine,routine
+EXT-145,le compre unos lentes nuevos y ya ve mejor la tele,routine,status_update,colloquial,[],,routine,routine
+EXT-146,¿podemos cambiar el horario del baño asistido a la mañana?,routine,schedule,colloquial,[],,urgent,urgent
+EXT-147,"mi papa dice que esta aburrido, ¿hay actividades en la tarde?",routine,general_question,colloquial,[],,routine,routine
+EXT-148,"la pomada que le dejaron ya se le termino, ¿me la reponen?",routine,supplies,colloquial,[],,routine,routine
+EXT-149,"no es urgente, nomas queria preguntar si el sabado hay servicio",routine,schedule,colloquial,[],,routine,routine
+EXT-150,"le tome la temperatura y tiene 36.8, esta bien, solo lo anoto",routine,status_update,colloquial,[],,urgent,urgent

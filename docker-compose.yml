@@ -16,6 +16,7 @@ x-backend: &backend
     TZ: America/Mexico_City
     OLLAMA_URL: ${OLLAMA_URL}
     OLLAMA_MODEL: ${OLLAMA_MODEL}
+    VOICE_URL: http://voice:8001
     CONFIG_DIR: /config
     REFERENCE_DIR: /data/reference
     SIM_RESULTS_DIR: /simulation/results
@@ -24,6 +25,7 @@ x-backend: &backend
     - ./config:/config:ro                   # simulation.yaml (risk multipliers), emergency rules
     - ./data/reference:/data/reference:ro   # prevalence reference, district boundaries (Panorama-AM)
     - ./simulation/results:/simulation/results:ro   # SIRAG-D results shown in /simulacion
+    - ./data/voice:/data/voice:ro                   # example phrases for the demo voice button
   extra_hosts:
     - "host.docker.internal:host-gateway"   # Ollama on Windows
   depends_on:
@@ -77,6 +79,21 @@ services:
     build: ./frontend
     restart: unless-stopped
 
+  # ORACLE-Voz internal service: Whisper + Keras classifier. No public port; the API calls http://voice:8001
+  voice:
+    build: ./voice
+    restart: unless-stopped
+    environment:
+      WHISPER_MODEL: ${WHISPER_MODEL:-small}
+      TZ: America/Mexico_City
+    volumes:
+      - ./:/repo                                # code, data/voice, voice/models (model saved here, git-ignored)
+      - whisper-cache:/root/.cache/huggingface  # Whisper weights (~460 MB), downloaded once
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8001/health')"]
+      interval: 15s
+      retries: 20
+
   # SIRAG-D (offline). Not started by `up`: run with  docker compose run --rm sim
   sim:
     build: ./simulation
@@ -99,3 +116,4 @@ services:
 
 volumes:
   pgdata:
+  whisper-cache:

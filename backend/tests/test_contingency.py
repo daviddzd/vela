@@ -8,7 +8,7 @@ from sqlalchemy import text
 from app.services import air_model
 from app.services import contingency as ct
 from app.services import operations as ops
-from tests.conftest import login, session_on
+from tests.conftest import free_caregiver, login, session_on
 
 
 def _open_events(s):
@@ -138,6 +138,7 @@ def test_event_ends_after_two_hourly_readings_below_watch(db_conn):
 def test_caregiver_out_of_service_redispatches_pending_visits(db_conn):
     with session_on(db_conn, "*") as s:
         start = ops.now() + timedelta(hours=2)
+        free_caregiver(s, "CUI-004")
         rid = s.scalar(text("""INSERT INTO service_requests (institution_id, patient_id, service_id, origin, priority,
                                scheduled_for, created_at, status) VALUES ('INS-A', 'PAC-0002', 'SRV-02', 'coordinator',
                                'medium', :t, now(), 'assigned') RETURNING request_id"""), {"t": start})

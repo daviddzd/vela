@@ -217,9 +217,19 @@ y el enlace ya no cambia.
    del día), así que el historial termina entre 0 y 6 días antes de ayer. Se puede correr cuantas veces
    haga falta: si ya está al día, no hace nada. No toca la bitácora (`audit_log`) ni las visitas de hoy o
    futuras. Para ensayar el día de la defensa sin cambiar nada: `--today 2026-12-01 --dry-run`.
-4. Probar el enlace desde un celular con datos móviles (no con el wifi de la escuela), con la prueba de
+4. **Operación limpia.** Borra lo que dejaron los ensayos: reportes de voz, alertas, avisos a familias,
+   escenarios de demostración (contingencias, tráfico, cuidadores fuera de servicio) y las visitas en vivo
+   pendientes. **La semilla no se toca** y la bitácora (`audit_log`) tampoco: el reinicio queda registrado ahí.
+   ```bash
+   python scripts/reset_demo.py --dry-run   # muestra cuántas filas borraría, sin guardar
+   python scripts/reset_demo.py             # lo aplica
+   python scripts/verify_db.py              # debe seguir en "Todo correcto"
+   ```
+   En el siguiente minuto el worker vuelve a crear las visitas de hoy de los planes de cuidado, asignadas
+   automáticamente. Córrelo **después** del ensayo general y **antes** de abrir el túnel.
+5. Probar el enlace desde un celular con datos móviles (no con el wifi de la escuela), con la prueba de
    tiempo real de arriba.
-5. Respaldo: la demo funciona en `http://localhost:8080` sin internet (salvo el enlace público) y hay un video grabado.
+6. Respaldo: la demo funciona en `http://localhost:8080` sin internet (salvo el enlace público) y hay un video grabado.
 
 ## Problemas comunes
 | Síntoma | Solución |

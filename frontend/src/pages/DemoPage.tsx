@@ -19,6 +19,7 @@ export function DemoPage() {
   const [msg, setMsg] = useState("");
   const [busy, setBusy] = useState(false);
   const [inst, setInst] = useState("");
+  const [voiceMsg, setVoiceMsg] = useState("");
   const load = useCallback(() => { api.demoState().then((x) => {
     const st = x as State; setS(st); setInst((cur) => cur || st.default_institution); }).catch(() => undefined); }, []);
   useEffect(load, [load]);
@@ -72,7 +73,18 @@ export function DemoPage() {
                   </li>))}
               </ul>
             </div>
-            <div><Button variant="secondary" icon={Mic} disabled>{t.voice}</Button><p className="mt-1 text-muted">{t.voiceSoon}</p></div>
+            <div>
+              <p className="font-bold"><Icon as={Mic} /> {t.voice}</p>
+              <p className="text-muted">{t.voiceHelp}</p>
+              <div className="mt-2 flex flex-wrap gap-2">
+                {(["routine", "urgent", "emergency"] as const).map((k) => (
+                  <Button key={k} variant={k === "emergency" ? "primary" : "secondary"} disabled={busy || !inst}
+                    onClick={() => run(async () => { const r = await api.demoVoice(inst, k);
+                      setVoiceMsg(t.voiceResult.replace("{phrase}", r.phrase_id).replace("{text}", r.transcript).replace("{level}", es.voice.levels[r.level])); })}>
+                    {t.voiceKinds[k]}</Button>))}
+              </div>
+              {voiceMsg && <p className="mt-2" aria-live="polite">{voiceMsg}</p>}
+            </div>
           </div>
         </Card>
       </div>

@@ -31,7 +31,8 @@ from app.core.roles import OWNER
 
 CHANNEL = "vela_events"
 EVENT_TYPES = ("request.created", "request.updated", "assignment.proposed", "assignment.approved",
-               "visit.arrived", "visit.finished", "alert.created", "contingency.changed")
+               "visit.arrived", "visit.finished", "alert.created", "contingency.changed",
+               "voice.report_ready")
 HEALTH_CHECK_SECONDS = 15      # how often the listener checks its connection is alive
 RECONNECT_SECONDS = 2
 log = logging.getLogger("vela.events")

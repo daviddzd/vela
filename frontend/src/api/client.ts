@@ -76,6 +76,15 @@ export const api = {
   decideContingency: (eventId: string, mode: string, ids: number[]) =>
     request<unknown>(`/api/contingency/${eventId}/decision`, { method: "POST", body: JSON.stringify({ mode, ids }) }),
   demoState: () => request<unknown>("/api/demo/state"),
+  demoVoice: (institutionId: string, kind: string) =>
+    request<any>("/api/demo/voice-sample", { method: "POST", body: JSON.stringify({ institution_id: institutionId, kind }) }),
+  voicePatients: () => request<any[]>("/api/voice/patients"),
+  voiceText: (patientId: string, text: string) =>
+    request<any>("/api/voice/text", { method: "POST", body: JSON.stringify({ patient_id: patientId, text }) }),
+  voiceCallMe: (patientId: string) =>
+    request<any>("/api/voice/call-me", { method: "POST", body: JSON.stringify({ patient_id: patientId }) }),
+  voiceReports: () => request<any[]>("/api/voice/reports"),
+  voiceReview: (id: string) => request<any>(`/api/voice/reports/${id}/review`, { method: "POST" }),
   demoScenario: (scenario: string) => request<unknown>("/api/demo/scenario", { method: "POST", body: JSON.stringify({ scenario }) }),
   demoUrgent: (institutionId: string) =>
     request<unknown>("/api/demo/urgent-request", { method: "POST", body: JSON.stringify({ institution_id: institutionId }) }),

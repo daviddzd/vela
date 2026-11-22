@@ -65,9 +65,11 @@ def test_physician_sees_only_own_patients(tx_client):
                                       SELECT 1 FROM assignments a JOIN service_requests r USING (request_id)
                                       WHERE a.caregiver_id = 'CUI-001' AND r.patient_id = pa.patient_id)
                                     LIMIT 1"""))
+        expected = s.scalar(text("""SELECT count(DISTINCT r.patient_id) FROM assignments a
+                                    JOIN service_requests r USING (request_id) WHERE a.caregiver_id = 'CUI-001'"""))
     login(tx_client, "cui-001@ejemplo.test")
     listed = {p["patient_id"] for p in tx_client.get("/api/patients").json()}
-    assert mine in listed and not_mine not in listed and len(listed) == 90
+    assert mine in listed and not_mine not in listed and len(listed) == expected
     assert tx_client.get(f"/api/patients/{mine}").status_code == 200
     r = tx_client.get(f"/api/patients/{not_mine}")
     assert r.status_code == 403 and "no está a tu cargo" in r.json()["detail"]
