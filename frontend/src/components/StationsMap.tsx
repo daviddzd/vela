@@ -2,7 +2,8 @@
 // small points (shape by level); only stations in watch / Phase I carry a label. Legend: icon + word.
 import { AlertTriangle, Ban, CheckCircle2, type LucideIcon } from "lucide-react";
 import { useMemo } from "react";
-import { CityMap, type MapPoint } from "../charts/CityMap";
+import { type MapPoint } from "../charts/CityMap";
+import { StreetMap } from "./StreetMap";
 import { chart } from "../charts/theme";
 import { es } from "../i18n/es";
 import { Icon } from "./icons";
@@ -37,7 +38,7 @@ export function StationsMap({ stations }: { stations: StationLevel[] }) {
     return Object.fromEntries(Object.entries(worst).map(([d, p]) => [d, FILL[p]]));
   }, [stations]);
   return (<>
-    <CityMap points={points} districtFill={fill} label={es.contingency.mapLabel} height={520} />
+    <StreetMap points={points} districtFill={fill} label={es.contingency.mapLabel} height={520} />
     <ul className="mt-2 flex flex-wrap gap-x-5 gap-y-1 text-sm" aria-label={es.contingency.level}>
       {PHASES.map((k) => (
         <li key={k} className={`font-bold ${TEXT[k]}`}><Icon as={LEVEL_ICON[k]} /> {es.contingency.levels[k]}

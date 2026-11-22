@@ -1,6 +1,7 @@
 // /tablero — live board for coordination: clock, counters, queue, alerts, map, new request.
 // Updates without reloading: every WebSocket event triggers a re-read of /api/board.
 import { lazy, Suspense, useCallback, useEffect, useRef, useState } from "react";
+import { Link } from "react-router";
 import { api, type Board } from "../api/client";
 import { AppShell } from "../components/AppShell";
 import { RequestForm } from "../components/RequestForm";
@@ -74,7 +75,7 @@ export function BoardPage() {
                 <span>
                   <strong className={q.priority === "high" ? "text-danger" : ""}>
                     {q.priority === "high" && <><Icon as={AlertTriangle} /> </>}{es.priority[q.priority]}
-                  </strong>{" · "}{q.patient_name} · {q.service_name} · {formatTime(q.scheduled_for)}
+                  </strong>{" · "}<Link to={`/pacientes/${q.patient_id}`} className="underline decoration-teal/40 hover:text-teal">{q.patient_name}</Link> · {q.service_name} · {formatTime(q.scheduled_for)}
                   <span className="block text-muted">
                     {es.board.origin[q.origin] ?? q.origin} · {q.status_reason ? es.statusReason[q.status_reason] : ""}
                   </span>
@@ -110,7 +111,7 @@ export function BoardPage() {
           <ul className="mt-3 max-h-60 divide-y divide-teal/10 overflow-y-auto">
             {board?.visits.map((v) => (
               <li key={v.request_id} className="flex flex-wrap items-center justify-between gap-2 py-1">
-                <span>{formatTime(v.scheduled_for)} · {v.patient_name} · {v.caregiver_name ?? es.family.pendingCaregiver}</span>
+                <span>{formatTime(v.scheduled_for)} · <Link to={`/pacientes/${v.patient_id}`} className="underline decoration-teal/40 hover:text-teal">{v.patient_name}</Link> · {v.caregiver_name ?? es.family.pendingCaregiver}</span>
                 <StatusBadge status={v.status} />
               </li>
             ))}

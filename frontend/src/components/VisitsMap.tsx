@@ -1,8 +1,9 @@
-// Today's visits and staff bases on the CDMX district map (no internet tiles). Visit points change shape with
+// Today's visits and staff bases on a street map of CDMX (falls back to the district drawing without internet). Visit points change shape with
 // their state and the legend names each shape with icon + word; details on hover / tap. The list next to the
 // map carries the same information for people who do not use the map.
 import { useMemo } from "react";
-import { CityMap, type MapPoint } from "../charts/CityMap";
+import { type MapPoint } from "../charts/CityMap";
+import { StreetMap } from "./StreetMap";
 import { chart } from "../charts/theme";
 import { es } from "../i18n/es";
 import { CircleDot, Icon, STATUS_ICON } from "./icons";
@@ -27,7 +28,7 @@ export function VisitsMap({ visits, staff }: { visits: MapVisit[]; staff: MapSta
   ], [visits, staff]);
   const present = [...new Set(visits.map((v) => v.status))];
   return (<>
-    <CityMap points={points} label={es.board.mapLabel} height={400} />
+    <StreetMap points={points} label={es.board.mapLabel} height={400} />
     <ul className="mt-2 flex flex-wrap gap-x-5 gap-y-1 text-sm">
       {present.map((st) => <li key={st} className="font-bold"><Icon as={STATUS_ICON[st] ?? CircleDot} /> {es.requestStatus[st] ?? st}
         <span className="font-normal text-muted"> · {es.board.shapes[STYLE[st]?.symbol ?? "circle"]}</span></li>)}

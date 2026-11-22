@@ -19,6 +19,9 @@ const VoiceReportsPage = lazy(() => import("./pages/VoiceReportsPage").then((m) 
 const DemoPage = lazy(() => import("./pages/DemoPage").then((m) => ({ default: m.DemoPage })));
 const BusinessPage = lazy(() => import("./pages/BusinessPage").then((m) => ({ default: m.BusinessPage })));
 const PrivacyPage = lazy(() => import("./pages/PrivacyPage").then((m) => ({ default: m.PrivacyPage })));
+const PatientsPage = lazy(() => import("./pages/PatientsPage").then((m) => ({ default: m.PatientsPage })));
+const PatientRecordPage = lazy(() => import("./pages/PatientRecordPage").then((m) => ({ default: m.PatientRecordPage })));
+const StaffPage = lazy(() => import("./pages/StaffPage").then((m) => ({ default: m.StaffPage })));
 const PanoramaPage = lazy(() => import("./pages/PanoramaPage").then((m) => ({ default: m.PanoramaPage })));
 
 // Screens already built; the rest show a placeholder until their step.
@@ -35,6 +38,8 @@ const BUILT: Record<string, ComponentType> = {
   "/reportes-voz": VoiceReportsPage,
   "/negocio": BusinessPage,
   "/privacidad": PrivacyPage,
+  "/pacientes": PatientsPage,
+  "/personal": StaffPage,
 };
 
 // Every screen from the spec; each gets a placeholder until its module is built.
@@ -55,6 +60,9 @@ export function App() {
             <Route key={path} path={path}
               element={<ProtectedRoute path={path}>{renderScreen(path)}</ProtectedRoute>} />
           ))}
+          {/* the record is part of the /pacientes screen: same roles */}
+          <Route path="/pacientes/:id" element={<ProtectedRoute path="/pacientes">
+            <Suspense fallback={<p className="p-8">{es.shell.loading}</p>}><PatientRecordPage /></Suspense></ProtectedRoute>} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>
