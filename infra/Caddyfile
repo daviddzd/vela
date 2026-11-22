@@ -1,0 +1,27 @@
+# Public entry point on :8080. FastAPI already uses the /api and /ws prefixes,
+# so paths are forwarded unchanged (no prefix stripping).
+{
+	admin off
+}
+
+:8080 {
+	encode gzip
+
+	# REST API
+	handle /api/* {
+		reverse_proxy api:8000
+	}
+
+	# WebSockets (live board, step 4). Caddy upgrades the connection automatically;
+	# flush_interval -1 sends every message at once.
+	handle /ws/* {
+		reverse_proxy api:8000 {
+			flush_interval -1
+		}
+	}
+
+	# Everything else: the React app
+	handle {
+		reverse_proxy web:80
+	}
+}

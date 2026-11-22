@@ -1,0 +1,28 @@
+@import "tailwindcss";
+@import "@fontsource/atkinson-hyperlegible/400.css";
+@import "@fontsource/atkinson-hyperlegible/700.css";
+
+/* Brand tokens (docs/brand.md). Same values as src/theme.ts. */
+@theme {
+  --color-teal: #0F5C6E;
+  --color-teal-dark: #0A4352;
+  --color-coral: #E8704A;
+  --color-cream: #FAF7F2;
+  --color-ink: #1F2A30;
+  --color-muted: #5B6870;
+  --color-ok: #2E7D4F;
+  --color-warn: #B7791F;
+  --color-danger: #C0392B;
+  --font-sans: "Atkinson Hyperlegible", Arial, sans-serif;
+  --radius-card: 12px;
+}
+
+/* 18 px base; "modo sencillo" raises it to 24 px. Tailwind sizes are in rem, so everything scales. */
+html { font-size: 18px; line-height: 1.5; }
+html.simple { font-size: 24px; }
+body { @apply bg-cream text-ink font-sans; }
+h1 { font-size: 1.556rem; font-weight: 700; }   /* 28 px at base */
+h2 { font-size: 1.222rem; font-weight: 700; }   /* 22 px at base */
+
+/* Visible keyboard focus everywhere */
+:focus-visible { outline: 3px solid var(--color-coral); outline-offset: 2px; }

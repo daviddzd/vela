@@ -1,0 +1,53 @@
+// Every text a person reads in the UI lives here (CLAUDE.md rule 1). Spanish (Mexico).
+export const es = {
+  app: {
+    name: "Vela",
+    tagline: "cuidado coordinado",
+    syntheticData: "Prototipo académico · datos sintéticos",
+  },
+  login: {
+    title: "Inicia sesión",
+    subtitle: "Coordinación del cuidado de personas mayores",
+    email: "Correo electrónico",
+    password: "Contraseña",
+    submit: "Entrar",
+    submitting: "Entrando…",
+    showPassword: "Mostrar contraseña",
+    hidePassword: "Ocultar contraseña",
+    simpleMode: "Modo sencillo (letra más grande)",
+    demoUsersTitle: "Usuarios de prueba",
+    demoUsersNote: "Contraseña de demostración pública: Demo2026! (solo para usuarios sintéticos).",
+    errorGeneric: "No pudimos iniciar sesión. Revisa tu conexión e inténtalo de nuevo.",
+  },
+  roles: {
+    owner: "Dirección Vela",
+    coordinator: "Coordinación",
+    physician: "Médico",
+    caregiver: "Cuidador/enfermería",
+    family: "Familiar",
+  } as Record<string, string>,
+  shell: {
+    logout: "Cerrar sesión",
+    menu: "Menú principal",
+    comingSoon: "Próximamente",
+    comingSoonBody: "Esta pantalla se construye en los siguientes pasos del proyecto.",
+    loading: "Cargando…",
+  },
+  // Screen titles, keyed by route (docs/spec/04_roles_y_pantallas.md)
+  screens: {
+    "/tablero": "Tablero en vivo",
+    "/aprobaciones": "Aprobaciones",
+    "/pacientes": "Pacientes",
+    "/personal": "Personal",
+    "/mis-visitas": "Mis visitas",
+    "/familia": "Mi familiar",
+    "/voz": "Asistente de voz",
+    "/reportes-voz": "Reportes de voz",
+    "/panorama": "Panorama-AM",
+    "/simulacion": "Simulación SIRAG-D",
+    "/contingencia": "Contingencia ambiental",
+    "/negocio": "Modelo de negocio",
+    "/privacidad": "Privacidad",
+    "/demo": "Panel de demostración",
+  } as Record<string, string>,
+};

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 72" role="img" aria-label="Vela">
+  <rect x="4" y="4" width="64" height="64" rx="18" fill="#0F5C6E"/>
+  <path d="M36 14c7 10 14 17 14 27a14 14 0 0 1-28 0c0-6 3-10 6-13 0 5 2 8 5 9-2-8 0-15 3-23z" fill="#E8704A"/>
+  <path d="M36 34c3 4 5 7 5 10a5 5 0 0 1-10 0c0-3 2-6 5-10z" fill="#FAF7F2"/>
+  <text x="84" y="47" font-family="Atkinson Hyperlegible, Arial, sans-serif" font-size="38" font-weight="700" fill="#0F5C6E">Vela</text>
+  <text x="86" y="64" font-family="Atkinson Hyperlegible, Arial, sans-serif" font-size="11.5" fill="#5B6870">cuidado coordinado</text>
+</svg>

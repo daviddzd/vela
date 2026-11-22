@@ -13,4 +13,14 @@ GRANT USAGE ON SCHEMA public TO vela_api;
 GRANT SELECT, INSERT, UPDATE ON ALL TABLES IN SCHEMA public TO vela_api;
 GRANT USAGE ON ALL SEQUENCES IN SCHEMA public TO vela_api;
 REVOKE UPDATE, DELETE ON audit_log FROM vela_api;
+-- Tables and sequences that future Alembic migrations create (as this same owner role)
+-- automatically get the same grants for vela_api. RLS for new tenant tables is still added
+-- explicitly in each migration.
+ALTER DEFAULT PRIVILEGES FOR ROLE "${POSTGRES_USER}" IN SCHEMA public
+  GRANT SELECT, INSERT, UPDATE ON TABLES TO vela_api;
+ALTER DEFAULT PRIVILEGES FOR ROLE "${POSTGRES_USER}" IN SCHEMA public
+  GRANT USAGE ON SEQUENCES TO vela_api;
+-- Functions are not executable by everyone by default; migrations GRANT EXECUTE one by one.
+ALTER DEFAULT PRIVILEGES FOR ROLE "${POSTGRES_USER}" IN SCHEMA public
+  REVOKE EXECUTE ON FUNCTIONS FROM PUBLIC;
 SQL

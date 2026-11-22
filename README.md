@@ -25,10 +25,14 @@ decisión, simulación de escenarios y un asistente de voz que detecta emergenci
 Guía completa: [`docs/00_preparar_laptop_y_github.md`](docs/00_preparar_laptop_y_github.md).
 
 ```bash
-cp .env.example .env
-docker compose up -d db          # base de datos con los datos sintéticos
+cp .env.example .env            # cambia las contraseñas y JWT_SECRET
+docker compose up -d --build    # base de datos, migraciones, API, worker, web y proxy
 python scripts/verify_db.py      # comprueba conteos, traslapes y aislamiento entre instituciones
+docker compose exec api pytest -q   # pruebas de sesión y aislamiento entre instituciones
 ```
+
+La aplicación queda en http://localhost:8080 (`/api` → API, `/ws` → WebSocket).
+Decisiones técnicas de la base: [`docs/dev/decisiones_paso_1_2.md`](docs/dev/decisiones_paso_1_2.md).
 
 Usuarios de prueba (contraseña de demostración pública `Demo2026!`): `owner@ejemplo.test`,
 `coordinacion.a@ejemplo.test`, `cui-001@ejemplo.test`, `cui-003@ejemplo.test`, `fam-0001@ejemplo.test`.

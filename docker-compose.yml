@@ -1,5 +1,27 @@
-# Starter compose: only the database exists today. Claude Code adds api, web, worker and proxy
-# (see CLAUDE.md → "Compose services"). Everything public goes through proxy on port 8080.
+# Vela · all services. Everything public goes through `proxy` on port 8080 (CLAUDE.md rule 8):
+#   /      → web (built React app)     /api/* → api (FastAPI)     /ws/* → api (WebSocket)
+# Ollama and cloudflared run outside Docker.
+#
+# Secrets: only `db` and `migrate` receive the table-owner password. `api` and `worker` connect
+# as vela_api (subject to row-level security) and never see the owner credentials.
+
+x-backend: &backend
+  build: ./backend
+  image: vela-backend
+  restart: unless-stopped
+  environment: &backend-env
+    DATABASE_URL: ${DATABASE_URL}
+    JWT_SECRET: ${JWT_SECRET}
+    PUBLIC_BASE_URL: ${PUBLIC_BASE_URL}
+    TZ: America/Mexico_City
+    OLLAMA_URL: ${OLLAMA_URL}
+    OLLAMA_MODEL: ${OLLAMA_MODEL}
+  extra_hosts:
+    - "host.docker.internal:host-gateway"   # Ollama on Windows
+  depends_on:
+    migrate:
+      condition: service_completed_successfully
+
 services:
   db:
     image: postgis/postgis:16-3.4
@@ -15,9 +37,48 @@ services:
       - ./:/repo:ro
       - ./infra/db-init.sh:/docker-entrypoint-initdb.d/10-init.sh:ro
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      # -h 127.0.0.1: during the first-time seed load Postgres only listens on its Unix socket,
+      # so this check stays "unhealthy" until the seed is fully loaded and vela_api exists.
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
       interval: 5s
-      retries: 20
+      retries: 60
+
+  # One-shot: applies Alembic migrations as the table owner, then exits.
+  migrate:
+    build: ./backend
+    image: vela-backend
+    command: ["alembic", "upgrade", "head"]
+    environment:
+      OWNER_DATABASE_URL: postgresql+psycopg://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+    depends_on:
+      db:
+        condition: service_healthy
+
+  api:
+    <<: *backend
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/health')"]
+      interval: 10s
+      retries: 10
+
+  worker:
+    <<: *backend
+    command: ["python", "-m", "app.worker"]
+
+  web:
+    build: ./frontend
+    restart: unless-stopped
+
+  proxy:
+    image: caddy:2
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8080:8080"   # cloudflared (on this laptop) points here
+    volumes:
+      - ./infra/Caddyfile:/etc/caddy/Caddyfile:ro
+    depends_on:
+      - api
+      - web
 
 volumes:
   pgdata:
