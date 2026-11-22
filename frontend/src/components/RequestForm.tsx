@@ -4,13 +4,21 @@ import { useEffect, useState, type FormEvent } from "react";
 import { api, type Service, type ServiceRequest } from "../api/client";
 import { es } from "../i18n/es";
 import { localInputValue } from "../lib/format";
+import { DateField } from "./DateField";
+import { AlertTriangle, Icon, Plus } from "./icons";
 import { Button, inputClass } from "./ui";
+
+const TIMES = Array.from({ length: (22 - 7) * 4 }, (_, i) =>
+  `${String(7 + Math.floor(i / 4)).padStart(2, "0")}:${String((i % 4) * 15).padStart(2, "0")}`);
 
 export function RequestForm({ coordinator = false, onCreated }:
   { coordinator?: boolean; onCreated: (r: ServiceRequest) => void }) {
   const [services, setServices] = useState<Service[]>([]);
   const [serviceId, setServiceId] = useState("");
-  const [when, setWhen] = useState(localInputValue(24));
+  // Date (dd/mm/aaaa) + time in 15-min steps, both in Mexico City time. Default: tomorrow at 10:00.
+  const [day, setDay] = useState(localInputValue(24).slice(0, 10));
+  const [time, setTime] = useState("10:00");
+  const when = `${day}T${time}`;
   const [patientId, setPatientId] = useState("");
   const [priority, setPriority] = useState("medium");
   const [busy, setBusy] = useState(false);
@@ -46,9 +54,15 @@ export function RequestForm({ coordinator = false, onCreated }:
           {services.map((s) => <option key={s.service_id} value={s.service_id}>{s.name} ({s.duration_min} {es.common.minutes})</option>)}
         </select>
       </label>
-      <label className="block"><span className="font-bold">{es.family.when}</span>
-        <input type="datetime-local" required value={when} onChange={(e) => setWhen(e.target.value)} className={inputClass} />
-      </label>
+      <fieldset className="flex flex-wrap items-start gap-3">
+        <legend className="sr-only">{es.family.when}</legend>
+        <DateField label={es.family.when} value={day} onChange={setDay} required />
+        <label className="block"><span className="font-bold">{es.dates.time}</span>
+          <select value={time} onChange={(e) => setTime(e.target.value)} className={`${inputClass} w-32`}>
+            {TIMES.map((t) => <option key={t} value={t}>{t}</option>)}
+          </select>
+        </label>
+      </fieldset>
       {coordinator && (
         <fieldset><legend className="font-bold">{es.board.priority}</legend>
           <div className="mt-1 flex flex-wrap gap-4">
@@ -61,8 +75,8 @@ export function RequestForm({ coordinator = false, onCreated }:
           </div>
         </fieldset>
       )}
-      {error && <p role="alert" className="font-bold text-danger"><span aria-hidden="true">⚠ </span>{error}</p>}
-      <Button type="submit" icon="➕" disabled={busy || !serviceId} className="w-full">{es.family.submit}</Button>
+      {error && <p role="alert" className="font-bold text-danger"><Icon as={AlertTriangle} /> {error}</p>}
+      <Button type="submit" icon={Plus} disabled={busy || !serviceId || !day} className="w-full">{es.family.submit}</Button>
     </form>
   );
 }

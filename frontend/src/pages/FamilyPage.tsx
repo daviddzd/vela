@@ -6,6 +6,7 @@ import { RequestForm } from "../components/RequestForm";
 import { RequestResult } from "../components/RequestResult";
 import { StatusBadge } from "../components/StatusBadge";
 import { Button, Card, Notice } from "../components/ui";
+import { ThumbsUp } from "../components/icons";
 import { es } from "../i18n/es";
 import { formatDateTime } from "../lib/format";
 
@@ -53,7 +54,7 @@ export function FamilyPage() {
             <div key={v.assignment_id} className="mt-4 border-t border-teal/15 pt-4">
               <p className="font-bold">{es.family.toConfirm}</p>
               <p>{v.service_name} · {formatDateTime(v.scheduled_for)} · {v.caregiver_name}</p>
-              <Button icon="👍" className="mt-2 w-full" onClick={() => confirm(v.assignment_id!)}>{es.family.confirm}</Button>
+              <Button icon={ThumbsUp} className="mt-2 w-full" onClick={() => confirm(v.assignment_id!)}>{es.family.confirm}</Button>
             </div>
           ))}
         </Card>

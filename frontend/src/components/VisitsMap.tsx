@@ -4,7 +4,11 @@
 import * as maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { useEffect, useRef } from "react";
+import type { LucideIcon } from "lucide-react";
+import { Hospital } from "lucide-react";
+import { renderToStaticMarkup } from "react-dom/server";
 import { es } from "../i18n/es";
+import { CircleDot, Icon, STATUS_ICON } from "./icons";
 
 export type MapVisit = { request_id: string; status: string; lat: number; lon: number; patient_name: string;
   service_name: string; caregiver_name: string | null; scheduled_for: string };
@@ -16,10 +20,12 @@ const OFFLINE_STYLE: maplibregl.StyleSpecification = {
 };
 const CDMX: [number, number] = [-99.13, 19.40];
 
-function markerElement(icon: string, label: string, tone: string): HTMLElement {
+function markerElement(icon: LucideIcon, label: string, tone: string): HTMLElement {
+  // SVG icon + word, rendered once to static markup (no emoji, never color alone)
   const el = document.createElement("div");
-  el.className = `rounded-card border-2 bg-white px-1 text-sm font-bold shadow ${tone}`;
-  el.textContent = `${icon} ${label}`;
+  el.className = `flex items-center gap-1 rounded-card border-2 bg-white px-1 text-sm font-bold shadow ${tone}`;
+  el.innerHTML = renderToStaticMarkup(<Icon as={icon} />);
+  if (label) el.append(document.createTextNode(label));   // text node: names never become HTML
   return el;
 }
 
@@ -44,12 +50,12 @@ export function VisitsMap({ visits, staff }: { visits: MapVisit[]; staff: MapSta
     if (!m) return;
     markers.current.forEach((mk) => mk.remove());
     markers.current = [
-      ...staff.map((s) => new maplibregl.Marker({ element: markerElement("🏥", "", "border-muted text-muted") })
+      ...staff.map((s) => new maplibregl.Marker({ element: markerElement(Hospital, "", "border-muted text-muted") })
         .setLngLat([s.lon, s.lat]).setPopup(new maplibregl.Popup().setText(`${es.board.staffBase}: ${s.name}`)).addTo(m)),
       ...visits.map((v) => {
-        const st = es.requestStatus[v.status] ?? { icon: "•", label: v.status };
+        const label = es.requestStatus[v.status] ?? v.status;
         const tone = v.status === "queued" ? "border-warn text-ink" : v.status === "in_progress" ? "border-coral text-ink" : "border-teal text-teal";
-        return new maplibregl.Marker({ element: markerElement(st.icon, st.label, tone) })
+        return new maplibregl.Marker({ element: markerElement(STATUS_ICON[v.status] ?? CircleDot, label, tone) })
           .setLngLat([v.lon, v.lat])
           .setPopup(new maplibregl.Popup().setText(`${v.patient_name} · ${v.service_name} · ${v.caregiver_name ?? es.family.pendingCaregiver}`))
           .addTo(m);

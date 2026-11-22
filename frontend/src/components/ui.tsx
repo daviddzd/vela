@@ -1,17 +1,19 @@
-// Small shared UI pieces with the accessibility rules: ≥ 48 px targets, text + icon, AA contrast.
+// Small shared UI pieces with the accessibility rules: >= 48 px targets, text + icon, AA contrast.
 import type { ButtonHTMLAttributes, ReactNode } from "react";
+import type { LucideIcon } from "lucide-react";
+import { Icon, NOTICE_ICON } from "./icons";
 
 type Variant = "primary" | "secondary";
 
 export function Button({ variant = "primary", icon, children, className = "", ...rest }:
-  ButtonHTMLAttributes<HTMLButtonElement> & { variant?: Variant; icon?: string; children: ReactNode }) {
+  ButtonHTMLAttributes<HTMLButtonElement> & { variant?: Variant; icon?: LucideIcon; children: ReactNode }) {
   const look = variant === "primary"
     ? "bg-teal text-white hover:bg-teal-dark"
     : "border-2 border-teal text-teal bg-white hover:bg-teal/10";
   return (
     <button type="button" className={`inline-flex min-h-12 items-center justify-center gap-2 rounded-card px-4 font-bold
       disabled:cursor-not-allowed disabled:opacity-60 ${look} ${className}`} {...rest}>
-      {icon && <span aria-hidden="true">{icon}</span>}
+      {icon && <Icon as={icon} />}
       {children}
     </button>
   );
@@ -23,10 +25,9 @@ export function Card({ children, className = "" }: { children: ReactNode; classN
 
 export function Notice({ kind = "info", children }: { kind?: "info" | "ok" | "error"; children: ReactNode }) {
   const look = { info: "border-teal text-ink", ok: "border-ok text-ok", error: "border-danger text-danger" }[kind];
-  const icon = { info: "ℹ", ok: "✅", error: "⚠" }[kind];
   return (
-    <p role={kind === "error" ? "alert" : "status"} className={`rounded-card border-2 bg-white p-3 font-bold ${look}`}>
-      <span aria-hidden="true">{icon} </span>{children}
+    <p role={kind === "error" ? "alert" : "status"} className={`flex gap-2 rounded-card border-2 bg-white p-3 font-bold ${look}`}>
+      <Icon as={NOTICE_ICON[kind]} className="mt-1" /><span>{children}</span>
     </p>
   );
 }

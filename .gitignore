@@ -18,6 +18,8 @@ frontend/dist/
 # large / generated
 data/reference/official/*
 !data/reference/official/README.md
+# District boundaries: INEGI via datos.cdmx.gob.mx, CC BY 4.0 → redistributed with attribution
+!data/reference/official/district_boundaries.geojson
 voice/models/*.keras
 voice/eval/audio/
 simulation/results/raw/

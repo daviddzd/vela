@@ -1,5 +1,6 @@
-// Request status as icon + word (never color alone, docs/brand.md).
+// Request status as SVG icon + word (never color alone, docs/brand.md).
 import { es } from "../i18n/es";
+import { CircleDot, Icon, STATUS_ICON } from "./icons";
 
 const TONE: Record<string, string> = {
   rejected: "border-danger text-danger", unattended: "border-danger text-danger",
@@ -7,11 +8,10 @@ const TONE: Record<string, string> = {
 };
 
 export function StatusBadge({ status }: { status: string }) {
-  const s = es.requestStatus[status] ?? { icon: "•", label: status };
   return (
     <span className={`inline-flex items-center gap-1 rounded-card border-2 px-2 font-bold ${TONE[status] ?? "border-teal text-teal"}`}>
-      <span aria-hidden="true">{s.icon}</span>
-      {s.label}
+      <Icon as={STATUS_ICON[status] ?? CircleDot} />
+      {es.requestStatus[status] ?? status}
     </span>
   );
 }

@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @import "@fontsource/atkinson-hyperlegible/400.css";
 @import "@fontsource/atkinson-hyperlegible/700.css";
+@import "@fontsource/lexend/600.css";
 
 /* Brand tokens (docs/brand.md). Same values as src/theme.ts. */
 @theme {
@@ -15,6 +16,9 @@
   --color-danger: #C0392B;
   --font-sans: "Atkinson Hyperlegible", Arial, sans-serif;
   --radius-card: 12px;
+  /* Big figures: Atkinson Hyperlegible draws 0 with a diagonal (reads like "Ø") and has no alternate
+     (checked: no "zero" feature, 3-contour glyph). Lexend (OFL) has a plain 0; text stays in Atkinson. */
+  --font-figures: "Lexend", "Atkinson Hyperlegible", Arial, sans-serif;
 }
 
 /* 18 px base; "modo sencillo" raises it to 24 px. Tailwind sizes are in rem, so everything scales. */
@@ -26,3 +30,6 @@ h2 { font-size: 1.222rem; font-weight: 700; }   /* 22 px at base */
 
 /* Visible keyboard focus everywhere */
 :focus-visible { outline: 3px solid var(--color-coral); outline-offset: 2px; }
+
+/* Large numbers (key figures, counters): plain zero, proportional digits */
+.figure { font-family: var(--font-figures); font-weight: 600; letter-spacing: -0.01em; }
