@@ -122,6 +122,10 @@ export function PanoramaView({ filters }: { filters: Filters }) {
       formatter: (v: number) => new Intl.DateTimeFormat("es-MX", { timeZone: "America/Mexico_City", day: "numeric", month: "short" }).format(new Date(v)) } },
     yAxis: { ...axisCommon, type: "value", min: 0, max: Math.ceil((limit * 1.1) / 20) * 20 },
     series: [{ type: "line", showSymbol: false, lineStyle: { width: 2 }, data: air.series.map((p) => [p.t, p[key]]),
+      // period of an ACTIVE demo scenario, labelled so nobody confuses it with real readings
+      markArea: scenarioSpan(air.series) ? { silent: true, itemStyle: { color: "rgba(183,121,31,0.12)" },
+        label: { show: true, position: "insideTop", color: chart.ink, fontFamily: chart.font, formatter: t.demoScenario },
+        data: [[{ xAxis: scenarioSpan(air.series)![0] }, { xAxis: scenarioSpan(air.series)![1] }]] } : undefined,
       markLine: { silent: true, symbol: "none", lineStyle: { color: chart.threshold, width: 2, type: "solid" },
         label: { formatter: `${t.threshold}: ${limit}`, position: "insideEndTop", color: chart.ink, fontFamily: chart.font },
         data: [{ yAxis: limit }] } }],
@@ -229,6 +233,11 @@ export function PanoramaView({ filters }: { filters: Filters }) {
       <SimulationCard />
     </div>
   );
+}
+
+function scenarioSpan(series: { t: string; scenario?: boolean }[]): [string, string] | null {
+  const s = series.filter((p) => p.scenario);
+  return s.length ? [s[0].t, s[s.length - 1].t] : null;
 }
 
 function MapLegend({ title, pieces }: { title: string; pieces: { color: string; label: string }[] }) {

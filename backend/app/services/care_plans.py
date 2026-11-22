@@ -59,7 +59,8 @@ def create_due_requests(db: Session, now: datetime | None = None) -> list[str]:
             with db.begin_nested():   # one bad plan must not stop the others
                 created.append(ops.create_request(
                     db, user_id=None, institution_id=p.institution_id, patient_id=p.patient_id,
-                    service_id=p.service_id, scheduled_for=at, priority=p.base_priority, origin="care_plan",
+                    service_id=p.service_id, scheduled_for=at,
+                    priority=ops.effective_priority(db, p.patient_id, p.base_priority), origin="care_plan",
                     care_plan_id=p.care_plan_id, plan_date=today))
         except Exception as exc:  # noqa: BLE001
             log.warning("care plan %s not created: %s", p.care_plan_id, exc)

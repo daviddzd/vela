@@ -1,12 +1,9 @@
-// Map of today's visits and staff bases. MapLibre + OpenFreeMap tiles (free, no key, © OpenStreetMap).
-// Without internet the markers still show on a plain background. Each marker has an icon AND a word;
-// the list next to the map carries the same information for people who do not use the map.
-import * as maplibregl from "maplibre-gl";
-import "maplibre-gl/dist/maplibre-gl.css";
-import { useEffect, useRef } from "react";
-import type { LucideIcon } from "lucide-react";
-import { Hospital } from "lucide-react";
-import { renderToStaticMarkup } from "react-dom/server";
+// Today's visits and staff bases on the CDMX district map (no internet tiles). Visit points change shape with
+// their state and the legend names each shape with icon + word; details on hover / tap. The list next to the
+// map carries the same information for people who do not use the map.
+import { useMemo } from "react";
+import { CityMap, type MapPoint } from "../charts/CityMap";
+import { chart } from "../charts/theme";
 import { es } from "../i18n/es";
 import { CircleDot, Icon, STATUS_ICON } from "./icons";
 
@@ -14,55 +11,27 @@ export type MapVisit = { request_id: string; status: string; lat: number; lon: n
   service_name: string; caregiver_name: string | null; scheduled_for: string };
 export type MapStaff = { caregiver_id: string; name: string; lat: number; lon: number };
 
-const STYLE = "https://tiles.openfreemap.org/styles/positron";
-const OFFLINE_STYLE: maplibregl.StyleSpecification = {
-  version: 8, sources: {}, layers: [{ id: "bg", type: "background", paint: { "background-color": "#FAF7F2" } }],
+const STYLE: Record<string, { symbol: string; color: string }> = {
+  queued: { symbol: "triangle", color: "#B7791F" }, assigned: { symbol: "circle", color: chart.series[0] },
+  in_progress: { symbol: "diamond", color: chart.series[1] }, completed: { symbol: "rect", color: "#2E7D4F" },
+  closed: { symbol: "rect", color: "#2E7D4F" }, unattended: { symbol: "pin", color: "#C0392B" },
 };
-const CDMX: [number, number] = [-99.13, 19.40];
-
-function markerElement(icon: LucideIcon, label: string, tone: string): HTMLElement {
-  // SVG icon + word, rendered once to static markup (no emoji, never color alone)
-  const el = document.createElement("div");
-  el.className = `flex items-center gap-1 rounded-card border-2 bg-white px-1 text-sm font-bold shadow ${tone}`;
-  el.innerHTML = renderToStaticMarkup(<Icon as={icon} />);
-  if (label) el.append(document.createTextNode(label));   // text node: names never become HTML
-  return el;
-}
+const BASE = { symbol: "roundRect", color: "#9AA5AB" };
 
 export function VisitsMap({ visits, staff }: { visits: MapVisit[]; staff: MapStaff[] }) {
-  const container = useRef<HTMLDivElement>(null);
-  const map = useRef<maplibregl.Map | null>(null);
-  const markers = useRef<maplibregl.Marker[]>([]);
-
-  useEffect(() => {
-    if (!container.current) return;
-    const m = new maplibregl.Map({ container: container.current, style: STYLE, center: CDMX, zoom: 10,
-      attributionControl: { compact: false } });
-    m.addControl(new maplibregl.NavigationControl({ showCompass: false }));
-    // If the tiles cannot load (no internet at the venue), fall back to a plain background.
-    m.on("error", () => { if (!m.isStyleLoaded()) m.setStyle(OFFLINE_STYLE); });
-    map.current = m;
-    return () => m.remove();
-  }, []);
-
-  useEffect(() => {
-    const m = map.current;
-    if (!m) return;
-    markers.current.forEach((mk) => mk.remove());
-    markers.current = [
-      ...staff.map((s) => new maplibregl.Marker({ element: markerElement(Hospital, "", "border-muted text-muted") })
-        .setLngLat([s.lon, s.lat]).setPopup(new maplibregl.Popup().setText(`${es.board.staffBase}: ${s.name}`)).addTo(m)),
-      ...visits.map((v) => {
-        const label = es.requestStatus[v.status] ?? v.status;
-        const tone = v.status === "queued" ? "border-warn text-ink" : v.status === "in_progress" ? "border-coral text-ink" : "border-teal text-teal";
-        return new maplibregl.Marker({ element: markerElement(STATUS_ICON[v.status] ?? CircleDot, label, tone) })
-          .setLngLat([v.lon, v.lat])
-          .setPopup(new maplibregl.Popup().setText(`${v.patient_name} · ${v.service_name} · ${v.caregiver_name ?? es.family.pendingCaregiver}`))
-          .addTo(m);
-      }),
-    ];
-  }, [visits, staff]);
-
-  return <div ref={container} className="h-96 w-full overflow-hidden rounded-card border border-teal/20"
-    role="region" aria-label={es.board.mapLabel} />;
+  const points: MapPoint[] = useMemo(() => [
+    ...staff.map((s) => ({ id: s.caregiver_id, lat: s.lat, lon: s.lon, ...BASE, size: 7,
+      tooltip: `${es.board.staffBase}: ${s.name}` })),
+    ...visits.map((v) => ({ id: v.request_id, lat: v.lat, lon: v.lon, ...(STYLE[v.status] ?? STYLE.assigned), size: 12,
+      tooltip: `${es.requestStatus[v.status] ?? v.status}: ${v.patient_name} · ${v.service_name} · ${v.caregiver_name ?? es.family.pendingCaregiver}` })),
+  ], [visits, staff]);
+  const present = [...new Set(visits.map((v) => v.status))];
+  return (<>
+    <CityMap points={points} label={es.board.mapLabel} height={400} />
+    <ul className="mt-2 flex flex-wrap gap-x-5 gap-y-1 text-sm">
+      {present.map((st) => <li key={st} className="font-bold"><Icon as={STATUS_ICON[st] ?? CircleDot} /> {es.requestStatus[st] ?? st}
+        <span className="font-normal text-muted"> · {es.board.shapes[STYLE[st]?.symbol ?? "circle"]}</span></li>)}
+      <li className="text-muted">▢ {es.board.staffBase}</li>
+    </ul>
+  </>);
 }

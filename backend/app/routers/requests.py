@@ -46,7 +46,8 @@ def create(body: RequestIn, user: CurrentUser = Depends(require_role(COORDINATOR
                        "Tu registro no permite solicitar servicios. Habla con la coordinación.")
         patient_id = family_patient_id(db, user)
         # The family does not choose the priority: it comes from the patient's care level.
-        priority = db.scalar(text("SELECT base_priority FROM patients WHERE patient_id = :p"), {"p": patient_id})
+        base = db.scalar(text("SELECT base_priority FROM patients WHERE patient_id = :p"), {"p": patient_id})
+        priority = ops.effective_priority(db, patient_id, base)     # raised while an approved contingency lasts
         origin = "family"
     else:
         if not body.patient_id or not body.priority:

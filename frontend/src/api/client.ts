@@ -35,6 +35,7 @@ export type FamilyVisit = {
 export type FamilyOverview = {
   patient_id: string; patient_name: string; can_request_services: boolean; home_care_consent: boolean;
   next_visit: FamilyVisit | null; to_confirm: FamilyVisit[]; recent_requests: FamilyVisit[];
+  notices: { message: string; created_at: string }[];
 };
 export type BoardQueueItem = { request_id: string; priority: string; status_reason: string | null; scheduled_for: string;
   origin: string; service_name: string; patient_name: string; minutes_waiting: number; risk: number };
@@ -71,6 +72,15 @@ export const api = {
   services: () => request<Service[]>("/api/services"),
   board: () => request<Board>("/api/board"),
   simulation: () => request<unknown>("/api/simulation/results"),
+  contingency: () => request<unknown>("/api/contingency/current"),
+  decideContingency: (eventId: string, mode: string, ids: number[]) =>
+    request<unknown>(`/api/contingency/${eventId}/decision`, { method: "POST", body: JSON.stringify({ mode, ids }) }),
+  demoState: () => request<unknown>("/api/demo/state"),
+  demoScenario: (scenario: string) => request<unknown>("/api/demo/scenario", { method: "POST", body: JSON.stringify({ scenario }) }),
+  demoUrgent: (institutionId: string) =>
+    request<unknown>("/api/demo/urgent-request", { method: "POST", body: JSON.stringify({ institution_id: institutionId }) }),
+  demoCaregiverOut: (caregiverId: string) =>
+    request<unknown>("/api/demo/caregiver-out", { method: "POST", body: JSON.stringify({ caregiver_id: caregiverId }) }),
   panorama: <T,>(view: string, params: Record<string, string | undefined> = {}) => {
     const q = new URLSearchParams(Object.entries(params).filter(([, v]) => v) as [string, string][]);
     return request<T>(`/api/panorama/${view}${q.size ? `?${q}` : ""}`);

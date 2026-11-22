@@ -29,7 +29,7 @@ export type Air = {
   station: string; from: string; to: string; data_until: string | null;
   stations: { station_id: string; name: string; district_id: string; district_name: string; location_source: string }[];
   thresholds: { o3_ppb_1h: number; pm25_ugm3_24h: number; watch_fraction: number };
-  series: { t: string; o3: number | null; pm25_24h: number | null }[];
+  series: { t: string; o3: number | null; pm25_24h: number | null; scenario?: boolean }[];
   max_o3: number | null; max_pm25_24h: number | null;
 };
 
