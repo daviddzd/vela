@@ -1,0 +1,12 @@
+# Serves the built React app inside the `web` container. Unknown paths fall back to
+# index.html so routes like /tablero work on reload (single-page app).
+{
+	admin off
+}
+
+:80 {
+	root * /srv
+	encode gzip
+	try_files {path} /index.html
+	file_server
+}
