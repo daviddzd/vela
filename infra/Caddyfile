@@ -2,6 +2,12 @@
 # so paths are forwarded unchanged (no prefix stripping).
 {
 	admin off
+	servers {
+		# cloudflared (on this laptop) reaches Caddy from a private Docker/host address. Trust
+		# X-Forwarded-* only from private ranges, so the API sees the real scheme (https) and the
+		# visitor's host instead of Caddy's own "http".
+		trusted_proxies static private_ranges
+	}
 }
 
 :8080 {

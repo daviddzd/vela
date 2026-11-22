@@ -6,6 +6,7 @@ from sqlalchemy import text
 
 from app.core.config import MEXICO_CITY
 from app.core.db import engine
+from app.core.events import hub
 
 router = APIRouter(prefix="/api", tags=["health"])
 
@@ -19,4 +20,5 @@ def health() -> dict:
         db = "ok"
     except Exception:  # noqa: BLE001 - health must never crash
         db = "error"
-    return {"status": "ok", "db": db, "time": datetime.now(MEXICO_CITY).isoformat()}
+    return {"status": "ok", "db": db, "realtime": "ok" if hub.listening else "reconnecting",
+            "time": datetime.now(MEXICO_CITY).isoformat()}

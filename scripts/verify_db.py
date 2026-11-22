@@ -12,6 +12,8 @@ EXPECTED = {
     "air_quality_stations": 17, "air_quality_readings": 12240, "traffic_hourly_profile": 48,
 }
 
+# Real arrival/finish times never overlap (seed and operation alike). Planned windows of new
+# assignments are protected by the EXCLUDE constraint no_caregiver_overlap (migration 0002).
 OVERLAPS = """SELECT count(*) FROM assignments a JOIN assignments b
   ON a.caregiver_id = b.caregiver_id AND a.assignment_id < b.assignment_id
  AND a.arrived_at < b.finished_at AND b.arrived_at < a.finished_at"""
@@ -28,13 +30,24 @@ def sql(query: str, api_role: bool = False) -> str:
     return out.stdout.strip().splitlines()[-1]
 
 
+# Operational tables keep growing while the app runs (requests from care plans, families, ...).
+# For them we check the SEED rows exactly (their ids come before the sequences of migration 0002)
+# and report the rows created in operation separately.
+SEED_ONLY = {"service_requests": "request_id <= 'REQ-02864'", "assignments": "assignment_id <= 'ASG-02597'"}
+
+
 def main() -> None:
     ok = True
     for table, n in EXPECTED.items():
-        got = int(sql(f"SELECT count(*) FROM {table}"))
+        where = f" WHERE {SEED_ONLY[table]}" if table in SEED_ONLY else ""
+        got = int(sql(f"SELECT count(*) FROM {table}{where}"))
         flag = "ok" if got == n else "FALLA"
         ok &= got == n
-        print(f"{flag:5} {table:24} {got:>6} (esperado {n})")
+        extra = ""
+        if table in SEED_ONLY:
+            live = int(sql(f"SELECT count(*) FROM {table} WHERE NOT ({SEED_ONLY[table]})"))
+            extra = f"  + {live} creadas en operación"
+        print(f"{flag:5} {table:24} {got:>6} (esperado {n}){extra}")
     overlaps = int(sql(OVERLAPS))
     print(f"{'ok' if overlaps == 0 else 'FALLA':5} traslapes de cuidadores: {overlaps}")
     ok &= overlaps == 0

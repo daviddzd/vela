@@ -8,6 +8,7 @@ from app.core.audit import audit
 from app.core.config import get_settings
 from app.core.db import SessionLocal
 from app.core.deps import CurrentUser, current_user
+from app.core.proxy import is_https
 from app.core.roles import HOME_BY_ROLE, screens_for
 from app.core.security import COOKIE_NAME, create_token, verify_password
 from app.models.tables import User
@@ -57,7 +58,7 @@ def login(body: LoginIn, request: Request, response: Response) -> MeOut:
         raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Correo o contraseña incorrectos.")
     response.set_cookie(COOKIE_NAME, create_token(user.user_id, user.role, user.institution_id),
                         max_age=settings.jwt_hours * 3600, httponly=True,
-                        secure=settings.cookie_secure, samesite="lax", path="/")
+                        secure=is_https(request), samesite="lax", path="/")
     return me_out(CurrentUser(user.user_id, user.role, user.institution_id, user.caregiver_id,
                               user.family_member_id, user.display_name))
 

@@ -13,14 +13,9 @@ class Settings(BaseSettings):
     database_url: str
     jwt_secret: str
     jwt_hours: int = 8
-    public_base_url: str = "http://localhost:8080"
+    public_base_url: str = "http://localhost:8080"   # informative; cookie Secure is decided per request
     # Failed login attempts allowed per IP per minute (docs/spec/02_arquitectura.md).
     login_attempts_per_minute: int = 5
-
-    @property
-    def cookie_secure(self) -> bool:
-        """Send the cookie only over HTTPS when the public URL is HTTPS (Cloudflare tunnel)."""
-        return self.public_base_url.startswith("https://")
 
 
 @lru_cache

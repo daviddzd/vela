@@ -23,6 +23,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from app.core.audit import audit
+from app.core.events import publish
 from app.services import dispatcher as dsp
 from app.services.dispatcher import MEXICO_CITY
 
@@ -127,17 +128,18 @@ def duty_coordinator(db: Session, institution_id: str) -> str:
 
 # ---- requests -----------------------------------------------------------------------------------
 
-def create_request(db: Session, *, user_id: str, institution_id: str, patient_id: str, service_id: str,
-                   scheduled_for: datetime, priority: str, origin: str) -> str:
+def create_request(db: Session, *, user_id: str | None, institution_id: str, patient_id: str, service_id: str,
+                   scheduled_for: datetime, priority: str, origin: str,
+                   care_plan_id: str | None = None, plan_date=None) -> str:
     """Register, validate and dispatch a request. Returns its id (look at its status afterwards)."""
     if scheduled_for.tzinfo is None:          # a time typed in the form is Mexico City time
         scheduled_for = scheduled_for.replace(tzinfo=MEXICO_CITY)
     request_id = db.scalar(text("""
         INSERT INTO service_requests (institution_id, patient_id, service_id, origin, priority,
-                                      scheduled_for, created_at, status)
-        VALUES (:inst, :p, :s, :o, :prio, :at, now(), 'registered') RETURNING request_id"""),
+                                      scheduled_for, created_at, status, care_plan_id, plan_date)
+        VALUES (:inst, :p, :s, :o, :prio, :at, now(), 'registered', :cp, :pd) RETURNING request_id"""),
         {"inst": institution_id, "p": patient_id, "s": service_id, "o": origin, "prio": priority,
-         "at": scheduled_for})
+         "at": scheduled_for, "cp": care_plan_id, "pd": plan_date})
     reason, duplicate_of = validate(db, request_id)
     if reason:
         db.execute(text("""UPDATE service_requests SET status = 'rejected', status_reason = :r,
@@ -145,10 +147,12 @@ def create_request(db: Session, *, user_id: str, institution_id: str, patient_id
                    {"r": reason, "d": duplicate_of, "id": request_id})
         audit(db, user_id=user_id, institution_id=institution_id, action="request_rejected",
               entity="service_request", entity_id=request_id, allowed=False, detail={"reason": reason})
+        publish(db, "request.created", institution_id, request_id=request_id, status="rejected")
         return request_id
     set_status(db, request_id, "validated")
     audit(db, user_id=user_id, institution_id=institution_id, action="request_created",
           entity="service_request", entity_id=request_id, detail={"priority": priority, "origin": origin})
+    publish(db, "request.created", institution_id, request_id=request_id, status="validated")
     dispatch_requests(db, institution_id, [request_id])
     return request_id
 
@@ -242,6 +246,8 @@ def save_assignment(db: Session, institution_id: str, request_id: str, options: 
               entity="assignment", entity_id=aid,
               detail={"request_id": request_id, "caregiver_id": o.caregiver_id, "travel_min": o.travel_min,
                       "policy": policy()})
+        publish(db, "assignment.approved", institution_id, request_id=request_id, assignment_id=aid,
+                approval=approval)
         return aid
     return None
 
@@ -257,6 +263,8 @@ def save_proposals(db: Session, institution_id: str, request_id: str, options: l
             VALUES (:r, :i, :rank, :c, :t, :ps, :pe, :pol)"""),
             {"r": request_id, "i": institution_id, "rank": rank, "c": o.caregiver_id, "t": o.travel_min,
              "ps": o.planned_start, "pe": o.planned_end, "pol": policy()})
+    if options:
+        publish(db, "assignment.proposed", institution_id, request_id=request_id)
 
 
 def approve(db: Session, *, user_id: str, institution_id: str, request_id: str, caregiver_id: str) -> str:
@@ -319,6 +327,7 @@ def confirm_visit(db: Session, *, user_id: str, institution_id: str, assignment_
     set_status(db, rid, "closed")
     audit(db, user_id=user_id, institution_id=institution_id, action="visit_confirmed",
           entity="assignment", entity_id=assignment_id)
+    publish(db, "request.updated", institution_id, request_id=rid, status="closed")
 
 
 def _visit_step(db, assignment_id, from_status, to_status, column, user_id, institution_id, action) -> None:
@@ -331,6 +340,8 @@ def _visit_step(db, assignment_id, from_status, to_status, column, user_id, inst
     set_status(db, rid, to_status)
     audit(db, user_id=user_id, institution_id=institution_id, action=action, entity="assignment",
           entity_id=assignment_id)
+    publish(db, "visit.arrived" if to_status == "in_progress" else "visit.finished", institution_id,
+            request_id=rid, assignment_id=assignment_id)
 
 
 def has_valid_consent(db: Session, patient_id: str, consent_type: str) -> bool:
