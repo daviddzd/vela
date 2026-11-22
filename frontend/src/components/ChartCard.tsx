@@ -3,9 +3,10 @@
 import type { ReactNode } from "react";
 import { es } from "../i18n/es";
 
-export function ChartCard({ question, keyValue, keyLabel, children, source, table, note, className = "" }: {
+export function ChartCard({ question, keyValue, keyLabel, children, source, table, note, className = "", synthetic = true }: {
   question: string; keyValue?: ReactNode; keyLabel?: ReactNode; children: ReactNode; source: string;
   table?: { columns: string[]; rows: (string | number | null)[][] }; note?: ReactNode; className?: string;
+  synthetic?: boolean;   // false for numbers that come from real sources / assumptions (e.g. /negocio)
 }) {
   return (
     <section className={`flex flex-1 flex-col rounded-card border border-teal/20 bg-white p-4 sm:p-5 ${className}`}>
@@ -30,7 +31,7 @@ export function ChartCard({ question, keyValue, keyLabel, children, source, tabl
         </details>
       )}
       <p className="mt-3 border-t border-teal/10 pt-2 text-sm text-muted">
-        {es.panorama.sourcePrefix} {source} · <strong>{es.panorama.synthetic}</strong>
+        {es.panorama.sourcePrefix} {source}{synthetic && <> · <strong>{es.panorama.synthetic}</strong></>}
       </p>
     </section>
   );

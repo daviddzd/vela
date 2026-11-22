@@ -6,7 +6,8 @@
 
 What it deletes (all of it is created while the app runs; none of it comes from database/seed/):
   - ORACLE-Voz reports (voice_reports) and every alert (alerts)
-  - family notices (family_notices)
+  - family notices (family_notices) and ARCO requests (arco_requests)
+  - consents changed during a rehearsal (revoked or registered in /privacidad) go back to their seed values
   - demo scenarios: scenario_runs and everything hanging from them (simulated air quality, traffic,
     caregivers out of service, contingency events / proposals / decisions, priority changes)
   - open or past assignment proposals (assignment_proposals)
@@ -27,7 +28,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 
-COUNT_TABLES = ["voice_reports", "alerts", "family_notices", "scenario_runs", "contingency_events",
+COUNT_TABLES = ["voice_reports", "alerts", "family_notices", "arco_requests", "scenario_runs", "contingency_events",
                 "contingency_proposals", "contingency_decisions", "priority_overrides", "traffic_conditions",
                 "caregiver_unavailability", "air_quality_scenario", "assignment_proposals"]
 
@@ -35,6 +36,9 @@ COUNT_TABLES = ["voice_reports", "alerts", "family_notices", "scenario_runs", "c
 TARGET_REQUESTS = """
 CREATE TEMP TABLE seed_requests (request_id text PRIMARY KEY);
 {seed_rows}
+CREATE TEMP TABLE seed_consents (consent_id text PRIMARY KEY, granted boolean, granted_by text, family_member_id text,
+                                 patient_assent text, signed_on date, expires_on date);
+{consent_rows}
 CREATE TEMP TABLE target_requests AS
   SELECT r.request_id FROM service_requests r
   WHERE r.request_id NOT IN (SELECT request_id FROM seed_requests)
@@ -44,6 +48,7 @@ CREATE TEMP TABLE target_requests AS
 
 DELETE = """
 DELETE FROM voice_reports;
+DELETE FROM arco_requests;
 DELETE FROM family_notices;
 DELETE FROM contingency_decisions;
 DELETE FROM contingency_proposals;
@@ -59,6 +64,11 @@ DELETE FROM assignments WHERE request_id IN (SELECT request_id FROM target_reque
 UPDATE service_requests SET duplicate_of = NULL
   WHERE duplicate_of IN (SELECT request_id FROM target_requests);
 DELETE FROM service_requests WHERE request_id IN (SELECT request_id FROM target_requests);
+UPDATE consents c SET granted = s.granted, granted_by = s.granted_by, family_member_id = s.family_member_id,
+       patient_assent = s.patient_assent, signed_on = s.signed_on, expires_on = s.expires_on,
+       recorded_by = NULL, recorded_at = NULL, revoked_at = NULL, revoked_by = NULL, revoke_reason = NULL
+  FROM seed_consents s WHERE s.consent_id = c.consent_id;
+DELETE FROM consents WHERE consent_id NOT IN (SELECT consent_id FROM seed_consents);
 INSERT INTO audit_log (user_id, institution_id, action, entity, entity_id, allowed, detail)
   VALUES (NULL, NULL, 'demo_reset', 'platform', NULL, true, '{"script": "scripts/reset_demo.py"}');
 """
@@ -82,11 +92,20 @@ def main() -> None:
     with open(ROOT / "database" / "seed" / "service_requests.csv", encoding="utf-8") as f:
         ids = [r["request_id"] for r in csv.DictReader(f)]
     seed_rows = "INSERT INTO seed_requests VALUES " + ",".join(f"('{i}')" for i in ids) + ";"
+    with open(ROOT / "database" / "seed" / "consents.csv", encoding="utf-8") as f:
+        cons = list(csv.DictReader(f))
+    q = lambda v: "NULL" if v == "" else "'" + v.replace("'", "''") + "'"   # noqa: E731
+    consent_rows = "INSERT INTO seed_consents VALUES " + ",".join(
+        f"({q(c['consent_id'])},{c['granted']},{q(c['granted_by'])},{q(c['family_member_id'])},{q(c['patient_assent'])},"
+        f"{q(c['signed_on'])},{q(c['expires_on'])})" for c in cons) + ";"
+    changed = """SELECT 'consents (cambiados en vivo)', count(*) FROM consents c LEFT JOIN seed_consents s USING (consent_id)
+                 WHERE s.consent_id IS NULL OR c.revoked_at IS NOT NULL OR c.recorded_at IS NOT NULL OR c.granted <> s.granted
+                 UNION ALL """
     counts = " UNION ALL ".join(f"SELECT '{t}', count(*) FROM {t}" for t in COUNT_TABLES)
-    report = f"""SELECT 'service_requests (en vivo)', count(*) FROM target_requests UNION ALL
+    report = changed + f"""SELECT 'service_requests (en vivo)', count(*) FROM target_requests UNION ALL
                  SELECT 'assignments (en vivo)', count(*) FROM assignments WHERE request_id IN (SELECT request_id FROM target_requests)
                  UNION ALL {counts};"""
-    sql = ("BEGIN;\n" + TARGET_REQUESTS.format(seed_rows=seed_rows) + report + DELETE
+    sql = ("BEGIN;\n" + TARGET_REQUESTS.format(seed_rows=seed_rows, consent_rows=consent_rows) + report + DELETE
            + ("ROLLBACK;" if args.dry_run else "COMMIT;"))
     print("Simulación (no se guarda nada):" if args.dry_run else "Borrado:")
     for line in psql(sql).strip().splitlines():

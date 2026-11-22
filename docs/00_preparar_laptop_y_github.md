@@ -206,7 +206,21 @@ y el enlace ya no cambia.
 1. Laptop conectada a la corriente; desactiva suspensión (Configuración → Sistema → Energía → "Nunca").
 2. 1 h antes: abrir Docker Desktop, `docker compose up -d`, abrir Ollama, `ollama run qwen3:8b "hola"` para
    cargar el modelo, abrir el túnel y generar el QR.
-3. **Fechas vivas.** El historial sintético (solicitudes, asignaciones, consentimientos y lecturas de aire)
+3. **Base de la demo desde cero (el día anterior, antes del ensayo general).** Las pruebas automáticas usan su
+   propia base (`vela_test`), así que ya no escriben en la bitácora de la demo. Pero la base de la demo todavía
+   guarda la bitácora de las semanas de desarrollo. Para que la bitácora de `/privacidad` muestre solo el uso
+   real de los ensayos y de la defensa, recrea la base desde la semilla:
+   ```bash
+   docker compose stop api worker web proxy db
+   docker compose rm -f db
+   docker volume rm vela_pgdata        # SOLO la base de la demo; el modelo de Whisper (whisper-cache) se queda
+   docker compose up -d                # carga la semilla y corre las migraciones (1–2 min)
+   python scripts/verify_db.py         # debe decir "Todo correcto"
+   python scripts/create_test_db.py    # la base de pruebas vive en el mismo volumen: hay que crearla otra vez
+   docker compose exec api pytest -q   # opcional: confirma que todo pasa (en vela_test, no en la demo)
+   ```
+   Después sigue con el paso 4 (fechas vivas). Usuarios y contraseña de demostración no cambian.
+4. **Fechas vivas.** El historial sintético (solicitudes, asignaciones, consentimientos y lecturas de aire)
    termina el 19–20 de noviembre. Para que tableros y simulación muestren un historial que termina "ayer":
    ```bash
    python scripts/rebase_dates.py --dry-run   # muestra qué movería, sin guardar
@@ -217,9 +231,10 @@ y el enlace ya no cambia.
    del día), así que el historial termina entre 0 y 6 días antes de ayer. Se puede correr cuantas veces
    haga falta: si ya está al día, no hace nada. No toca la bitácora (`audit_log`) ni las visitas de hoy o
    futuras. Para ensayar el día de la defensa sin cambiar nada: `--today 2026-12-01 --dry-run`.
-4. **Operación limpia.** Borra lo que dejaron los ensayos: reportes de voz, alertas, avisos a familias,
+5. **Operación limpia.** Borra lo que dejaron los ensayos: reportes de voz, alertas, avisos a familias,
    escenarios de demostración (contingencias, tráfico, cuidadores fuera de servicio) y las visitas en vivo
-   pendientes. **La semilla no se toca** y la bitácora (`audit_log`) tampoco: el reinicio queda registrado ahí.
+   pendientes, solicitudes ARCO, y regresa a la semilla los consentimientos que se revocaron en un ensayo.
+   **La semilla no se toca** y la bitácora (`audit_log`) tampoco: el reinicio queda registrado ahí.
    ```bash
    python scripts/reset_demo.py --dry-run   # muestra cuántas filas borraría, sin guardar
    python scripts/reset_demo.py             # lo aplica
@@ -227,9 +242,9 @@ y el enlace ya no cambia.
    ```
    En el siguiente minuto el worker vuelve a crear las visitas de hoy de los planes de cuidado, asignadas
    automáticamente. Córrelo **después** del ensayo general y **antes** de abrir el túnel.
-5. Probar el enlace desde un celular con datos móviles (no con el wifi de la escuela), con la prueba de
+6. Probar el enlace desde un celular con datos móviles (no con el wifi de la escuela), con la prueba de
    tiempo real de arriba.
-6. Respaldo: la demo funciona en `http://localhost:8080` sin internet (salvo el enlace público) y hay un video grabado.
+7. Respaldo: la demo funciona en `http://localhost:8080` sin internet (salvo el enlace público) y hay un video grabado.
 
 ## Problemas comunes
 | Síntoma | Solución |
