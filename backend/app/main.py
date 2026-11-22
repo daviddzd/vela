@@ -7,7 +7,7 @@ from fastapi import FastAPI
 
 from app.core import events
 from app.routers import (approvals, auth, board, catalog, contingency, family, health, panorama, patients,
-                         requests, simulation, visits)
+                         requests, simulation, visits, voice)
 from app.ws import board as ws_board
 from app.ws import ping
 
@@ -26,7 +26,7 @@ app = FastAPI(title="Vela API", docs_url="/api/docs", openapi_url="/api/openapi.
 app.include_router(health.router)
 app.include_router(auth.router)
 app.include_router(patients.router)
-for module in (catalog, requests, approvals, visits, family, board, panorama, simulation, contingency):
+for module in (catalog, requests, approvals, visits, family, board, panorama, simulation, contingency, voice):
     app.include_router(module.router)
 app.include_router(ping.router)
 app.include_router(ws_board.router)

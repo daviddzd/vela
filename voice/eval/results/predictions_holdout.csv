@@ -1,0 +1,151 @@
+phrase_id,text,label,category,style,rule_hits,rules_only,classifier,final
+HLD-001,"Buenas tardes, quería ver lo de la visita del jueves pero ahorita lo importante es que don Chuy no puede jalar aire, está boqueando y se le ven los labios azules, ya no puede ni hablar",emergency,severe_breathing,long_mixed,['severe_breathing'],emergency,emergency,emergency
+HLD-002,"Ayer en la noche estuvo un ratito confundido cuando se despertó, pero ya se le quitó, hoy sabe quién soy y todo; nomás tiene algo de fiebre",urgent,none,hard_case,[],,urgent,urgent
+HLD-003,"Casi me da un infarto con el recibo de este mes, ¿por qué salió tan caro?",routine,none,hard_case,[],,emergency,emergency
+HLD-004,¿Mañana sí vienen?,routine,none,short,[],,routine,routine
+HLD-005,le duele mucho la rodiya desde ayer y casi no puede caminar,urgent,none,typo,[],,urgent,urgent
+HLD-006,"habla rarisimo de repente, como borracho, y se le cae la cara de un lado",emergency,stroke_signs,typo,[],,emergency,emergency
+HLD-007,"Les escribo para lo de la cita de la próxima semana, pero también porque mi mamá se cayó de sentón hace rato, se levantó sola y dice que está bien, nomás le duele tantito la pompa al sentarse, quiero que alguien la cheque",urgent,none,long_mixed,[],,emergency,emergency
+HLD-008,"Buenas, todo bien con mi papá, ya terminó el antibiótico y ni tos tiene, nada más quería ver si me pueden cambiar la cuidadora del miércoles porque a esa hora tiene su taller de dominó",routine,none,long_mixed,[],,urgent,urgent
+HLD-009,"La encontré en el piso del baño, dice que lleva ahí desde la madrugada, no tiene fuerza para pararse y le duele mucho la cadera",emergency,serious_fall,hard_case,['serious_fall'],emergency,emergency,emergency
+HLD-010,Mi papá dice que ya se quiere morir y que se va a tomar todas sus pastillas de una vez,emergency,self_harm,colloquial,['self_harm'],emergency,emergency,emergency
+HLD-011,"buenas tardes, quisiera saver si ya esta lista la factura del mes",routine,none,typo,[],,routine,routine
+HLD-012,"Se cayó en la sala pero ya se levantó solito y está bien, nomás se raspó tantito el codo",urgent,none,hard_case,[],,emergency,emergency
+HLD-013,"Mire, nomás para que sepa, la señora amaneció bien contenta y ya se echó su atole",routine,none,regional,[],,emergency,emergency
+HLD-014,"Hola buenas, les escribo para confirmar que mañana sí viene la enfermera a las 10, y también para avisar que desde hace como 20 minutos mi mamá tiene un dolor bien fuerte en el pecho que no se le quita, le corre al brazo y anda sudando",emergency,chest_pain,long_mixed,['chest_pain'],emergency,emergency,emergency
+HLD-015,"Oiga, mi papá no se halla, anda con calenturita y bien aguado, no quiere ni su atole",urgent,none,regional,[],,urgent,urgent
+HLD-016,"Mi mamá tiene calentura desde la mañana, 38.2, y no quiere comer",urgent,none,colloquial,[],,urgent,urgent
+HLD-017,"¡Está convulsionando, ayuda!",emergency,seizure,short,['seizure'],emergency,emergency,emergency
+HLD-018,¿Me pueden confirmar a qué hora viene mañana la enfermera?,routine,none,colloquial,[],,routine,routine
+HLD-019,No ha comido nada hoy,urgent,none,short,[],,urgent,urgent
+HLD-020,"La encontré en el sillón con los ojos cerrados, le aplaudí, la sacudí del hombro y nada, nomás respira bien despacito",emergency,unconscious,hard_case,[],,emergency,emergency
+HLD-021,"Mi papá dice que se va a morir de aburrimiento si no le traen su periódico, ¿el cuidador se lo puede comprar?",routine,none,hard_case,[],,emergency,emergency
+HLD-022,"De repente mi mamá no me reconoce, me pregunta quién soy y se quiere salir a la calle en camisón",emergency,sudden_confusion,colloquial,['sudden_confusion'],emergency,emergency,emergency
+HLD-023,"Anda diciendo 'ya me quiero morir de aburrimiento' de broma, pero la verdad sí la veo muy apagada, llora en las tardes y no quiere salir; no ha dicho que se quiera hacer daño",urgent,none,hard_case,['self_harm'],emergency,emergency,emergency
+HLD-024,"Buenos días, les escribo para confirmar la visita de mañana a las 11, también para preguntar si el pago se puede hacer con transferencia y para avisar que mi mamá ha estado muy bien, comiendo y caminando en el patio",routine,none,long_mixed,[],,emergency,emergency
+HLD-025,"Ya llegó el cuidador, gracias.",routine,none,short,[],,routine,routine
+HLD-026,"se le acabo la insulina y no hemos podido ir por ella, hoy no se la puso",urgent,none,typo,[],,urgent,urgent
+HLD-027,Tose sangre a borbotones,emergency,severe_bleeding,short,[],,emergency,emergency
+HLD-028,"no me deja entrar la aplicacion, dice contraseña incorecta",routine,none,typo,[],,emergency,emergency
+HLD-029,"Fíjese que mi señor se está ahogando, se le cierra el pecho y no jala aire, ya se puso bien morado",emergency,severe_breathing,regional,['severe_breathing'],emergency,emergency,emergency
+HLD-030,"Oigan, ¿me pueden mandar el recibo de octubre? Y otra cosa, la abuelita tiene la pierna izquierda roja, calientita y más hinchada que la otra desde ayer",urgent,none,long_mixed,[],,urgent,urgent
+HLD-031,"Hola, una pregunta sobre el pago de este mes, y otra cosa, mi papá desde hace rato no puede mover la pierna ni el brazo del lado izquierdo y la boca se le ve torcida, hace media hora estaba bien",emergency,stroke_signs,long_mixed,['stroke_signs'],emergency,emergency,emergency
+HLD-032,"Qué onda, ¿me puede decir cuánto sale el plan para dos abuelitos?",routine,none,regional,[],,emergency,emergency
+HLD-033,"Se pegó en la frente con la puerta de la alacena, le salió un chichón, pero está despierta, habla bien y no ha vomitado",urgent,none,hard_case,[],,emergency,emergency
+HLD-034,"Trae diarrea desde ayer, como cinco veces, y casi no ha tomado agua",urgent,none,colloquial,[],,urgent,urgent
+HLD-035,"Todo bien hoy, comió completito y ya está dormida",routine,none,colloquial,[],,routine,routine
+HLD-036,"Mi abuelita se cayó en la cocina, se pegó en la cabeza contra la mesa y ahora está bien atarantada, no se puede levantar",emergency,serious_fall,colloquial,['serious_fall'],emergency,emergency,emergency
+HLD-037,"Dolor fuertísimo en el pecho, mi esposo",emergency,chest_pain,short,['chest_pain'],emergency,emergency,emergency
+HLD-038,"mi viejito trae los pies bien hinchados y moraditos de los dedos, la verdad me late que no está bien",urgent,none,regional,[],,urgent,urgent
+HLD-039,"Se me cayó el teléfono y se rompió la pantalla, por eso no contestaba; mi mamá está bien, aquí está viendo su novela",routine,none,hard_case,['unconscious'],emergency,emergency,emergency
+HLD-040,Anda muy triste y llorando,urgent,none,short,[],,urgent,urgent
+HLD-041,"Buenas tardes, una consulta sobre la factura, y también estoy preocupada porque mi mamá me acaba de decir que ya escondió un cuchillo y que esta noche se va a hacer daño, que ya no quiere vivir",emergency,self_harm,long_mixed,['self_harm'],emergency,emergency,emergency
+HLD-042,"Buenas noches, perdón la hora, solo para avisar que mañana no va a haber nadie en la casa de 9 a 12 porque mi mamá va a su cita del dentista que ya teníamos, que el cuidador llegue después de las 12 por favor",routine,none,long_mixed,[],,emergency,emergency
+HLD-043,¿Cuánto es la mensualidad?,routine,none,short,[],,routine,routine
+HLD-044,"le dolió el pecho ayer un ratito cuando subió la escalera pero ya no, hoy amaneció bien, ¿será que lo vea alguien?",urgent,none,hard_case,[],,urgent,urgent
+HLD-045,"Mi abuelita se desmayó y no despierta, le hablo y no me contesta",emergency,unconscious,colloquial,['unconscious'],emergency,emergency,emergency
+HLD-046,"Se quedó rígida en la silla, los brazos le brincan solos y no me ve aunque le hablo, ya va como tres minutos así",emergency,seizure,hard_case,[],,emergency,emergency
+HLD-047,a que ora pasa el cuidador el sabado?,routine,none,typo,[],,routine,routine
+HLD-048,"¿A qué hora llega la enfermera? Es que mi papá amaneció con la sonda tapada y la bolsa casi vacía desde la madrugada, y se queja de la panza",urgent,none,long_mixed,[],,routine,routine
+HLD-049,"La verdad, bien a gusto con el servicio, mi jefa está feliz con su cuidadora",routine,none,regional,[],,routine,routine
+HLD-050,"Ayer estaba lúcida haciendo su crucigrama y hoy me dice que soy su hermana que murió, no sabe ni qué año es, se duerme a media frase y no la puedo despabilar",emergency,sudden_confusion,hard_case,[],,emergency,emergency
+HLD-051,"se le hizo una llaga en la colita de estar acostado, esta rojita y abierta",urgent,none,typo,[],,emergency,emergency
+HLD-052,"En el pañal vi tantita sangre rosita al orinar, no es mucha, él está bien y comiendo",urgent,none,hard_case,[],,emergency,emergency
+HLD-053,"Cambiamos de domicilio, ¿a quién le paso la nueva dirección?",routine,none,colloquial,[],,routine,routine
+HLD-054,"Mi papá está vomitando sangre, mucha, como café oscuro y rojo",emergency,severe_bleeding,colloquial,['severe_bleeding'],emergency,emergency,emergency
+HLD-055,"Me muero de risa con mi abuelita, hoy se puso a bailar con la cuidadora, todo muy bien",routine,none,hard_case,[],,emergency,emergency
+HLD-056,"A mi papá se le olvidó tomarse la pastilla de la presión ayer y hoy, ¿qué hacemos?",urgent,none,colloquial,[],,routine,routine
+HLD-057,"Hola, iba a preguntar si el cuidador puede venir el sábado en lugar del viernes, pero acaba de pasar algo, mi papá se resbaló en la regadera, se golpeó la cabeza y no lo puedo levantar, dice que le duele mucho la cadera",emergency,serious_fall,long_mixed,['serious_fall'],emergency,emergency,emergency
+HLD-058,se esta ahogando mi papa con un pedazo de carne y no le sale nada de aire,emergency,severe_breathing,typo,['severe_breathing'],emergency,emergency,emergency
+HLD-059,"Órale, se me pasó darle su pastilla de la mañana a don Chuy, ¿se la doy ahorita junto con la de la tarde o cómo le hago?",urgent,none,regional,[],,routine,routine
+HLD-060,"¿Podrían mandarme el aviso de privacidad? Mi hijo quiere leerlo antes de firmar el consentimiento de las grabaciones, y de paso díganme si el sábado hay servicio",routine,none,long_mixed,[],,emergency,emergency
+HLD-061,"Buenas tardes, quería confirmar la visita del lunes y preguntar si pueden traer más gasas, y de paso avisar que mi mamá trae calentura desde anoche, 38 grados, y está más dormilona de lo normal pero sí contesta bien",urgent,none,long_mixed,[],,routine,routine
+HLD-062,Se le durmió medio cuerpo de golpe,emergency,stroke_signs,short,[],,emergency,emergency
+HLD-063,Mamá amaneció muy bien hoy.,routine,none,short,[],,emergency,emergency
+HLD-064,se puede cambiar el numero de telefono de contacto? el mio ya no sirve,routine,none,typo,[],,emergency,emergency
+HLD-065,"Dice que siente como un elefante sentado aquí en medio, le baja hasta la mandíbula y está empapado de sudor, pero no quiere que lo llevemos",emergency,chest_pain,hard_case,[],,emergency,emergency
+HLD-066,"Hace rato se mareó y se sentó, no se desmayó, ya está platicando bien pero sigue algo pálido",urgent,none,hard_case,['unconscious'],emergency,emergency,emergency
+HLD-067,Tiene fiebre y escalofríos,urgent,none,short,[],,urgent,urgent
+HLD-068,"Oiga, ¿ahorita a qué hora me cae el muchacho que viene a bañar a mi papá?",routine,none,regional,[],,emergency,emergency
+HLD-069,"Mi señora se quedó como trabada, se le fueron los ojos y ya no me contesta por más que le grito, está bien guanga",emergency,unconscious,regional,['unconscious'],emergency,emergency,emergency
+HLD-070,"Encontré vacías las cajas de sus pastillas para dormir, ayer estaban llenas, y está muy adormilada; ella me había dicho que ya no quería ser una carga",emergency,self_harm,hard_case,[],,routine,routine
+HLD-071,Queremos agendar una visita para el próximo martes en la tarde,routine,none,colloquial,[],,routine,routine
+HLD-072,"la presión le salió en 150/95 hoy en la mañana, normalmente la trae en 130",urgent,none,colloquial,[],,urgent,urgent
+HLD-073,"Mi papá está temblando todo, bien fuerte, con los ojos volteados y le sale espuma de la boca",emergency,seizure,colloquial,[],,emergency,emergency
+HLD-074,"le arde mucho al hacer pipi y va a cada rato, huele fuerte",urgent,none,typo,[],,urgent,urgent
+HLD-075,"Ya no aguanto la app, me ahoga con tantas notificaciones, ¿cómo las quito?",routine,none,hard_case,[],,routine,routine
+HLD-076,"Hola, quería agradecerle a la enfermera, mi papá ya ni se acuerda del dolor de rodilla que tenía el mes pasado, ya camina bien; ¿podemos dejar las visitas cada quince días?",routine,none,long_mixed,[],,routine,routine
+HLD-077,"Tiene la boca medio chueca desde hace años por la parálisis facial, eso no es nuevo, pero hoy le salió una ampolla en el labio y le duele al comer",urgent,none,hard_case,['stroke_signs'],emergency,urgent,emergency
+HLD-078,"Mi señor anda bien ido desde hace rato, no sabe ni dónde está parado, dice puras incoherencias y se pone bravo, nunca había estado así",emergency,sudden_confusion,regional,[],,emergency,emergency
+HLD-079,"Fíjese que la señora anda bien malita del estómago, trae chorrillo desde anoche",urgent,none,regional,[],,routine,routine
+HLD-080,"Buenas noches, les quería avisar que ya no necesitamos los pañales de la talla grande, y también que a mi mamá se le abrió la herida de la operación y le está saliendo sangre sin parar, ya va empapando la sábana",emergency,severe_bleeding,long_mixed,[],,emergency,emergency
+HLD-081,Todo tranquilo por acá.,routine,none,short,[],,urgent,urgent
+HLD-082,"mi mama se cayo de la escalera y la pierna se le ve chueca, grita de dolor si la movemos",emergency,serious_fall,typo,[],,emergency,emergency
+HLD-083,porfa me pueden cambiar la vicita del jueves al viernes,routine,none,typo,[],,routine,routine
+HLD-084,"Buenos días, cambiamos de número de teléfono, luego se los paso, y también quería decirles que mi esposo lleva dos días comiendo poquito y hoy vomitó el desayuno, está tranquilo pero decaído",urgent,none,long_mixed,[],,emergency,emergency
+HLD-085,"Fíjese que el viernes no va a estar nadie, ¿se puede recorrer la visita al sábado?",routine,none,regional,[],,emergency,emergency
+HLD-086,"Está sentado en la orilla de la cama inclinado hacia adelante, cada palabra le cuesta, los labios se le ven como grisecitos y el aparatito del dedo marca 82",emergency,severe_breathing,hard_case,[],,emergency,emergency
+HLD-087,"Vomitó dos veces, sigue con náuseas",urgent,none,short,[],,urgent,urgent
+HLD-088,"Se atragantó con el agua pero tosió, ya se le pasó y respira bien, nomás quedó asustado; le pasa seguido al tomar líquidos",urgent,none,hard_case,[],,urgent,urgent
+HLD-089,¿El plan incluye las terapias de rehabilitación o se pagan aparte?,routine,none,colloquial,[],,routine,routine
+HLD-090,A mi mamá se le chuequeó la boca de repente y no puede levantar el brazo derecho,emergency,stroke_signs,colloquial,['stroke_signs'],emergency,emergency,emergency
+HLD-091,mi mama no a querido tomar agua en todo el dia y tiene los labios resecos,urgent,none,typo,[],,emergency,emergency
+HLD-092,"Oiga, a don Toño le dio un dolorón en el pecho bien macizo, se lo agarra con la mano y anda sudando a chorros",emergency,chest_pain,regional,['chest_pain'],emergency,emergency,emergency
+HLD-093,"Me dio un ataque de nervios buscando el papel del consentimiento pero ya lo encontré, ¿se los mando por foto?",routine,none,hard_case,['seizure'],emergency,emergency,emergency
+HLD-094,"se callo en el baño y no despierta, la muevo y nada",emergency,unconscious,typo,['unconscious'],emergency,emergency,emergency
+HLD-095,Mi abuelita ha vomitado dos veces desde la mañana y anda sin ganas,urgent,none,colloquial,[],,urgent,urgent
+HLD-096,"Hola, mi abuelita estuvo con gripa hace dos semanas pero ya se le quitó por completo, el doctor ya la dio de alta, ¿pueden quitar la nota de la app y regresar al horario de siempre?",routine,none,long_mixed,[],,emergency,emergency
+HLD-097,¿Traen el pañal grande?,routine,none,short,[],,urgent,urgent
+HLD-098,"Se le fue el aire un poquito al subir a la azotea pero se sentó, descansó y ya respira normal, ¿es normal que se canse tanto?",urgent,none,hard_case,['severe_breathing'],emergency,emergency,emergency
+HLD-099,"Mi suegro anda diciendo que mejor se mata, que ya se despidió de todos y regaló sus cosas, ahorita se encerró en el cuarto",emergency,self_harm,regional,[],,emergency,emergency
+HLD-100,"Buenas, aviso que el domingo no vamos a estar, y que mi mamá desde ayer anda muy desanimada, no quiere levantarse ni ver a nadie, no dice nada de hacerse daño pero me preocupa",urgent,none,long_mixed,['self_harm'],emergency,emergency,emergency
+HLD-101,"gracias por todo, mi papa esta muy contento con el señor q lo cuida",routine,none,typo,[],,routine,routine
+HLD-102,"A mi suegra le dio un ataque, se está zangoloteando en el piso y echa espuma, se mordió la lengua",emergency,seizure,regional,['seizure'],emergency,emergency,emergency
+HLD-103,"mi abuelo amanecio bien raro, no sabe donde esta, habla con gente que no existe y no lo podemos despertar bien",emergency,sudden_confusion,typo,['sudden_confusion'],emergency,emergency,emergency
+HLD-104,"Órale pues, quedamos el jueves a las diez, ahí lo esperamos",routine,none,regional,[],,routine,routine
+HLD-105,"Ahorita la señora anda bien chípil, no come, nomás quiere estar acostada y dice que le duele todo el cuerpo",urgent,none,regional,[],,emergency,emergency
+HLD-106,"Muchas gracias a Lupita por cómo cuidó a mi mamá esta semana, es un amor",routine,none,colloquial,[],,routine,routine
+HLD-107,se corto con un vidrio en la pierna y no para de salir sangre ya empapo dos toallas,emergency,severe_bleeding,typo,['severe_bleeding'],emergency,emergency,emergency
+HLD-108,Glucosa en 280 esta mañana,urgent,none,short,[],,urgent,urgent
+HLD-109,Se cayó y no se puede parar,emergency,serious_fall,short,['serious_fall'],emergency,emergency,emergency
+HLD-110,"Temblaba mucho anoche pero era de frío, tenía 38.5 de calentura, ya le bajó con el paracetamol pero sigue decaída",urgent,none,hard_case,[],,urgent,urgent
+HLD-111,"Hola, el doctor de la clínica le bajó la dosis de la pastilla de la presión, le dio receta nueva, ¿se la mando a la enfermera para que actualicen su lista? Él se siente bien",routine,none,long_mixed,[],,routine,routine
+HLD-112,"esta muy nerviosa, no durmio nada en la noche y anda llorando, dice q tiene miedo",urgent,none,typo,[],,emergency,emergency
+HLD-113,"Mi mamá no puede respirar, se está poniendo morada de los labios, ayúdenme",emergency,severe_breathing,colloquial,['severe_breathing'],emergency,emergency,emergency
+HLD-114,Gracias por la visita.,routine,none,short,[],,routine,routine
+HLD-115,nesecito el comprobante de pago para el seguro,routine,none,typo,[],,emergency,emergency
+HLD-116,"Tiene las piernas bien hinchadas, más que otros días, y le aprietan los zapatos",urgent,none,colloquial,[],,urgent,urgent
+HLD-117,"fíjese que a la abuelita se le trabó la lengua de sopetón, no se le entiende nada y se le jala la cara pa un lado",emergency,stroke_signs,regional,['stroke_signs'],emergency,emergency,emergency
+HLD-118,"Oiga, ¿la muchacha puede traer de pasada unas gasas y alcohol? Ahí se los pago",routine,none,regional,[],,emergency,emergency
+HLD-119,"A mi papá le está doliendo muchísimo el pecho, dice que es como si le estuvieran apretando y está sudando frío",emergency,chest_pain,colloquial,[],,emergency,emergency
+HLD-120,"Mire, a la abuelita le salió un granote en la espalda bien colorado y le punza",urgent,none,regional,[],,urgent,urgent
+HLD-121,"Hola, perdón la hora, todo bien con lo del pago, ya quedó. Mi tía anda con mucha tos seca y dice que le duele la espalda al toser, no tiene fiebre y respira bien, ¿pueden mandar a alguien hoy?",urgent,none,long_mixed,[],,urgent,urgent
+HLD-122,¿Pueden traer más guantes y toallitas húmedas en la próxima visita?,routine,none,colloquial,[],,urgent,urgent
+HLD-123,"Buenos días, quería pedir que me cambien el horario de la terapia, pero ahorita le estaba dando de desayunar a mi papá y de repente se fue de lado y ya no me responde, no abre los ojos",emergency,unconscious,long_mixed,['unconscious'],emergency,emergency,emergency
+HLD-124,"mi abuela dijo q se va a aventar de la azotea porque ya no aguanta, la tengo agarrada",emergency,self_harm,typo,[],,emergency,emergency
+HLD-125,"Oigan, ¿me pueden explicar la diferencia entre el plan básico y el completo? Es que mi hermano quiere que también vean a mi tía, que vive con nosotros y está sanita",routine,none,long_mixed,[],,emergency,emergency
+HLD-126,"Le salió un poco de sangre de la nariz, se la paró con un algodón en 5 minutos, ya no le sale",urgent,none,hard_case,[],,emergency,emergency
+HLD-127,Le duele mucho la cabeza desde ayer,urgent,none,short,[],,emergency,emergency
+HLD-128,"se puso tieso tieso y empezo a sacudirse de brazos y piernas, no para",emergency,seizure,typo,[],,emergency,emergency
+HLD-129,Necesito cambiar el horario.,routine,none,short,[],,urgent,urgent
+HLD-130,"Ya no conoce a nadie, de golpe",emergency,sudden_confusion,short,[],,emergency,emergency
+HLD-131,"tose y tose con flemas verdes desde hace tres dias, no tiene calentura",urgent,none,typo,[],,urgent,urgent
+HLD-132,"ya le di sus medicinas como dijo la enfermera, todo normal",routine,none,typo,[],,routine,routine
+HLD-133,"Fíjese que ya nos cambiamos de colonia, le paso luego los datos nuevos",routine,none,regional,[],,urgent,urgent
+HLD-134,"Está haciendo del baño puro negro como chapopote y ahorita le salió un charco rojo, se ve blanco como papel",emergency,severe_bleeding,hard_case,[],,emergency,emergency
+HLD-135,Mi esposo no ha hecho del baño en cuatro días y tiene la panza dura e inflamada,urgent,none,colloquial,[],,urgent,urgent
+HLD-136,"Mi hermana va a estar con mi papá este fin, por si le llaman a ella",routine,none,colloquial,[],,routine,routine
+HLD-137,"Oiga, el chamaco que la cuida dice que la señora anda con el azúcar por las nubes, 300 y tantos, y con mucha sed",urgent,none,regional,[],,emergency,emergency
+HLD-138,"Oiga, don Chuy se dio un ranazo en la banqueta, se pegó en la nuca y ahorita está vomitando y bien somnoliento",emergency,serious_fall,regional,[],,emergency,emergency
+HLD-139,"Hola, gracias por la visita de ayer, el muchacho muy amable. Nomás que desde que le cambiaron la pastilla mi papá anda mareado cuando se para y hoy casi se cae, no se pegó, ¿alguien lo puede revisar hoy?",urgent,none,long_mixed,[],,urgent,urgent
+HLD-140,"Les quería comentar que el portón ahora tiene otro código, se lo paso por mensaje a la coordinadora, y también si la cuidadora puede traer el cuaderno de registros que se llevó",routine,none,long_mixed,[],,emergency,emergency
+HLD-141,"Ya no le entra el aire, está boqueando",emergency,severe_breathing,short,['severe_breathing'],emergency,emergency,emergency
+HLD-142,"Estaba platicando normal y de repente empezó a decir palabras que no tienen sentido, se le cae el café de la mano izquierda y su sonrisa está chueca",emergency,stroke_signs,hard_case,[],,emergency,emergency
+HLD-143,¿Dónde descargo la app?,routine,none,short,[],,emergency,emergency
+HLD-144,"La herida del pie se ve roja, hinchada y le está saliendo como pus",urgent,none,colloquial,[],,urgent,urgent
+HLD-145,"tiene ronchas en todo el cuerpo desde q empezo el antibiotico nuevo, le dan comezon pero respira bien",urgent,none,typo,[],,urgent,urgent
+HLD-146,"mi esposo dice q siente una piedra encima del pecho y le duele la quijada, esta palido y sudando",emergency,chest_pain,typo,['chest_pain'],emergency,emergency,emergency
+HLD-147,"Ahí le encargo que me manden el recibo, que mi carnal lo quiere ver",routine,none,regional,[],,emergency,emergency
+HLD-148,"No reacciona mi papá, no abre los ojos",emergency,unconscious,short,['unconscious'],emergency,emergency,emergency
+HLD-149,Se le acabó la medicina del corazón,urgent,none,short,[],,urgent,urgent
+HLD-150,Confirmo la cita del lunes.,routine,none,short,[],,routine,routine

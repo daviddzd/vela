@@ -11,7 +11,7 @@ from app.services import dispatcher as dsp
 from app.services import operations as ops
 from app.services import queue
 from app.services.dispatcher import MEXICO_CITY
-from tests.conftest import login, session_on
+from tests.conftest import free_caregiver, login, session_on
 
 PATIENT = "PAC-0001"            # INS-A, all consents valid, family FAM-0001
 NURSING_VISIT = "SRV-02"        # 30 min, skill nursing
@@ -153,7 +153,7 @@ def test_new_assignment_coexists_with_seed_and_reassigned_rows(db_conn):
         _insert_assignment(s, "CUI-003", later, later + timedelta(minutes=30), status="reassigned")
         _insert_assignment(s, "CUI-003", later, later + timedelta(minutes=30))
         assert s.scalar(text("SELECT count(*) FROM assignments WHERE caregiver_id = 'CUI-003' "
-                             "AND planned_start IS NOT NULL")) == 3
+                             "AND planned_start IS NOT NULL AND assigned_at = now()")) == 3   # the 3 rows of this test
 
 
 def test_retry_when_slot_taken_between_read_and_write(tx_client, db_conn, monkeypatch):
@@ -225,6 +225,7 @@ def test_worker_marks_past_queued_requests_unattended(db_conn):
 
 def _visit_now(db_conn, caregiver="CUI-003", patient=PATIENT) -> str:
     with session_on(db_conn, "INS-A") as s:
+        free_caregiver(s, caregiver)
         rid = s.scalar(text("""INSERT INTO service_requests (institution_id, patient_id, service_id, origin, priority,
                                scheduled_for, created_at, status) VALUES ('INS-A', :p, 'SRV-02', 'coordinator',
                                'medium', now(), now() - interval '1 hour', 'assigned') RETURNING request_id"""),

@@ -1,0 +1,54 @@
+# APPLIED on 2026-11-21 (team decision) to config/emergency_rules.yaml. Kept for the record. Extra patterns for config/emergency_rules.yaml written after looking at the
+# misses of data/voice/external_phrases.csv. Because they were written seeing that set, their result on it is
+# NOT an independent test: a NEW third set is needed to validate them. The team decides whether to adopt them.
+# Patterns run on normalized text (lowercase, no accents).
+categories:
+  severe_breathing:
+    - "no (jala|le llega|me llega|le entra nada de) (el )?aire"
+    - "no le entra.{0,12}aire"
+    - "asfixi"
+    - "boquea"
+    - "respira (bien |muy )?(feo|raro|silbando)"
+    - "(se puso|esta|se esta poniendo) (gris|morad|azul)"
+    - "labios.{0,15}morad"
+  chest_pain:
+    - "(duele|dolor\\w*|aprieta|oprime|opresion|arde|piquete|aplast\\w*)\\b.{0,30}\\bpe(ch|x)o"
+    - "pecho.{0,40}(brazo|quijada|mandibula)"
+    - "aplastando el corazon"
+    - "agarr\\w* el pecho"
+  unconscious:
+    - "no (me |nos )?(contesta|abre los ojos)"
+    - "ojos en blanco"
+    - "se le fue el sentido"
+    - "se quedo ties"
+    - "se le cierran los ojos"
+  stroke_signs:
+    - "(chue\\w*|torci\\w*|caid\\w*|jal\\w*).{0,20}(la cara|la boca)"
+    - "(la cara|la boca).{0,25}(chue|torci|caid|jalad)"
+    - "habla como borracho"
+    - "se le traba la lengua"
+    - "se le (durmio|adormecio) (todo )?(el|un) lado"
+    - "no (puede|puedo) (levantar|mover) (el|la) (brazo|pierna|mano)"
+    - "no mueve (la|el) (mano|brazo|pierna)"
+    - "dejo de hablar"
+  seizure:
+    - "espuma por la boca"
+    - "temblando todo el cuerpo"
+    - "se (estaba |esta )?sacudiendo"
+  severe_bleeding:
+    - "chorros? de sangre"
+    - "sangre.{0,20}a chorros"
+    - "sangra muchisimo"
+    - "empap\\w*.{0,12}(toalla|trapo|ropa)"
+    - "popo con sangre"
+  serious_fall:
+    - "(pego|golpeo|ranazo).{0,30}cabeza"
+    - "(cayo|cai|resbalo).{0,45}no (se )?(puede|puedo) (parar|levantar|mover)"
+    - "pierna (bien )?chueca"
+    - "(encontre|esta) (tirad[oa] )?en el piso"
+    - "sangre de la cabeza"
+  sudden_confusion:
+    - "(de golpe|de repente|de pronto).{0,30}(confund|incoheren|no sabe)"
+  self_harm:
+    - "(tomar|tomo|tomarse) (todas las|un monton de) pastillas"
+    - "ya no quiere seguir (aqui|viviendo)"

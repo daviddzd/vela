@@ -9,6 +9,7 @@ from collections.abc import Iterator
 
 import pytest
 from fastapi.testclient import TestClient
+from sqlalchemy import text
 from sqlalchemy.orm import Session
 
 from app.core import ratelimit
@@ -75,6 +76,13 @@ def db_conn():
     finally:
         outer.rollback()
         conn.close()
+
+
+def free_caregiver(s, caregiver_id: str) -> None:
+    """Set aside the caregiver's LIVE pending visits (created by the worker from today's care plans) inside the
+    test transaction, so a test that books a window at a real hour does not collide with them. Rolled back."""
+    s.execute(text("""UPDATE assignments SET status = 'reassigned' WHERE caregiver_id = :c AND status = 'active'
+                      AND planned_start IS NOT NULL AND arrived_at IS NULL"""), {"c": caregiver_id})
 
 
 def session_on(conn, institution_id: str | None) -> _Session:
