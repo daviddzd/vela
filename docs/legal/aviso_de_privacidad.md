@@ -21,7 +21,7 @@
 
 **Cómo los protegemos.** Separación de datos por institución en la base de datos, acceso por rol, contraseñas cifradas, bitácora de accesos, y procesamiento de voz en equipos propios cuando es posible. Los audios se borran después de transcribirse.
 
-**Tus derechos.** Puedes acceder, rectificar, cancelar u oponerte al tratamiento de tus datos, y retirar tu consentimiento en cualquier momento, desde la sección "Mi cuenta" o escribiendo a privacidad@vela.test.
+**Tus derechos.** Puedes acceder, rectificar, cancelar u oponerte al tratamiento de tus datos (derechos ARCO), y retirar tu consentimiento en cualquier momento, desde la sección "Privacidad" de la plataforma o escribiendo a privacidad@vela.test. El trámite es gratuito (art. 34). Tu solicitud recibe un folio; te comunicaremos la respuesta en un plazo máximo de 20 días hábiles desde que la recibimos y, si procede, la haremos efectiva dentro de los 15 días hábiles siguientes. Ambos plazos pueden ampliarse una sola vez por un periodo igual cuando las circunstancias lo justifiquen (art. 31; los días son hábiles, art. 2, fracción VIII).
 
 **Autoridad.** Si consideras que tus derechos fueron vulnerados, puedes acudir a la Secretaría Anticorrupción y Buen Gobierno, autoridad en materia de protección de datos personales.
 

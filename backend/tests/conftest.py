@@ -1,20 +1,28 @@
-"""Shared test fixtures. Tests run against the real database inside Docker:
+"""Shared test fixtures. Tests run inside Docker against a SEPARATE database, `vela_test`, created from the same
+SQL, seed and migrations as the demo database (python scripts/create_test_db.py):
 
     docker compose exec api pytest
 
+So the tests never write into the demo database: its audit trail only shows real use (rehearsals, defense).
 Rule: tests leave no garbage. Anything they change runs inside a transaction that is rolled back.
-Only the audit_log rows produced by the API itself remain (that trail is append-only on purpose).
+Only the audit_log rows produced by the API itself remain in vela_test (that trail is append-only on purpose).
 """
-from collections.abc import Iterator
+import os
 
-import pytest
-from fastapi.testclient import TestClient
-from sqlalchemy import text
-from sqlalchemy.orm import Session
+# Must run BEFORE the app is imported: the engine reads DATABASE_URL once. Same user (vela_api), other database.
+TEST_DB = os.environ.get("TEST_DATABASE_NAME", "vela_test")
+os.environ["DATABASE_URL"] = os.environ["DATABASE_URL"].rsplit("/", 1)[0] + "/" + TEST_DB
 
-from app.core import ratelimit
-from app.core.db import SessionLocal
-from app.main import app
+from collections.abc import Iterator  # noqa: E402
+
+import pytest  # noqa: E402
+from fastapi.testclient import TestClient  # noqa: E402
+from sqlalchemy import text  # noqa: E402
+from sqlalchemy.orm import Session  # noqa: E402
+
+from app.core import ratelimit  # noqa: E402
+from app.core.db import SessionLocal  # noqa: E402
+from app.main import app  # noqa: E402
 
 DEMO_PASSWORD = "Demo2026!"  # public demo password, synthetic users only
 
@@ -26,6 +34,18 @@ DEMO_USERS = {
     "cui-003@ejemplo.test": ("caregiver", "/mis-visitas"),
     "fam-0001@ejemplo.test": ("family", "/familia"),
 }
+
+
+@pytest.fixture(scope="session", autouse=True)
+def _only_the_test_database() -> None:
+    """Stop at once if the tests are not connected to the test database (never touch the demo data)."""
+    try:
+        with SessionLocal() as s:
+            name = s.scalar(text("SELECT current_database()"))
+    except Exception as exc:  # noqa: BLE001
+        pytest.exit(f"No hay base de pruebas '{TEST_DB}'. Créala con: python scripts/create_test_db.py ({exc.__class__.__name__})")
+    if name != TEST_DB:
+        pytest.exit(f"Las pruebas están conectadas a '{name}', no a '{TEST_DB}'. No se corre nada.")
 
 
 @pytest.fixture(autouse=True)

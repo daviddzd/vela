@@ -28,7 +28,8 @@ Guía completa: [`docs/00_preparar_laptop_y_github.md`](docs/00_preparar_laptop_
 cp .env.example .env            # cambia las contraseñas y JWT_SECRET
 docker compose up -d --build    # base de datos, migraciones, API, worker, web y proxy
 python scripts/verify_db.py      # comprueba conteos, traslapes y aislamiento entre instituciones
-docker compose exec api pytest -q   # pruebas de sesión y aislamiento entre instituciones
+python scripts/create_test_db.py    # una vez (y después de migraciones nuevas): base de pruebas vela_test
+docker compose exec api pytest -q   # las pruebas corren en vela_test, nunca en la base de la demo
 ```
 
 La aplicación queda en http://localhost:8080 (`/api` → API, `/ws` → WebSocket).

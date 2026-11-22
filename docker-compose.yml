@@ -20,12 +20,16 @@ x-backend: &backend
     CONFIG_DIR: /config
     REFERENCE_DIR: /data/reference
     SIM_RESULTS_DIR: /simulation/results
+    BUSINESS_DIR: /data/business
+    LEGAL_DIR: /docs/legal
     DISPATCH_POLICY: ${DISPATCH_POLICY:-risk_plus_live_traffic}
   volumes:
     - ./config:/config:ro                   # simulation.yaml (risk multipliers), emergency rules
     - ./data/reference:/data/reference:ro   # prevalence reference, district boundaries (Panorama-AM)
     - ./simulation/results:/simulation/results:ro   # SIRAG-D results shown in /simulacion
     - ./data/voice:/data/voice:ro                   # example phrases for the demo voice button
+    - ./data/business:/data/business:ro             # business assumptions with sources (/negocio)
+    - ./docs/legal:/docs/legal:ro                   # privacy notice shown in /privacidad
   extra_hosts:
     - "host.docker.internal:host-gateway"   # Ollama on Windows
   depends_on:

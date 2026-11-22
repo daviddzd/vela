@@ -84,6 +84,20 @@ export const api = {
   voiceCallMe: (patientId: string) =>
     request<any>("/api/voice/call-me", { method: "POST", body: JSON.stringify({ patient_id: patientId }) }),
   voiceReports: () => request<any[]>("/api/voice/reports"),
+  business: () => request<any>("/api/business"),
+  businessModel: (values: Record<string, unknown>) =>
+    request<any>("/api/business/model", { method: "POST", body: JSON.stringify({ values }) }),
+  privacyNotice: () => request<{ markdown: string; arco_days: number }>("/api/privacy/notice"),
+  consents: (q = "") => request<any>(`/api/privacy/consents${q ? `?q=${encodeURIComponent(q)}` : ""}`),
+  recordConsent: (body: Record<string, unknown>) =>
+    request<any>("/api/privacy/consents", { method: "POST", body: JSON.stringify(body) }),
+  revokeConsent: (id: string, reason: string) =>
+    request<any>(`/api/privacy/consents/${id}/revoke`, { method: "POST", body: JSON.stringify({ reason }) }),
+  arcoCreate: (body: Record<string, string>) => request<any>("/api/privacy/arco", { method: "POST", body: JSON.stringify(body) }),
+  arcoList: () => request<any[]>("/api/privacy/arco"),
+  audit: (params: Record<string, string>) =>
+    request<any>(`/api/privacy/audit?${new URLSearchParams(Object.entries(params).filter(([, v]) => v))}`),
+  auditSummary: () => request<any>("/api/privacy/audit/summary"),
   voiceReview: (id: string) => request<any>(`/api/voice/reports/${id}/review`, { method: "POST" }),
   demoScenario: (scenario: string) => request<unknown>("/api/demo/scenario", { method: "POST", body: JSON.stringify({ scenario }) }),
   demoUrgent: (institutionId: string) =>

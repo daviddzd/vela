@@ -17,6 +17,8 @@ const ContingencyPage = lazy(() => import("./pages/ContingencyPage").then((m) =>
 const VoicePage = lazy(() => import("./pages/VoicePage").then((m) => ({ default: m.VoicePage })));
 const VoiceReportsPage = lazy(() => import("./pages/VoiceReportsPage").then((m) => ({ default: m.VoiceReportsPage })));
 const DemoPage = lazy(() => import("./pages/DemoPage").then((m) => ({ default: m.DemoPage })));
+const BusinessPage = lazy(() => import("./pages/BusinessPage").then((m) => ({ default: m.BusinessPage })));
+const PrivacyPage = lazy(() => import("./pages/PrivacyPage").then((m) => ({ default: m.PrivacyPage })));
 const PanoramaPage = lazy(() => import("./pages/PanoramaPage").then((m) => ({ default: m.PanoramaPage })));
 
 // Screens already built; the rest show a placeholder until their step.
@@ -31,6 +33,8 @@ const BUILT: Record<string, ComponentType> = {
   "/demo": DemoPage,
   "/voz": VoicePage,
   "/reportes-voz": VoiceReportsPage,
+  "/negocio": BusinessPage,
+  "/privacidad": PrivacyPage,
 };
 
 // Every screen from the spec; each gets a placeholder until its module is built.
