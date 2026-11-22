@@ -99,3 +99,10 @@ def test_ws_route_answers():
     from app.main import app
     with TestClient(app).websocket_connect("/ws/ping") as ws:
         assert ws.receive_json() == {"type": "pong"}
+
+
+def test_audit_log_stays_append_only_for_the_api_role():
+    with tenant_session(None) as s:
+        can_update = s.scalar(text("SELECT has_table_privilege('vela_api', 'audit_log', 'UPDATE')"))
+        can_delete = s.scalar(text("SELECT has_table_privilege('vela_api', 'audit_log', 'DELETE')"))
+    assert not can_update and not can_delete

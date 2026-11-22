@@ -238,15 +238,21 @@ def air(user: CurrentUser = Depends(VIEWERS), db: Session = Depends(tenant_db), 
     last = db.scalar(text(f"SELECT max((measured_at AT TIME ZONE '{TZ}')::date) FROM air_quality_readings"))
     end = end or last
     start = start or end - timedelta(days=6)
+    # Live view: calibrated history, with an ACTIVE demo scenario in front (marked so the chart can label it).
     rows = db.execute(text(f"""
-        SELECT measured_at, o3_ppb::float, round(pm25_24h_avg::numeric, 1)::float AS pm25_24h
-        FROM v_air_quality_24h
-        WHERE station_id = :s AND (measured_at AT TIME ZONE '{TZ}')::date BETWEEN :from AND :to
+        SELECT measured_at, o3_ppb, pm25_24h, scenario FROM (
+          SELECT measured_at, o3_ppb::float,
+                 round(avg(pm25_ugm3) OVER (ORDER BY measured_at RANGE BETWEEN interval '23 hours' PRECEDING AND CURRENT ROW)::numeric, 1)::float AS pm25_24h,
+                 source = 'scenario' AS scenario
+          FROM v_air_quality_live WHERE station_id = :s
+            AND (measured_at AT TIME ZONE '{TZ}')::date BETWEEN :from - 1 AND :to) x
+        WHERE (measured_at AT TIME ZONE '{TZ}')::date BETWEEN :from AND :to
         ORDER BY measured_at"""), {"s": chosen, "from": start, "to": end}).mappings().all()
     return {"station": chosen, "stations": [dict(s) for s in stations], "from": start.isoformat(),
             "to": end.isoformat(), "data_until": last.isoformat() if last else None,
             "thresholds": contingency_thresholds(),
-            "series": [{"t": r["measured_at"].isoformat(), "o3": r["o3_ppb"], "pm25_24h": r["pm25_24h"]} for r in rows],
+            "series": [{"t": r["measured_at"].isoformat(), "o3": r["o3_ppb"], "pm25_24h": r["pm25_24h"],
+                        "scenario": r["scenario"]} for r in rows],
             "max_o3": max((r["o3_ppb"] for r in rows if r["o3_ppb"] is not None), default=None),
             "max_pm25_24h": max((r["pm25_24h"] for r in rows if r["pm25_24h"] is not None), default=None)}
 

@@ -38,6 +38,8 @@ export function FamilyPage() {
       <div className="mt-4 grid gap-4 lg:grid-cols-2">
         {error && <div className="lg:col-span-2"><Notice kind="error">{error}</Notice></div>}
         {notice && <div className="lg:col-span-2"><Notice kind="ok">{notice}</Notice></div>}
+        {data?.notices.map((n) => (
+          <div key={n.created_at} className="lg:col-span-2"><Notice kind="info">{n.message}</Notice></div>))}
 
         <Card>
           <h2>{es.family.nextVisit}</h2>

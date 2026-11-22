@@ -35,7 +35,11 @@ def overview(user: CurrentUser = Depends(require_role(FAMILY)), db: Session = De
         where="AND r.status = 'completed' AND NOT a.family_confirmed", order="r.scheduled_for DESC", limit=5)),
         {"p": p}).mappings().all()
     recent = db.execute(text(VISIT_SQL.format(where="", order="r.created_at DESC", limit=5)), {"p": p}).mappings().all()
+    notices = db.execute(text("""SELECT message, created_at FROM family_notices WHERE patient_id = :p
+                                 AND created_at > now() - interval '3 days' ORDER BY created_at DESC LIMIT 3"""),
+                         {"p": p}).mappings().all()
     return {**info, "home_care_consent": ops.has_valid_consent(db, p, "home_care"),
+            "notices": [dict(n) for n in notices],
             "next_visit": dict(upcoming[0]) if upcoming else None,
             "upcoming": [dict(r) for r in upcoming], "to_confirm": [dict(r) for r in to_confirm],
             "recent_requests": [dict(r) for r in recent]}

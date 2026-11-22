@@ -108,6 +108,8 @@ def load_caregivers(db: Session, institution_id: str, around: datetime) -> list[
                array_agg(DISTINCT k.skill) AS skills
         FROM caregivers c JOIN caregiver_skills k USING (caregiver_id)
         WHERE c.institution_id = :inst AND c.active
+          AND NOT EXISTS (SELECT 1 FROM caregiver_unavailability u WHERE u.caregiver_id = c.caregiver_id AND u.active
+                          AND u.starts_at <= now() AND (u.ends_at IS NULL OR u.ends_at > now()))
         GROUP BY c.caregiver_id"""), {"inst": institution_id}).all()
     busy_rows = db.execute(text("""
         SELECT caregiver_id, planned_start, planned_end FROM assignments
@@ -141,7 +143,66 @@ def options_for(db: Session, request_id: str) -> list[dsp.Option]:
     req = load_request(db, request_id)
     inst = db.scalar(text("SELECT institution_id FROM service_requests WHERE request_id = :id"), {"id": request_id})
     pool = dsp.apply_holds(load_caregivers(db, inst, req.scheduled_for), load_holds(db, inst), now(), request_id)
-    return dsp.earliest_options(req, pool, load_traffic(db), policy(), now(), req.scheduled_for + late_tolerance())
+    factor, extra = traffic_effects(db, [req])
+    return dsp.earliest_options(req, pool, load_traffic(db), policy(), now(), req.scheduled_for + late_tolerance(),
+                                factor, extra.get(req.request_id))
+
+
+def traffic_effects(db: Session, requests: list[dsp.Request]):
+    """Current traffic condition (input data: a real roadblock or a demo scenario) as the dispatcher's
+    extra_traffic_factor and per-request extra minutes for trips that start or end in a blocked district."""
+    row = db.execute(text("""SELECT extra_factor::float AS f, blocked_districts AS b, extra_minutes AS m
+                             FROM traffic_conditions WHERE active ORDER BY started_at DESC LIMIT 1""")).first()
+    if row is None:
+        return 1.0, {}
+    blocked = set(row.b)
+    centroids = {d: (float(la), float(lo)) for d, la, lo in db.execute(text("SELECT district_id, lat, lon FROM districts")).all()}
+
+    def district_of(lat: float, lon: float) -> str:      # ASSUMPTION: nearest district centroid
+        return min(centroids, key=lambda d: dsp.haversine_km(lat, lon, *centroids[d]))
+
+    extra = {}
+    for r in requests:
+        patient_blocked = district_of(r.lat, r.lon) in blocked
+        extra[r.request_id] = (lambda cg, pb=patient_blocked:
+                               row.m if (pb or district_of(cg.lat, cg.lon) in blocked) else 0.0)
+    return row.f, extra
+
+
+def effective_priority(db: Session, patient_id: str, base: str) -> str:
+    """Base priority, or 'high' while an APPROVED contingency override is active (base is never modified)."""
+    raised = db.scalar(text("SELECT 1 FROM priority_overrides WHERE patient_id = :p AND active LIMIT 1"), {"p": patient_id})
+    return "high" if raised else base
+
+
+def caregiver_out_of_service(db: Session, *, caregiver_id: str, reason: str, origin: str, user_id: str | None,
+                             run_id: str | None = None) -> dict:
+    """Mark a caregiver unavailable and re-dispatch their pending visits with the SAME logic: low/medium are
+    reassigned at once; high get proposals (approval, time limit). Coordination gets an alert."""
+    inst = db.scalar(text("SELECT institution_id FROM caregivers WHERE caregiver_id = :c"), {"c": caregiver_id})
+    db.execute(text("""INSERT INTO caregiver_unavailability (caregiver_id, institution_id, reason, origin, run_id)
+                       VALUES (:c, :i, :r, :o, :run)"""), {"c": caregiver_id, "i": inst, "r": reason, "o": origin, "run": run_id})
+    pending = db.execute(text("""
+        UPDATE assignments SET status = 'cancelled'
+        WHERE caregiver_id = :c AND status = 'active' AND arrived_at IS NULL AND planned_end > now()
+        RETURNING request_id"""), {"c": caregiver_id}).scalars().all()
+    for rid in pending:
+        set_status(db, rid, "queued", "caregiver_unavailable")
+        db.execute(text("UPDATE assignment_proposals SET status = 'superseded' WHERE request_id = :r AND status = 'open'"),
+                   {"r": rid})
+    dispatch_requests(db, inst, list(pending))
+    result = dict(db.execute(text("""SELECT status, count(*) FROM service_requests WHERE request_id = ANY(:ids)
+                                     GROUP BY 1"""), {"ids": list(pending)}).all()) if pending else {}
+    name = db.scalar(text("SELECT first_name || ' ' || paternal_surname FROM caregivers WHERE caregiver_id = :c"), {"c": caregiver_id})
+    alert_id = db.scalar(text("""INSERT INTO alerts (institution_id, type, level, message, code)
+                                 VALUES (:i, 'anomaly', 'high', :m, NULL) RETURNING alert_id"""),
+                         {"i": inst, "m": f"{name} quedó fuera de servicio. {len(pending)} visita(s) pendiente(s): "
+                                          f"{result.get('assigned', 0)} reasignada(s) y {result.get('queued', 0)} en espera "
+                                          "(las de prioridad alta, en Aprobaciones)."})
+    publish(db, "alert.created", inst, alert_id=alert_id)
+    audit(db, user_id=user_id, institution_id=inst, action="caregiver_out_of_service", entity="caregiver",
+          entity_id=caregiver_id, detail={"reason": reason, "origin": origin, "pending": len(pending), "result": result})
+    return {"caregiver_id": caregiver_id, "institution_id": inst, "pending": len(pending), "result": result}
 
 
 def duty_coordinator(db: Session, institution_id: str) -> str:
@@ -230,7 +291,8 @@ def dispatch_requests(db: Session, institution_id: str, request_ids: list[str]) 
                                  load_holds(db, institution_id), now())
     # Same function as SIRAG-D: earliest arrival from the requested time up to the late tolerance.
     latest = {r.request_id: r.scheduled_for + late_tolerance() for r in requests}
-    decisions = dsp.dispatch_window(requests, caregivers, load_traffic(db), policy(), now(), latest)
+    factor, extra = traffic_effects(db, requests)
+    decisions = dsp.dispatch_window(requests, caregivers, load_traffic(db), policy(), now(), latest, factor, extra)
     for d in decisions:
         rid = d.request.request_id
         if d.request.priority in AUTO_PRIORITIES:

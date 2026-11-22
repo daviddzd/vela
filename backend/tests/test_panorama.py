@@ -84,7 +84,9 @@ def test_air_thresholds_come_from_the_yaml(client):
     login(client, "coordinacion.a@ejemplo.test")
     air = client.get("/api/panorama/air", params={"station": "SAC"}).json()
     assert air["thresholds"] == {"o3_ppb_1h": 155, "pm25_ugm3_24h": 97.5, "watch_fraction": 0.85}
-    assert air["station"] == "SAC" and len(air["series"]) == 7 * 24
+    # 7 days ending with today: today is filled live by the worker only up to the current hour
+    assert air["station"] == "SAC" and 6 * 24 < len(air["series"]) <= 7 * 24
+    assert all(p["scenario"] is False for p in air["series"])          # no demo scenario active in this test
 
 
 def test_traffic_peak(client):

@@ -33,7 +33,9 @@ def sql(query: str, api_role: bool = False) -> str:
 # Operational tables keep growing while the app runs (requests from care plans, families, ...).
 # For them we check the SEED rows exactly (their ids come before the sequences of migration 0002)
 # and report the rows created in operation separately.
-SEED_ONLY = {"service_requests": "request_id <= 'REQ-02864'", "assignments": "assignment_id <= 'ASG-02597'"}
+SEED_ONLY = {"service_requests": "request_id <= 'REQ-02864'", "assignments": "assignment_id <= 'ASG-02597'",
+             # the seed has 30 days of hourly readings; the worker adds live ones after them (rebase-safe window)
+             "air_quality_readings": "measured_at < (SELECT min(measured_at) FROM air_quality_readings) + interval '30 days'"}
 
 
 def main() -> None:
@@ -46,7 +48,7 @@ def main() -> None:
         extra = ""
         if table in SEED_ONLY:
             live = int(sql(f"SELECT count(*) FROM {table} WHERE NOT ({SEED_ONLY[table]})"))
-            extra = f"  + {live} creadas en operación"
+            extra = f"  + {live} creadas en operación" if table != "air_quality_readings" else f"  + {live} lecturas en vivo"
         print(f"{flag:5} {table:24} {got:>6} (esperado {n}){extra}")
     overlaps = int(sql(OVERLAPS))
     print(f"{'ok' if overlaps == 0 else 'FALLA':5} traslapes de cuidadores: {overlaps}")

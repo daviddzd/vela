@@ -31,7 +31,7 @@ from app.core.roles import OWNER
 
 CHANNEL = "vela_events"
 EVENT_TYPES = ("request.created", "request.updated", "assignment.proposed", "assignment.approved",
-               "visit.arrived", "visit.finished", "alert.created")
+               "visit.arrived", "visit.finished", "alert.created", "contingency.changed")
 HEALTH_CHECK_SECONDS = 15      # how often the listener checks its connection is alive
 RECONNECT_SECONDS = 2
 log = logging.getLogger("vela.events")
@@ -52,7 +52,10 @@ class Client:
     institution_id: str | None
 
     def wants(self, event: dict) -> bool:
-        return self.role == OWNER or event.get("institution_id") == self.institution_id
+        """Owner: everything. Others: their institution, plus platform-wide events (institution_id None,
+        e.g. a contingency opening), which carry no personal data."""
+        inst = event.get("institution_id")
+        return self.role == OWNER or inst is None or inst == self.institution_id
 
 
 class Hub:

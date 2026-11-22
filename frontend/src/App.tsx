@@ -13,6 +13,8 @@ import { PlaceholderPage } from "./pages/PlaceholderPage";
 
 // ECharts is large: the Panorama-AM screen is loaded only when someone opens it.
 const SimulationPage = lazy(() => import("./pages/SimulationPage").then((m) => ({ default: m.SimulationPage })));
+const ContingencyPage = lazy(() => import("./pages/ContingencyPage").then((m) => ({ default: m.ContingencyPage })));
+const DemoPage = lazy(() => import("./pages/DemoPage").then((m) => ({ default: m.DemoPage })));
 const PanoramaPage = lazy(() => import("./pages/PanoramaPage").then((m) => ({ default: m.PanoramaPage })));
 
 // Screens already built; the rest show a placeholder until their step.
@@ -23,6 +25,8 @@ const BUILT: Record<string, ComponentType> = {
   "/familia": FamilyPage,
   "/panorama": PanoramaPage,
   "/simulacion": SimulationPage,
+  "/contingencia": ContingencyPage,
+  "/demo": DemoPage,
 };
 
 // Every screen from the spec; each gets a placeholder until its module is built.
