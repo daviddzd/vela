@@ -60,9 +60,7 @@ def require_role(*roles: str):
 
 def tenant_db(user: CurrentUser = Depends(current_user)) -> Iterator[Session]:
     """One transaction per request, scoped with SET LOCAL app.institution_id to the user's institution.
-
-    TODO(step 3): physicians and caregivers currently see their whole institution. In step 3 they must
-    only see their own patients and visits (filter by users.caregiver_id → assignments/care team).
-    """
+    Narrower role scopes (physician → own patients, caregiver → own visits, family → own patient)
+    are applied on top of this in app/core/guards.py."""
     with tenant_session(user.tenant) as session:
         yield session

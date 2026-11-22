@@ -12,6 +12,7 @@ def audit(session: Session, *, user_id: str | None, institution_id: str | None, 
     """Add an audit row to the caller's transaction (saved only if that transaction commits)."""
     session.add(AuditLog(user_id=user_id, institution_id=institution_id, action=action, entity=entity,
                          entity_id=entity_id, allowed=allowed, detail=detail))
+    session.flush()   # write it now, so the trail keeps the real order of events
 
 
 def audit_now(**kwargs) -> None:

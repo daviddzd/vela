@@ -16,6 +16,10 @@ x-backend: &backend
     TZ: America/Mexico_City
     OLLAMA_URL: ${OLLAMA_URL}
     OLLAMA_MODEL: ${OLLAMA_MODEL}
+    CONFIG_DIR: /config
+    DISPATCH_POLICY: ${DISPATCH_POLICY:-risk_plus_live_traffic}
+  volumes:
+    - ./config:/config:ro                   # simulation.yaml (risk multipliers), emergency rules
   extra_hosts:
     - "host.docker.internal:host-gateway"   # Ollama on Windows
   depends_on:
