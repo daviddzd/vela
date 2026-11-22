@@ -8,13 +8,15 @@ import { useAuth } from "../auth/AuthContext";
 import { es } from "../i18n/es";
 import { Icon } from "./icons";
 
-export function AppShell({ children }: { children: ReactNode }) {
+// `bare`: presentation mode, only the page content (no navigation, no footer).
+export function AppShell({ children, bare = false }: { children: ReactNode; bare?: boolean }) {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [open, setOpen] = useState(false);
   useEffect(() => setOpen(false), [location.pathname]);       // close the menu after choosing a screen
   if (!user) return null;
+  if (bare) return <main className="mx-auto max-w-[1880px] px-6 py-6">{children}</main>;
 
   const onLogout = async () => {
     await logout();

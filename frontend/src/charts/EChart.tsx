@@ -1,5 +1,5 @@
 // Minimal ECharts wrapper (tree-shaken: only the chart types we use are bundled).
-import { BarChart, HeatmapChart, LineChart, MapChart, ScatterChart } from "echarts/charts";
+import { BarChart, CustomChart, HeatmapChart, LineChart, MapChart, ScatterChart } from "echarts/charts";
 import {
   GeoComponent, GridComponent, LegendComponent, MarkLineComponent, TooltipComponent, VisualMapComponent,
 } from "echarts/components";
@@ -7,7 +7,7 @@ import * as echarts from "echarts/core";
 import { CanvasRenderer } from "echarts/renderers";
 import { useEffect, useRef } from "react";
 
-echarts.use([BarChart, LineChart, HeatmapChart, MapChart, ScatterChart, GridComponent, TooltipComponent,
+echarts.use([BarChart, CustomChart, LineChart, HeatmapChart, MapChart, ScatterChart, GridComponent, TooltipComponent,
   LegendComponent, MarkLineComponent, VisualMapComponent, GeoComponent, CanvasRenderer]);
 
 export { echarts };

@@ -1,0 +1,57 @@
+"""Metrics of one replication (docs/spec/06 + config/simulation.yaml)."""
+from __future__ import annotations
+
+import numpy as np
+
+from simulation.sirag.model import Model
+
+LONG_SERVICES = ("SRV-03", "SRV-04", "SRV-06", "SRV-07")
+AFFECTED = {"09005", "09006", "09007", "09011", "09017"}   # districts of stations with their own PM2.5 target
+
+
+def summarize(model: Model, requests) -> dict:
+    w, prm = model.world, model.params
+    total = len(requests)
+    short = [r for r in requests if r.service_id not in LONG_SERVICES]
+    attended = [r for r in requests if not r.unattended]
+    high = [r for r in attended if r.priority == "high"]
+    waits = np.array([(r.assigned["arrival"] - r.requested).total_seconds() / 60 for r in high]) if high else np.array([])
+    crises = [r for r in requests if r.kind == "crisis"]
+    crisis_ok = [r for r in crises if not r.unattended
+                 and (r.assigned["arrival"] - r.requested).total_seconds() / 60 <= 60]
+    cresp = [(r.assigned["arrival"] - r.requested).total_seconds() / 60 for r in crises if not r.unattended]
+    work_min = sum((r.assigned["planned_end"] - r.assigned["planned_start"]).total_seconds() / 60 for r in attended)
+    shift_min = sum(w.shift_minutes_per_day[c.caregiver_id] for pool in w.caregivers.values() for c in pool) * prm.days
+
+    out = {
+        "policy": prm.policy, "scenario": prm.scenario, "replication": prm.replication,
+        "requests": total, "crises": len(crises),
+        "high_wait_mean_min": float(waits.mean()) if waits.size else np.nan,
+        "high_wait_p90_min": float(np.percentile(waits, 90)) if waits.size else np.nan,
+        "crisis_under_60_pct": 100 * len(crisis_ok) / len(crises) if crises else np.nan,
+        "crisis_response_mean_min": float(np.mean(cresp)) if cresp else np.nan,
+        "crisis_response_p90_min": float(np.percentile(cresp, 90)) if cresp else np.nan,
+        "unattended_pct": 100 * sum(r.unattended for r in requests) / total if total else np.nan,
+        "travel_km": sum(r.assigned["km"] for r in attended),
+        "utilization_pct": 100 * work_min / shift_min,
+        "overtime_hours": sum(r.assigned["overtime_min"] for r in attended) / 60,
+        # for the validation: without the 8 h / 12 h shift services (see docs/dev/sirag_d_modelo.md)
+        "unattended_short_pct": 100 * sum(r.unattended for r in short) / len(short) if short else np.nan,
+        "at_risk_entries": model.at_risk_entries,
+    }
+    # The contingency where it happens: only inside the 24 h window and the affected districts.
+    # Computed for every scenario (in "normal" it is the same window with ordinary air) for comparison.
+    lo, hi = model.window
+    inside = [r for r in requests if lo <= r.requested < hi and r.district_id in AFFECTED]
+    in_crises = [r for r in inside if r.kind == "crisis"]
+    in_high = [r for r in inside if r.priority == "high" and not r.unattended]
+    in_waits = [(r.assigned["arrival"] - r.requested).total_seconds() / 60 for r in in_high]
+    out.update({
+        "win_requests": len(inside), "win_crises": len(in_crises), "win_at_risk_entries": model.at_risk_entries_window,
+        "win_crisis_under_60_pct": 100 * sum(1 for r in in_crises if not r.unattended and
+                                             (r.assigned["arrival"] - r.requested).total_seconds() / 60 <= 60)
+                                   / len(in_crises) if in_crises else np.nan,
+        "win_high_wait_mean_min": float(np.mean(in_waits)) if in_waits else np.nan,
+        "win_unattended_pct": 100 * sum(r.unattended for r in inside) / len(inside) if inside else np.nan,
+    })
+    return out

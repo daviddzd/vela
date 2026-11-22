@@ -167,12 +167,14 @@ def test_board_snapshot_is_scoped_to_the_institution(tx_client, db_conn):
 
 def test_planned_visit_is_deterministic_and_matches_frequency():
     day = date(2026, 12, 1)
-    assert planned_visit("CP-1", day, 3.5, "day") == planned_visit("CP-1", day, 3.5, "day")
+    assert planned_visit("CP-1", day, 3.5, "SRV-02") == planned_visit("CP-1", day, 3.5, "SRV-02")
     days = [day + timedelta(days=i) for i in range(700)]
-    visits = [planned_visit("CP-1", d, 3.5, "day") for d in days]
+    visits = [planned_visit("CP-1", d, 3.5, "SRV-02") for d in days]
     assert 300 < sum(v is not None for v in visits) < 400               # ≈ 350 = 3.5/7 × 700
     hours = {v.hour for v in visits if v}
     assert min(hours) >= 8 and max(hours) < 18                          # inside visiting hours
+    long_shift = {planned_visit("CP-2", d, 7, "SRV-06").hour for d in days[:30]}
+    assert long_shift == {8}                                            # 8-h shifts start at 08:00 (seed rule)
 
 
 def test_care_plan_requests_are_created_once(db_conn):

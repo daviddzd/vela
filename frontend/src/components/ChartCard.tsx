@@ -8,7 +8,7 @@ export function ChartCard({ question, keyValue, keyLabel, children, source, tabl
   table?: { columns: string[]; rows: (string | number | null)[][] }; note?: ReactNode; className?: string;
 }) {
   return (
-    <section className={`flex h-full flex-col rounded-card border border-teal/20 bg-white p-4 sm:p-5 ${className}`}>
+    <section className={`flex flex-1 flex-col rounded-card border border-teal/20 bg-white p-4 sm:p-5 ${className}`}>
       <h2 className="text-teal">{question}</h2>
       {keyValue !== undefined && (
         <p className="mt-1"><span className="figure text-4xl">{keyValue}</span>

@@ -1,0 +1,4 @@
+scenario,at_risk_entries,win_at_risk_entries,crises,win_crises
+contingency_east,1439,145,186,21
+contingency_east_roadblocks,1439,145,186,21
+normal,1429,136,186,21

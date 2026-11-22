@@ -19,10 +19,11 @@ def tick() -> None:
     with tenant_session(ALL_INSTITUTIONS) as db:
         planned = care_plans.create_due_requests(db)
         retried = queue.process_queue(db)
+        by_timeout = queue.auto_apply_urgent(db)
         queue.create_alerts(db)
         unattended = queue.mark_unattended(db)
     print(f"worker tick {datetime.now(MEXICO_CITY):%Y-%m-%d %H:%M:%S %Z} "
-          f"care_plan={len(planned)} queue={retried} unattended={unattended}", flush=True)
+          f"care_plan={len(planned)} queue={retried} timeout={len(by_timeout)} unattended={unattended}", flush=True)
 
 
 def main() -> None:

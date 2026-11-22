@@ -7,6 +7,9 @@ import { axisCommon, baseOption, chart } from "../../charts/theme";
 import { ChartCard } from "../../components/ChartCard";
 import { ChartLegend } from "../../charts/ChartLegend";
 import { AlertTriangle, Ban, CheckCircle2, FlaskConical, Icon } from "../../components/icons";
+import { CIChart } from "../../charts/CIChart";
+import { Link } from "react-router";
+import { ciRows, conclusion, fmt, OPERATING, pick, type Results } from "../simulation/data";
 import { Notice, inputClass } from "../../components/ui";
 import { es } from "../../i18n/es";
 import { dayHour, num, pct } from "./format";
@@ -223,11 +226,7 @@ export function PanoramaView({ filters }: { filters: Filters }) {
         {trafficOption && <EChart option={trafficOption} height={220} label={t.trafficQ} />}
       </ChartCard>
 
-      <ChartCard question={t.simQ} source={t.simSource}>
-        <div className="flex min-h-40 items-center justify-center rounded-card border-2 border-dashed border-teal/30 p-6 text-center text-muted">
-          <p><Icon as={FlaskConical} /> {t.simPending}</p>
-        </div>
-      </ChartCard>
+      <SimulationCard />
     </div>
   );
 }
@@ -244,5 +243,28 @@ function MapLegend({ title, pieces }: { title: string; pieces: { color: string; 
         ))}
       </ul>
     </div>
+  );
+}
+
+// "¿Qué política conviene?": SIRAG-D results (step 6), compact. Full detail in /simulacion.
+function SimulationCard() {
+  const [r, setR] = useState<Results | null>(null);
+  useEffect(() => { api.simulation().then((x) => setR(x as Results)).catch(() => undefined); }, []);
+  const available = r?.available;
+  return (
+    <ChartCard question={t.simQ} source={es.sim.source}
+      keyValue={available ? fmt(pick(r!.summary, "normal", OPERATING, "high_wait_p90_min")?.mean) : undefined}
+      keyLabel={available ? es.sim.panoramaKey : undefined}>
+      {!available ? (
+        <div className="flex min-h-40 items-center justify-center rounded-card border-2 border-dashed border-teal/30 p-6 text-center text-muted">
+          <p><Icon as={FlaskConical} /> {t.simPending}</p>
+        </div>
+      ) : (<>
+        <p className="font-bold">{es.sim.metrics.high_wait_p90_min.label} · {es.sim.scenarios.normal}</p>
+        <CIChart rows={ciRows(r!.summary, "normal", "high_wait_p90_min")} unit="min" title={es.sim.metrics.high_wait_p90_min.label} />
+        <p className="mt-2">{conclusion(r!)[0]}</p>
+        <Link to="/simulacion" className="mt-2 inline-flex min-h-12 items-center font-bold text-teal underline">{es.sim.panoramaLink}</Link>
+      </>)}
+    </ChartCard>
   );
 }

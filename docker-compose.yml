@@ -18,10 +18,12 @@ x-backend: &backend
     OLLAMA_MODEL: ${OLLAMA_MODEL}
     CONFIG_DIR: /config
     REFERENCE_DIR: /data/reference
+    SIM_RESULTS_DIR: /simulation/results
     DISPATCH_POLICY: ${DISPATCH_POLICY:-risk_plus_live_traffic}
   volumes:
     - ./config:/config:ro                   # simulation.yaml (risk multipliers), emergency rules
     - ./data/reference:/data/reference:ro   # prevalence reference, district boundaries (Panorama-AM)
+    - ./simulation/results:/simulation/results:ro   # SIRAG-D results shown in /simulacion
   extra_hosts:
     - "host.docker.internal:host-gateway"   # Ollama on Windows
   depends_on:
@@ -74,6 +76,15 @@ services:
   web:
     build: ./frontend
     restart: unless-stopped
+
+  # SIRAG-D (offline). Not started by `up`: run with  docker compose run --rm sim
+  sim:
+    build: ./simulation
+    profiles: ["tools"]
+    volumes:
+      - ./:/repo
+    environment:
+      TZ: America/Mexico_City
 
   proxy:
     image: caddy:2

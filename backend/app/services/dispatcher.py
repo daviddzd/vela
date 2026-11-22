@@ -20,6 +20,7 @@ the shift, and no overlap with the caregiver's other visits including the travel
 from __future__ import annotations
 
 import math
+from collections.abc import Callable
 from dataclasses import dataclass, field, replace
 from datetime import datetime, time, timedelta
 from zoneinfo import ZoneInfo
@@ -80,6 +81,7 @@ class Option:
     planned_start: datetime              # departure = scheduled_for - travel
     planned_end: datetime                # scheduled_for + duration
     load_min: float                      # minutes already booked that day (tie-breaker)
+    arrival: datetime | None = None      # when the caregiver arrives (= the scheduled_for that was tried)
 
 
 @dataclass
@@ -165,8 +167,12 @@ def order_queue(requests: list[Request], policy: str, now: datetime) -> list[Req
 
 
 def rank_candidates(request: Request, caregivers: list[Caregiver], traffic: TrafficProfile,
-                    policy: str = DEFAULT_POLICY, extra_traffic_factor: float = 1.0) -> list[Option]:
-    """Every feasible caregiver for one request, best first according to the policy."""
+                    policy: str = DEFAULT_POLICY, extra_traffic_factor: float = 1.0,
+                    extra_minutes: Callable[[Caregiver], float] | None = None) -> list[Option]:
+    """Every feasible caregiver for one request, best first according to the policy.
+
+    extra_minutes (optional, used by SIRAG-D's roadblock scenario): fixed minutes added to the trip of a
+    given caregiver, e.g. +15 min when the trip crosses a blocked district. The operation never passes it."""
     _check(policy)
     visit_end = request.scheduled_for + timedelta(minutes=request.duration_min)
     options: list[Option] = []
@@ -177,11 +183,14 @@ def rank_candidates(request: Request, caregivers: list[Caregiver], traffic: Traf
             continue
         km = haversine_km(cg.lat, cg.lon, request.lat, request.lon)
         minutes = trip_minutes(km, request.scheduled_for, traffic, extra_traffic_factor)
+        if extra_minutes is not None:
+            minutes += extra_minutes(cg)
         depart = request.scheduled_for - timedelta(minutes=minutes)
         if overlaps(depart, visit_end, cg.busy):
             continue
         options.append(Option(cg.caregiver_id, round(km, 2), round(minutes, 1), depart, visit_end,
-                              booked_minutes_on(cg, request.scheduled_for.astimezone(MEXICO_CITY).date())))
+                              booked_minutes_on(cg, request.scheduled_for.astimezone(MEXICO_CITY).date()),
+                              request.scheduled_for))
     if policy == "risk_plus_live_traffic":
         key = lambda o: (o.travel_min, o.load_min, o.caregiver_id)  # noqa: E731
     else:
@@ -199,6 +208,76 @@ def dispatch(requests: list[Request], caregivers: list[Caregiver], traffic: Traf
     decisions = []
     for req in order_queue(requests, policy, now):
         options = rank_candidates(req, list(pool.values()), traffic, policy, extra_traffic_factor)
+        decision = Decision(req, options)
+        if decision.chosen:
+            cg = pool[decision.chosen.caregiver_id]
+            pool[cg.caregiver_id] = replace(cg, busy=cg.busy + ((decision.chosen.planned_start,
+                                                                 decision.chosen.planned_end),))
+        decisions.append(decision)
+    return decisions
+
+
+@dataclass(frozen=True)
+class Hold:
+    """Reservation of the proposed caregiver's window while a HIGH-priority request waits for approval.
+    Other requests cannot take that window until `expires` (approval.hold_minutes after the proposal)."""
+    request_id: str
+    caregiver_id: str
+    start: datetime
+    end: datetime
+    expires: datetime
+
+
+def apply_holds(caregivers: list[Caregiver], holds: list[Hold], now: datetime,
+                except_request: str | None = None) -> list[Caregiver]:
+    """Caregivers with the active reservations added to their busy windows. The request that owns a
+    reservation (except_request) can still use it. Used by the operation's worker AND by SIRAG-D."""
+    by_cg: dict[str, list[tuple[datetime, datetime]]] = {}
+    for h in holds:
+        if h.expires > now and h.request_id != except_request:
+            by_cg.setdefault(h.caregiver_id, []).append((h.start, h.end))
+    return [replace(c, busy=c.busy + tuple(by_cg[c.caregiver_id])) if c.caregiver_id in by_cg else c
+            for c in caregivers]
+
+
+def arrival_times(requested: datetime, now: datetime, latest: datetime, step_min: int = 5):
+    """Arrival times to try, earliest first: the requested time if it is still ahead, then every `step_min`
+    minutes (on the clock grid) until `latest`. A request "as soon as possible" passes requested <= now."""
+    if requested >= now:
+        yield requested
+    minute = (max(requested, now) - datetime(2000, 1, 1, tzinfo=MEXICO_CITY)).total_seconds() / 60
+    t = datetime(2000, 1, 1, tzinfo=MEXICO_CITY) + timedelta(minutes=-(-minute // step_min) * step_min)
+    if t == requested:
+        t += timedelta(minutes=step_min)
+    while t <= latest:
+        yield t
+        t += timedelta(minutes=step_min)
+
+
+def earliest_options(request: Request, caregivers: list[Caregiver], traffic: TrafficProfile, policy: str,
+                     now: datetime, latest: datetime, extra_traffic_factor: float = 1.0,
+                     extra_minutes: Callable[[Caregiver], float] | None = None) -> list[Option]:
+    """Ranked options at the EARLIEST arrival time (requested time first, then later, up to `latest`) at which
+    someone can still leave on time (departure >= now). Used by the operation's worker (late tolerance) and by
+    SIRAG-D, so both decide in exactly the same way. Empty list = nobody until `latest`."""
+    for t in arrival_times(request.scheduled_for, now, latest):
+        options = [o for o in rank_candidates(replace(request, scheduled_for=t), caregivers, traffic, policy,
+                                              extra_traffic_factor, extra_minutes) if o.planned_start >= now]
+        if options:
+            return options
+    return []
+
+
+def dispatch_window(requests: list[Request], caregivers: list[Caregiver], traffic: TrafficProfile, policy: str,
+                    now: datetime, latest: dict[str, datetime], extra_traffic_factor: float = 1.0,
+                    extra_minutes: dict[str, Callable[[Caregiver], float]] | None = None) -> list[Decision]:
+    """Like dispatch(), but each request may arrive late up to latest[request_id] (late tolerance).
+    Each choice books the window before the next request is considered: a batch never overlaps."""
+    pool = {cg.caregiver_id: cg for cg in caregivers}
+    decisions = []
+    for req in order_queue(requests, policy, now):
+        options = earliest_options(req, list(pool.values()), traffic, policy, now, latest[req.request_id],
+                                   extra_traffic_factor, (extra_minutes or {}).get(req.request_id))
         decision = Decision(req, options)
         if decision.chosen:
             cg = pool[decision.chosen.caregiver_id]

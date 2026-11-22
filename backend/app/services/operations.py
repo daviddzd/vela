@@ -51,10 +51,18 @@ def config_dir() -> Path:
     return Path(os.environ.get("CONFIG_DIR", Path(__file__).resolve().parents[3] / "config"))
 
 
-@lru_cache
 def risk_multipliers() -> dict[str, float]:
-    data = yaml.safe_load((config_dir() / "simulation.yaml").read_text(encoding="utf-8"))
-    return data["health_markov"]["risk_multipliers"]
+    return settings_yaml()["health_markov"]["risk_multipliers"]
+
+
+@lru_cache
+def settings_yaml() -> dict:
+    return yaml.safe_load((config_dir() / "simulation.yaml").read_text(encoding="utf-8"))
+
+
+def late_tolerance() -> timedelta:
+    """A visit may start up to this much after the requested time (same value as SIRAG-D)."""
+    return timedelta(minutes=settings_yaml()["dispatch"]["late_tolerance_minutes"])
 
 
 def policy() -> str:
@@ -114,10 +122,26 @@ def load_caregivers(db: Session, institution_id: str, around: datetime) -> list[
             for r in rows]
 
 
+def load_holds(db: Session, institution_id: str) -> list[dsp.Hold]:
+    """Active reservations: the rank-1 proposal of each high-priority request still waiting for approval,
+    for approval.hold_minutes after it was proposed (shared rule with SIRAG-D: dispatcher.apply_holds)."""
+    minutes = settings_yaml()["approval"]["hold_minutes"]
+    rows = db.execute(text("""
+        SELECT p.request_id, p.caregiver_id, p.planned_start, p.planned_end,
+               p.created_at + :m * interval '1 minute' AS expires
+        FROM assignment_proposals p JOIN service_requests r USING (request_id)
+        WHERE p.institution_id = :i AND p.status = 'open' AND p.rank = 1 AND r.status = 'queued'"""),
+        {"i": institution_id, "m": minutes}).all()
+    return [dsp.Hold(r.request_id, r.caregiver_id, r.planned_start, r.planned_end, r.expires) for r in rows]
+
+
 def options_for(db: Session, request_id: str) -> list[dsp.Option]:
+    """Options at the earliest feasible arrival, from the requested time up to the late tolerance.
+    Other requests' reservations are respected; this request may use its own."""
     req = load_request(db, request_id)
     inst = db.scalar(text("SELECT institution_id FROM service_requests WHERE request_id = :id"), {"id": request_id})
-    return dsp.rank_candidates(req, load_caregivers(db, inst, req.scheduled_for), load_traffic(db), policy())
+    pool = dsp.apply_holds(load_caregivers(db, inst, req.scheduled_for), load_holds(db, inst), now(), request_id)
+    return dsp.earliest_options(req, pool, load_traffic(db), policy(), now(), req.scheduled_for + late_tolerance())
 
 
 def duty_coordinator(db: Session, institution_id: str) -> str:
@@ -202,8 +226,11 @@ def dispatch_requests(db: Session, institution_id: str, request_ids: list[str]) 
     if not request_ids:
         return
     requests = [load_request(db, rid) for rid in request_ids]
-    caregivers = load_caregivers(db, institution_id, min(r.scheduled_for for r in requests))
-    decisions = dsp.dispatch(requests, caregivers, load_traffic(db), policy(), now())
+    caregivers = dsp.apply_holds(load_caregivers(db, institution_id, min(r.scheduled_for for r in requests)),
+                                 load_holds(db, institution_id), now())
+    # Same function as SIRAG-D: earliest arrival from the requested time up to the late tolerance.
+    latest = {r.request_id: r.scheduled_for + late_tolerance() for r in requests}
+    decisions = dsp.dispatch_window(requests, caregivers, load_traffic(db), policy(), now(), latest)
     for d in decisions:
         rid = d.request.request_id
         if d.request.priority in AUTO_PRIORITIES:
@@ -242,7 +269,8 @@ def save_assignment(db: Session, institution_id: str, request_id: str, options: 
                            THEN 'approved' ELSE 'superseded' END
                            WHERE request_id = :r AND status = 'open'"""), {"c": o.caregiver_id, "r": request_id})
         audit(db, user_id=assigned_by, institution_id=institution_id,
-              action="assignment_auto" if approval == "auto" else "assignment_approved",
+              action={"auto": "assignment_auto", "timeout": "assignment_approved_by_timeout"}.get(approval,
+                                                                                            "assignment_approved"),
               entity="assignment", entity_id=aid,
               detail={"request_id": request_id, "caregiver_id": o.caregiver_id, "travel_min": o.travel_min,
                       "policy": policy()})
