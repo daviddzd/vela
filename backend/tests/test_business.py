@@ -90,3 +90,30 @@ def test_market_share_uses_denue_and_shows_the_conservative_case_when_too_high(t
     d = tx_client.get("/api/business").json()["model"]
     assert d["market"]["too_high"] is True and d["conservative"]["factor_pct"] == 50
     assert round(d["conservative"]["customers"][4]) == round(m["years"][4]["customers_end"] / 2)
+
+
+def test_recommended_scenario_respects_its_caps():
+    v = bm.inputs()
+    rows = bm.simulate_recommended(v)
+    last = rows[-1]
+    for region in bm.REGIONS:
+        assert last[f"customers_{region}"] <= bm.private_count(v, region) * 0.15 + 1e-6          # <= 15 % private
+        assert last[f"government_{region}"] <= bm.public_day_centers(v, region) * 0.05 + 1e-6    # <= 5 % public
+    year3 = rows[35]
+    assert year3["customers_jalisco"] == 0 and year3["customers_nuevoleon"] == 0                 # they open in year 4
+    assert rows[5]["government"] == 0 and rows[6]["government"] > 0       # sells from month 1, pays from month 7
+    assert rows[0]["cost_fixed"] < bm.simulate(v)[0]["cost_fixed"]                                # founders at 50 % in year 1
+    assert rows[12]["cost_fixed"] == bm.simulate(v)[12]["cost_fixed"]                             # full salary from year 2
+
+
+def test_scenarios_side_by_side_and_missing_lever_when_negative():
+    s = bm.scenarios()
+    assert {"base", "conservative", "recommended"} <= s.keys()
+    for k in ("base", "conservative", "recommended"):
+        assert {"investment", "breakeven_month", "npv", "shares"} <= s[k].keys()
+    bad = bm.scenarios({"government_cap": 0, "founder_salary_year1_recommended": 100})
+    assert bad["recommended_positive"] is False
+    price = bad["recommended_missing"]["plan_professional_price"]
+    rate = bad["rate_pct"]
+    assert abs(bm.npv(bm.simulate_recommended(bm.inputs({"government_cap": 0, "founder_salary_year1_recommended": 100,
+                                                         "plan_professional_price": price})), rate)) < 50

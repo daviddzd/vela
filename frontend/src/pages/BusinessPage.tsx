@@ -130,6 +130,14 @@ export function BusinessPage() {
             <NumberField label={t.perSupport} value={values.institutions_per_support} min={1} onChange={(v) => set("institutions_per_support", v)} src={<Src row={a.institutions_per_support} />} />
             <NumberField label={t.perServer} value={values.institutions_per_server} min={1} onChange={(v) => set("institutions_per_server", v)} src={<Src row={a.institutions_per_server} />} />
           </div>
+          <fieldset className="mt-4 space-y-2">
+            <legend className="font-bold">{t.recommendedControls}</legend>
+            <NumberField label={t.capLabel} value={values.recommended_private_cap} min={1} onChange={(v) => set("recommended_private_cap", v)} src={<Src row={a.recommended_private_cap} />} />
+            <NumberField label={t.govPrice} value={values.plan_government_price} step={500} onChange={(v) => set("plan_government_price", v)} src={<Src row={a.plan_government_price} />} />
+            <NumberField label={t.govCycle} value={values.government_sales_cycle_months} onChange={(v) => set("government_sales_cycle_months", v)} src={<Src row={a.government_sales_cycle_months} />} />
+            <NumberField label={t.govCap} value={values.government_cap} onChange={(v) => set("government_cap", v)} src={<Src row={a.government_cap} />} />
+            <NumberField label={t.founderPct} value={values.founder_salary_year1_recommended} step={10} onChange={(v) => set("founder_salary_year1_recommended", v)} src={<Src row={a.founder_salary_year1_recommended} />} />
+          </fieldset>
           <Button className="mt-4" variant="secondary" icon={RotateCcw} onClick={() => setValues(defaults(d))}>{t.reset}</Button>
         </Card>
 
@@ -150,9 +158,9 @@ export function BusinessPage() {
 
       <Investment m={m} />
       <WhatIf m={m} />
+      <Scenarios m={m} a={a} values={values} />
       <YearsTable m={m} a={a} values={values} />
       <Competition d={d} />
-      <Market d={d} />
       <RealMarket a={a} m={m} />
       <Usage d={d} />
     </AppShell>
@@ -269,17 +277,6 @@ function Competition({ d }: { d: any }) {
   );
 }
 
-function Market({ d }: { d: any }) {
-  return (
-    <Card className="mt-4">
-      <h2 className="text-teal">{t.marketQ}</h2>
-      <p className="mt-1 text-muted">{t.marketNote}</p>
-      <div className="mt-2"><SourceTable rows={d.market} /></div>
-
-    </Card>
-  );
-}
-
 function Usage({ d }: { d: any }) {
   const u = d.usage;
   const a = d.assumptions;
@@ -357,7 +354,6 @@ function RealMarket({ a, m }: { a: Record<string, Row>; m: any }) {
     ["day_centers", "denue_day_centers_private_cdmx", "denue_day_centers_public_cdmx", "denue_day_centers_private_edomex", "denue_day_centers_public_edomex"],
     ["home_nursing", "denue_home_nursing_cdmx", "", "denue_home_nursing_edomex", ""],
   ];
-  const c = m.conservative;
   const pct = (x: number | null) => (x == null ? "—" : `${num(x, 1)} %`);
   return (
     <Card className="mt-4">
@@ -384,19 +380,66 @@ function RealMarket({ a, m }: { a: Record<string, Row>; m: any }) {
       <p className="mt-1 text-muted">{fill(t.expansionNote, { y: Number(a.edomex_start_year.value), s: Number(a.edomex_share_of_new.value) })} <Src row={a.edomex_start_year} /> <span className="text-sm text-muted">({t.derived})</span></p>
       <p className={`mt-2 font-bold ${mk.too_high ? "text-danger" : "text-ok"}`}>
         {fill(mk.too_high ? t.shareHigh : t.shareOk, { a: num(mk.alert_pct) })} <Src row={a.market_share_alert} /></p>
-      {c && (
-        <div className="mt-3 rounded-card border-2 border-teal/30 p-4">
-          <h3 className="font-bold text-teal">{fill(t.conservativeQ, { f: num(c.factor_pct) })} <Src row={a.conservative_customer_factor} /></h3>
-          <div className="mt-2 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-            <Kpi label={t.conservativeCustomers} value={c.customers.map((x: number) => num(x)).join(" · ")} src={<span className="text-sm text-muted">{t.derived}</span>} />
-            <Kpi label={t.kpiBreakeven} value={c.breakeven_month ? fill(t.kpiBreakevenValue, { m: c.breakeven_month, y: Math.ceil(c.breakeven_month / 12) }) : t.never}
-              src={<span className="text-sm">{t.kpiPayback}: {c.payback_month ? fill(t.kpiBreakevenValue, { m: c.payback_month, y: Math.ceil(c.payback_month / 12) }) : t.never}</span>} />
-            <Kpi label={t.kpiInvestment} value={mxn(c.investment.amount)} src={<span className="text-sm">{c.investment.month && fill(t.kpiInvestmentWhen, { m: c.investment.month, y: Math.ceil(c.investment.month / 12) })}</span>} />
-            <Kpi label={fill(t.npvRate, { r: num(c.npv[1].rate_pct) })} value={<span className={c.npv[1].npv < 0 ? "text-danger" : ""}>{mxn(c.npv[1].npv)}</span>}
-              src={<span className="text-sm">15 %: {mxn(c.npv[0].npv)} · 35 %: {mxn(c.npv[2].npv)}</span>} />
-          </div>
-          <p className="mt-2">{fill(t.conservativeStill, { pct: pct(c.market.cdmx.share_pct) })}</p>
-        </div>)}
+    </Card>
+  );
+}
+
+function Scenarios({ m, a, values }: { m: any; a: Record<string, Row>; values: Record<string, any> }) {
+  const s = m.scenarios;
+  const keys = ["base", "conservative", "recommended"];
+  const r = s.rate_pct;
+  const month = (x: number | null) => (x ? fill(t.monthAt, { m: x }) + ` (${t.year.toLowerCase()} ${Math.ceil(x / 12)})` : t.never);
+  const share = (k: string, region: string) => {
+    const x = s[k].shares[region];
+    return x.customers < 0.05 ? t.notOpen : `${num(x.share_pct, 1)} % (${num(x.customers)} de ${num(x.establishments)})`;
+  };
+  const rows: [string, (k: string) => ReactNode][] = [
+    [t.rowInvestment, (k) => <>{mxn(s[k].investment.amount)}{s[k].investment.month && <span className="block text-sm text-muted">{fill(t.monthAt, { m: s[k].investment.month })}</span>}</>],
+    [t.rowBreakeven, (k) => month(s[k].breakeven_month)],
+    [t.rowPayback, (k) => month(s[k].payback_month)],
+    [fill(t.rowNpv, { r: num(r) }), (k) => <span className={`font-bold ${s[k].npv[1].npv < 0 ? "text-danger" : "text-ok"}`}>{mxn(s[k].npv[1].npv)}</span>],
+    [t.rowCustomers, (k) => fill(t.rowCustomersValue, { total: num(s[k].customers_year5), priv: num(s[k].private_year5), gov: num(s[k].government_year5) })],
+    ...["cdmx", "edomex", "jalisco", "nuevoleon"].map((reg) => [fill(t.rowShare, { region: t.region4[reg] }), (k: string) => share(k, reg)] as [string, (k: string) => ReactNode]),
+    [t.rowGovShare, (k) => (s[k].government_year5 < 0.05 ? "—" : `${num(s[k].government_share_pct, 1)} % (${num(s[k].government_year5)} de ${num(s[k].public_day_centers)})`)],
+  ];
+  const help = (k: string) => fill(t.scenHelp[k], { cap: num(values.recommended_private_cap), y: Number(a.recommended_new_states_year.value),
+    price: mxn(values.plan_government_price), cycle: num(values.government_sales_cycle_months), gcap: num(values.government_cap),
+    fpct: num(values.founder_salary_year1_recommended) });
+  const miss = s.recommended_missing;
+  const opt = (x: number | null, f: (n: number) => string) => (x == null ? t.whatIfNone : f(x));
+  return (
+    <Card className="mt-4">
+      <h2 className="text-teal">{t.scenariosQ}</h2>
+      <p className="mt-1 text-muted">{t.scenariosIntro}</p>
+      <div className="mt-3 overflow-x-auto">
+        <table className="w-full text-left tabular-nums">
+          <thead><tr className="border-b border-teal/20 align-bottom">
+            <th className="py-1 pr-3" />
+            {keys.map((k) => (
+              <th key={k} className={`py-2 pr-3 ${k === "recommended" ? "rounded-t-card bg-teal/10" : ""}`}>
+                {k === "recommended" ? <span className="rounded bg-teal px-2 py-0.5 text-white">{t.recommendedBadge}</span> : t.scen[k]}
+                <span className="block text-sm font-normal text-muted">{help(k)}</span>
+              </th>))}
+          </tr></thead>
+          <tbody>{rows.map(([label, f]) => (
+            <tr key={label} className="border-b border-teal/10 align-top">
+              <th scope="row" className="py-1.5 pr-3 font-bold">{label}</th>
+              {keys.map((k) => <td key={k} className={`py-1.5 pr-3 ${k === "recommended" ? "bg-teal/10" : ""}`}>{f(k)}</td>)}
+            </tr>))}</tbody>
+        </table>
+      </div>
+      {s.recommended_positive ? (
+        <p className="mt-3">{fill(t.recommendedOk, { r: num(r), npv: mxn(s.recommended.npv[1].npv), noGov: mxn(s.recommended_without.government),
+          noCut: mxn(s.recommended_without.founder_cut), both: mxn(s.recommended_without.both) })}</p>
+      ) : (<>
+        <p className="mt-3 font-bold text-danger">{fill(t.recommendedNo, { r: num(r), npv: mxn(s.recommended.npv[1].npv) })}</p>
+        <ul className="mt-1 list-disc pl-6">
+          <li>{fill(t.missingPrice, { v: opt(miss.plan_professional_price, (x) => mxn(Math.ceil(x))), now: mxn(miss.current_professional_price) })}</li>
+          <li>{fill(t.missingGov, { v: opt(miss.plan_government_price, (x) => mxn(Math.ceil(x))), now: mxn(miss.current_government_price) })}</li>
+          <li>{fill(t.missingCac, { v: opt(miss.cac, (x) => mxn(Math.floor(x))), now: mxn(miss.current_cac) })}</li>
+          <li>{fill(t.missingCap, { v: opt(miss.recommended_private_cap, (x) => `${num(x, 1)} %`), now: `${num(miss.current_private_cap)} %` })}</li>
+        </ul></>)}
+      <p className="mt-2 text-sm text-muted"><Src row={a.plan_government_price} /> {a.plan_government_price.description_es}</p>
     </Card>
   );
 }

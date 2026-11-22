@@ -62,3 +62,20 @@ def test_role_change_invalidates_token(client, rollback_session):
     claims = decode_token(client.cookies[COOKIE_NAME])
     forged = {**claims, "role": "coordinator"}  # token claims a role the DB does not confirm
     assert load_active_user(rollback_session, forged) is None
+
+
+def test_token_survives_the_clock_going_back(monkeypatch):
+    """WSL2 moves the clock back ~3 s when it re-syncs: a token issued "in the future" must still be valid."""
+    from datetime import datetime, timedelta, timezone
+
+    import jwt
+
+    from app.core import security
+    from app.core.config import get_settings
+    future = datetime.now(timezone.utc) + timedelta(seconds=5)
+    token = jwt.encode({"sub": "USR-001", "role": "owner", "institution_id": None, "iat": future,
+                        "exp": future + timedelta(hours=1)}, get_settings().jwt_secret, algorithm=security.ALGORITHM)
+    assert security.decode_token(token)["sub"] == "USR-001"
+    expired = jwt.encode({"sub": "USR-001", "role": "owner", "exp": datetime.now(timezone.utc) - timedelta(minutes=5)},
+                         get_settings().jwt_secret, algorithm=security.ALGORITHM)
+    assert security.decode_token(expired) is None                      # a really expired token is still refused

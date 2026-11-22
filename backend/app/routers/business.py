@@ -57,6 +57,7 @@ def _summary(m: dict, overrides: dict | None = None) -> dict:
     return {k: v for k, v in m.items() if k != "months"} | {
         "months": [{k: r[k] for k in ("month", "year", "customers", "revenue", "costs", "profit", "cash")} for r in m["months"]],
         "what_if": bm.what_for_npv_zero(overrides),
+        "scenarios": bm.scenarios(overrides),
         "conservative": bm.conservative(overrides) if m["market"]["too_high"] else None}
 
 

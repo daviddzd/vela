@@ -60,7 +60,13 @@ def client() -> Iterator[TestClient]:
 
 
 def login(client: TestClient, email: str, password: str = DEMO_PASSWORD):
-    return client.post("/api/auth/login", json={"email": email, "password": password})
+    r = client.post("/api/auth/login", json={"email": email, "password": password})
+    if email in DEMO_USERS or email.startswith(("cui-", "fam-", "coordinacion.")):
+        # a demo user with the demo password must log in; otherwise show WHY (not a later 401)
+        if password == DEMO_PASSWORD:
+            assert r.status_code == 200 and client.cookies.get("vela_session"), \
+                f"login {email}: {r.status_code} {r.text} cookies={list(client.cookies.keys())}"
+    return r
 
 
 @pytest.fixture

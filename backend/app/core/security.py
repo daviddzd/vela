@@ -8,6 +8,10 @@ from app.core.config import get_settings
 
 COOKIE_NAME = "vela_session"
 ALGORITHM = "HS256"
+# Tolerance for clock differences when checking "issued at" / "expires". Measured on the demo laptop (WSL2):
+# the clock jumps BACK about 3 s every ~30 s when it re-syncs with Windows, so a token made just before a jump
+# looked "issued in the future" and was rejected (intermittent 401 right after logging in). 60 s is plenty.
+CLOCK_LEEWAY_SECONDS = 60
 
 
 def verify_password(password: str, password_hash: str) -> bool:
@@ -37,7 +41,7 @@ def create_token(user_id: str, role: str, institution_id: str | None) -> str:
 def decode_token(token: str) -> dict | None:
     """Return the claims, or None if the token is invalid or expired."""
     try:
-        return jwt.decode(token, get_settings().jwt_secret, algorithms=[ALGORITHM],
+        return jwt.decode(token, get_settings().jwt_secret, algorithms=[ALGORITHM], leeway=CLOCK_LEEWAY_SECONDS,
                           options={"require": ["sub", "role", "exp"]})
     except jwt.PyJWTError:
         return None

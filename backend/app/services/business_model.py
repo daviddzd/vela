@@ -36,6 +36,9 @@ EDITABLE = {
     "customers_year1": (0, 2_000), "customer_growth_year2_5": None, "monthly_churn": (0, 20),
     "price_inflation_adjustment": (0, 1), "institutions_per_support": (1, 500), "cac_per_institution": (0, 500_000),
     "institutions_per_server": (1, 500),
+    # recommended scenario
+    "recommended_private_cap": (1, 100), "plan_government_price": (0, 100_000), "government_sales_cycle_months": (0, 36),
+    "government_cap": (0, 100), "founder_salary_year1_recommended": (0, 100),
 }
 
 
@@ -93,9 +96,22 @@ def _index(v: dict, year: int) -> float:
     return (1 + v["inflation_annual_oct_2026"] / 100) ** (year - 1)
 
 
-def fixed_costs(v: dict, year: int = 1) -> float:
-    base = v["founders"] * v["founder_salary_year1"] * v["employer_cost_factor"] + v["infra_monthly_year1"]
+def fixed_costs(v: dict, year: int = 1, founder_pct_year1: float = 100) -> float:
+    """Founders' salaries + infrastructure. `founder_pct_year1` < 100: founders earn less in year 1 (recommended)."""
+    pct = founder_pct_year1 / 100 if year == 1 else 1.0
+    base = v["founders"] * v["founder_salary_year1"] * v["employer_cost_factor"] * pct + v["infra_monthly_year1"]
     return base * _index(v, year)
+
+
+def _costs(v: dict, year: int, customers: float, new: float, founder_pct_year1: float = 100) -> dict:
+    """Monthly costs: fixed + those that grow with customers (support, production hosting, acquisition)."""
+    idx = _index(v, year)
+    support_people = math.floor(customers / v["institutions_per_support"])
+    servers = math.ceil(customers / v["institutions_per_server"]) if year >= v["hosting_start_year"] else 0
+    return {"fixed": fixed_costs(v, year, founder_pct_year1),
+            "support": support_people * v["support_salary_reference"] * v["employer_cost_factor"] * idx,
+            "hosting": servers * (v["hosting_server_usd"] + v["hosting_database_usd"]) * v["usd_mxn_fix"] * idx,
+            "acquisition": new * v["cac_per_institution"] * idx}
 
 
 def simulate(v: dict) -> list[dict]:
@@ -113,21 +129,13 @@ def simulate(v: dict) -> list[dict]:
             lost = customers * churn
             customers = customers - lost + new
             edomex = edomex * keep + new_edomex
-            idx = _index(v, year)
-            support_people = math.floor(customers / v["institutions_per_support"])
-            servers = math.ceil(customers / v["institutions_per_server"]) if year >= v["hosting_start_year"] else 0
-            costs = {
-                "fixed": fixed_costs(v, year),
-                "support": support_people * v["support_salary_reference"] * v["employer_cost_factor"] * idx,
-                "hosting": servers * (v["hosting_server_usd"] + v["hosting_database_usd"]) * v["usd_mxn_fix"] * idx,
-                "acquisition": new * v["cac_per_institution"] * idx,
-            }
+            costs = _costs(v, year, customers, new)
             revenue = customers * average_revenue(v, year)
             rows.append({"month": (year - 1) * 12 + m + 1, "year": year, "customers": customers, "new": new,
                          "customers_edomex": edomex, "customers_cdmx": customers - edomex,
+                         "customers_jalisco": 0.0, "customers_nuevoleon": 0.0, "government": 0.0,
                          "lost": lost, "revenue": revenue, **{f"cost_{k}": c for k, c in costs.items()},
-                         "costs": sum(costs.values()), "profit": revenue - sum(costs.values()),
-                         "support_people": support_people, "servers": servers})
+                         "costs": sum(costs.values()), "profit": revenue - sum(costs.values())})
     cash = 0.0
     for r in rows:
         cash += r["profit"]
@@ -276,3 +284,129 @@ def conservative(overrides: dict | None = None) -> dict:
     return {"factor_pct": v["conservative_customer_factor"], "customers": [y["customers_end"] for y in m["years"]],
             "breakeven_month": m["breakeven_month"], "payback_month": m["payback_month"], "npv": m["npv"],
             "investment": m["investment"], "market": m["market"], "years": [{k: y[k] for k in ("year", "revenue", "costs", "profit", "cash_end")} for y in m["years"]]}
+
+
+# ---- scenarios: base, conservative, recommended (team decision 22 Nov 2026) ----------------------------
+
+REGIONS = ["cdmx", "edomex", "jalisco", "nuevoleon"]
+
+
+def private_count(v: dict, region: str) -> float:
+    """Establishments that match Vela's private customers in a state (DENUE 05/2026)."""
+    keys = [f"denue_residences_private_{region}", f"denue_day_centers_private_{region}", f"denue_home_nursing_{region}"]
+    return sum(v[k] for k in keys if isinstance(v.get(k), float))
+
+
+def public_day_centers(v: dict, region: str) -> float:
+    k = f"denue_day_centers_public_{region}"
+    return v[k] if isinstance(v.get(k), float) else 0.0
+
+
+def _path(targets: list[float], churn: float, start_month: int) -> list[tuple[float, float]]:
+    """(customers, new) for months 1..60: nobody before start_month; inside each year a constant number of new
+    customers so the year ends at its target (the same rule as the base model)."""
+    keep, customers, out = 1 - churn, 0.0, []
+    for year in range(1, 6):
+        months = range((year - 1) * 12 + 1, year * 12 + 1)
+        n = sum(1 for m in months if m >= start_month)
+        new = max(0.0, (targets[year - 1] - customers * keep ** n) / sum(keep ** k for k in range(n))) if n else 0.0
+        for m in months:
+            if m >= start_month:
+                customers = customers * keep + new
+            out.append((customers, new if m >= start_month else 0.0))
+    return out
+
+
+def _open_month(v: dict, region: str) -> int:
+    year = {"cdmx": 1, "edomex": v["edomex_start_year"], "jalisco": v["recommended_new_states_year"],
+            "nuevoleon": v["recommended_new_states_year"]}[region]
+    return int((year - 1) * 12 + 1)
+
+
+def recommended_targets(v: dict) -> dict[str, list[float]]:
+    """Private customers per state and year: the base targets, but no state above `recommended_private_cap` % of its
+    private establishments. States are filled in the expansion order (CDMX, Edomex, then Jalisco and Nuevo León)."""
+    totals = [v["customers_year1"], *_targets(v["customer_growth_year2_5"])]
+    cap = {r: private_count(v, r) * v["recommended_private_cap"] / 100 for r in REGIONS}
+    out = {r: [] for r in REGIONS}
+    for year, total in enumerate(totals, start=1):
+        left = total
+        for group in (["cdmx"], ["edomex"], ["jalisco", "nuevoleon"]):
+            open_ = [r for r in group if _open_month(v, r) <= year * 12]
+            for r in group:
+                take = min(cap[r], left / len(open_)) if r in open_ else 0.0
+                out[r].append(take)
+            left -= sum(out[r][-1] for r in group)
+    return out
+
+
+def simulate_recommended(v: dict) -> list[dict]:
+    churn = v["monthly_churn"] / 100
+    private = {r: _path(t, churn, _open_month(v, r)) for r, t in recommended_targets(v).items()}
+    gov_cap = {r: public_day_centers(v, r) * v["government_cap"] / 100 for r in REGIONS}
+    gov = {r: _path([gov_cap[r]] * 5, churn, _open_month(v, r) + int(v["government_sales_cycle_months"])) for r in REGIONS}
+    rows, cash = [], 0.0
+    for i in range(60):
+        month, year = i + 1, i // 12 + 1
+        priv = {r: private[r][i][0] for r in REGIONS}
+        g = sum(gov[r][i][0] for r in REGIONS)
+        customers = sum(priv.values()) + g
+        new = sum(private[r][i][1] + gov[r][i][1] for r in REGIONS)
+        gov_price = v["plan_government_price"] * (_index(v, year) if v["price_inflation_adjustment"] >= 0.5 else 1.0)
+        revenue = sum(priv.values()) * average_revenue(v, year) + g * gov_price
+        costs = _costs(v, year, customers, new, v["founder_salary_year1_recommended"])
+        cash += revenue - sum(costs.values())
+        rows.append({"month": month, "year": year, "customers": customers, "new": new, "government": g,
+                     **{f"customers_{r}": priv[r] for r in REGIONS}, **{f"government_{r}": gov[r][i][0] for r in REGIONS},
+                     "revenue": revenue, **{f"cost_{k}": c for k, c in costs.items()}, "costs": sum(costs.values()),
+                     "profit": revenue - sum(costs.values()), "cash": cash})
+    return rows
+
+
+def scenario_summary(v: dict, rows: list[dict]) -> dict:
+    worst = min(rows, key=lambda r: r["cash"])
+    last = rows[-1]
+    shares = {r: {"customers": last[f"customers_{r}"], "establishments": private_count(v, r),
+                  "share_pct": 100 * last[f"customers_{r}"] / private_count(v, r) if private_count(v, r) else None}
+              for r in REGIONS}
+    public = sum(public_day_centers(v, r) for r in REGIONS)
+    return {"investment": {"amount": max(0.0, -worst["cash"]), "month": worst["month"] if worst["cash"] < 0 else None},
+            "breakeven_month": _first(rows, lambda r: r["profit"] >= 0), "payback_month": _first(rows, lambda r: r["cash"] >= 0),
+            "npv": [{"rate_pct": r, "npv": npv(rows, r)} for r in (v["discount_rate_low"], v["discount_rate_base"], v["discount_rate_high"])],
+            "customers_year5": last["customers"], "private_year5": last["customers"] - last["government"],
+            "government_year5": last["government"],
+            "government_share_pct": 100 * last["government"] / public if public else None, "public_day_centers": public,
+            "shares": shares, "revenue_year5": sum(r["revenue"] for r in rows if r["year"] == 5)}
+
+
+def scenarios(overrides: dict | None = None) -> dict:
+    """Base, conservative and recommended side by side; if the recommended NPV at the base rate is still negative,
+    which single lever would make it zero (analysis, not a target)."""
+    base_o = dict(overrides or {})
+    v = inputs(base_o)
+    f = v["conservative_customer_factor"] / 100
+    totals = [v["customers_year1"], *_targets(v["customer_growth_year2_5"])]
+    cons_o = {**base_o, "customers_year1": totals[0] * f, "customer_growth_year2_5": ",".join(str(round(x * f, 4)) for x in totals[1:])}
+    out = {"base": scenario_summary(v, simulate(v)), "conservative": scenario_summary(inputs(cons_o), simulate(inputs(cons_o))),
+           "recommended": scenario_summary(v, simulate_recommended(v)),
+           "recommended_targets": recommended_targets(v), "rate_pct": v["discount_rate_base"]}
+    # What the recommended result depends on: the same scenario without each of its two new assumptions
+    def rec_npv_with(extra: dict) -> float:
+        return npv(simulate_recommended(inputs({**base_o, **extra})), v["discount_rate_base"])
+    out["recommended_without"] = {"government": rec_npv_with({"government_cap": 0}),
+                                  "founder_cut": rec_npv_with({"founder_salary_year1_recommended": 100}),
+                                  "both": rec_npv_with({"government_cap": 0, "founder_salary_year1_recommended": 100})}
+    rec_npv = out["recommended"]["npv"][1]["npv"]
+    out["recommended_positive"] = rec_npv >= 0
+    if rec_npv < 0:
+        def rec(extra: dict) -> float:
+            return npv(simulate_recommended(inputs({**base_o, **extra})), v["discount_rate_base"])
+        out["recommended_missing"] = {
+            "plan_professional_price": _bisect(lambda x: rec({"plan_professional_price": x}), 0, 100_000),
+            "current_professional_price": v["plan_professional_price"],
+            "plan_government_price": _bisect(lambda x: rec({"plan_government_price": x}), 0, 100_000),
+            "current_government_price": v["plan_government_price"],
+            "cac": _bisect(lambda x: rec({"cac_per_institution": x}), 0, 500_000), "current_cac": v["cac_per_institution"],
+            "recommended_private_cap": _bisect(lambda x: rec({"recommended_private_cap": x}), v["recommended_private_cap"], 100),
+            "current_private_cap": v["recommended_private_cap"]}
+    return out
