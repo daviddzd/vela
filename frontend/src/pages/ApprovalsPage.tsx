@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import { api, ApiError, type Approval, type Option } from "../api/client";
 import { AppShell } from "../components/AppShell";
 import { Button, Card, Notice } from "../components/ui";
+import { AlertTriangle, CheckCircle2, Icon, Star } from "../components/icons";
 import { es } from "../i18n/es";
 import { formatDateTime, formatTime } from "../lib/format";
 
@@ -25,7 +26,7 @@ export function ApprovalsPage() {
     setMessage(null);
     try {
       await api.approve(item.request_id, option.caregiver_id);
-      setMessage({ kind: "ok", text: `${es.approvals.approved} ${item.request_id} → ${option.caregiver_name}` });
+      setMessage({ kind: "ok", text: `${es.approvals.approved} ${item.request_id}: ${option.caregiver_name}` });
     } catch (err) {
       const recalculated = err instanceof ApiError && err.status === 409 && Array.isArray(err.body.options);
       setMessage({ kind: recalculated ? "info" : "error", text: recalculated ? es.approvals.recalculated : (err as Error).message || es.common.error });
@@ -46,7 +47,7 @@ export function ApprovalsPage() {
           <Card key={item.request_id}>
             <div className="flex flex-wrap items-baseline justify-between gap-2">
               <h2>{item.patient_name}</h2>
-              <span className="font-bold text-danger"><span aria-hidden="true">❗ </span>{es.priority.high}</span>
+              <span className="font-bold text-danger"><Icon as={AlertTriangle} /> {es.priority.high}</span>
             </div>
             <p>{item.service_name} · {es.approvals.scheduledFor}: <strong>{formatDateTime(item.scheduled_for)}</strong></p>
             <p className="text-muted">{item.request_id} · {es.approvals.waiting} {item.minutes_waiting} {es.common.minutes}</p>
@@ -56,10 +57,10 @@ export function ApprovalsPage() {
               <ul className="mt-3 grid gap-3 md:grid-cols-3">
                 {item.options.map((o) => (
                   <li key={o.caregiver_id} className={`rounded-card border-2 p-3 ${o.rank === 1 ? "border-teal" : "border-muted/40"}`}>
-                    <p className="font-bold">{o.rank === 1 ? `★ ${es.approvals.proposed}` : es.approvals.alternative}</p>
+                    <p className="font-bold">{o.rank === 1 ? <><Icon as={Star} /> {es.approvals.proposed}</> : es.approvals.alternative}</p>
                     <p>{o.caregiver_name}</p>
                     <p className="text-muted">{es.common.travel}: {Math.round(o.travel_min)} {es.common.minutes} · {es.common.leaves} {formatTime(o.planned_start)}</p>
-                    <Button className="mt-2 w-full" icon="✔" variant={o.rank === 1 ? "primary" : "secondary"}
+                    <Button className="mt-2 w-full" icon={CheckCircle2} variant={o.rank === 1 ? "primary" : "secondary"}
                       disabled={busy === item.request_id} onClick={() => approve(item, o)}>
                       {es.approvals.approve}
                     </Button>

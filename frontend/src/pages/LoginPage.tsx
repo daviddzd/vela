@@ -5,6 +5,8 @@ import { ApiError } from "../api/client";
 import { useAuth } from "../auth/AuthContext";
 import { getSimpleMode, setSimpleMode } from "../auth/simpleMode";
 import { es } from "../i18n/es";
+import { AlertTriangle, Icon } from "../components/icons";
+import { LogIn } from "lucide-react";
 
 // Public demo accounts from README.md (synthetic users only).
 const DEMO_USERS = [
@@ -79,7 +81,7 @@ export function LoginPage() {
 
             {error && (
               <p role="alert" className="rounded-card border-2 border-danger bg-danger/5 p-3 font-bold text-danger">
-                <span aria-hidden="true">⚠ </span>{error}
+                <Icon as={AlertTriangle} /> {error}
               </p>
             )}
 
@@ -87,7 +89,7 @@ export function LoginPage() {
               type="submit" disabled={busy}
               className="w-full min-h-12 rounded-card bg-teal px-4 text-lg font-bold text-white hover:bg-teal-dark disabled:opacity-70"
             >
-              <span aria-hidden="true">→ </span>
+              <Icon as={LogIn} />{" "}
               {busy ? es.login.submitting : es.login.submit}
             </button>
           </form>

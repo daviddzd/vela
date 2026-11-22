@@ -189,7 +189,8 @@ def generar_poblacion(n):
                 "artritis","enf_pulmonar_cronica","cancer"]
     df["num_enf_cronicas"] = df[cronicas].sum(axis=1)
     df["multimorbilidad"] = (df.num_enf_cronicas >= 2).astype(int)
-    # definición amplia (comparable con ENSANUT 2018-19, 55.6 %): suma obesidad y síntomas depresivos
+    # definición amplia (calibrada contra ENSANUT 2018-19, 55.6 %; OJO: ENSANUT cuenta 2+ de 7 enfermedades
+    # sin obesidad ni depresión, así que la comparación es aproximada): suma obesidad y síntomas depresivos
     df["multimorbilidad_amplia"] = ((df.num_enf_cronicas + df.obesidad + df.sintomas_depresivos) >= 2).astype(int)
 
     # limitación / discapacidad (Censo): incluye a todos con dificultad funcional,

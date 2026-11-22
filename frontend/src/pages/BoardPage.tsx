@@ -7,6 +7,8 @@ import { RequestForm } from "../components/RequestForm";
 import { RequestResult } from "../components/RequestResult";
 import { StatusBadge } from "../components/StatusBadge";
 import { Card, Notice } from "../components/ui";
+import { AlertTriangle, COUNTER_ICON, Icon } from "../components/icons";
+import { RefreshCw, Radio } from "lucide-react";
 import { es } from "../i18n/es";
 import { formatClock, formatLongDate, useServerClock } from "../lib/clock";
 import { formatTime } from "../lib/format";
@@ -17,7 +19,6 @@ import type { ServiceRequest } from "../api/client";
 const VisitsMap = lazy(() => import("../components/VisitsMap").then((m) => ({ default: m.VisitsMap })));
 
 const COUNTERS = ["queued", "on_the_way", "in_visit", "done_today"] as const;
-const COUNTER_ICON = { queued: "⏳", on_the_way: "🚗", in_visit: "🏠", done_today: "✅" };
 
 export function BoardPage() {
   const [board, setBoard] = useState<Board | null>(null);
@@ -41,12 +42,12 @@ export function BoardPage() {
           <p className="text-muted first-letter:uppercase">{formatLongDate(now)}</p>
         </div>
         <div className="text-right">
-          <p className="text-4xl font-bold tabular-nums" aria-live="off">{formatClock(now)}</p>
+          <p className="figure text-4xl tabular-nums" aria-live="off">{formatClock(now)}</p>
           {!synced && <p className="text-muted">{es.board.clockUnsynced}</p>}
           <p className="font-bold" aria-live="polite">
-            {socket === "live" && <span className="text-ok"><span aria-hidden="true">● </span>{es.board.live}</span>}
+            {socket === "live" && <span className="text-ok"><Icon as={Radio} /> {es.board.live}</span>}
             {socket === "connecting" && <span className="text-muted">{es.board.connecting}</span>}
-            {socket === "reconnecting" && <span className="text-warn"><span aria-hidden="true">⟳ </span>{es.board.reconnecting}</span>}
+            {socket === "reconnecting" && <span className="text-warn"><Icon as={RefreshCw} /> {es.board.reconnecting}</span>}
           </p>
         </div>
       </div>
@@ -57,8 +58,8 @@ export function BoardPage() {
       <ul className="mt-4 grid grid-cols-2 gap-3 md:grid-cols-4">
         {COUNTERS.map((k) => (
           <li key={k}><Card className="text-center">
-            <p className="text-4xl font-bold text-teal tabular-nums">{board?.counters[k] ?? "—"}</p>
-            <p className="font-bold"><span aria-hidden="true">{COUNTER_ICON[k]} </span>{es.board.counters[k]}</p>
+            <p className="figure text-4xl text-teal">{board?.counters[k] ?? "—"}</p>
+            <p className="font-bold"><Icon as={COUNTER_ICON[k]} /> {es.board.counters[k]}</p>
           </Card></li>
         ))}
       </ul>
@@ -72,7 +73,7 @@ export function BoardPage() {
               <li key={q.request_id} className="flex flex-wrap items-center justify-between gap-2 py-2">
                 <span>
                   <strong className={q.priority === "high" ? "text-danger" : ""}>
-                    {q.priority === "high" && <span aria-hidden="true">❗ </span>}{es.priority[q.priority]}
+                    {q.priority === "high" && <><Icon as={AlertTriangle} /> </>}{es.priority[q.priority]}
                   </strong>{" · "}{q.patient_name} · {q.service_name} · {formatTime(q.scheduled_for)}
                   <span className="block text-muted">
                     {es.board.origin[q.origin] ?? q.origin} · {q.status_reason ? es.statusReason[q.status_reason] : ""}
@@ -89,7 +90,7 @@ export function BoardPage() {
           <ul className="mt-2 space-y-2">
             {board?.alerts.map((a) => (
               <li key={a.alert_id} className="rounded-card border-2 border-danger p-2">
-                <span aria-hidden="true">⚠ </span>{a.message}
+                <Icon as={AlertTriangle} /> {a.message}
                 <span className="block text-muted">{formatTime(a.created_at)}</span>
               </li>
             ))}

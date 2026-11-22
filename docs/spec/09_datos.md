@@ -6,7 +6,7 @@ fuentes oficiales; ningún registro corresponde a una persona real.
 ## Archivos
 | Archivo | Cómo se generó | Calibrado con |
 |---|---|---|
-| `database/seed/persons.csv` (20,000) | Cópula gaussiana (cargas 0.30 global, 0.45 cardiometabólica, 0.60 funcional) | Censo 2020, ENSANUT 2018/2022, ENASEM 2021, CONAPO |
+| `database/seed/persons.csv` (20,000) | Cópula gaussiana (cargas 0.30 global, 0.45 cardiometabólica, 0.60 funcional) | Censo 2020, ENSANUT 2018-19 (y 2012 para estado cognitivo), ENASEM 2024, CONAPO |
 | `database/seed/*` (resto) | `data/generator/legacy_es/generar_base.py` → `to_english_seed.py` | Precios de mercado de servicios, turnos típicos |
 | `data/reference/air_quality_*.csv` | `build_reference_data.py` | Reportes SIMAT (máximos diarios O₃ ~93–113 ppb; episodios PM2.5 ~43–60 µg/m³; Fase I PM2.5 de 99.5 µg/m³ en SAC) |
 | `data/reference/traffic_hourly_profile.csv` | `build_reference_data.py` | TomTom Traffic Index 2025, CDMX: 75.9 % congestión, ~13 km/h a las 18 h |
@@ -26,7 +26,16 @@ Si algo falla, el sistema sigue con los archivos calibrados. Las coordenadas act
 aproximadas (`location_source = approximate`); al descargar el catálogo oficial se actualizan a `official`.
 
 ## Fuentes principales
-- INEGI, Censo de Población y Vivienda 2020; ENASEM 2021; DENUE — https://www.inegi.org.mx
+- INEGI, Censo de Población y Vivienda 2020; DENUE — https://www.inegi.org.mx
+- INEGI, ENASEM 2024, vía *Estadísticas a propósito del Día Internacional de las Personas Adultas Mayores*,
+  comunicado 89/26 (28 sep 2026): % de mujeres por edad (gráfica 1) y enfermedades entre quienes reportaron
+  alguna (gráfica 6, p. 5) — https://www.inegi.org.mx/contenidos/saladeprensa/aproposito/2026/EAP_Adulmayor_26.pdf.
+  Artritis, enfermedad pulmonar crónica y cáncer se publican **entre quienes reportaron alguna enfermedad**; para
+  llevarlas a prevalencia poblacional se multiplican por 0.57 = 42.4 (hipertensión, ENSANUT) / 74.5 (hipertensión,
+  ENASEM entre quienes reportan enfermedad). Ese factor es un **supuesto** del generador.
+- INEGI, ENASEM 2021 (comunicado 2023): solo como contraste de diabetes por sexo, no se usa para generar datos.
+- Prevalencias de referencia que muestra Panorama-AM: `data/reference/prevalence_reference.csv`.
+- Límites de alcaldías: INEGI vía Datos Abiertos CDMX, CC BY 4.0 (`data/reference/official/README.md`).
 - INSP, ENSANUT — https://ensanut.insp.mx
 - SEDEMA, Sistema de Monitoreo Atmosférico — http://www.aire.cdmx.gob.mx
 - Portal de Datos Abiertos CDMX — https://datos.cdmx.gob.mx

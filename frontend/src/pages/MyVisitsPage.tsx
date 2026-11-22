@@ -4,6 +4,7 @@ import { api, type Visit } from "../api/client";
 import { AppShell } from "../components/AppShell";
 import { StatusBadge } from "../components/StatusBadge";
 import { Button, Card, Notice } from "../components/ui";
+import { CheckCircle2, Mic, Navigation } from "../components/icons";
 import { es } from "../i18n/es";
 import { formatTime } from "../lib/format";
 
@@ -42,11 +43,11 @@ export function MyVisitsPage() {
             <p>{v.service_name}</p>
             <p className="text-muted">{es.visits.district}: {v.district_name} · {es.common.leaves} {formatTime(v.planned_start)} ({Math.round(v.travel_min)} {es.common.minutes})</p>
             <div className="mt-4 grid gap-3 sm:grid-cols-3">
-              <Button icon="📍" className="min-h-16 text-xl" disabled={v.status !== "assigned"}
+              <Button icon={Navigation} className="min-h-16 text-xl" disabled={v.status !== "assigned"}
                 onClick={() => step(api.arrive, v.assignment_id)}>{es.visits.arrived}</Button>
-              <Button icon="✅" className="min-h-16 text-xl" disabled={v.status !== "in_progress"}
+              <Button icon={CheckCircle2} className="min-h-16 text-xl" disabled={v.status !== "in_progress"}
                 onClick={() => step(api.finish, v.assignment_id)}>{es.visits.finished}</Button>
-              <Button icon="🎙" variant="secondary" className="min-h-16" disabled>{es.visits.voiceNote}</Button>
+              <Button icon={Mic} variant="secondary" className="min-h-16" disabled>{es.visits.voiceNote}</Button>
             </div>
           </Card>
         ))}
