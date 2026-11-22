@@ -176,8 +176,20 @@ En **PowerShell** (o en Ubuntu si instalaste cloudflared ahí):
 cloudflared tunnel --url http://localhost:8080
 ```
 Aparecerá un enlace del tipo `https://palabras-aleatorias.trycloudflare.com`. Ese es el enlace público;
-compártelo o conviértelo en QR. Copia el enlace en `PUBLIC_BASE_URL` del `.env` y reinicia la API
-(`docker compose restart api`).
+compártelo o conviértelo en QR. No hace falta tocar `.env` ni reiniciar nada: la API detecta sola que el
+visitante llegó por https (cabecera `Cf-Visitor` de Cloudflare) y marca la cookie de sesión como `Secure`.
+
+**Comprobar el tiempo real por el enlace público** (criterio A4):
+1. En la laptop, abre el enlace e inicia sesión como `coordinacion.a@ejemplo.test` → `/tablero`.
+   Arriba a la derecha debe decir "● En vivo".
+2. En un celular **con datos móviles**, abre el mismo enlace e inicia sesión como `fam-0001@ejemplo.test`.
+3. En el celular toca "Solicitar servicio". En menos de 2 s, sin recargar, la solicitud aparece en la cola del
+   tablero de la laptop (y en Aprobaciones, porque ese paciente es de prioridad alta).
+4. Apaga el wifi de la laptop unos segundos (no cierres el túnel: al reabrirlo cambia el enlace): el tablero
+   muestra "Reconectando…" y vuelve solo a "En vivo".
+
+Si cambias `infra/Caddyfile`, recárgalo con `docker compose restart proxy` (`up -d` no lo recarga, porque
+el archivo está montado y el contenedor no cambia).
 
 Qué saber del túnel rápido:
 - No necesita cuenta ni abrir puertos del módem.
@@ -194,8 +206,20 @@ y el enlace ya no cambia.
 1. Laptop conectada a la corriente; desactiva suspensión (Configuración → Sistema → Energía → "Nunca").
 2. 1 h antes: abrir Docker Desktop, `docker compose up -d`, abrir Ollama, `ollama run qwen3:8b "hola"` para
    cargar el modelo, abrir el túnel y generar el QR.
-3. Probar el enlace desde un celular con datos móviles (no con el wifi de la escuela).
-4. Respaldo: la demo funciona en `http://localhost:8080` sin internet (salvo el enlace público) y hay un video grabado.
+3. **Fechas vivas.** El historial sintético (solicitudes, asignaciones, consentimientos y lecturas de aire)
+   termina el 19–20 de noviembre. Para que tableros y simulación muestren un historial que termina "ayer":
+   ```bash
+   python scripts/rebase_dates.py --dry-run   # muestra qué movería, sin guardar
+   python scripts/rebase_dates.py             # lo aplica
+   python scripts/verify_db.py                # debe seguir en "Todo correcto"
+   ```
+   Mueve todo por semanas completas (un lunes sigue siendo lunes, porque el tráfico y las visitas dependen
+   del día), así que el historial termina entre 0 y 6 días antes de ayer. Se puede correr cuantas veces
+   haga falta: si ya está al día, no hace nada. No toca la bitácora (`audit_log`) ni las visitas de hoy o
+   futuras. Para ensayar el día de la defensa sin cambiar nada: `--today 2026-12-01 --dry-run`.
+4. Probar el enlace desde un celular con datos móviles (no con el wifi de la escuela), con la prueba de
+   tiempo real de arriba.
+5. Respaldo: la demo funciona en `http://localhost:8080` sin internet (salvo el enlace público) y hay un video grabado.
 
 ## Problemas comunes
 | Síntoma | Solución |
@@ -204,4 +228,5 @@ y el enlace ya no cambia.
 | La API no alcanza a Ollama | En PowerShell `setx OLLAMA_HOST 0.0.0.0:11434`, reinicia Ollama y permite el acceso en el firewall solo para redes privadas |
 | `verify_db.py` falla en conteos | `docker compose down -v` y volver a `up -d db` (la carga solo corre con el volumen vacío) |
 | El enlace de Cloudflare da error 502 | La app no está corriendo en el puerto 8080: `docker compose ps` |
+| El tablero se queda en "Reconectando…" | `curl localhost:8080/api/health` debe decir `"realtime":"ok"`; si dice `reconnecting`, revisa `docker compose logs api` y que `db` esté arriba |
 | Todo va lento | Cierra el navegador con muchas pestañas; usa el modelo `llama3.2:3b` |

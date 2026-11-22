@@ -36,6 +36,16 @@ export type FamilyOverview = {
   patient_id: string; patient_name: string; can_request_services: boolean; home_care_consent: boolean;
   next_visit: FamilyVisit | null; to_confirm: FamilyVisit[]; recent_requests: FamilyVisit[];
 };
+export type BoardQueueItem = { request_id: string; priority: string; status_reason: string | null; scheduled_for: string;
+  origin: string; service_name: string; patient_name: string; minutes_waiting: number; risk: number };
+export type BoardAlert = { alert_id: string; level: string; code: string | null; message: string; created_at: string };
+export type Board = {
+  now: string; counters: { queued: number; on_the_way: number; in_visit: number; done_today: number };
+  queue: BoardQueueItem[]; alerts: BoardAlert[];
+  visits: { request_id: string; status: string; priority: string; scheduled_for: string; service_name: string;
+    patient_name: string; lat: number; lon: number; caregiver_name: string | null }[];
+  staff: { caregiver_id: string; name: string; type: string; lat: number; lon: number }[];
+};
 export type Service = { service_id: string; name: string; duration_min: number };
 export type ServiceRequest = FamilyVisit & { priority: string; caregiver_id: string | null };
 
@@ -59,6 +69,7 @@ export const api = {
   logout: () => request<void>("/api/auth/logout", { method: "POST" }),
   me: () => request<Me>("/api/auth/me"),
   services: () => request<Service[]>("/api/services"),
+  board: () => request<Board>("/api/board"),
   createRequest: (body: { patient_id?: string; service_id: string; scheduled_for: string; priority?: string }) =>
     request<ServiceRequest>("/api/requests", { method: "POST", body: JSON.stringify(body) }),
   approvals: () => request<Approval[]>("/api/approvals"),

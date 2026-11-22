@@ -12,6 +12,7 @@ from sqlalchemy import text
 from sqlalchemy.orm import Session
 
 from app.core import messages_es as msg
+from app.core.events import publish
 from app.services import operations as ops
 
 APPROVAL_ALERT_AFTER = timedelta(minutes=10)
@@ -48,17 +49,24 @@ def create_alerts(db: Session) -> None:
 
 def mark_unattended(db: Session) -> int:
     """Waiting requests whose visit window is already over."""
-    return db.execute(text("""
+    rows = db.execute(text("""
         UPDATE service_requests r SET status = 'unattended', status_reason = 'time_passed'
         FROM institution_services ins
         WHERE r.status = 'queued' AND ins.institution_id = r.institution_id AND ins.service_id = r.service_id
-          AND r.scheduled_for + ins.duration_min * interval '1 minute' < now()""")).rowcount
+          AND r.scheduled_for + ins.duration_min * interval '1 minute' < now()
+        RETURNING r.request_id, r.institution_id""")).all()
+    for r in rows:
+        publish(db, "request.updated", r.institution_id, request_id=r.request_id, status="unattended")
+    return len(rows)
 
 
 def _alert(db: Session, r, code: str, template: str, waited: timedelta) -> None:
-    db.execute(text("""
+    alert_id = db.execute(text("""
         INSERT INTO alerts (institution_id, type, level, patient_id, message, request_id, code)
         VALUES (:i, 'queue_delay', 'high', :p, :m, :r, :c)
-        ON CONFLICT (request_id, code) WHERE request_id IS NOT NULL DO NOTHING"""),
+        ON CONFLICT (request_id, code) WHERE request_id IS NOT NULL DO NOTHING
+        RETURNING alert_id"""),
         {"i": r.institution_id, "p": r.patient_id, "r": r.request_id, "c": code,
-         "m": template.format(request_id=r.request_id, minutes=int(waited.total_seconds() // 60))})
+         "m": template.format(request_id=r.request_id, minutes=int(waited.total_seconds() // 60))}).scalar()
+    if alert_id:   # only a NEW alert produces an event
+        publish(db, "alert.created", r.institution_id, alert_id=alert_id, request_id=r.request_id)
