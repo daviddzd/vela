@@ -123,3 +123,28 @@ ensayos (no se ejecutó aquí: borra la base de la demo).
 - Pruebas: `backend/tests/test_consents.py` (8) y `backend/tests/test_business.py` (6).
 - `scripts/reset_demo.py` ahora también borra las solicitudes ARCO y regresa los consentimientos a los valores
   de la semilla (después de un ensayo en el que se revocó alguno).
+
+## 4. Modelo de negocio v2: escenario recomendado (decisión del equipo, 22 nov 2026)
+- Se quitó la tabla «¿Qué tan grande es el mercado?» con el 319 (subsector 623 completo, que incluye
+  establecimientos que no son clientes de Vela). Queda solo el cálculo por segmento del DENUE.
+- **Escenario recomendado** (junto al base y al conservador, con los mismos supuestos de la página):
+  - Privados: como máximo **15 %** de los establecimientos privados de cada entidad (CDMX 117, Edomex 101 y,
+    desde el año 4, Jalisco 162 y Nuevo León 122; DENUE 05/2026). Las metas del base se reparten en el orden
+    de expansión hasta llenar cada tope.
+  - **Plan Gobierno** para centros de día públicos (DIF o alcaldías): 4,000 MXN al mes por centro, **supuesto**:
+    no se encontró una referencia pública de precio de software contratado por gobiernos locales en México.
+    Ciclo de venta de 6 meses (empiezan a pagar 6 meses después de abrir la entidad) y máximo 5 % de los
+    379 centros de día públicos de las cuatro entidades (19 centros).
+  - Fundadores al **50 %** del sueldo el año 1 (supuesto editable).
+
+| Escenario | Inversión necesaria | Mes de equilibrio | Recupera lo perdido | VPN al 25 % | Instituciones año 5 | CDMX · Edomex · Jalisco · NL (privados) |
+|---|---|---|---|---|---|---|
+| Base | 1.90 M (mes 29) | 30 | 53 | −0.16 M | 75 | 35.8 % · 32.8 % · — · — |
+| Conservador | 2.86 M (mes 43) | 44 | no ocurre | −1.92 M | 38 | 17.9 % · 16.4 % · — · — |
+| **Recomendado** | **1.01 M (mes 31)** | **32** | **44** | **+1.21 M** | 91 (72 + 19 gobierno) | 15 % · 15 % · 13.1 % · 15 % |
+
+**El recomendado sí da un VPN positivo al 25 %, pero depende de sus dos supuestos nuevos:** sin el plan
+Gobierno sería +0.33 M; sin el recorte a los fundadores, +0.70 M; **sin ninguno de los dos, −0.18 M**. Si en
+la página se cambian los supuestos y el recomendado queda negativo, la página lo dice y calcula qué palanca
+falta (precio Profesional, precio Gobierno, CAC o tope de participación), cada una por separado.
+No se modeló un CAC más alto para Jalisco y Nuevo León (viajes, ventas a distancia): es un riesgo a mencionar.

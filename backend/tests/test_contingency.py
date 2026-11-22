@@ -44,7 +44,8 @@ def test_demo_scenario_is_detected_by_one_worker_tick_without_changing_prioritie
 
 def test_partial_approval_applies_only_the_chosen_changes_and_normal_reverts(tx_client, db_conn):
     login(tx_client, "owner@ejemplo.test")
-    tx_client.post("/api/demo/scenario", json={"scenario": "contingency_east"})
+    r = tx_client.post("/api/demo/scenario", json={"scenario": "contingency_east"})
+    assert r.status_code == 200, f"{r.status_code} {r.text}"
     with session_on(db_conn, "*") as s:
         ct.detect(s)
         ev = [e for e in _open_events(s) if e.origin == "demo_scenario"][0].event_id
@@ -63,7 +64,8 @@ def test_partial_approval_applies_only_the_chosen_changes_and_normal_reverts(tx_
         assert s.scalar(text("SELECT count(*) FROM family_notices WHERE event_id = :e"), {"e": ev}) == 0   # not approved
         s.commit()
     login(tx_client, "owner@ejemplo.test")
-    tx_client.post("/api/demo/scenario", json={"scenario": "normal"})           # closes the demo event at once
+    r = tx_client.post("/api/demo/scenario", json={"scenario": "normal"})       # closes the demo event at once
+    assert r.status_code == 200, f"{r.status_code} {r.text}"
     with session_on(db_conn, "*") as s:
         assert s.scalar(text("SELECT ended_at IS NOT NULL FROM contingency_events WHERE event_id = :e"), {"e": ev})
         assert ops.effective_priority(s, patient, base) == base                     # back to the base priority
@@ -74,7 +76,8 @@ def test_partial_approval_applies_only_the_chosen_changes_and_normal_reverts(tx_
 
 def test_an_institution_cannot_see_or_decide_another_institutions_proposal(tx_client, db_conn):
     login(tx_client, "owner@ejemplo.test")
-    tx_client.post("/api/demo/scenario", json={"scenario": "contingency_east"})
+    r = tx_client.post("/api/demo/scenario", json={"scenario": "contingency_east"})
+    assert r.status_code == 200, f"{r.status_code} {r.text}"
     with session_on(db_conn, "*") as s:
         ct.detect(s)
         ev = [e for e in _open_events(s) if e.origin == "demo_scenario"][0].event_id
@@ -103,7 +106,8 @@ def test_real_and_demo_events_never_mix(tx_client, db_conn):
         ct.detect(s)
         s.commit()
     login(tx_client, "owner@ejemplo.test")
-    tx_client.post("/api/demo/scenario", json={"scenario": "contingency_east"})
+    r = tx_client.post("/api/demo/scenario", json={"scenario": "contingency_east"})
+    assert r.status_code == 200, f"{r.status_code} {r.text}"
     with session_on(db_conn, "*") as s:
         ct.detect(s)
         events = _open_events(s)

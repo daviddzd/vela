@@ -115,3 +115,19 @@ ya había creado las visitas reales del día (62 a las 13:30). Ahora apartan las
 de su propia transacción (`free_caregiver`, se deshace al terminar) y el conteo de pacientes del médico se lee de
 la base. Las aserciones siguen igual de estrictas. Esto no explica la falla de la voz: una nota de voz no crea
 visitas ni toca `assignments`.
+
+**Causa encontrada (22 nov 2026).** La falla intermitente no era de la voz: con la base de pruebas aparte volvió a
+aparecer en otras pruebas (contingencia, panorama, operaciones, consentimientos), siempre como un **401 «Inicia
+sesión para continuar»** segundos después de un inicio de sesión correcto. Medido en la laptop: el reloj de WSL2
+**retrocede unos 3 s cada ~30 s** al sincronizarse con Windows (2 saltos de −2.7 y −2.9 s en 90 s). Un token
+emitido justo antes del salto tenía su hora de emisión (`iat`) «en el futuro» y PyJWT lo rechazaba hasta que el
+reloj lo alcanzaba. Por eso no quedaba nada en `audit_log` (un 401 de sesión no se audita) ni en PostgreSQL.
+Arreglo: `decode_token` acepta 60 s de diferencia de reloj (`CLOCK_LEEWAY_SECONDS` en
+`backend/app/core/security.py`), con prueba. Afectaba también a la demo: alguien que iniciara sesión justo antes
+de un salto habría visto «Inicia sesión» unos segundos. El ayudante `login()` de las pruebas ahora falla si un
+usuario de demostración no logra entrar.
+El mismo salto de reloj causaba otras dos fallas raras: (1) «Terminé» justo después de «Llegué» podía guardar una
+hora de término anterior a la de llegada y la base lo rechazaba (error 500); ahora el término nunca es anterior a
+la llegada (`_visit_step` en `operations.py`). (2) Una prueba de aislamiento buscaba en la bitácora «desde la
+hora de inicio»; ahora usa la posición en la bitácora (`audit_id`). Verificación: 50 corridas seguidas de toda
+la suite, 0 fallas (antes, 3 o 4 de cada 40).

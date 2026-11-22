@@ -1,6 +1,5 @@
 """Acceptance criterion A2 (docs/spec/10): without an institution the API sees 0 rows, and a user of
 INS-A gets 403 when asking for a patient of INS-B, with the attempt stored in audit_log."""
-from datetime import datetime, timezone
 
 import pytest
 from sqlalchemy import text
@@ -42,7 +41,8 @@ def test_setting_is_local_to_the_transaction():
 
 
 def test_cross_tenant_read_is_403_and_audited(client):
-    started = datetime.now(timezone.utc)
+    with tenant_session(None) as s:   # position in the trail, not the clock (WSL2 moves the clock back ~3 s)
+        last_id = s.scalar(text("SELECT coalesce(max(audit_id), 0) FROM audit_log"))
     assert login(client, "coordinacion.a@ejemplo.test").status_code == 200
 
     assert client.get(f"/api/patients/{INS_A_PATIENT}").status_code == 200   # own institution
@@ -55,9 +55,9 @@ def test_cross_tenant_read_is_403_and_audited(client):
         row = s.execute(text("""SELECT user_id, institution_id, allowed, detail->>'target_institution'
                                 FROM audit_log
                                 WHERE action = 'blocked_cross_tenant' AND entity_id = :p
-                                  AND occurred_at >= :t
+                                  AND audit_id > :last
                                 ORDER BY audit_id DESC LIMIT 1"""),
-                        {"p": INS_B_PATIENT, "t": started}).one()
+                        {"p": INS_B_PATIENT, "last": last_id}).one()
     assert tuple(row) == ("USR-002", "INS-A", False, "INS-B")
 
 

@@ -421,8 +421,10 @@ def confirm_visit(db: Session, *, user_id: str, institution_id: str, assignment_
 
 
 def _visit_step(db, assignment_id, from_status, to_status, column, user_id, institution_id, action) -> None:
+    # "Terminé" is never earlier than "Llegué", even if the laptop clock jumps back (WSL2 re-syncs ~3 s back)
+    value = "greatest(clock_timestamp(), a.arrived_at + interval '1 second')" if column == "finished_at" else "clock_timestamp()"
     rid = db.scalar(text(f"""
-        UPDATE assignments a SET {column} = clock_timestamp() FROM service_requests r
+        UPDATE assignments a SET {column} = {value} FROM service_requests r
         WHERE a.assignment_id = :a AND a.status = 'active' AND r.request_id = a.request_id
           AND r.status = :from RETURNING r.request_id"""), {"a": assignment_id, "from": from_status})
     if rid is None:

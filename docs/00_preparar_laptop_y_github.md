@@ -254,4 +254,5 @@ y el enlace ya no cambia.
 | `verify_db.py` falla en conteos | `docker compose down -v` y volver a `up -d db` (la carga solo corre con el volumen vacío) |
 | El enlace de Cloudflare da error 502 | La app no está corriendo en el puerto 8080: `docker compose ps` |
 | El tablero se queda en "Reconectando…" | `curl localhost:8080/api/health` debe decir `"realtime":"ok"`; si dice `reconnecting`, revisa `docker compose logs api` y que `db` esté arriba |
+| Te saca la sesión segundos después de entrar | El reloj de WSL2 se atrasa al sincronizarse con Windows; la API ya tolera 60 s. Si es más: en PowerShell `wsl --shutdown` y vuelve a abrir Ubuntu |
 | Todo va lento | Cierra el navegador con muchas pestañas; usa el modelo `llama3.2:3b` |
