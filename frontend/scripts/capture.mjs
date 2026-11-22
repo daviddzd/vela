@@ -10,7 +10,8 @@ const OUT = process.env.OUT ?? "/out";
 const USERS = Object.fromEntries(Object.entries({ coordinacion: "coordinacion.a@ejemplo.test", direccion: "owner@ejemplo.test" })
   .filter(([k]) => !process.env.ONLY || process.env.ONLY.split(",").includes(k)));
 const SIZES = { proyector: { width: 1280, height: 720 }, celular: { width: 390, height: 844 } };
-const VIEWS = { operacion: "operacion", panorama: "panorama" };
+const VIEWS = Object.fromEntries(["operacion", "panorama", "simulacion"]
+  .filter((v) => !process.env.VIEWS || process.env.VIEWS.split(",").includes(v)).map((v) => [v, v]));
 
 const browser = await chromium.launch();
 for (const [who, email] of Object.entries(USERS)) {
@@ -24,20 +25,27 @@ for (const [who, email] of Object.entries(USERS)) {
     await page.click('button[type="submit"]');
     await page.waitForURL((u) => !u.pathname.endsWith("/"), { timeout: 15000 });
     for (const view of Object.keys(VIEWS)) {
-      await page.goto(`${BASE}/panorama${view === "panorama" ? "?vista=panorama" : ""}`);
+      await page.goto(view === "simulacion" ? `${BASE}/simulacion` : `${BASE}/panorama${view === "panorama" ? "?vista=panorama" : ""}`);
       await page.waitForSelector("canvas", { timeout: 20000 });
       await page.waitForTimeout(2500);                     // let charts animate and the map tiles settle
       const file = `${OUT}/${view}_${who}_${sizeName}.png`;
       await page.screenshot({ path: file, fullPage: true });
       console.log("saved", file);
-      if (view === "panorama") {                                // broad multimorbidity vs ENSANUT
+      if (view === "simulacion") {                              // presentation mode (projector)
+        await page.getByRole("button", { name: "Modo presentación" }).click();
+        await page.waitForTimeout(1500);
+        await page.screenshot({ path: `${OUT}/simulacion_presentacion_${who}_${sizeName}.png`, fullPage: true });
+        console.log("saved", `${OUT}/simulacion_presentacion_${who}_${sizeName}.png`);
+        await page.getByRole("button", { name: "Salir del modo presentación" }).click();
+      }
+      if (view === "panorama" && !process.env.NO_EXTRA) {      // broad multimorbidity vs ENSANUT
         await page.getByLabel("Multimorbilidad amplia", { exact: false }).check();
         await page.waitForTimeout(1200);
         const card = `${OUT}/tarjetas/multimorbilidad_amplia_${sizeName}.png`;
         await page.locator("main section").first().screenshot({ path: card });
         console.log("saved", card);
       }
-      if (sizeName === "celular" && view === "operacion") {     // the mobile menu, opened
+      if (sizeName === "celular" && view === "operacion" && !process.env.NO_MENU) {     // the mobile menu, opened
         await page.getByRole("button", { name: "Menú" }).click();
         await page.screenshot({ path: `${OUT}/menu_${who}_celular.png` });
         console.log("saved", `${OUT}/menu_${who}_celular.png`);

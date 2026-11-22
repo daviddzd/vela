@@ -68,6 +68,17 @@ human_dispatcher_delay_minutes: [5, 20]   # ASSUMPTION uniform range
 approval:
   auto_approve_priorities: [low, medium]   # routine assignments are approved automatically
   coordinator_approval_priorities: [high]  # urgent/crisis assignments wait for the coordinator
+  # Finding of SIRAG-D that changed the product (docs/dev/sirag_d_modelo.md): if an URGENT high-priority
+  # request (visit due within `urgent_within_minutes`) waits `auto_apply_after_minutes` without approval,
+  # Vela applies the proposed candidate ("aprobada por tiempo"), alerts coordination, who can change it.
+  auto_apply_after_minutes: 3              # ASSUMPTION / product decision
+  urgent_within_minutes: 60                # ASSUMPTION / product decision
+  # While a high-priority request waits for approval, its proposed caregiver's window is reserved so low/medium
+  # requests cannot take it. The reservation expires after `hold_minutes` (covers approvals of up to 15 min).
+  hold_minutes: 15                         # ASSUMPTION / product decision
+
+dispatch:
+  late_tolerance_minutes: 60               # ASSUMPTION: a visit may start up to 60 min after the requested time
 
 experiments:
   replications: 30

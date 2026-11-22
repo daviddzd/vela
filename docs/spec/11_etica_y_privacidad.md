@@ -17,7 +17,7 @@
 | Aislamiento | Seguridad a nivel de fila por institución, falla cerrada |
 | Trazabilidad | `audit_log` de lecturas, cambios, aprobaciones e intentos bloqueados |
 | Derechos ARCO | Pantalla `/privacidad` con instrucciones y formulario de solicitud |
-| IA responsable | ORACLE-Voz no diagnostica; las decisiones de asignación alta y contingencia las aprueba una persona |
+| IA responsable | ORACLE-Voz no diagnostica; las decisiones de asignación alta y contingencia las aprueba una persona. Única excepción: una solicitud alta **urgente** sin respuesta en 3 min se aplica "por tiempo", con aviso a coordinación, registro en bitácora y posibilidad de cambiarla (ver riesgo 3) |
 | Datos sintéticos | Ningún dato real; las grabaciones de prueba son propias con consentimiento o de licencia abierta |
 
 Plantillas en `docs/legal/aviso_de_privacidad.md` y `docs/legal/formato_consentimiento.md`.
@@ -25,5 +25,8 @@ Plantillas en `docs/legal/aviso_de_privacidad.md` y `docs/legal/formato_consenti
 ## Riesgos éticos a discutir en la defensa
 1. Falsas alarmas vs. emergencias perdidas (se eligió priorizar no perder emergencias).
 2. Sesgo de reconocimiento de voz por edad, acento y lengua indígena.
-3. Automatización de asignaciones: quién responde si falla (por eso existe la aprobación humana).
+3. Automatización de asignaciones: quién responde si falla (por eso existe la aprobación humana). La
+   simulación mostró que esperar una aprobación lenta empeora la respuesta a lo urgente; se eligió aplicar
+   la propuesta solo en lo urgente y tras 3 min, dejando a la persona la última palabra (puede cambiarla)
+   y la responsabilidad trazable en `audit_log` (`assignment_approved_by_timeout`).
 4. Vigilancia del personal: los datos de llegada se usan para coordinar, no para sancionar.

@@ -1,0 +1,4 @@
+metric,with_holds,without_holds,diff_mean,test,p_raw,p_holm
+unattended_pct,14.672746566838317,14.672746566838317,0.0,sin diferencias,1.0,1.0
+medium_wait_p90_min,15.500000000000007,15.500000000000007,0.0,sin diferencias,1.0,1.0
+low_wait_p90_min,19.533333333333342,19.533333333333342,0.0,sin diferencias,1.0,1.0

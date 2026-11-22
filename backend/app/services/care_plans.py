@@ -13,7 +13,7 @@ makes it impossible to create the same visit twice.
 from __future__ import annotations
 
 import hashlib
-from datetime import date, datetime, time, timedelta
+from datetime import date, datetime, timedelta
 
 import logging
 
@@ -22,25 +22,21 @@ from sqlalchemy.orm import Session
 
 from app.services import operations as ops
 from app.services.dispatcher import MEXICO_CITY
+from app.services.visit_rules import visit_time
 
 RELEASE_BEFORE = timedelta(hours=2)
 MIN_AHEAD = timedelta(minutes=15)
-SLOT_MINUTES = 15
-# Visiting hours by institution schedule (ASSUMPTION, documented in docs/dev/decisiones_paso_4.md).
-VISIT_HOURS = {"day": (8, 18), "24h": (7, 21)}
 log = logging.getLogger("vela.care_plans")
 
 
-def planned_visit(care_plan_id: str, day: date, times_per_week: float, schedule: str) -> datetime | None:
-    """Time of the plan's visit on that day, or None if no visit is due. Pure and deterministic."""
+def planned_visit(care_plan_id: str, day: date, times_per_week: float, service_id: str) -> datetime | None:
+    """Time of the plan's visit on that day, or None if no visit is due. Pure and deterministic.
+    The hour follows app/services/visit_rules.py (shared with the SIRAG-D simulation)."""
     digest = hashlib.sha256(f"{care_plan_id}|{day.isoformat()}".encode()).digest()
     draw = int.from_bytes(digest[:8], "big") / 2**64                   # uniform in [0, 1)
     if draw >= min(times_per_week / 7, 1.0):
         return None
-    start, end = VISIT_HOURS[schedule]
-    slots = (end - start) * 60 // SLOT_MINUTES
-    slot = int.from_bytes(digest[8:12], "big") % slots
-    return datetime.combine(day, time(start), MEXICO_CITY) + timedelta(minutes=slot * SLOT_MINUTES)
+    return visit_time(day, service_id, int.from_bytes(digest[8:16], "big") / 2**64)
 
 
 def create_due_requests(db: Session, now: datetime | None = None) -> list[str]:
@@ -56,7 +52,7 @@ def create_due_requests(db: Session, now: datetime | None = None) -> list[str]:
                           AND r.plan_date = :today)"""), {"today": today}).all()
     created = []
     for p in plans:
-        at = planned_visit(p.care_plan_id, today, p.tpw, p.schedule)
+        at = planned_visit(p.care_plan_id, today, p.tpw, p.service_id)
         if at is None or not (at - RELEASE_BEFORE <= now <= at - MIN_AHEAD):
             continue
         try:

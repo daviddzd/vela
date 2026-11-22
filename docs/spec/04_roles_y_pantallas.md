@@ -16,8 +16,12 @@
    y elige con la política activa (por defecto `risk_plus_live_traffic`).
 4. Prioridad baja/media → se asigna al momento. Prioridad alta → aparece en **Aprobaciones** con el
    candidato propuesto y dos alternativas; coordinación aprueba o cambia.
+   **Excepción (hallazgo de SIRAG-D):** si una solicitud alta **urgente** (visita en menos de 60 min) lleva
+   3 min sin aprobación, se aplica el candidato propuesto ("aprobada por tiempo"), se avisa a coordinación y
+   queda en la bitácora; coordinación puede cambiarla. Las visitas altas programadas siempre esperan a una persona.
 5. El cuidador marca llegada y término; el familiar confirma.
-6. Si nadie está disponible: queda en cola, se reintenta cada minuto y se alerta a los 30 min.
+6. Si nadie está disponible: queda en cola, se reintenta cada minuto (la visita puede empezar hasta 60 min
+   después de la hora pedida) y se alerta a los 30 min; pasada esa tolerancia queda "sin atender".
 
 ## Pantallas
 | Ruta | Pantalla | Rol |

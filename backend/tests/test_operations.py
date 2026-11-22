@@ -7,6 +7,7 @@ import pytest
 from sqlalchemy import text
 from sqlalchemy.exc import IntegrityError
 
+from app.services import dispatcher as dsp
 from app.services import operations as ops
 from app.services import queue
 from app.services.dispatcher import MEXICO_CITY
@@ -256,3 +257,113 @@ def test_caregiver_cannot_touch_someone_elses_visit(tx_client, db_conn):
     login(tx_client, "cui-003@ejemplo.test")
     assert aid not in [v["assignment_id"] for v in tx_client.get("/api/visits/mine").json()]
     assert tx_client.post(f"/api/visits/{aid}/arrive").status_code == 403
+
+
+# ---- late tolerance (60 min, same value as SIRAG-D) ---------------------------------------------
+
+def test_visit_is_assigned_late_within_tolerance_when_nobody_is_free_on_time(tx_client, db_conn):
+    """Every INS-A nurse is busy until 10:25 tomorrow: a 10:00 visit is assigned to arrive later (<= 11:00)."""
+    day = datetime.now(MEXICO_CITY).date() + timedelta(days=1)
+    busy_from = datetime(day.year, day.month, day.day, 8, 0, tzinfo=MEXICO_CITY)
+    busy_to = datetime(day.year, day.month, day.day, 10, 25, tzinfo=MEXICO_CITY)
+    with session_on(db_conn, "INS-A") as s:
+        nurses = s.scalars(text("""SELECT DISTINCT c.caregiver_id FROM caregivers c JOIN caregiver_skills k USING (caregiver_id)
+                                   WHERE c.institution_id = 'INS-A' AND k.skill = 'nursing' AND c.active""")).all()
+        for cg in nurses:
+            _insert_assignment(s, cg, busy_from, busy_to)
+        s.commit()
+    login(tx_client, "coordinacion.a@ejemplo.test")
+    body = new_request(tx_client, "medium", tomorrow_at(10)).json()
+    assert body["status"] == "assigned", body
+    arrival = datetime.fromisoformat(body["planned_end"]) - timedelta(minutes=30)
+    assert busy_to <= arrival <= busy_to.replace(hour=11, minute=0)
+
+
+def test_unattended_only_after_the_tolerance(db_conn):
+    with session_on(db_conn, "*") as s:
+        ids = {}
+        for label, minutes in (("within", 30), ("past", 90)):
+            ids[label] = s.scalar(text("""INSERT INTO service_requests (institution_id, patient_id, service_id, origin,
+                                   priority, scheduled_for, created_at, status) VALUES ('INS-A', 'PAC-0002', 'SRV-02',
+                                   'coordinator', 'low', now() - :m * interval '1 minute', now() - interval '3 hours',
+                                   'queued') RETURNING request_id"""), {"m": minutes})
+        queue.mark_unattended(s)
+        status = dict(s.execute(text("SELECT request_id, status FROM service_requests WHERE request_id IN (:a, :b)"),
+                                {"a": ids["within"], "b": ids["past"]}).all())
+    assert status == {ids["within"]: "queued", ids["past"]: "unattended"}
+
+
+# ---- time-limited approval of URGENT high priority (finding of SIRAG-D) --------------------------
+
+def _queued_high(s, minutes_ahead: int, proposed_minutes_ago: int) -> str:
+    rid = s.scalar(text("""INSERT INTO service_requests (institution_id, patient_id, service_id, origin, priority,
+                           scheduled_for, created_at, status, status_reason) VALUES ('INS-A', 'PAC-0002', 'SRV-02',
+                           'coordinator', 'high', now() + :m * interval '1 minute', now() - interval '10 minutes',
+                           'queued', 'awaiting_approval') RETURNING request_id"""), {"m": minutes_ahead})
+    s.execute(text("""INSERT INTO assignment_proposals (request_id, institution_id, rank, caregiver_id, travel_min,
+                      planned_start, planned_end, policy, created_at)
+                      VALUES (:r, 'INS-A', 1, 'CUI-004', 10, now(), now() + interval '1 hour', 'risk_plus_live_traffic',
+                              now() - :ago * interval '1 minute')"""), {"r": rid, "ago": proposed_minutes_ago})
+    return rid
+
+
+def test_urgent_high_priority_is_applied_by_timeout_and_coordination_is_alerted(db_conn, monkeypatch):
+    def fake_options(db, request_id):   # independent of the hour the test runs (night: nobody on shift)
+        # a different window per request: the EXCLUDE constraint would (rightly) reject a shared one
+        start = datetime.now(MEXICO_CITY) + timedelta(days=3, hours=int(request_id[-5:]) % 500)
+        return [dsp.Option("CUI-004", 3.0, 10.0, start, start + timedelta(minutes=40), 0.0, start + timedelta(minutes=10))]
+    monkeypatch.setattr(ops, "options_for", fake_options)
+    with session_on(db_conn, "*") as s:
+        urgent = _queued_high(s, minutes_ahead=40, proposed_minutes_ago=4)
+        fresh = _queued_high(s, minutes_ahead=40, proposed_minutes_ago=1)       # still within the 3 minutes
+        planned = _queued_high(s, minutes_ahead=24 * 60, proposed_minutes_ago=30)  # not urgent: waits for a person
+        applied = queue.auto_apply_urgent(s)
+        rows = dict(s.execute(text("""SELECT r.request_id, coalesce(a.approval, r.status) FROM service_requests r
+                                      LEFT JOIN assignments a ON a.request_id = r.request_id AND a.status = 'active'
+                                      WHERE r.request_id IN (:a, :b, :c)"""), {"a": urgent, "b": fresh, "c": planned}).all())
+        alert = s.scalar(text("SELECT message FROM alerts WHERE request_id = :r AND code = 'approved_by_timeout'"),
+                         {"r": urgent})
+        audited = s.scalar(text("""SELECT count(*) FROM audit_log WHERE action = 'assignment_approved_by_timeout'
+                                   AND detail->>'request_id' = :r"""), {"r": urgent})
+    assert urgent in applied and fresh not in applied and planned not in applied   # other live requests may also qualify
+    assert rows == {urgent: "timeout", fresh: "queued", planned: "queued"}
+    assert "sin aprobación" in alert and audited == 1
+
+
+# ---- reservation of the proposed candidate (shared with SIRAG-D: dispatcher.apply_holds) --------
+
+def test_proposed_candidate_is_reserved_until_the_hold_expires(tx_client, db_conn):
+    login(tx_client, "coordinacion.a@ejemplo.test")
+    high = new_request(tx_client, "high", tomorrow_at(10)).json()
+    proposed = next(p for p in tx_client.get("/api/approvals").json() if p["request_id"] == high["request_id"])["options"][0]
+    held = proposed["caregiver_id"]
+    # Make every OTHER nurse busy, so the only way to serve a medium request at 10:00 is the held caregiver.
+    day = datetime.now(MEXICO_CITY).date() + timedelta(days=1)
+    lo = datetime(day.year, day.month, day.day, 8, 0, tzinfo=MEXICO_CITY)
+    hi = datetime(day.year, day.month, day.day, 12, 0, tzinfo=MEXICO_CITY)
+    with session_on(db_conn, "INS-A") as s:
+        others = s.scalars(text("""SELECT DISTINCT c.caregiver_id FROM caregivers c JOIN caregiver_skills k USING (caregiver_id)
+                                   WHERE c.institution_id = 'INS-A' AND k.skill = 'nursing' AND c.active AND c.caregiver_id <> :h"""),
+                           {"h": held}).all()
+        # three different patients with a valid home_care consent (none of them used by the blocking visits)
+        p1, p2, blocker = s.scalars(text("""SELECT pa.patient_id FROM patients pa JOIN v_consents c USING (patient_id)
+                                            WHERE pa.active AND c.type = 'home_care' AND c.is_valid
+                                              AND pa.patient_id NOT IN ('PAC-0001', 'PAC-0002')
+                                            ORDER BY pa.patient_id LIMIT 3""")).all()
+        for cg in others:
+            _insert_assignment(s, cg, lo, hi, patient=blocker)
+        s.commit()
+    medium = new_request(tx_client, "medium", tomorrow_at(10), patient=p1).json()
+    if medium["caregiver_id"] == held:   # it may only use the held caregiver OUTSIDE the reserved window
+        arrival = datetime.fromisoformat(medium["planned_end"]) - timedelta(minutes=30)
+        assert arrival >= datetime.fromisoformat(proposed["planned_end"])
+    else:
+        assert medium["status"] == "queued", medium.get("status_reason")
+    # After approval.hold_minutes without approval the reservation expires and the window is free again.
+    with session_on(db_conn, "INS-A") as s:
+        s.execute(text("UPDATE assignment_proposals SET created_at = now() - interval '20 minutes' WHERE request_id = :r"),
+                  {"r": high["request_id"]})
+        s.commit()
+        assert ops.load_holds(s, "INS-A")[0].expires < ops.now()
+    later = new_request(tx_client, "medium", tomorrow_at(10), patient=p2).json()
+    assert later["status"] == "assigned" and later["caregiver_id"] == held

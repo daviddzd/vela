@@ -121,3 +121,15 @@ def test_staff_hours_include_estimated_travel(client):
                                      / count(DISTINCT (arrived_at AT TIME ZONE 'America/Mexico_City')::date)
                                    FROM assignments WHERE caregiver_id = 'CUI-001' AND finished_at IS NOT NULL"""))
     assert laura["avg_hours_per_day"] > round(float(on_site), 1)
+
+
+def test_simulation_results_are_served_read_only(client):
+    login(client, "coordinacion.a@ejemplo.test")
+    body = client.get("/api/simulation/results").json()
+    assert body["available"] is True and body["info"]["replications"] == 30
+    policies = {r["policy"] for r in body["summary"]}
+    assert policies == {"nearest", "risk_priority", "risk_plus_live_traffic", "vela_timeout", "human_dispatcher"}
+    assert {r["scenario"] for r in body["summary"]} == {"normal", "contingency_east", "contingency_east_roadblocks"}
+    assert all(r["ci_low"] <= r["mean"] <= r["ci_high"] for r in body["summary"] if r["mean"] is not None)
+    login(client, "fam-0001@ejemplo.test")
+    assert client.get("/api/simulation/results").status_code == 403

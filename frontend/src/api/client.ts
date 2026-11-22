@@ -70,6 +70,7 @@ export const api = {
   me: () => request<Me>("/api/auth/me"),
   services: () => request<Service[]>("/api/services"),
   board: () => request<Board>("/api/board"),
+  simulation: () => request<unknown>("/api/simulation/results"),
   panorama: <T,>(view: string, params: Record<string, string | undefined> = {}) => {
     const q = new URLSearchParams(Object.entries(params).filter(([, v]) => v) as [string, string][]);
     return request<T>(`/api/panorama/${view}${q.size ? `?${q}` : ""}`);

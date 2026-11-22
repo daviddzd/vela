@@ -20,7 +20,12 @@ All data are **synthetic**. The team only knows Python: keep code simple, commen
 3. **Assignment.** Every service request is assigned **automatically** by the dispatcher.
    `low`/`medium` priority → applied immediately (`approval='auto'`).
    `high` priority → proposed, then a **coordinator approves** (`approval='coordinator'`).
-   A coordinator can always override.
+   **Only exception (SIRAG-D finding, team decision 21 Nov 2026):** an URGENT high-priority request
+   (visit due within `approval.urgent_within_minutes`) that waits `approval.auto_apply_after_minutes`
+   without an answer gets the proposed candidate applied (`approval='timeout'`, "aprobada por tiempo"),
+   coordination is alerted and it is audited. Scheduled high-priority visits always wait for a person.
+   A coordinator can always override. Visits may start up to `dispatch.late_tolerance_minutes` late
+   (all three values in `config/simulation.yaml`, shared by the worker and SIRAG-D).
 4. **Tenant isolation.** PostgreSQL row-level security (`database/sql/004_row_level_security.sql`).
    The API connects as role `vela_api` (not the table owner) and runs
    `SET LOCAL app.institution_id = '<id>'` in every transaction (`'*'` only for the owner role).
