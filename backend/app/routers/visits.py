@@ -16,7 +16,7 @@ STAFF = (CAREGIVER, PHYSICIAN)
 def my_visits(user: CurrentUser = Depends(require_role(*STAFF)), db: Session = Depends(tenant_db)) -> list[dict]:
     """Today's visits (Mexico City date), only the caregiver's own."""
     rows = db.execute(text("""
-        SELECT a.assignment_id, r.request_id, r.status, r.scheduled_for, a.planned_start, a.planned_end,
+        SELECT a.assignment_id, r.request_id, r.patient_id, r.status, r.scheduled_for, a.planned_start, a.planned_end,
                a.travel_min::float AS travel_min, a.arrived_at, a.finished_at, s.name AS service_name, r.priority,
                pe.first_name || ' ' || pe.paternal_surname AS patient_name, d.name AS district_name
         FROM assignments a JOIN service_requests r USING (request_id) JOIN services s USING (service_id)

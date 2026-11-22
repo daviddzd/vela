@@ -6,7 +6,8 @@ import { RequestForm } from "../components/RequestForm";
 import { RequestResult } from "../components/RequestResult";
 import { StatusBadge } from "../components/StatusBadge";
 import { Button, Card, Notice } from "../components/ui";
-import { ThumbsUp } from "../components/icons";
+import { Icon, Mic, ThumbsUp } from "../components/icons";
+import { Link } from "react-router";
 import { es } from "../i18n/es";
 import { formatDateTime } from "../lib/format";
 
@@ -34,7 +35,12 @@ export function FamilyPage() {
   const next = data?.next_visit;
   return (
     <AppShell>
-      <h1 className="text-teal">{data ? `${es.screens["/familia"]}: ${data.patient_name}` : es.screens["/familia"]}</h1>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <h1 className="text-teal">{data ? `${es.screens["/familia"]}: ${data.patient_name}` : es.screens["/familia"]}</h1>
+        <Link to={data ? `/voz?paciente=${encodeURIComponent(data.patient_id)}` : "/voz"}
+          className="inline-flex min-h-12 items-center gap-2 rounded-card bg-teal px-4 font-bold text-white hover:bg-teal-dark">
+          <Icon as={Mic} /> {es.family.voiceAssistant}</Link>
+      </div>
       <div className="mt-4 grid gap-4 lg:grid-cols-2">
         {error && <div className="lg:col-span-2"><Notice kind="error">{error}</Notice></div>}
         {notice && <div className="lg:col-span-2"><Notice kind="ok">{notice}</Notice></div>}

@@ -42,7 +42,10 @@ export function VoicePage() {
   const timer = useRef<ReturnType<typeof setInterval> | undefined>(undefined);
 
   useEffect(() => {
-    api.voicePatients().then((p: Patient[]) => { setPatients(p); setPid((cur) => cur || p.find((x) => x.voice_consent)?.patient_id || p[0]?.patient_id || ""); })
+    // "Nota de voz" from /mis-visitas opens this screen with the patient already chosen (?paciente=PAC-…)
+    const asked = new URLSearchParams(window.location.search).get("paciente");
+    api.voicePatients().then((p: Patient[]) => { setPatients(p); setPid((cur) => cur || p.find((x) => x.patient_id === asked)?.patient_id
+      || p.find((x) => x.voice_consent)?.patient_id || p[0]?.patient_id || ""); })
       .catch(() => undefined);
     return () => clearInterval(timer.current);
   }, []);

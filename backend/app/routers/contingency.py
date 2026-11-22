@@ -106,7 +106,9 @@ def demo_urgent(body: UrgentIn, user: CurrentUser = Depends(require_role(OWNER))
     p = db.execute(text("""
         SELECT pa.patient_id FROM patients pa JOIN v_persons vp USING (person_id) JOIN v_consents c USING (patient_id)
         WHERE pa.institution_id = :i AND pa.active AND c.type = 'home_care' AND c.is_valid
-        ORDER BY (vp.district_id IN ('09007','09006','09017','09011','09005')) DESC, vp.pollution_sensitive DESC,
+        ORDER BY (vp.district_id IN ('09007','09006','09017','09011','09005')) DESC,
+                 (vp.pollution_sensitive AND EXISTS (SELECT 1 FROM v_consents h WHERE h.patient_id = pa.patient_id
+                                                     AND h.type = 'health_data' AND h.is_valid)) DESC,
                  random() LIMIT 1"""), {"i": body.institution_id}).scalar()
     if p is None:
         raise HTTPException(status.HTTP_409_CONFLICT, "Esa institución no tiene pacientes con consentimiento vigente.")

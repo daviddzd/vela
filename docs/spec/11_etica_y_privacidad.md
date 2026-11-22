@@ -12,6 +12,7 @@
 | Principio | Implementación |
 |---|---|
 | Consentimiento | Tres tipos (`health_data`, `home_care`, `voice_assistant`), con vigencia; si falta, la función se bloquea |
+| Consentimiento en las decisiones automáticas | Sin `health_data` vigente, el despachador y la cola **no usan el riesgo calculado con datos de salud** (enfermedades, dependencia, edad en el cálculo de riesgo): la solicitud compite solo con su prioridad base (riesgo neutro = 1). La contingencia tampoco propone subir de prioridad ni avisar por «sensible a la contaminación» a quien no lo tiene, y la ficha muestra «Falta consentimiento» en lugar del indicador de riesgo (decisión del equipo, 22 nov 2026) |
 | Representación | Si la persona no puede decidir, firma su representante legal y se registra su asentimiento |
 | Minimización | Cada rol ve solo lo necesario; el familiar ve solo a su paciente |
 | Aislamiento | Seguridad a nivel de fila por institución, falla cerrada |

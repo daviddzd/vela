@@ -8,6 +8,8 @@ What it deletes (all of it is created while the app runs; none of it comes from 
   - ORACLE-Voz reports (voice_reports) and every alert (alerts)
   - family notices (family_notices) and ARCO requests (arco_requests)
   - consents changed during a rehearsal (revoked or registered in /privacidad) go back to their seed values
+  - care plans changed by a physician in a rehearsal: the seed plans come back as they were and the plans created
+    in the rehearsal are deactivated (not deleted: visits that already happened still point to them)
   - demo scenarios: scenario_runs and everything hanging from them (simulated air quality, traffic,
     caregivers out of service, contingency events / proposals / decisions, priority changes)
   - open or past assignment proposals (assignment_proposals)
@@ -69,6 +71,9 @@ UPDATE consents c SET granted = s.granted, granted_by = s.granted_by, family_mem
        recorded_by = NULL, recorded_at = NULL, revoked_at = NULL, revoked_by = NULL, revoke_reason = NULL
   FROM seed_consents s WHERE s.consent_id = c.consent_id;
 DELETE FROM consents WHERE consent_id NOT IN (SELECT consent_id FROM seed_consents);
+UPDATE care_plans SET active = false WHERE created_at IS NOT NULL AND active;
+UPDATE care_plans SET active = true, ended_at = NULL, ended_by = NULL
+  WHERE created_at IS NULL AND ended_at IS NOT NULL;
 INSERT INTO audit_log (user_id, institution_id, action, entity, entity_id, allowed, detail)
   VALUES (NULL, NULL, 'demo_reset', 'platform', NULL, true, '{"script": "scripts/reset_demo.py"}');
 """

@@ -36,7 +36,7 @@ def board(user: CurrentUser = Depends(require_role(COORDINATOR, OWNER)), db: Ses
           AND r.scheduled_for > now() - interval '2 days'""")).mappings().one()
 
     waiting = db.execute(text("""
-        SELECT r.request_id, r.institution_id, r.priority, r.status_reason, r.scheduled_for, r.origin,
+        SELECT r.request_id, r.institution_id, r.patient_id, r.priority, r.status_reason, r.scheduled_for, r.origin,
                s.name AS service_name, pe.first_name || ' ' || pe.paternal_surname AS patient_name,
                round(extract(epoch FROM now() - r.created_at) / 60)::int AS minutes_waiting
         FROM service_requests r JOIN services s USING (service_id)
@@ -52,7 +52,7 @@ def board(user: CurrentUser = Depends(require_role(COORDINATOR, OWNER)), db: Ses
         WHERE status = 'open' ORDER BY created_at DESC LIMIT 20""")).mappings().all()
 
     visits = db.execute(text(f"""
-        SELECT r.request_id, r.status, r.priority, r.scheduled_for, s.name AS service_name,
+        SELECT r.request_id, r.patient_id, r.status, r.priority, r.scheduled_for, s.name AS service_name,
                pe.first_name || ' ' || pe.paternal_surname AS patient_name, pe.lat::float AS lat, pe.lon::float AS lon,
                c.first_name || ' ' || c.paternal_surname AS caregiver_name
         FROM service_requests r JOIN services s USING (service_id)

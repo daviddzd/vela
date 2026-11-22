@@ -80,25 +80,40 @@ def load_traffic(db: Session) -> dsp.TrafficProfile:
     return dsp.TrafficProfile({(r.day_type, r.hour): float(r.avg_speed_kmh) for r in rows})
 
 
+def risk_flags(r) -> dict[str, bool]:
+    """Which risk multipliers apply (row with v_persons columns). Health data: use only with health_data consent."""
+    return {"chronic_lung_disease": r.chronic_lung_disease, "heart_disease": r.heart_disease,
+            "stroke": r.stroke, "diabetes": r.diabetes,
+            "dependency_severe": r.dependency_level == "severe",
+            "dependency_moderate": r.dependency_level == "moderate",
+            "age_80_plus": r.age_group == "80+", "no_chronic_disease": r.chronic_disease_count == 0}
+
+
+def risk_level(risk: float) -> str:
+    """'low' / 'medium' / 'high' with the cutoffs of config/simulation.yaml (health_markov.risk_levels, ASSUMPTION)."""
+    cut = settings_yaml()["health_markov"]["risk_levels"]
+    return "high" if risk >= cut["high_from"] else "medium" if risk >= cut["medium_from"] else "low"
+
+
 def load_request(db: Session, request_id: str) -> dsp.Request:
     r = db.execute(text("""
         SELECT r.request_id, r.priority, r.scheduled_for, r.created_at, s.required_skill,
                ins.duration_min, vp.lat, vp.lon, vp.chronic_lung_disease, vp.heart_disease, vp.stroke,
-               vp.diabetes, vp.dependency_level, vp.age_group, vp.chronic_disease_count
+               vp.diabetes, vp.dependency_level, vp.age_group, vp.chronic_disease_count,
+               coalesce((SELECT c.is_valid FROM v_consents c WHERE c.patient_id = r.patient_id
+                         AND c.type = 'health_data'), false) AS health_consent
         FROM service_requests r
         JOIN services s ON s.service_id = r.service_id
         JOIN institution_services ins ON ins.institution_id = r.institution_id AND ins.service_id = r.service_id
         JOIN patients pa ON pa.patient_id = r.patient_id
         JOIN v_persons vp ON vp.person_id = pa.person_id
         WHERE r.request_id = :id"""), {"id": request_id}).one()
-    flags = {"chronic_lung_disease": r.chronic_lung_disease, "heart_disease": r.heart_disease,
-             "stroke": r.stroke, "diabetes": r.diabetes,
-             "dependency_severe": r.dependency_level == "severe",
-             "dependency_moderate": r.dependency_level == "moderate",
-             "age_80_plus": r.age_group == "80+", "no_chronic_disease": r.chronic_disease_count == 0}
+    flags = risk_flags(r)
+    # Consent also inside the dispatcher (CLAUDE.md rule 5, docs/spec/11): without a valid health_data consent the
+    # health-based risk is NOT used; the request competes only by its priority (risk = 1, neutral).
+    risk = dsp.patient_risk(flags, risk_multipliers()) if r.health_consent else 1.0
     return dsp.Request(r.request_id, r.priority, r.required_skill, r.scheduled_for, r.duration_min,
-                       float(r.lat), float(r.lon), r.created_at,
-                       dsp.patient_risk(flags, risk_multipliers()))
+                       float(r.lat), float(r.lon), r.created_at, risk)
 
 
 def load_caregivers(db: Session, institution_id: str, around: datetime) -> list[dsp.Caregiver]:

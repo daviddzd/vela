@@ -26,7 +26,7 @@ export type Approval = {
 };
 export type Visit = {
   assignment_id: string; request_id: string; status: string; scheduled_for: string; planned_start: string;
-  travel_min: number; service_name: string; patient_name: string; district_name: string; priority: string;
+  travel_min: number; service_name: string; patient_name: string; district_name: string; priority: string; patient_id: string;
 };
 export type FamilyVisit = {
   request_id: string; status: string; status_reason: string | null; scheduled_for: string; service_name: string;
@@ -37,13 +37,13 @@ export type FamilyOverview = {
   next_visit: FamilyVisit | null; to_confirm: FamilyVisit[]; recent_requests: FamilyVisit[];
   notices: { message: string; created_at: string }[];
 };
-export type BoardQueueItem = { request_id: string; priority: string; status_reason: string | null; scheduled_for: string;
+export type BoardQueueItem = { request_id: string; patient_id: string; priority: string; status_reason: string | null; scheduled_for: string;
   origin: string; service_name: string; patient_name: string; minutes_waiting: number; risk: number };
 export type BoardAlert = { alert_id: string; level: string; code: string | null; message: string; created_at: string };
 export type Board = {
   now: string; counters: { queued: number; on_the_way: number; in_visit: number; done_today: number };
   queue: BoardQueueItem[]; alerts: BoardAlert[];
-  visits: { request_id: string; status: string; priority: string; scheduled_for: string; service_name: string;
+  visits: { request_id: string; patient_id: string; status: string; priority: string; scheduled_for: string; service_name: string;
     patient_name: string; lat: number; lon: number; caregiver_name: string | null }[];
   staff: { caregiver_id: string; name: string; type: string; lat: number; lon: number }[];
 };
@@ -84,6 +84,19 @@ export const api = {
   voiceCallMe: (patientId: string) =>
     request<any>("/api/voice/call-me", { method: "POST", body: JSON.stringify({ patient_id: patientId }) }),
   voiceReports: () => request<any[]>("/api/voice/reports"),
+  patients: () => request<any[]>("/api/patients"),
+  patientRecord: (id: string) => request<any>(`/api/patients/${encodeURIComponent(id)}/record`),
+  addPlan: (id: string, body: Record<string, unknown>) =>
+    request<any>(`/api/patients/${encodeURIComponent(id)}/care-plans`, { method: "POST", body: JSON.stringify(body) }),
+  changePlan: (id: string, plan: string, body: Record<string, unknown>) =>
+    request<any>(`/api/patients/${encodeURIComponent(id)}/care-plans/${plan}`, { method: "PUT", body: JSON.stringify(body) }),
+  endPlan: (id: string, plan: string) =>
+    request<any>(`/api/patients/${encodeURIComponent(id)}/care-plans/${plan}/end`, { method: "POST" }),
+  staff: () => request<any>("/api/staff"),
+  staffDay: (id: string, on?: string) => request<any>(`/api/staff/${id}/day${on ? `?on=${on}` : ""}`),
+  staffOut: (id: string, reason: string) =>
+    request<any>(`/api/staff/${id}/out-of-service`, { method: "POST", body: JSON.stringify({ reason }) }),
+  staffBack: (id: string) => request<any>(`/api/staff/${id}/back-in-service`, { method: "POST" }),
   business: () => request<any>("/api/business"),
   businessModel: (values: Record<string, unknown>) =>
     request<any>("/api/business/model", { method: "POST", body: JSON.stringify({ values }) }),

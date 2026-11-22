@@ -11,15 +11,15 @@ import { Button, inputClass } from "./ui";
 const TIMES = Array.from({ length: (22 - 7) * 4 }, (_, i) =>
   `${String(7 + Math.floor(i / 4)).padStart(2, "0")}:${String((i % 4) * 15).padStart(2, "0")}`);
 
-export function RequestForm({ coordinator = false, onCreated }:
-  { coordinator?: boolean; onCreated: (r: ServiceRequest) => void }) {
+export function RequestForm({ coordinator = false, onCreated, patient }:
+  { coordinator?: boolean; onCreated: (r: ServiceRequest) => void; patient?: string }) {
   const [services, setServices] = useState<Service[]>([]);
   const [serviceId, setServiceId] = useState("");
   // Date (dd/mm/aaaa) + time in 15-min steps, both in Mexico City time. Default: tomorrow at 10:00.
   const [day, setDay] = useState(localInputValue(24).slice(0, 10));
   const [time, setTime] = useState("10:00");
   const when = `${day}T${time}`;
-  const [patientId, setPatientId] = useState("");
+  const [patientId, setPatientId] = useState(patient ?? "");   // fixed when opened from a patient record
   const [priority, setPriority] = useState("medium");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
@@ -44,7 +44,7 @@ export function RequestForm({ coordinator = false, onCreated }:
 
   return (
     <form onSubmit={submit} className="space-y-3">
-      {coordinator && (
+      {coordinator && !patient && (
         <label className="block"><span className="font-bold">{es.board.patientId}</span>
           <input required value={patientId} onChange={(e) => setPatientId(e.target.value)} className={inputClass} />
         </label>

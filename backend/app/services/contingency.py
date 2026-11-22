@@ -176,7 +176,10 @@ def generate_proposals(db: Session, event_id: str) -> int:
                vp.first_name || ' ' || vp.paternal_surname AS name,
                vp.chronic_lung_disease, vp.heart_disease, vp.stroke
         FROM patients pa JOIN v_persons vp USING (person_id)
-        WHERE pa.active AND vp.pollution_sensitive AND vp.district_id = ANY(:d)"""), {"d": ev["districts"]}).mappings().all()
+        WHERE pa.active AND vp.pollution_sensitive AND vp.district_id = ANY(:d)
+          -- "sensitive" comes from health conditions: only with a valid health_data consent (docs/spec/11)
+          AND EXISTS (SELECT 1 FROM v_consents c WHERE c.patient_id = pa.patient_id AND c.type = 'health_data' AND c.is_valid)"""),
+        {"d": ev["districts"]}).mappings().all()
     rows = []
     for p in patients:
         cond = ", ".join(c for c, flag in (("enfermedad pulmonar crónica", p["chronic_lung_disease"]),
