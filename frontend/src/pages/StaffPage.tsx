@@ -58,7 +58,7 @@ export function StaffPage() {
                 <LoadBar c={c} />
               </button>
             </li>))}</ul>
-          <p className="mt-2 text-sm text-muted">{t.weekNote}</p>
+          <p className="mt-2 text-sm text-muted">{fill(t.weekNote, { d: d.workdays_per_week })}</p>
         </Card>
         <div className="space-y-4">
           {person && <Agenda person={person} onMsg={(m) => { setMsg(m); load(); }} />}

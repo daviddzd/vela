@@ -83,6 +83,15 @@ approval:
 dispatch:
   late_tolerance_minutes: 60               # ASSUMPTION: a visit may start up to 60 min after the requested time
 
+staffing:
+  # Working days per caregiver per week, used for the weekly capacity in /personal (shift hours x this value).
+  # ASSUMPTION of the team (22 Nov 2026): 6, the legal maximum before a rest day. Ley Federal del Trabajo,
+  # art. 69: "Por cada seis días de trabajo se deberá otorgar, por lo menos, un día de descanso con goce de
+  # salario íntegro" (texto vigente, última reforma DOF 14-05-2026; https://www.diputados.gob.mx/LeyesBiblio/pdf/LFT.pdf).
+  # Change it here (e.g. 5) and /personal follows at once. NOTE: the dispatcher, the seed and SIRAG-D still let
+  # every caregiver work all 7 days (see docs/dev/decisiones_pantallas_faltantes.md).
+  workdays_per_week: 6
+
 experiments:
   replications: 30
   confidence_level: 0.95

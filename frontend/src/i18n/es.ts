@@ -571,7 +571,7 @@ export const es = {
     visitsTodayOne: "1 visita hoy",
     weekLoad: "Carga de la semana",
     weekLoadValue: "{h} h de {cap} h ({pct} %)",
-    weekNote: "Horas asignadas de lunes a domingo frente a las horas de su turno en 7 días.",
+    weekNote: "Horas asignadas de lunes a domingo frente a las horas de su turno en {d} días laborables (supuesto: la Ley Federal del Trabajo, art. 69, da al menos un día de descanso por cada seis de trabajo; se cambia en config/simulation.yaml).",
     agenda: "Agenda del día",
     agendaOf: "Agenda de {name}",
     trip: "Traslado",

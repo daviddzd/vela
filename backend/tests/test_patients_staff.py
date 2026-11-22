@@ -27,7 +27,10 @@ def revoke_health(s, where: str, params: dict) -> None:
 def test_dispatcher_uses_only_priority_without_health_consent(db_conn):
     with session_on(db_conn, "INS-A") as s:
         rid = s.scalar(text("""SELECT r.request_id FROM service_requests r JOIN v_patients p USING (patient_id)
-                               WHERE p.chronic_disease_count > 0 AND r.institution_id = 'INS-A' LIMIT 1"""))
+                               WHERE p.chronic_lung_disease AND r.institution_id = 'INS-A'      -- a factor that counts (x1.5)
+                                 AND EXISTS (SELECT 1 FROM v_consents c WHERE c.patient_id = p.patient_id
+                                             AND c.type = 'health_data' AND c.is_valid)
+                               ORDER BY r.request_id LIMIT 1"""))
         patient = s.scalar(text("SELECT patient_id FROM service_requests WHERE request_id = :r"), {"r": rid})
         with_consent = ops.load_request(s, rid).risk
         assert with_consent != 1.0                                     # health conditions change the risk
@@ -153,3 +156,12 @@ def test_staff_out_of_service_and_back_with_the_same_logic(tx_client, db_conn):
     with session_on(db_conn, "*") as s:
         other = s.scalar(text("SELECT caregiver_id FROM caregivers WHERE institution_id = 'INS-B' LIMIT 1"))
     assert tx_client.post(f"/api/staff/{other}/out-of-service", json={"reason": "x" * 5}).status_code == 403
+
+
+def test_weekly_capacity_uses_the_working_days_assumption(tx_client):
+    """Shift hours x staffing.workdays_per_week (6 by default, LFT art. 69), not 7 days."""
+    login(tx_client, "coordinacion.a@ejemplo.test")
+    d = tx_client.get("/api/staff").json()
+    days = ops.settings_yaml()["staffing"]["workdays_per_week"]
+    cui = next(c for c in d["staff"] if c["caregiver_id"] == "CUI-001")        # shift 10:00–18:00 = 8 h
+    assert d["workdays_per_week"] == days == 6 and cui["week_capacity_hours"] == 8 * days

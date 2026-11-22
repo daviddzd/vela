@@ -4,8 +4,8 @@
 "Fuera de servicio" uses EXACTLY the same function as the demo panel (operations.caregiver_out_of_service):
 pending visits are re-dispatched by the dispatcher (low/medium at once, high through approval or the time limit).
 "Volver a servicio" closes the unavailability; new visits can be assigned to the person again.
-Week load = hours of active assignments this week (Monday–Sunday) / hours of shift in 7 days (every caregiver has
-one shift a day in the seed).
+Week load = hours of active assignments this week (Monday–Sunday) / (shift hours x working days per week).
+Working days per week: config/simulation.yaml -> staffing.workdays_per_week (ASSUMPTION 6, LFT art. 69).
 """
 from __future__ import annotations
 
@@ -64,15 +64,16 @@ def staff(user: CurrentUser = Depends(COORD), db: Session = Depends(tenant_db)) 
         {"ws": week_start, "we": week_start + timedelta(days=7),
          "ds": datetime.combine(now.date(), time.min, MEXICO_CITY),
          "de": datetime.combine(now.date() + timedelta(days=1), time.min, MEXICO_CITY)}).mappings().all()
+    workdays = float(ops.settings_yaml()["staffing"]["workdays_per_week"])   # ASSUMPTION, LFT art. 69
     out = []
     for r in rows:
-        capacity = _shift_hours(r["shift_start"], r["shift_end"]) * 7
+        capacity = _shift_hours(r["shift_start"], r["shift_end"]) * workdays
         out.append({**dict(r), "shift_start": r["shift_start"].strftime("%H:%M"), "shift_end": r["shift_end"].strftime("%H:%M"),
                     "on_shift_now": r["active"] and r["out_reason"] is None and _on_shift(r["shift_start"], r["shift_end"], now),
                     "out_of_service": r["out_reason"] is not None, "week_hours": round(float(r["week_hours"]), 1),
                     "week_capacity_hours": round(capacity, 1),
                     "week_load_pct": round(100 * float(r["week_hours"]) / capacity, 1) if capacity else None})
-    return {"now": now.isoformat(), "week_start": week_start.date().isoformat(), "staff": out}
+    return {"now": now.isoformat(), "week_start": week_start.date().isoformat(), "workdays_per_week": workdays, "staff": out}
 
 
 @router.get("/{caregiver_id}/day")

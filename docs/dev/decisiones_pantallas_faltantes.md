@@ -38,6 +38,27 @@ visita sólida, y la misma información en texto); carga de la semana (horas asi
 las horas de su turno en 7 días); «fuera de servicio» con la **misma función** del panel demo
 (`caregiver_out_of_service`) y «volver a servicio» (nuevo); mapa con sus bases.
 
+### Carga semanal: días laborables (decisión del equipo, 22 nov 2026)
+La capacidad semanal es **horas de turno × días laborables por semana**, con `staffing.workdays_per_week` en
+`config/simulation.yaml` (**supuesto: 6**). Fuente: Ley Federal del Trabajo, art. 69, texto vigente (última
+reforma DOF 14-05-2026; el artículo se reformó el 01-05-2026): «Por cada seis días de trabajo se deberá otorgar,
+por lo menos, un día de descanso con goce de salario íntegro». Para cambiarlo: editar el YAML y reiniciar la API
+(`docker compose restart api worker`). Un turno de 8 h da 48 h por semana (antes 56 h).
+
+**¿Usan el mismo valor Panorama-AM y SIRAG-D?**
+- **Panorama-AM:** no usa días por semana. Compara las horas trabajadas **por día trabajado** con las horas del
+  turno de ese día, así que el supuesto no cambia sus resultados.
+- **SIRAG-D:** **no**. Su utilización es tiempo de trabajo ÷ (minutos de turno por día × días simulados): supone
+  que todos trabajan los 7 días. Se dejó así a propósito, porque el modelo **también** deja trabajar a todos los 7
+  días (igual que el despachador real y la semilla: los cuidadores de la semilla tienen visitas los 7 días de la
+  semana). Cambiar solo el denominador inventaría capacidad que el modelo sí usa.
+- **En qué cambiarían los resultados con 6 días:** la utilización media del escenario normal pasaría de **26.2 %
+  a 30.6 %** para todas las políticas (se multiplica por 7/6); las diferencias entre políticas y sus pruebas
+  estadísticas no cambian, porque el factor es el mismo para todas.
+- **Hallazgo:** ni el despachador ni la simulación dan un día de descanso; un cuidador podría quedar asignado 7
+  días seguidos, lo que contradice el art. 69. Para corregirlo de fondo habría que asignar un día de descanso por
+  persona en el despachador, la semilla y SIRAG-D, y volver a correr los experimentos. Queda propuesto, no hecho.
+
 ## Mapas con calles
 `frontend/src/components/StreetMap.tsx`: MapLibre GL con el estilo «positron» de **OpenFreeMap** (libre, sin
 llave) y atribución a OpenStreetMap / OpenMapTiles; encima, los límites de las alcaldías y los puntos (forma +
