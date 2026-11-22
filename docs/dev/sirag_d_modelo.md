@@ -189,6 +189,11 @@ despacho humano):
 Con los dos cambios, una coordinación lenta ya no deja a Vela en desventaja: la espera de prioridad alta con
 5–15 min de retraso (13.3 min) queda igual que con aprobación de 1–5 min (13.3 min).
 
+**La reserva no empeora a las demás** (escenario normal, Vela como opera hoy, 30 réplicas pareadas con y sin
+reserva, `simulation/experiments/holds_check.py` → `results/holds_check.csv`): sin atender 14.7 % → 14.7 %,
+espera p90 de prioridad media 15.5 → 15.5 min y baja 19.5 → 19.5 min, sin ninguna diferencia (la reserva solo
+reasignó 1 visita baja/media en 5 réplicas, sin cambiar su hora).
+
 ## 9. ¿Y si contratamos? (sensibilidad)
 
 Escenario normal, 30 réplicas, política Vela con límite de tiempo:

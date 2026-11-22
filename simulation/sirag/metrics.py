@@ -32,6 +32,8 @@ def summarize(model: Model, requests) -> dict:
         "crisis_response_mean_min": float(np.mean(cresp)) if cresp else np.nan,
         "crisis_response_p90_min": float(np.percentile(cresp, 90)) if cresp else np.nan,
         "unattended_pct": 100 * sum(r.unattended for r in requests) / total if total else np.nan,
+        **{f"{prio}_wait_p90_min": _p90([(r.assigned["arrival"] - r.requested).total_seconds() / 60
+                                         for r in attended if r.priority == prio]) for prio in ("medium", "low")},
         "travel_km": sum(r.assigned["km"] for r in attended),
         "utilization_pct": 100 * work_min / shift_min,
         "overtime_hours": sum(r.assigned["overtime_min"] for r in attended) / 60,
@@ -55,3 +57,7 @@ def summarize(model: Model, requests) -> dict:
         "win_unattended_pct": 100 * sum(r.unattended for r in inside) / len(inside) if inside else np.nan,
     })
     return out
+
+
+def _p90(values: list[float]) -> float:
+    return float(np.percentile(values, 90)) if values else np.nan

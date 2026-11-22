@@ -61,6 +61,7 @@ class Params:
     approval_delay: tuple[float, float] = (1.0, 5.0)    # Vela, high priority only
     risk_multiplier: float = 1.0                        # stress test knob (sensitivity only)
     extra_staff: str = ""                               # "¿y si contratamos?": "" | "requested" | "targeted"
+    holds: bool = True                                  # reservation of the proposed candidate (off only to measure it)
 
 
 @dataclass
@@ -292,7 +293,7 @@ class Model:
             for inst, pool in self.caregivers.items():                       # forget windows from long ago
                 self.caregivers[inst] = [replace(c, busy=tuple(b for b in c.busy if b[1] > now - timedelta(hours=12)))
                                          for c in pool]
-            if self.params.policy != "human_dispatcher":       # the human dispatcher makes no proposals
+            if self.params.policy != "human_dispatcher" and self.params.holds:   # the human makes no proposals
                 for r in self.pending:
                     if r.priority == "high" and r.ready_at > now:
                         self.reserve(r, now)
