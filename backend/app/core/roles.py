@@ -22,7 +22,7 @@ SCREEN_ROLES: dict[str, tuple[str, ...]] = {
     "/aprobaciones": (COORDINATOR,),
     "/pacientes": (COORDINATOR, PHYSICIAN),
     "/personal": (COORDINATOR,),
-    "/mis-visitas": (CAREGIVER,),
+    "/mis-visitas": (CAREGIVER, PHYSICIAN),   # physicians also make home visits (SRV-01)
     "/familia": (FAMILY,),
     "/voz": (FAMILY, CAREGIVER),
     "/reportes-voz": (PHYSICIAN,),

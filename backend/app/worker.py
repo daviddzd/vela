@@ -1,24 +1,27 @@
 """Real-time worker loop (one tick per minute, wall-clock time in Mexico City).
 
-For now it only checks the database and prints a heartbeat. Later steps add: air-quality checks,
-contingency detection, queue retries, risk updates and care-plan requests (docs/spec/02).
+Each tick: retry the request queue, create delay alerts, mark unattended requests. Later steps add
+air-quality checks, contingency detection, risk updates and care-plan requests (docs/spec/02).
+The worker is a platform process: it scopes its transaction with '*' (all institutions).
 Run with:  python -m app.worker
 """
 import time
 from datetime import datetime
 
-from sqlalchemy import text
-
 from app.core.config import MEXICO_CITY
-from app.core.db import engine
+from app.core.db import ALL_INSTITUTIONS, tenant_session
+from app.services import queue
 
 TICK_SECONDS = 60
 
 
 def tick() -> None:
-    with engine.connect() as conn:
-        conn.execute(text("SELECT 1"))
-    print(f"worker tick {datetime.now(MEXICO_CITY):%Y-%m-%d %H:%M:%S %Z}", flush=True)
+    with tenant_session(ALL_INSTITUTIONS) as db:
+        retried = queue.process_queue(db)
+        queue.create_alerts(db)
+        unattended = queue.mark_unattended(db)
+    print(f"worker tick {datetime.now(MEXICO_CITY):%Y-%m-%d %H:%M:%S %Z} "
+          f"queue={retried} unattended={unattended}", flush=True)
 
 
 def main() -> None:

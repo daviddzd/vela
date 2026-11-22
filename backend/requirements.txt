@@ -10,3 +10,4 @@ pyjwt==2.10.*
 # Tests (kept in the same image so `docker compose exec api pytest` works)
 pytest==8.3.*
 httpx==0.28.*
+pyyaml==6.0.*

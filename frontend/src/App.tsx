@@ -1,13 +1,31 @@
 // Routes: "/" is the login; every other screen is protected by role (docs/spec/04).
+import type { ComponentType } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router";
 import { AuthProvider } from "./auth/AuthContext";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { es } from "./i18n/es";
 import { LoginPage } from "./pages/LoginPage";
+import { ApprovalsPage } from "./pages/ApprovalsPage";
+import { BoardPage } from "./pages/BoardPage";
+import { FamilyPage } from "./pages/FamilyPage";
+import { MyVisitsPage } from "./pages/MyVisitsPage";
 import { PlaceholderPage } from "./pages/PlaceholderPage";
+
+// Screens already built; the rest show a placeholder until their step.
+const BUILT: Record<string, ComponentType> = {
+  "/tablero": BoardPage,
+  "/aprobaciones": ApprovalsPage,
+  "/mis-visitas": MyVisitsPage,
+  "/familia": FamilyPage,
+};
 
 // Every screen from the spec; each gets a placeholder until its module is built.
 const SCREENS = Object.keys(es.screens);
+
+function renderScreen(path: string) {
+  const Page = BUILT[path];
+  return Page ? <Page /> : <PlaceholderPage path={path} />;
+}
 
 export function App() {
   return (
@@ -17,7 +35,7 @@ export function App() {
           <Route path="/" element={<LoginPage />} />
           {SCREENS.map((path) => (
             <Route key={path} path={path}
-              element={<ProtectedRoute path={path}><PlaceholderPage path={path} /></ProtectedRoute>} />
+              element={<ProtectedRoute path={path}>{renderScreen(path)}</ProtectedRoute>} />
           ))}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
