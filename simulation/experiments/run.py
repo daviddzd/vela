@@ -5,7 +5,10 @@ Main:         5 policies x 3 scenarios x 30 replications of 7 days, seed 2026, c
               (the 4 of docs/spec/06 + "vela_timeout": Vela with time-limited approval of urgent requests).
 Sensitivity:  (clearly separated, NOT main results) on the "normal" scenario:
               approval delay 0 / 1-5 / 5-15 min, crisis risk x1 / x2 / x3 (stress_test knob), and
-              "¿y si contratamos?": +1 night nurse per 24 h institution and +1 day caregiver in INS-A.
+              "¿y si contratamos?": +1 night nurse per 24 h institution and +1 day caregiver in INS-A; and
+              "Cumplir jornada nocturna": each 12-h night shift split into two legal 7-h shifts (night staff x2).
+Labor rules (LFT arts. 60, 61, 69; backend/app/services/labor.py) apply to EVERY run: weekly rest day and legal
+shifts. Only the validation against the seed history uses the seed staffing (7 days a week, as it happened).
 Outputs in simulation/results/: summary.csv, window.csv, tests.csv, validation.csv, sensitivity.csv,
 run_info.json; one row per replication in results/raw/ (git-ignored).
 """
@@ -32,7 +35,7 @@ RESULTS = ROOT / "simulation" / "results"
 SCENARIOS = ["normal", "contingency_east", "contingency_east_roadblocks"]
 MAIN_METRICS = ["high_wait_mean_min", "high_wait_p90_min", "crisis_under_60_pct", "crisis_response_mean_min",
                 "crisis_response_p90_min", "unattended_pct",
-                "travel_km", "utilization_pct", "overtime_hours"]
+                "travel_km", "utilization_pct", "overtime_hours", "night_crisis_under_60_pct", "staff"]
 WINDOW_METRICS = ["win_at_risk_entries", "win_crises", "win_crisis_under_60_pct", "win_high_wait_mean_min", "win_unattended_pct", "win_requests"]
 
 
@@ -71,11 +74,14 @@ def main() -> int:
                  for r in range(args.sens_reps) for pol in st.POLICIES]
     sens_jobs += [Params(pol, "normal", r, seed, risk_multiplier=k) for k in (2.0, 3.0)
                   for r in range(args.sens_reps) for pol in st.POLICIES]
-    sens_jobs += [Params(pol, "normal", r, seed, extra_staff=k) for k in ("requested", "targeted")
+    sens_jobs += [Params(pol, "normal", r, seed, extra_staff=k) for k in ("requested", "targeted", "night_legal")
                   for r in range(args.sens_reps) for pol in st.POLICIES]
+    # Validation against the seed history: the staff as in the seed (7 days, seed shifts), human dispatcher
+    valid_jobs = [Params("human_dispatcher", "normal", r, seed, labor_rules=False) for r in range(args.reps)]
     with Pool(args.workers) as pool:
         main_rows = pool.map(_run, main_jobs, chunksize=4)
         sens_rows = pool.map(_run, sens_jobs, chunksize=4)
+        valid_rows = pool.map(_run, valid_jobs, chunksize=4)
     elapsed = time.perf_counter() - started
 
     runs = pd.DataFrame(main_rows)
@@ -87,7 +93,7 @@ def main() -> int:
                                                                            "crises", "win_crises"]].sum()
     effect.to_csv(RESULTS / "contingency_effect.csv")
     st.summary(runs, WINDOW_METRICS, ["scenario", "policy"]).to_csv(RESULTS / "window.csv", index=False)
-    st.compare(runs, MAIN_METRICS + ["win_crisis_under_60_pct", "win_high_wait_mean_min"]).to_csv(
+    st.compare(runs, [m for m in MAIN_METRICS if m != "staff"] + ["win_crisis_under_60_pct", "win_high_wait_mean_min"]).to_csv(
         RESULTS / "tests.csv", index=False)
 
     # Sensitivity: the main 1-5 min / x1 runs of the normal scenario are the middle level of each knob.
@@ -106,7 +112,7 @@ def main() -> int:
     key = ["high_wait_p90_min", "crisis_response_p90_min", "crisis_under_60_pct", "unattended_pct"]
     tests = []
     for knob, col, levels in (("approval_delay", "approval_delay", ["0-0", "1-5", "5-15"]),
-                              ("extra_staff", "extra_staff", ["current", "requested", "targeted"])):
+                              ("extra_staff", "extra_staff", ["current", "requested", "targeted", "night_legal"])):
         for level in levels:
             sub = sens[(sens[col] == level) & (sens.risk_multiplier == 1.0)
                        & ((sens.extra_staff == "current") if knob == "approval_delay" else (sens.approval_delay == "1-5"))]
@@ -114,7 +120,7 @@ def main() -> int:
     pd.concat(tests, ignore_index=True).to_csv(RESULTS / "sensitivity_tests.csv", index=False)
 
     obs = baseline_unattended()
-    sim = runs[(runs.scenario == "normal") & (runs.policy == "human_dispatcher")]
+    sim = pd.DataFrame(valid_rows)          # seed staffing (7 days): the seed history had no rest day
     mean, lo, hi, n = st.ci95(sim["unattended_pct"])
     smean, slo, shi, _ = st.ci95(sim["unattended_short_pct"])
     pd.DataFrame([{**obs, "sim_mean": mean, "sim_ci_low": lo, "sim_ci_high": hi, "sim_n": n,
@@ -123,7 +129,10 @@ def main() -> int:
 
     info = {"finished_at": datetime.now().isoformat(timespec="seconds"), "elapsed_seconds": round(elapsed, 1),
             "workers": args.workers, "replications": args.reps, "sensitivity_replications": args.sens_reps,
-            "runs_main": len(main_jobs), "runs_sensitivity": len(sens_jobs), "days": 7, "seed": seed,
+            "runs_main": len(main_jobs), "runs_sensitivity": len(sens_jobs), "runs_validation": len(valid_jobs),
+            "days": 7, "seed": seed,
+            "labor_rules": "rest day (LFT art. 69) + legal shifts (arts. 60-61) in every experiment; "
+                           "validation uses the seed staffing (7 days)",
             "params_example": asdict(main_jobs[0]),
             "approval": config()["approval"], "late_tolerance_minutes": config()["dispatch"]["late_tolerance_minutes"]}
     (RESULTS / "run_info.json").write_text(json.dumps(info, indent=2, ensure_ascii=False), encoding="utf-8")

@@ -96,6 +96,8 @@ export const api = {
   staffDay: (id: string, on?: string) => request<any>(`/api/staff/${id}/day${on ? `?on=${on}` : ""}`),
   staffOut: (id: string, reason: string) =>
     request<any>(`/api/staff/${id}/out-of-service`, { method: "POST", body: JSON.stringify({ reason }) }),
+  staffRestDay: (id: string, restDay: number) =>
+    request<any>(`/api/staff/${id}/rest-day`, { method: "PUT", body: JSON.stringify({ rest_day: restDay }) }),
   staffBack: (id: string) => request<any>(`/api/staff/${id}/back-in-service`, { method: "POST" }),
   business: () => request<any>("/api/business"),
   businessModel: (values: Record<string, unknown>) =>

@@ -16,6 +16,7 @@ import numpy as np
 import yaml
 
 from app.services import dispatcher as dsp   # the SAME dispatcher the operation uses
+from app.services import labor             # the SAME labor rules (rest day, legal shifts)
 
 ROOT = Path(__file__).resolve().parents[2]
 SEED = ROOT / "database" / "seed"
@@ -84,7 +85,9 @@ def nearest(points: dict[str, tuple[float, float]], lat: float, lon: float) -> s
 
 
 @lru_cache
-def load_world() -> World:
+def load_world(labor_rules: bool = True) -> World:
+    """labor_rules=False: the staff exactly as in the seed (7 days a week, seed shifts) = "before Vela", used ONLY
+    to validate the model against the seed history. Every experiment uses the legal rules."""
     cfg = config()
     mult = cfg["health_markov"]["risk_multipliers"]
     eff = cfg["health_markov"]["pollution_effects"]
@@ -128,12 +131,21 @@ def load_world() -> World:
         skills.setdefault(r["caregiver_id"], set()).add(r["skill"])
     caregivers: dict[str, list[dsp.Caregiver]] = {}
     cg_district, shift_min = {}, {}
-    for r in _rows(SEED / "caregivers.csv"):
-        if not _bool(r["active"]):
-            continue
-        start, end = time.fromisoformat(r["shift_start"]), time.fromisoformat(r["shift_end"])
+    # Labor rules (app/services/labor.py, the SAME functions the operation uses; the seed CSV is not changed):
+    # legal shift by art. 60/61 and one fixed weekly rest day by art. 69, assigned in the same rotation.
+    active = [r for r in _rows(SEED / "caregivers.csv") if _bool(r["active"])]
+    legal = {r["caregiver_id"]: labor.legal_shift(time.fromisoformat(r["shift_start"]), time.fromisoformat(r["shift_end"]))
+             for r in active}
+    rest = labor.assign_rest_days([{"caregiver_id": r["caregiver_id"], "institution_id": r["institution_id"],
+                                    "shift_start": legal[r["caregiver_id"]]["start"], "shift_end": legal[r["caregiver_id"]]["end"],
+                                    "skill": labor.main_skill(skills.get(r["caregiver_id"], ()))} for r in active])
+    for r in active:
+        if labor_rules:
+            start, end, day = legal[r["caregiver_id"]]["start"], legal[r["caregiver_id"]]["end"], rest[r["caregiver_id"]]
+        else:
+            start, end, day = time.fromisoformat(r["shift_start"]), time.fromisoformat(r["shift_end"]), None
         cg = dsp.Caregiver(r["caregiver_id"], frozenset(skills.get(r["caregiver_id"], ())), start, end,
-                           float(r["base_lat"]), float(r["base_lon"]))
+                           float(r["base_lat"]), float(r["base_lon"]), rest_day=day)
         caregivers.setdefault(r["institution_id"], []).append(cg)
         # ASSUMPTION: the base is in the district whose centroid is closest
         cg_district[r["caregiver_id"]] = nearest(districts, cg.lat, cg.lon)

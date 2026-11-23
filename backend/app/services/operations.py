@@ -25,6 +25,7 @@ from sqlalchemy.orm import Session
 from app.core.audit import audit
 from app.core.events import publish
 from app.services import dispatcher as dsp
+from app.services import labor
 from app.services.dispatcher import MEXICO_CITY
 
 AUTO_PRIORITIES = ("low", "medium")       # applied at once (CLAUDE.md rule 3)
@@ -119,7 +120,7 @@ def load_request(db: Session, request_id: str) -> dsp.Request:
 def load_caregivers(db: Session, institution_id: str, around: datetime) -> list[dsp.Caregiver]:
     """Active caregivers of the institution with their booked windows near that day."""
     rows = db.execute(text("""
-        SELECT c.caregiver_id, c.shift_start, c.shift_end, c.base_lat, c.base_lon,
+        SELECT c.caregiver_id, c.shift_start, c.shift_end, c.base_lat, c.base_lon, c.rest_day,
                array_agg(DISTINCT k.skill) AS skills
         FROM caregivers c JOIN caregiver_skills k USING (caregiver_id)
         WHERE c.institution_id = :inst AND c.active
@@ -135,8 +136,59 @@ def load_caregivers(db: Session, institution_id: str, around: datetime) -> list[
     for b in busy_rows:
         busy.setdefault(b.caregiver_id, []).append((b.planned_start, b.planned_end))
     return [dsp.Caregiver(r.caregiver_id, frozenset(r.skills), r.shift_start, r.shift_end,
-                          float(r.base_lat), float(r.base_lon), tuple(busy.get(r.caregiver_id, ())))
+                          float(r.base_lat), float(r.base_lon), tuple(busy.get(r.caregiver_id, ())),
+                          rest_day=r.rest_day)
             for r in rows]
+
+
+# ---- labor rules in the operation (app/services/labor.py) ------------------------------------------------
+
+LABOR_ALERT = ("{name}: su turno {start}–{end} es jornada {kind} de {hours:g} h y excede el máximo de {max:g} h "
+               "del art. 61 de la Ley Federal del Trabajo. Vela no cambia la plantilla: lo decide la institución.")
+
+
+def labor_alerts(db: Session) -> int:
+    """One open alert per caregiver whose shift exceeds the legal maximum (only nocturna shifts can, see labor.py).
+    Idempotent: it is not created again while the previous one is open."""
+    created = 0
+    for c in db.execute(text("""SELECT caregiver_id, institution_id, first_name || ' ' || paternal_surname AS name,
+                                       shift_start, shift_end FROM caregivers WHERE active""")).all():
+        legal = labor.legal_shift(c.shift_start, c.shift_end)
+        if not legal["exceeds"]:
+            continue
+        code = f"legal_hours:{c.caregiver_id}"
+        if db.scalar(text("SELECT 1 FROM alerts WHERE code = :c AND status <> 'resolved'"), {"c": code}):
+            continue
+        alert_id = db.scalar(text("""INSERT INTO alerts (institution_id, type, level, message, code)
+                                     VALUES (:i, 'labor', 'watch', :m, :c) RETURNING alert_id"""),
+                             {"i": c.institution_id, "c": code, "m": LABOR_ALERT.format(
+                                 name=c.name, start=c.shift_start.strftime("%H:%M"), end=c.shift_end.strftime("%H:%M"),
+                                 kind=legal["type"], hours=legal["hours"], max=legal["max_hours"])})
+        publish(db, "alert.created", c.institution_id, alert_id=alert_id)
+        created += 1
+    return created
+
+
+def set_rest_day(db: Session, *, caregiver_id: str, rest_day: int, user_id: str) -> dict:
+    """Change the weekly rest day. Pending visits that now fall on it are re-dispatched with the SAME logic as
+    "fuera de servicio" (low/medium at once, high through approval or the time limit)."""
+    inst, old = db.execute(text("SELECT institution_id, rest_day FROM caregivers WHERE caregiver_id = :c"),
+                           {"c": caregiver_id}).one()
+    db.execute(text("UPDATE caregivers SET rest_day = :d WHERE caregiver_id = :c"), {"d": rest_day, "c": caregiver_id})
+    cg = next((c for c in load_caregivers(db, inst, now()) if c.caregiver_id == caregiver_id), None)
+    moved = []
+    for a in db.execute(text("""SELECT assignment_id, request_id, planned_start, planned_end FROM assignments
+                                WHERE caregiver_id = :c AND status = 'active' AND arrived_at IS NULL
+                                  AND planned_start > now()"""), {"c": caregiver_id}).all():
+        if cg is None or not dsp.within_shift(cg, a.planned_start, a.planned_end):
+            db.execute(text("UPDATE assignments SET status = 'cancelled' WHERE assignment_id = :a"), {"a": a.assignment_id})
+            set_status(db, a.request_id, "queued", "caregiver_unavailable")
+            moved.append(a.request_id)
+    if moved:
+        dispatch_requests(db, inst, moved)
+    audit(db, user_id=user_id, institution_id=inst, action="caregiver_rest_day_changed", entity="caregiver",
+          entity_id=caregiver_id, detail={"from": old, "to": rest_day, "redispatched": moved})
+    return {"caregiver_id": caregiver_id, "rest_day": rest_day, "redispatched": moved}
 
 
 def load_holds(db: Session, institution_id: str) -> list[dsp.Hold]:

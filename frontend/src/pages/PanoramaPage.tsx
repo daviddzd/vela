@@ -30,6 +30,7 @@ export function PanoramaPage() {
   return (
     <AppShell>
       <h1 className="text-teal">{es.screens["/panorama"]}</h1>
+      <p className="mt-1 max-w-4xl text-muted">{t.laborNote}</p>
       <div role="tablist" aria-label={es.screens["/panorama"]} className="mt-3 flex gap-2">
         {(["operation", "panorama"] as const).map((k) => (
           <button key={k} role="tab" aria-selected={tab === k} onClick={() => setTab(k)}

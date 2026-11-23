@@ -7,7 +7,7 @@ import { api, ApiError } from "../api/client";
 import type { MapPoint } from "../charts/CityMap";
 import { chart } from "../charts/theme";
 import { AppShell } from "../components/AppShell";
-import { Ban, Icon } from "../components/icons";
+import { AlertTriangle, Ban, Icon } from "../components/icons";
 import { StatusBadge } from "../components/StatusBadge";
 import { Button, Card, inputClass, Notice } from "../components/ui";
 import { es } from "../i18n/es";
@@ -54,7 +54,9 @@ export function StaffPage() {
                   <strong className="text-teal">{c.name}</strong>
                   <StateWord c={c} />
                 </span>
-                <span className="block text-sm">{t.type[c.type]} · {c.skills.map((s: string) => t.skills[s]).join(", ")} · {t.shift[c.shift]} {c.shift_start}–{c.shift_end}</span>
+                <span className="block text-sm">{t.type[c.type]} · {c.skills.map((s: string) => t.skills[s]).join(", ")} · {c.shift_start}–{c.shift_end} ({t.legalType[c.legal_type]})
+                  {" · "}{c.rests_today ? <strong>{t.restsToday}</strong> : fill(t.restDay, { day: t.weekdays[c.rest_day] })}</span>
+                {c.exceeds_legal && <span className="mt-1 block text-sm font-bold text-danger"><Icon as={AlertTriangle} /> {t.exceeds}</span>}
                 <LoadBar c={c} />
               </button>
             </li>))}</ul>
@@ -129,6 +131,18 @@ function Agenda({ person, onMsg }: { person: any; onMsg: (m: { kind: "ok" | "err
           <div className="flex gap-2"><Button type="submit">{t.markOut}</Button>
             <Button variant="secondary" onClick={() => setAsking(false)}>{es.record.cancel}</Button></div>
         </form>)}
+      {person.exceeds_legal && (
+        <Notice kind="error">{t.exceeds}: {fill(t.exceedsDetail, { hours: person.shift_hours, kind: t.legalType[person.legal_type],
+          max: person.legal_max_hours })}</Notice>)}
+      <label className="mt-3 block max-w-xs"><span className="font-bold">{t.restDayLabel}</span>
+        <select className={inputClass} value={person.rest_day} onChange={async (e) => {
+          const d = Number(e.target.value);
+          try {
+            const r = await api.staffRestDay(person.caregiver_id, d);
+            onMsg({ kind: "ok", text: fill(t.restDaySaved, { name: person.name, day: t.weekdays[d], n: r.redispatched.length }) });
+          } catch (err) { onMsg({ kind: "error", text: err instanceof ApiError ? err.message : es.common.error }); }
+        }}>{[1, 2, 3, 4, 5, 6, 7].map((d) => <option key={d} value={d}>{t.weekdays[d]}</option>)}</select></label>
+      <p className="mt-1 text-sm text-muted">{t.restNote}</p>
       {!day ? <p className="mt-2">{es.common.loading}</p> : <Timeline day={day} />}
     </Card>
   );

@@ -92,6 +92,7 @@ export function SimulationPage() {
       </div>
       {!present && <p className="mt-1 text-muted">{t.presentHint}</p>}
       <p className="mt-1 max-w-4xl">{t.intro}</p>
+      <p className="mt-1 max-w-4xl text-muted">{t.laborNote}</p>
       <p className="mt-1 text-muted">{fill(t.runInfo, { reps: String(r.info.replications), seed: String(r.info.seed),
         secs: fmt(r.info.elapsed_seconds, 0), workers: String(r.info.workers) })}</p>
 
@@ -211,6 +212,18 @@ export function SimulationPage() {
                 key: m + p, cells: [`${t.metrics[m].label} · ${t.policies[p]}`, ...["current", "requested", "targeted"].map((l) => {
                   const x = r.sensitivity.find((y) => y.knob === "extra_staff" && y.extra_staff === l && y.policy === p && y.metric === m);
                   return x ? `${fmt(x.mean)} % [${fmt(x.ci_low)}–${fmt(x.ci_high)}]` : "—"; })] })))} />
+          </div>
+          <h3 className="mt-6 text-xl font-bold text-teal">{t.nightQ}</h3>
+          <p className="mt-1 text-muted">{t.nightNote}</p>
+          <div className="mt-2">
+            <ResponsiveTable head={[t.metric, ...["current", "night_legal"].map((l) => t.nightLevels[l])]}
+              rows={[{ key: "staff", cells: [t.nightStaff, ...["current", "night_legal"].map((l) => {
+                const x = r.sensitivity.find((y) => y.knob === "extra_staff" && y.extra_staff === l && y.policy === VELA_TIMEOUT && y.metric === "staff");
+                return x ? fmt(x.mean, 0) : "—"; })] },
+              ...["unattended_pct", "crisis_under_60_pct", "night_crisis_under_60_pct"].flatMap((m) => [VELA_TIMEOUT, HUMAN].map((p) => ({
+                key: m + p, cells: [`${t.metrics[m].label} · ${t.policies[p]}`, ...["current", "night_legal"].map((l) => {
+                  const x = r.sensitivity.find((y) => y.knob === "extra_staff" && y.extra_staff === l && y.policy === p && y.metric === m);
+                  return x ? `${fmt(x.mean)} % [${fmt(x.ci_low)}–${fmt(x.ci_high)}]` : "—"; })] })))]} />
           </div>
         </Card>
         </>}

@@ -34,6 +34,7 @@ import numpy as np
 import simpy
 
 from app.services import dispatcher as dsp
+from app.services import labor
 from app.services.visit_rules import visit_time
 from simulation.sirag.data import World, config, road_km
 
@@ -62,6 +63,7 @@ class Params:
     risk_multiplier: float = 1.0                        # stress test knob (sensitivity only)
     extra_staff: str = ""                               # "¿y si contratamos?": "" | "requested" | "targeted"
     holds: bool = True                                  # reservation of the proposed candidate (off only to measure it)
+    labor_rules: bool = True                            # rest day + legal shifts; False only for the seed validation
 
 
 @dataclass
@@ -120,15 +122,28 @@ class Model:
         # district (ASSUMPTION).
         #   requested: +1 night nurse (20-08) in each 24 h institution and +1 day caregiver (08-16) in INS-A
         #   targeted:  +1 day caregiver (08-16) in INS-B and INS-D, where 8-h day-caregiver visits go unattended
+        #   night_legal: "Cumplir jornada nocturna" (team decision 22 Nov 2026): every night shift above the legal 7 h
+        #                (art. 61) becomes TWO 7-h shifts, 20:00-03:00 and 01:00-08:00, so night positions double.
+        # Hired / split staff also get a weekly rest day with the same rotation rule (labor.assign_rest_days).
         for inst, pool in self.caregivers.items():
             lat, lon = w.district_centroid[w.institution_district[inst]]
+            new: list[dsp.Caregiver] = []
             if self.params.extra_staff == "requested":
                 if w.schedule[inst] == "24h":
-                    pool.append(dsp.Caregiver(f"NEW-N-{inst}", frozenset({"nursing"}), time(20), time(8), lat, lon))
+                    new.append(dsp.Caregiver(f"NEW-N-{inst}", frozenset({"nursing"}), time(20), time(8), lat, lon))
                 if inst == "INS-A":
-                    pool.append(dsp.Caregiver(f"NEW-D-{inst}", frozenset({"caregiving"}), time(8), time(16), lat, lon))
+                    new.append(dsp.Caregiver(f"NEW-D-{inst}", frozenset({"caregiving"}), time(8), time(16), lat, lon))
             elif self.params.extra_staff == "targeted" and inst in ("INS-B", "INS-D"):
-                pool.append(dsp.Caregiver(f"NEW-D-{inst}", frozenset({"caregiving"}), time(8), time(16), lat, lon))
+                new.append(dsp.Caregiver(f"NEW-D-{inst}", frozenset({"caregiving"}), time(8), time(16), lat, lon))
+            elif self.params.extra_staff == "night_legal":
+                for i, c in enumerate(list(pool)):
+                    if labor.legal_shift(c.shift_start, c.shift_end)["exceeds"]:
+                        pool[pool.index(c)] = replace(c, shift_end=time(3))                       # 20:00-03:00
+                        new.append(replace(c, caregiver_id=f"{c.caregiver_id}-B", shift_start=time(1), rest_day=None))
+            for c in new:                     # each new person gets a rest day without moving anyone else's
+                as_dict = lambda x: {"shift_start": x.shift_start, "shift_end": x.shift_end,  # noqa: E731
+                                     "skill": labor.main_skill(x.skills), "rest_day": x.rest_day}
+                pool.append(replace(c, rest_day=labor.next_rest_day(as_dict(c), [as_dict(o) for o in pool])))
         self.pending: list[SimRequest] = []
         self.holds: dict[str, list[dsp.Hold]] = {k: [] for k in self.caregivers}   # reservations by institution
         self.done: list[SimRequest] = []

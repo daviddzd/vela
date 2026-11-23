@@ -4,6 +4,7 @@
 "Fuera de servicio" uses EXACTLY the same function as the demo panel (operations.caregiver_out_of_service):
 pending visits are re-dispatched by the dispatcher (low/medium at once, high through approval or the time limit).
 "Volver a servicio" closes the unavailability; new visits can be assigned to the person again.
+Rest day and legal hours (LFT arts. 60, 61, 69): app/services/labor.py. The rest day is editable here.
 Week load = hours of active assignments this week (Monday–Sunday) / (shift hours x working days per week).
 Working days per week: config/simulation.yaml -> staffing.workdays_per_week (ASSUMPTION 6, LFT art. 69).
 """
@@ -23,6 +24,7 @@ from app.core.events import publish
 from app.core.guards import not_found_or_cross_tenant
 from app.core.roles import COORDINATOR
 from app.services import dispatcher as dsp
+from app.services import labor
 from app.services import operations as ops
 
 router = APIRouter(prefix="/api/staff", tags=["staff"])
@@ -37,8 +39,8 @@ def _shift_hours(start: time, end: time) -> float:
     return (e - s).total_seconds() / 3600
 
 
-def _on_shift(start: time, end: time, now: datetime) -> bool:
-    cg = dsp.Caregiver("x", frozenset(), start, end, 0.0, 0.0)
+def _on_shift(start: time, end: time, now: datetime, rest_day: int | None = None) -> bool:
+    cg = dsp.Caregiver("x", frozenset(), start, end, 0.0, 0.0, rest_day=rest_day)
     return dsp.within_shift(cg, now, now + timedelta(minutes=1))
 
 
@@ -48,7 +50,7 @@ def staff(user: CurrentUser = Depends(COORD), db: Session = Depends(tenant_db)) 
     week_start = datetime.combine(now.date() - timedelta(days=now.weekday()), time.min, MEXICO_CITY)
     rows = db.execute(text("""
         SELECT c.caregiver_id, c.first_name || ' ' || c.paternal_surname || ' ' || c.maternal_surname AS name, c.type,
-               c.shift, c.shift_start, c.shift_end, c.base_lat::float AS lat, c.base_lon::float AS lon, c.active,
+               c.shift, c.shift_start, c.shift_end, c.base_lat::float AS lat, c.base_lon::float AS lon, c.active, c.rest_day,
                array_agg(DISTINCT k.skill ORDER BY k.skill) AS skills,
                (SELECT u.reason FROM caregiver_unavailability u WHERE u.caregiver_id = c.caregiver_id AND u.active
                 ORDER BY u.starts_at DESC LIMIT 1) AS out_reason,
@@ -68,8 +70,12 @@ def staff(user: CurrentUser = Depends(COORD), db: Session = Depends(tenant_db)) 
     out = []
     for r in rows:
         capacity = _shift_hours(r["shift_start"], r["shift_end"]) * workdays
+        legal = labor.legal_shift(r["shift_start"], r["shift_end"])
         out.append({**dict(r), "shift_start": r["shift_start"].strftime("%H:%M"), "shift_end": r["shift_end"].strftime("%H:%M"),
-                    "on_shift_now": r["active"] and r["out_reason"] is None and _on_shift(r["shift_start"], r["shift_end"], now),
+                    "legal_type": legal["type"], "shift_hours": legal["hours"], "legal_max_hours": legal["max_hours"],
+                    "exceeds_legal": legal["exceeds"], "rests_today": not labor.works_on(r["rest_day"], now.date()),
+                    "on_shift_now": r["active"] and r["out_reason"] is None
+                                    and _on_shift(r["shift_start"], r["shift_end"], now, r["rest_day"]),
                     "out_of_service": r["out_reason"] is not None, "week_hours": round(float(r["week_hours"]), 1),
                     "week_capacity_hours": round(capacity, 1),
                     "week_load_pct": round(100 * float(r["week_hours"]) / capacity, 1) if capacity else None})
@@ -137,3 +143,15 @@ def back_in_service(caregiver_id: str, user: CurrentUser = Depends(COORD), db: S
           entity="caregiver", entity_id=caregiver_id)
     publish(db, "request.updated", user.institution_id, caregiver_id=caregiver_id)
     return {"caregiver_id": caregiver_id, "back_in_service": True}
+
+
+class RestDayIn(BaseModel):
+    rest_day: int = Field(ge=1, le=7)          # ISO weekday: 1 Monday ... 7 Sunday
+
+
+@router.put("/{caregiver_id}/rest-day")
+def rest_day(caregiver_id: str, body: RestDayIn, user: CurrentUser = Depends(COORD), db: Session = Depends(tenant_db)) -> dict:
+    """Weekly rest day (LFT art. 69). Visits already assigned on the new rest day are re-dispatched."""
+    if not db.scalar(text("SELECT 1 FROM caregivers WHERE caregiver_id = :c"), {"c": caregiver_id}):
+        raise not_found_or_cross_tenant(db, user, "caregiver", caregiver_id)
+    return ops.set_rest_day(db, caregiver_id=caregiver_id, rest_day=body.rest_day, user_id=user.user_id)

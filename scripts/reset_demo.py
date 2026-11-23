@@ -8,6 +8,7 @@ What it deletes (all of it is created while the app runs; none of it comes from 
   - ORACLE-Voz reports (voice_reports) and every alert (alerts)
   - family notices (family_notices) and ARCO requests (arco_requests)
   - consents changed during a rehearsal (revoked or registered in /privacidad) go back to their seed values
+  - weekly rest days changed in /personal during a rehearsal go back to the rotation (app/services/labor.py)
   - care plans changed by a physician in a rehearsal: the seed plans come back as they were and the plans created
     in the rehearsal are deactivated (not deleted: visits that already happened still point to them)
   - demo scenarios: scenario_runs and everything hanging from them (simulated air quality, traffic,
@@ -110,7 +111,18 @@ def main() -> None:
     report = changed + f"""SELECT 'service_requests (en vivo)', count(*) FROM target_requests UNION ALL
                  SELECT 'assignments (en vivo)', count(*) FROM assignments WHERE request_id IN (SELECT request_id FROM target_requests)
                  UNION ALL {counts};"""
-    sql = ("BEGIN;\n" + TARGET_REQUESTS.format(seed_rows=seed_rows, consent_rows=consent_rows) + report + DELETE
+    # Rest days back to the rotation (the same function the migration and SIRAG-D use)
+    sys.path.insert(0, str(ROOT / "backend"))
+    from datetime import time as _time
+    from app.services import labor
+    rows = [line.split("|") for line in psql(
+        "SELECT c.caregiver_id, c.institution_id, c.shift_start, c.shift_end, string_agg(k.skill, ',') "
+        "FROM caregivers c JOIN caregiver_skills k USING (caregiver_id) GROUP BY c.caregiver_id;").strip().splitlines()]
+    days = labor.assign_rest_days([{"caregiver_id": r[0], "institution_id": r[1], "shift_start": _time.fromisoformat(r[2]),
+                                    "shift_end": _time.fromisoformat(r[3]), "skill": labor.main_skill(r[4].split(","))}
+                                   for r in rows])
+    rest_sql = "".join(f"UPDATE caregivers SET rest_day = {d} WHERE caregiver_id = '{c}';\n" for c, d in days.items())
+    sql = ("BEGIN;\n" + TARGET_REQUESTS.format(seed_rows=seed_rows, consent_rows=consent_rows) + report + DELETE + rest_sql
            + ("ROLLBACK;" if args.dry_run else "COMMIT;"))
     print("Simulación (no se guarda nada):" if args.dry_run else "Borrado:")
     for line in psql(sql).strip().splitlines():

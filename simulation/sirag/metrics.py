@@ -1,9 +1,13 @@
 """Metrics of one replication (docs/spec/06 + config/simulation.yaml)."""
 from __future__ import annotations
 
+from datetime import timedelta
+
 import numpy as np
 
-from simulation.sirag.model import Model
+from app.services import labor
+from app.services.dispatcher import MEXICO_CITY
+from simulation.sirag.model import START, Model
 
 LONG_SERVICES = ("SRV-03", "SRV-04", "SRV-06", "SRV-07")
 AFFECTED = {"09005", "09006", "09007", "09011", "09017"}   # districts of stations with their own PM2.5 target
@@ -21,7 +25,14 @@ def summarize(model: Model, requests) -> dict:
                  and (r.assigned["arrival"] - r.requested).total_seconds() / 60 <= 60]
     cresp = [(r.assigned["arrival"] - r.requested).total_seconds() / 60 for r in crises if not r.unattended]
     work_min = sum((r.assigned["planned_end"] - r.assigned["planned_start"]).total_seconds() / 60 for r in attended)
-    shift_min = sum(w.shift_minutes_per_day[c.caregiver_id] for pool in w.caregivers.values() for c in pool) * prm.days
+    # Available time = shift minutes on the days each person WORKS (their weekly rest day excluded, LFT art. 69),
+    # for everyone the model staffed (including hired staff in the sensitivity scenarios).
+    sim_days = [(START + timedelta(days=d)).date() for d in range(prm.days)]
+    shift_min = sum(labor.hours(c.shift_start, c.shift_end) * 60 * sum(labor.works_on(c.rest_day, d) for d in sim_days)
+                    for pool in model.caregivers.values() for c in pool)
+    # Crises that start at night (20:00-06:00, art. 60), for the "Cumplir jornada nocturna" sensitivity
+    night_crises = [r for r in crises if r.requested.astimezone(MEXICO_CITY).hour >= 20
+                    or r.requested.astimezone(MEXICO_CITY).hour < 6]
 
     out = {
         "policy": prm.policy, "scenario": prm.scenario, "replication": prm.replication,
@@ -36,6 +47,11 @@ def summarize(model: Model, requests) -> dict:
                                          for r in attended if r.priority == prio]) for prio in ("medium", "low")},
         "travel_km": sum(r.assigned["km"] for r in attended),
         "utilization_pct": 100 * work_min / shift_min,
+        "night_crises": len(night_crises),
+        "night_crisis_under_60_pct": 100 * sum(1 for r in night_crises if not r.unattended and
+                                               (r.assigned["arrival"] - r.requested).total_seconds() / 60 <= 60)
+                                     / len(night_crises) if night_crises else np.nan,
+        "staff": sum(len(pool) for pool in model.caregivers.values()),
         "overtime_hours": sum(r.assigned["overtime_min"] for r in attended) / 60,
         # for the validation: without the 8 h / 12 h shift services (see docs/dev/sirag_d_modelo.md)
         "unattended_short_pct": 100 * sum(r.unattended for r in short) / len(short) if short else np.nan,

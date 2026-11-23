@@ -10,7 +10,7 @@ from datetime import datetime
 
 from app.core.config import MEXICO_CITY
 from app.core.db import ALL_INSTITUTIONS, tenant_session
-from app.services import care_plans, contingency, queue
+from app.services import care_plans, contingency, operations, queue
 
 TICK_SECONDS = 60
 
@@ -24,6 +24,7 @@ def tick() -> None:
         by_timeout = queue.auto_apply_urgent(db)
         queue.create_alerts(db)
         unattended = queue.mark_unattended(db)
+        operations.labor_alerts(db)          # shifts above the legal maximum (art. 61): alert, never auto-change
     print(f"worker tick {datetime.now(MEXICO_CITY):%Y-%m-%d %H:%M:%S %Z} "
           f"contingency={len(changed)} care_plan={len(planned)} queue={retried} timeout={len(by_timeout)} unattended={unattended}", flush=True)
 
