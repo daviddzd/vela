@@ -147,3 +147,29 @@ def test_coverage_endpoint_and_alerts(tx_client, db_conn):
         assert ops.coverage_alerts(s) == 0                                  # idempotent
         n = s.scalar(text("SELECT count(*) FROM alerts WHERE type = 'coverage' AND status = 'open' AND institution_id = 'INS-B'"))
         assert n == len(ops.coverage_gaps(s, "INS-B"))
+
+
+def test_coverage_alerts_close_by_themselves_when_the_gap_is_over(db_conn):
+    """An open coverage alert whose gap already ended (or no longer exists) is resolved on the next worker tick."""
+    with session_on(db_conn, "*") as s:
+        old = "coverage:therapy:202611200800"                               # a gap of last week
+        s.execute(text("""INSERT INTO alerts (institution_id, type, level, message, code, created_at)
+                          VALUES ('INS-B', 'coverage', 'watch', 'Viernes 20 8:00–10:00: sin terapia en turno', :c,
+                                  now() - interval '3 days')"""), {"c": old})
+        ops.coverage_alerts(s)
+        assert s.scalar(text("SELECT status FROM alerts WHERE code = :c"), {"c": old}) == "resolved"
+        open_codes = set(s.scalars(text("SELECT code FROM alerts WHERE type = 'coverage' AND status = 'open' "
+                                        "AND institution_id = 'INS-B'")).all())
+        now = ops.now()
+        assert all(g["end"] > now for g in ops.coverage_gaps(s, "INS-B"))   # every open alert is a gap still to come
+        assert open_codes == {f"coverage:{g['skill']}:{g['start'].astimezone(TZ):%Y%m%d%H%M}" for g in ops.coverage_gaps(s, "INS-B")}
+
+
+def test_a_night_gap_keeps_its_start_after_midnight():
+    """Looking from the day before: the gap that began Monday 21:30 is still 'Monday 21:30–Tuesday 08:00' on Tuesday."""
+    people = [coverage.Person(_cg("DAY", 8, 21, "nursing")), coverage.Person(_cg("NIGHT", 21, 8, "nursing", rest_day=1))]
+    tuesday_8 = datetime.combine(MONDAY + timedelta(days=1), time(8), TZ)
+    from_tuesday = coverage.week_gaps(people, MONDAY + timedelta(days=1), days=1)       # without looking back
+    assert [(g["start"].time(), g["end"]) for g in from_tuesday][:1] == [(time(0), tuesday_8)]   # a "new" 00:00 gap
+    from_monday = coverage.week_gaps(people, MONDAY, days=2)                           # what coverage_gaps does
+    assert [(g["start"].time(), g["end"]) for g in from_monday if g["end"] == tuesday_8] == [(time(21), tuesday_8)]

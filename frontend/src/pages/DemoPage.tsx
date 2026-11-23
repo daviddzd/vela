@@ -5,7 +5,7 @@ import { useCallback, useEffect, useState } from "react";
 import { api } from "../api/client";
 import { AppShell } from "../components/AppShell";
 import { CheckCircle2, Icon } from "../components/icons";
-import { Button, Card, Notice } from "../components/ui";
+import { Button, Card, ChoiceList, Notice } from "../components/ui";
 import { es } from "../i18n/es";
 
 const t = es.demo;
@@ -50,14 +50,12 @@ export function DemoPage() {
         </Card>
         <Card>
           <h2 className="text-teal">{t.actionsQ}</h2>
-          <label className="mt-3 block max-w-md"><span className="font-bold">{t.institution}</span>
-            <select className="mt-1 block min-h-12 w-full rounded-card border-2 border-muted/60 bg-white px-3" value={inst}
-              onChange={(e) => setInst(e.target.value)}>
-              {s?.institutions.map((i) => <option key={i.institution_id} value={i.institution_id}>
-                {i.name} · {t.onShift.replace("{n}", String(i.on_shift))} · {t.pendingVisits.replace("{n}", String(i.pending))}</option>)}
-            </select>
-            <span className="text-sm text-muted">{t.institutionHelp}</span>
-          </label>
+          <div className="mt-3">
+            <ChoiceList legend={t.institution} name="institution" value={inst} onChange={setInst}
+              options={(s?.institutions ?? []).map((i) => ({ value: i.institution_id, title: i.name,
+                detail: `${t.onShiftShort.replace("{n}", String(i.on_shift))} · ${i.pending === 1 ? t.pendingShortOne : t.pendingShort.replace("{n}", String(i.pending))}` }))} />
+            <p className="mt-1 text-sm text-muted">{t.institutionHelp}</p>
+          </div>
           <div className="mt-3 space-y-4">
             <div><Button icon={Siren} disabled={busy || !inst} onClick={() => run(() => api.demoUrgent(inst))}>{t.urgent}</Button>
               <p className="mt-1 text-muted">{t.urgentHelp}</p></div>

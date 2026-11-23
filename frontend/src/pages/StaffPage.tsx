@@ -11,12 +11,13 @@ import { AlertTriangle, Ban, Icon } from "../components/icons";
 import { StatusBadge } from "../components/StatusBadge";
 import { Button, Card, inputClass, Notice } from "../components/ui";
 import { es } from "../i18n/es";
+import { formatTime } from "../lib/format";
 import { useBoardSocket } from "../lib/useBoardSocket";
 
 const StreetMap = lazy(() => import("../components/StreetMap").then((m) => ({ default: m.StreetMap })));
 const t = es.staff;
 const fill = (s: string, v: Record<string, string | number>) => s.replace(/\{(\w+)\}/g, (_, k) => String(v[k] ?? ""));
-const hm = (iso: string) => new Date(iso).toLocaleTimeString("es-MX", { timeZone: "America/Mexico_City", hour: "2-digit", minute: "2-digit" });
+const hm = formatTime;
 const minutesOfDay = (iso: string) => {
   const [h, m] = new Date(iso).toLocaleTimeString("en-GB", { timeZone: "America/Mexico_City", hour: "2-digit", minute: "2-digit" }).split(":").map(Number);
   return h * 60 + m;
@@ -125,7 +126,7 @@ function LoadBar({ c }: { c: any }) {
   return (
     <span className="mt-1 block text-sm">
       {t.weekLoad}: {fill(t.weekLoadValue, { h: c.week_hours.toLocaleString("es-MX"), cap: c.week_capacity_hours, pct: (c.week_load_pct ?? 0).toLocaleString("es-MX") })}
-      · {c.visits_today === 1 ? t.visitsTodayOne : fill(t.visitsToday, { n: c.visits_today })}
+      {" · "}{c.visits_today === 1 ? t.visitsTodayOne : fill(t.visitsToday, { n: c.visits_today })}
       <span aria-hidden="true" className="mt-1 block h-2 w-full overflow-hidden rounded bg-teal/10">
         <span className="block h-2 rounded bg-teal" style={{ width: `${pct}%` }} /></span>
     </span>
@@ -199,9 +200,10 @@ function Timeline({ day }: { day: any }) {
     <p className="mt-1 text-sm text-muted">{fill(t.shiftWindow, { from: day.shift_start, to: day.shift_end })}</p>
     {day.visits.length === 0 ? <p className="mt-2">{t.noVisits}</p> : (<>
       <div className="relative mt-3 h-16 rounded bg-cream" aria-hidden="true">
-        {hours.map((m) => (
+        {hours.map((m, i) => (
           <span key={m} className="absolute top-0 h-full border-l border-teal/15 text-[11px] text-muted" style={{ left: pos(m) }}>
-            <span className="ml-0.5">{String(Math.floor(m / 60) % 24).padStart(2, "0")}</span></span>))}
+            {/* the last hour is written to the LEFT of its line so it never leaves the card */}
+            <span className={i === hours.length - 1 ? "absolute right-full mr-0.5" : "ml-0.5"}>{String(Math.floor(m / 60) % 24).padStart(2, "0")}</span></span>))}
         {day.visits.map((v: any) => {
           const start = v.planned_start ? minutesOfDay(v.planned_start) : null;
           const arrive = v.arrive_at ? minutesOfDay(v.arrive_at) : start;

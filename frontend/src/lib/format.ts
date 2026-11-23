@@ -1,16 +1,43 @@
 // Dates and times always shown in Mexico City time (CLAUDE.md rule 2), whatever the device's zone.
+// One clock format in the whole system: 24 h ("15:57"), never a.m./p.m.
+import { es } from "../i18n/es";
+
 const TZ = "America/Mexico_City";
+const H24 = { timeZone: TZ, hourCycle: "h23" } as const;
 
 export function formatDateTime(iso: string | null | undefined): string {
   if (!iso) return "—";
-  return new Intl.DateTimeFormat("es-MX", {
-    timeZone: TZ, weekday: "short", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit",
-  }).format(new Date(iso));
+  return new Intl.DateTimeFormat("es-MX", { ...H24, weekday: "short", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })
+    .format(new Date(iso));
 }
 
+/** "15:57" */
 export function formatTime(iso: string | null | undefined): string {
   if (!iso) return "—";
-  return new Intl.DateTimeFormat("es-MX", { timeZone: TZ, hour: "2-digit", minute: "2-digit" }).format(new Date(iso));
+  return new Intl.DateTimeFormat("es-MX", { ...H24, hour: "2-digit", minute: "2-digit" }).format(new Date(iso));
+}
+
+/** "21/11/2026 15:57" (tables: audit trail, patient record). */
+export function formatShortDateTime(iso: string | null | undefined): string {
+  if (!iso) return "—";
+  return new Intl.DateTimeFormat("es-MX", { ...H24, day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" })
+    .format(new Date(iso)).replace(",", "");
+}
+
+/** Calendar day in Mexico City as YYYY-MM-DD, to compare days whatever the device's zone. */
+export function dayKey(d: Date): string {
+  return new Intl.DateTimeFormat("en-CA", { timeZone: TZ, year: "numeric", month: "2-digit", day: "2-digit" }).format(d);
+}
+
+/** When something happened, for alerts: "15:57" today, "ayer, 21:22" yesterday, "21/11, 21:22" before. */
+export function formatWhen(iso: string | null | undefined, now: Date = new Date()): string {
+  if (!iso) return "—";
+  const d = new Date(iso);
+  const time = formatTime(iso);
+  if (dayKey(d) === dayKey(now)) return time;
+  if (dayKey(d) === dayKey(new Date(now.getTime() - 86_400_000))) return `${es.dates.yesterday}, ${time}`;
+  const dm = new Intl.DateTimeFormat("es-MX", { timeZone: TZ, day: "2-digit", month: "2-digit" }).format(d);
+  return `${dm}, ${time}`;
 }
 
 /** Value for <input type="datetime-local"> = now + hours, in Mexico City time. */

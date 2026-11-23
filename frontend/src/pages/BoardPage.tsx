@@ -12,7 +12,7 @@ import { AlertTriangle, COUNTER_ICON, Icon } from "../components/icons";
 import { RefreshCw, Radio } from "lucide-react";
 import { es } from "../i18n/es";
 import { formatClock, formatLongDate, useServerClock } from "../lib/clock";
-import { formatTime } from "../lib/format";
+import { formatTime, formatWhen } from "../lib/format";
 import { useBoardSocket } from "../lib/useBoardSocket";
 import type { ServiceRequest } from "../api/client";
 import { relayText } from "../lib/relay";
@@ -93,7 +93,7 @@ export function BoardPage() {
             {board?.alerts.map((a) => (
               <li key={a.alert_id} className="rounded-card border-2 border-danger p-2">
                 <Icon as={AlertTriangle} /> {a.message}
-                <span className="block text-muted">{formatTime(a.created_at)}</span>
+                <span className="block text-muted">{formatWhen(a.created_at, board ? new Date(board.now) : undefined)}</span>
               </li>
             ))}
           </ul>

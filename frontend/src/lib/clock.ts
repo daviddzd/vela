@@ -34,7 +34,7 @@ export function useServerClock(): { now: Date; synced: boolean } {
 }
 
 export function formatClock(d: Date): string {
-  return new Intl.DateTimeFormat("es-MX", { timeZone: TZ, hour: "2-digit", minute: "2-digit", second: "2-digit" }).format(d);
+  return new Intl.DateTimeFormat("es-MX", { timeZone: TZ, hourCycle: "h23", hour: "2-digit", minute: "2-digit", second: "2-digit" }).format(d);
 }
 
 export function formatLongDate(d: Date): string {

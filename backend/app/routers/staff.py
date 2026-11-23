@@ -98,7 +98,7 @@ def week_coverage(user: CurrentUser = Depends(COORD), db: Session = Depends(tena
                      "resting": [r.name for r in resting if r.rest_day == day.isoweekday()],
                      "gaps": [{"skill": g["skill"], "start": g["start"].isoformat(), "end": g["end"].isoformat(),
                                "message": ops.coverage_message(g)}
-                              for g in gaps if g["start"].astimezone(MEXICO_CITY).date() == day]})
+                              for g in gaps if max(g["start"].astimezone(MEXICO_CITY).date(), first) == day]})
     return {"from": first.isoformat(), "days": days, "gaps": len(gaps)}
 
 
