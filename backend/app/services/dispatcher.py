@@ -16,6 +16,12 @@ Policies (docs/spec/06_sirag_d_y_contingencia.md):
 
 Feasibility is the same for every policy (it is physics, not preference): right skill, visit inside
 the shift, and no overlap with the caregiver's other visits including the travel time with traffic.
+
+Relays (team decision 22 Nov 2026): a service LONGER than any legal shift (labor.needs_relay, e.g. SRV-04 / SRV-07
+of 12 h) that no single caregiver can cover may be covered by TWO consecutive people of the same skill: the first
+works until the end of their shift, the second arrives at that moment (the shift boundary) and stays until the end.
+A single caregiver is always preferred (continuity of care); relays are only offered when there is none.
+The operation and SIRAG-D get relays from these same functions (Option.relay).
 """
 from __future__ import annotations
 
@@ -85,6 +91,16 @@ class Option:
     planned_end: datetime                # scheduled_for + duration
     load_min: float                      # minutes already booked that day (tie-breaker)
     arrival: datetime | None = None      # when the caregiver arrives (= the scheduled_for that was tried)
+    relay: Option | None = None          # second caregiver who takes over at the shift boundary (planned_end)
+
+    @property
+    def legs(self) -> tuple[Option, ...]:
+        """Every person of the option: (self,) or (first, relay)."""
+        return (self,) if self.relay is None else (self, self.relay)
+
+    @property
+    def visit_end(self) -> datetime:
+        return self.legs[-1].planned_end
 
 
 @dataclass
@@ -132,15 +148,30 @@ def trip_minutes(km: float, arrive_at: datetime, traffic: TrafficProfile, extra_
     return travel_minutes(km, min(arrival_speed, departure_speed), extra_factor)
 
 
+def shift_containing(cg: Caregiver, moment: datetime) -> tuple[datetime, datetime] | None:
+    """(start, end) of the caregiver's shift that contains `moment` (local time), or None. Never a shift that starts
+    on their weekly rest day (app/services/labor.py, LFT art. 69). Checks the shift that starts on that day and the
+    one that started the day before (night shifts that cross midnight)."""
+    local = moment.astimezone(MEXICO_CITY)
+    for days_back in (0, 1):
+        day = local.date() - timedelta(days=days_back)
+        if not labor.works_on(cg.rest_day, day):        # no shift starts on the weekly rest day (art. 69)
+            continue
+        s = datetime.combine(day, cg.shift_start, MEXICO_CITY)
+        e = datetime.combine(day, cg.shift_end, MEXICO_CITY)
+        if e <= s:
+            e += timedelta(days=1)
+        if s <= local <= e:
+            return s, e
+    return None
+
+
 def within_shift(cg: Caregiver, start: datetime, end: datetime) -> bool:
-    """True if [start, end] fits inside one of the caregiver's shifts (local time), never in a shift that would
-    start on their weekly rest day (app/services/labor.py, LFT art. 69; same rule in the operation and SIRAG-D).
-    Checks the shift that starts on the visit's day and the one that started the day before
-    (night shifts that cross midnight)."""
+    """True if [start, end] fits inside one of the caregiver's shifts (same rule in the operation and SIRAG-D)."""
     local_start, local_end = start.astimezone(MEXICO_CITY), end.astimezone(MEXICO_CITY)
     for days_back in (0, 1):
         day = local_start.date() - timedelta(days=days_back)
-        if not labor.works_on(cg.rest_day, day):        # no shift starts on the weekly rest day (art. 69)
+        if not labor.works_on(cg.rest_day, day):
             continue
         s = datetime.combine(day, cg.shift_start, MEXICO_CITY)
         e = datetime.combine(day, cg.shift_end, MEXICO_CITY)
@@ -172,36 +203,84 @@ def order_queue(requests: list[Request], policy: str, now: datetime) -> list[Req
                                            -(now - r.created_at).total_seconds()))
 
 
+def _option(request: Request, cg: Caregiver, traffic: TrafficProfile, extra_traffic_factor: float,
+            extra_minutes: Callable[[Caregiver], float] | None) -> Option | None:
+    """The caregiver's option for the request, or None if not feasible (skill, shift, overlap with travel)."""
+    visit_end = request.scheduled_for + timedelta(minutes=request.duration_min)
+    if not cg.active or request.required_skill not in cg.skills:
+        return None
+    if not within_shift(cg, request.scheduled_for, visit_end):
+        return None
+    km = haversine_km(cg.lat, cg.lon, request.lat, request.lon)
+    minutes = trip_minutes(km, request.scheduled_for, traffic, extra_traffic_factor)
+    if extra_minutes is not None:
+        minutes += extra_minutes(cg)
+    depart = request.scheduled_for - timedelta(minutes=minutes)
+    if overlaps(depart, visit_end, cg.busy):
+        return None
+    return Option(cg.caregiver_id, round(km, 2), round(minutes, 1), depart, visit_end,
+                  booked_minutes_on(cg, request.scheduled_for.astimezone(MEXICO_CITY).date()), request.scheduled_for)
+
+
+def _sort_key(policy: str):
+    if policy == "risk_plus_live_traffic":
+        return lambda o: (sum(x.travel_min for x in o.legs), sum(x.load_min for x in o.legs), o.caregiver_id)
+    return lambda o: (sum(x.distance_km for x in o.legs), sum(x.load_min for x in o.legs), o.caregiver_id)
+
+
+def relay_options(request: Request, caregivers: list[Caregiver], traffic: TrafficProfile, policy: str = DEFAULT_POLICY,
+                  extra_traffic_factor: float = 1.0,
+                  extra_minutes: Callable[[Caregiver], float] | None = None) -> list[Option]:
+    """Two consecutive people of the same skill for a service longer than any legal shift (labor.needs_relay).
+    First leg: someone whose shift contains the start, from the start until the END of their shift (the boundary).
+    Second leg: someone else who arrives at the boundary and stays until the end of the service. Best first."""
+    if not labor.needs_relay(request.duration_min):
+        return []
+    visit_end = request.scheduled_for + timedelta(minutes=request.duration_min)
+    seconds: dict[datetime, list[Option]] = {}         # ranked second legs per boundary (computed once)
+    out: list[Option] = []
+    for cg in caregivers:
+        if not cg.active or request.required_skill not in cg.skills:
+            continue
+        shift = shift_containing(cg, request.scheduled_for)
+        if shift is None or not request.scheduled_for < shift[1] < visit_end:
+            continue
+        boundary = shift[1]
+        first = _option(replace(request, duration_min=int((boundary - request.scheduled_for).total_seconds() // 60)),
+                        cg, traffic, extra_traffic_factor, extra_minutes)
+        if first is None:
+            continue
+        if boundary not in seconds:
+            rest = replace(request, scheduled_for=boundary, duration_min=int((visit_end - boundary).total_seconds() // 60))
+            seconds[boundary] = sorted((o for c in caregivers
+                                        if (o := _option(rest, c, traffic, extra_traffic_factor, extra_minutes))),
+                                       key=_sort_key(policy))
+        second = next((o for o in seconds[boundary] if o.caregiver_id != cg.caregiver_id), None)
+        if second is not None:
+            out.append(replace(first, relay=second))
+    return sorted(out, key=_sort_key(policy))
+
+
 def rank_candidates(request: Request, caregivers: list[Caregiver], traffic: TrafficProfile,
                     policy: str = DEFAULT_POLICY, extra_traffic_factor: float = 1.0,
                     extra_minutes: Callable[[Caregiver], float] | None = None) -> list[Option]:
-    """Every feasible caregiver for one request, best first according to the policy.
+    """Every feasible caregiver for one request, best first according to the policy. If nobody can cover a service
+    longer than a legal shift alone, the feasible relays (two people, see relay_options) instead.
 
     extra_minutes (optional, used by SIRAG-D's roadblock scenario): fixed minutes added to the trip of a
     given caregiver, e.g. +15 min when the trip crosses a blocked district. The operation never passes it."""
     _check(policy)
-    visit_end = request.scheduled_for + timedelta(minutes=request.duration_min)
-    options: list[Option] = []
-    for cg in caregivers:
-        if not cg.active or request.required_skill not in cg.skills:
-            continue
-        if not within_shift(cg, request.scheduled_for, visit_end):
-            continue
-        km = haversine_km(cg.lat, cg.lon, request.lat, request.lon)
-        minutes = trip_minutes(km, request.scheduled_for, traffic, extra_traffic_factor)
-        if extra_minutes is not None:
-            minutes += extra_minutes(cg)
-        depart = request.scheduled_for - timedelta(minutes=minutes)
-        if overlaps(depart, visit_end, cg.busy):
-            continue
-        options.append(Option(cg.caregiver_id, round(km, 2), round(minutes, 1), depart, visit_end,
-                              booked_minutes_on(cg, request.scheduled_for.astimezone(MEXICO_CITY).date()),
-                              request.scheduled_for))
-    if policy == "risk_plus_live_traffic":
-        key = lambda o: (o.travel_min, o.load_min, o.caregiver_id)  # noqa: E731
-    else:
-        key = lambda o: (o.distance_km, o.load_min, o.caregiver_id)  # noqa: E731
-    return sorted(options, key=key)
+    options = [o for cg in caregivers if (o := _option(request, cg, traffic, extra_traffic_factor, extra_minutes))]
+    if not options:
+        return relay_options(request, caregivers, traffic, policy, extra_traffic_factor, extra_minutes)
+    return sorted(options, key=_sort_key(policy))
+
+
+def book(pool: dict[str, Caregiver], option: Option) -> None:
+    """Add the option's windows (both people of a relay) to the caregivers' busy windows."""
+    for leg in option.legs:
+        cg = pool[leg.caregiver_id]
+        pool[leg.caregiver_id] = replace(cg, busy=cg.busy + ((leg.planned_start, leg.planned_end),))
 
 
 def dispatch(requests: list[Request], caregivers: list[Caregiver], traffic: TrafficProfile,
@@ -216,9 +295,7 @@ def dispatch(requests: list[Request], caregivers: list[Caregiver], traffic: Traf
         options = rank_candidates(req, list(pool.values()), traffic, policy, extra_traffic_factor)
         decision = Decision(req, options)
         if decision.chosen:
-            cg = pool[decision.chosen.caregiver_id]
-            pool[cg.caregiver_id] = replace(cg, busy=cg.busy + ((decision.chosen.planned_start,
-                                                                 decision.chosen.planned_end),))
+            book(pool, decision.chosen)
         decisions.append(decision)
     return decisions
 
@@ -286,9 +363,7 @@ def dispatch_window(requests: list[Request], caregivers: list[Caregiver], traffi
                                    extra_traffic_factor, (extra_minutes or {}).get(req.request_id))
         decision = Decision(req, options)
         if decision.chosen:
-            cg = pool[decision.chosen.caregiver_id]
-            pool[cg.caregiver_id] = replace(cg, busy=cg.busy + ((decision.chosen.planned_start,
-                                                                 decision.chosen.planned_end),))
+            book(pool, decision.chosen)
         decisions.append(decision)
     return decisions
 

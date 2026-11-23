@@ -10,6 +10,7 @@ import { Icon, Mic, ThumbsUp } from "../components/icons";
 import { Link } from "react-router";
 import { es } from "../i18n/es";
 import { formatDateTime } from "../lib/format";
+import { relayText } from "../lib/relay";
 
 export function FamilyPage() {
   const [data, setData] = useState<FamilyOverview | null>(null);
@@ -54,7 +55,8 @@ export function FamilyPage() {
               <p className="text-xl font-bold">{formatDateTime(next.scheduled_for)}</p>
               <p>{next.service_name}</p>
               <p><StatusBadge status={next.status} /></p>
-              <p>{es.family.caregiver}: <strong>{next.caregiver_name ?? es.family.pendingCaregiver}</strong></p>
+              <p>{es.family.caregiver}: <strong>{next.caregiver_name ?? es.family.pendingCaregiver}</strong>
+                {next.relay_caregiver_name && ` · ${relayText(next.relay_caregiver_name, next.relay_at)}`}</p>
               {next.status_reason && <p className="text-muted">{es.statusReason[next.status_reason] ?? ""}</p>}
             </div>
           )}

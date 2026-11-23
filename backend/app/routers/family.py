@@ -12,11 +12,15 @@ router = APIRouter(prefix="/api/family", tags=["family"])
 
 VISIT_SQL = """
     SELECT r.request_id, r.status, r.status_reason, r.scheduled_for, r.priority, s.name AS service_name,
-           a.assignment_id, a.arrived_at, a.finished_at, a.family_confirmed,
-           c.first_name || ' ' || c.paternal_surname AS caregiver_name
+           a.assignment_id, a.arrived_at, CASE WHEN b.assignment_id IS NULL THEN a.finished_at ELSE b.finished_at END
+           AS finished_at, a.family_confirmed, c.first_name || ' ' || c.paternal_surname AS caregiver_name,
+           rc.first_name || ' ' || rc.paternal_surname AS relay_caregiver_name,
+           CASE WHEN b.assignment_id IS NOT NULL THEN a.planned_end END AS relay_at
     FROM service_requests r JOIN services s USING (service_id)
-    LEFT JOIN assignments a ON a.request_id = r.request_id AND a.status = 'active'
+    LEFT JOIN assignments a ON a.request_id = r.request_id AND a.status = 'active' AND a.leg = 1
     LEFT JOIN caregivers c ON c.caregiver_id = a.caregiver_id
+    LEFT JOIN assignments b ON b.request_id = r.request_id AND b.status = 'active' AND b.leg = 2     -- relay
+    LEFT JOIN caregivers rc ON rc.caregiver_id = b.caregiver_id
     WHERE r.patient_id = :p {where} ORDER BY {order} LIMIT {limit}"""
 
 

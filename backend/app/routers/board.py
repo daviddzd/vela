@@ -31,7 +31,7 @@ def board(user: CurrentUser = Depends(require_role(COORDINATOR, OWNER)), db: Ses
                count(*) FILTER (WHERE r.status IN ('completed','closed')
                                 AND (a.finished_at AT TIME ZONE 'America/Mexico_City')::date = {TODAY}) AS done_today
         FROM service_requests r
-        LEFT JOIN assignments a ON a.request_id = r.request_id AND a.status = 'active'
+        LEFT JOIN assignments a ON a.request_id = r.request_id AND a.status = 'active' AND a.leg = 1
         WHERE r.status IN ('queued','assigned','in_progress','completed','closed')
           AND r.scheduled_for > now() - interval '2 days'""")).mappings().one()
 
@@ -54,11 +54,15 @@ def board(user: CurrentUser = Depends(require_role(COORDINATOR, OWNER)), db: Ses
     visits = db.execute(text(f"""
         SELECT r.request_id, r.patient_id, r.status, r.priority, r.scheduled_for, s.name AS service_name,
                pe.first_name || ' ' || pe.paternal_surname AS patient_name, pe.lat::float AS lat, pe.lon::float AS lon,
-               c.first_name || ' ' || c.paternal_surname AS caregiver_name
+               c.first_name || ' ' || c.paternal_surname AS caregiver_name,
+               rc.first_name || ' ' || rc.paternal_surname AS relay_caregiver_name,
+               CASE WHEN b.assignment_id IS NOT NULL THEN a.planned_end END AS relay_at
         FROM service_requests r JOIN services s USING (service_id)
         JOIN patients pa ON pa.patient_id = r.patient_id JOIN persons pe ON pe.person_id = pa.person_id
-        LEFT JOIN assignments a ON a.request_id = r.request_id AND a.status = 'active'
+        LEFT JOIN assignments a ON a.request_id = r.request_id AND a.status = 'active' AND a.leg = 1
         LEFT JOIN caregivers c ON c.caregiver_id = a.caregiver_id
+        LEFT JOIN assignments b ON b.request_id = r.request_id AND b.status = 'active' AND b.leg = 2     -- relay
+        LEFT JOIN caregivers rc ON rc.caregiver_id = b.caregiver_id
         WHERE (r.scheduled_for AT TIME ZONE 'America/Mexico_City')::date = {TODAY}
           AND r.status NOT IN ('rejected','cancelled')
         ORDER BY r.scheduled_for""")).mappings().all()

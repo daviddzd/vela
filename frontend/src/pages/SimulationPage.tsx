@@ -105,6 +105,7 @@ export function SimulationPage() {
 
         <ChartCard question={t.findingQ} source={t.source}>
           <p>{fill(t.findingIntro, cfg)}</p>
+          <p className="mt-2 font-bold">{t.findingTable}</p>
           <ResponsiveTable head={[t.metric, t.policies[VELA], t.policies[VELA_TIMEOUT]]}
             rows={["crisis_response_p90_min", "high_wait_p90_min"].map((m) => {
               const x = sensTest("5-15", m);
@@ -220,6 +221,9 @@ export function SimulationPage() {
               rows={[{ key: "staff", cells: [t.nightStaff, ...["current", "night_legal"].map((l) => {
                 const x = r.sensitivity.find((y) => y.knob === "extra_staff" && y.extra_staff === l && y.policy === VELA_TIMEOUT && y.metric === "staff");
                 return x ? fmt(x.mean, 0) : "—"; })] },
+              { key: "relays", cells: [t.nightRelays, ...["current", "night_legal"].map((l) => {
+                const x = r.sensitivity.find((y) => y.knob === "extra_staff" && y.extra_staff === l && y.policy === VELA_TIMEOUT && y.metric === "relays");
+                return x ? fmt(x.mean) : "—"; })] },
               ...["unattended_pct", "crisis_under_60_pct", "night_crisis_under_60_pct"].flatMap((m) => [VELA_TIMEOUT, HUMAN].map((p) => ({
                 key: m + p, cells: [`${t.metrics[m].label} · ${t.policies[p]}`, ...["current", "night_legal"].map((l) => {
                   const x = r.sensitivity.find((y) => y.knob === "extra_staff" && y.extra_staff === l && y.policy === p && y.metric === m);

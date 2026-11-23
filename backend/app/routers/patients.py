@@ -153,7 +153,7 @@ def record(patient_id: str, user: CurrentUser = Depends(require_role(COORDINATOR
                r.care_plan_id, a.approval, a.arrived_at, a.finished_at,
                c.first_name || ' ' || c.paternal_surname AS caregiver_name
         FROM service_requests r JOIN services s USING (service_id)
-        LEFT JOIN assignments a ON a.request_id = r.request_id AND a.status = 'active'
+        LEFT JOIN assignments a ON a.request_id = r.request_id AND a.status = 'active' AND a.leg = 1
         LEFT JOIN caregivers c ON c.caregiver_id = a.caregiver_id
         WHERE r.patient_id = :p ORDER BY r.scheduled_for DESC LIMIT 40"""), {"p": patient_id}).mappings().all()
     reports = [dict(r) for r in db.execute(text("""

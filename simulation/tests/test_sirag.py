@@ -108,3 +108,14 @@ def test_reserved_window_is_not_taken_by_others():
     assert dsp.rank_candidates(low, dsp.apply_holds([cg], [hold], start + timedelta(minutes=1)), traffic)  # expired
     own = dsp.Request("HIGH-1", "high", "nursing", start, 30, 19.41, -99.11, start - timedelta(hours=2))
     assert dsp.rank_candidates(own, dsp.apply_holds([cg], [hold], now, except_request="HIGH-1"), traffic)  # its own
+
+
+def test_legal_night_covers_12h_services_with_relays_of_two_people():
+    """'Cumplir jornada nocturna': nobody works 12 h, so 12-h services are covered by the operation's relays."""
+    model = M.Model(load_world(), M.Params("vela_timeout", "normal", 0, extra_staff="night_legal"))
+    done = model.run()
+    relays = [r for r in done if r.assigned and r.assigned.get("relay")]
+    assert relays and all(r.service_id in ("SRV-04", "SRV-07") for r in relays)
+    assert all(r.assigned["relay"] != r.assigned["caregiver_id"] for r in relays)
+    current = M.Model(load_world(), M.Params("vela_timeout", "normal", 0)).run()
+    assert not any(r.assigned and r.assigned.get("relay") for r in current)   # the 12-h night shift covers them alone

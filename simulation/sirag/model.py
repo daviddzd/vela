@@ -258,10 +258,10 @@ class Model:
         options = dsp.earliest_options(req.d, pool, self.world.traffic, self.dispatch_policy, now, req.deadline,
                                        self.traffic_factor, self.extra_minutes(req))
         if options:
-            o = options[0]
             minutes = config()["approval"]["hold_minutes"]
-            holds.append(dsp.Hold(req.key, o.caregiver_id, o.planned_start, o.planned_end,
-                                  req.created + timedelta(minutes=minutes)))
+            for leg in options[0].legs:                 # a relay reserves both people
+                holds.append(dsp.Hold(req.key, leg.caregiver_id, leg.planned_start, leg.planned_end,
+                                      req.created + timedelta(minutes=minutes)))
 
     def try_assign(self, req: SimRequest, now: datetime) -> bool:
         pool = self.caregivers[req.institution_id]
@@ -272,16 +272,20 @@ class Model:
         options = dsp.earliest_options(req.d, usable, self.world.traffic, self.dispatch_policy, now, req.deadline,
                                        self.traffic_factor, extra)
         for o in options[:1]:
-            t = o.arrival
-            j = next(k for k, c in enumerate(pool) if c.caregiver_id == o.caregiver_id)
-            pool[j] = replace(pool[j], busy=pool[j].busy + ((o.planned_start, o.planned_end),))
-            cg = pool[j]
-            req.assigned = {"caregiver_id": o.caregiver_id, "arrival": t, "planned_start": o.planned_start,
-                            "planned_end": o.planned_end, "travel_min": o.travel_min,
-                            "km": 2 * road_km(cg.lat, cg.lon, req.d.lat, req.d.lon),        # ASSUMPTION: return to base
-                            "overtime_min": self.overtime(cg, o.planned_start, o.planned_end, t)}
+            by_id = {c.caregiver_id: c for c in pool}
+            dsp.book(by_id, o)                          # the operation's function: both people of a relay
+            pool[:] = list(by_id.values())
+            legs = [(by_id[leg.caregiver_id], leg) for leg in o.legs]
+            req.assigned = {"caregiver_id": o.caregiver_id, "arrival": o.arrival, "planned_start": o.planned_start,
+                            "planned_end": o.visit_end, "travel_min": o.travel_min,
+                            "relay": o.relay.caregiver_id if o.relay else None,
+                            "work_min": sum((leg.planned_end - leg.planned_start).total_seconds() / 60 for _, leg in legs),
+                            # ASSUMPTION: each person goes back to base
+                            "km": sum(2 * road_km(cg.lat, cg.lon, req.d.lat, req.d.lon) for cg, _ in legs),
+                            "overtime_min": sum(self.overtime(cg, leg.planned_start, leg.planned_end, leg.arrival)
+                                                for cg, leg in legs)}
             if req.kind == "crisis":
-                self.env.process(self.resolve(req.patient_idx, o.planned_end))
+                self.env.process(self.resolve(req.patient_idx, o.visit_end))
             return True
         return False
 

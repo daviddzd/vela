@@ -27,10 +27,12 @@ def request_out(db: Session, request_id: str) -> dict:
         SELECT r.request_id, r.patient_id, r.service_id, s.name AS service_name, r.priority, r.origin,
                r.scheduled_for, r.created_at, r.status, r.status_reason, r.duplicate_of,
                v.assignment_id, v.caregiver_id, v.approval, v.planned_start, v.planned_end,
-               c.first_name || ' ' || c.paternal_surname AS caregiver_name
+               c.first_name || ' ' || c.paternal_surname AS caregiver_name,
+               v.relay_caregiver_id, v.relay_at, rc.first_name || ' ' || rc.paternal_surname AS relay_caregiver_name
         FROM service_requests r JOIN services s USING (service_id)
         LEFT JOIN v_service_requests v ON v.request_id = r.request_id
         LEFT JOIN caregivers c ON c.caregiver_id = v.caregiver_id
+        LEFT JOIN caregivers rc ON rc.caregiver_id = v.relay_caregiver_id
         WHERE r.request_id = :id"""), {"id": request_id}).mappings().one()
     return dict(r)
 

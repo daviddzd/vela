@@ -10,6 +10,7 @@ approval_delay,policy,metric,mean,ci_low,ci_high,n,knob,risk_multiplier,extra_st
 0-0,human_dispatcher,overtime_hours,14.055630618333335,13.661160639898291,14.45010059676838,30,approval_delay,,
 0-0,human_dispatcher,night_crisis_under_60_pct,43.93374741200829,26.559044917207,61.30844990680957,23,approval_delay,,
 0-0,human_dispatcher,staff,44.0,44.0,44.0,30,approval_delay,,
+0-0,human_dispatcher,relays,0.0,0.0,0.0,30,approval_delay,,
 0-0,nearest,high_wait_mean_min,5.519450712834727,5.077106946220656,5.961794479448798,30,approval_delay,,
 0-0,nearest,high_wait_p90_min,23.04692188877778,20.785635699279737,25.308208078275825,30,approval_delay,,
 0-0,nearest,crisis_under_60_pct,56.42352092352092,48.285726984728804,64.56131486231303,30,approval_delay,,
@@ -21,6 +22,7 @@ approval_delay,policy,metric,mean,ci_low,ci_high,n,knob,risk_multiplier,extra_st
 0-0,nearest,overtime_hours,14.247211289037038,13.854511662049967,14.639910916024109,30,approval_delay,,
 0-0,nearest,night_crisis_under_60_pct,43.93374741200829,26.559044917207,61.30844990680957,23,approval_delay,,
 0-0,nearest,staff,44.0,44.0,44.0,30,approval_delay,,
+0-0,nearest,relays,0.0,0.0,0.0,30,approval_delay,,
 0-0,risk_plus_live_traffic,high_wait_mean_min,5.058115258183124,4.608659960884987,5.50757055548126,30,approval_delay,,
 0-0,risk_plus_live_traffic,high_wait_p90_min,19.758950580611113,17.364213735900986,22.15368742532124,30,approval_delay,,
 0-0,risk_plus_live_traffic,crisis_under_60_pct,56.42352092352092,48.285726984728804,64.56131486231303,30,approval_delay,,
@@ -32,6 +34,7 @@ approval_delay,policy,metric,mean,ci_low,ci_high,n,knob,risk_multiplier,extra_st
 0-0,risk_plus_live_traffic,overtime_hours,13.763179701129632,13.342334470247184,14.184024932012079,30,approval_delay,,
 0-0,risk_plus_live_traffic,night_crisis_under_60_pct,43.93374741200829,26.559044917207,61.30844990680957,23,approval_delay,,
 0-0,risk_plus_live_traffic,staff,44.0,44.0,44.0,30,approval_delay,,
+0-0,risk_plus_live_traffic,relays,0.0,0.0,0.0,30,approval_delay,,
 0-0,risk_priority,high_wait_mean_min,5.058115258183124,4.608659960884987,5.50757055548126,30,approval_delay,,
 0-0,risk_priority,high_wait_p90_min,19.758950580611113,17.364213735900986,22.15368742532124,30,approval_delay,,
 0-0,risk_priority,crisis_under_60_pct,56.42352092352092,48.285726984728804,64.56131486231303,30,approval_delay,,
@@ -43,6 +46,7 @@ approval_delay,policy,metric,mean,ci_low,ci_high,n,knob,risk_multiplier,extra_st
 0-0,risk_priority,overtime_hours,13.77075119788889,13.35079101074957,14.19071138502821,30,approval_delay,,
 0-0,risk_priority,night_crisis_under_60_pct,43.93374741200829,26.559044917207,61.30844990680957,23,approval_delay,,
 0-0,risk_priority,staff,44.0,44.0,44.0,30,approval_delay,,
+0-0,risk_priority,relays,0.0,0.0,0.0,30,approval_delay,,
 0-0,vela_timeout,high_wait_mean_min,5.058115258183124,4.608659960884987,5.50757055548126,30,approval_delay,,
 0-0,vela_timeout,high_wait_p90_min,19.758950580611113,17.364213735900986,22.15368742532124,30,approval_delay,,
 0-0,vela_timeout,crisis_under_60_pct,56.42352092352092,48.285726984728804,64.56131486231303,30,approval_delay,,
@@ -54,6 +58,7 @@ approval_delay,policy,metric,mean,ci_low,ci_high,n,knob,risk_multiplier,extra_st
 0-0,vela_timeout,overtime_hours,13.763179701129632,13.342334470247184,14.184024932012079,30,approval_delay,,
 0-0,vela_timeout,night_crisis_under_60_pct,43.93374741200829,26.559044917207,61.30844990680957,23,approval_delay,,
 0-0,vela_timeout,staff,44.0,44.0,44.0,30,approval_delay,,
+0-0,vela_timeout,relays,0.0,0.0,0.0,30,approval_delay,,
 1-5,human_dispatcher,high_wait_mean_min,5.660337957159355,5.173210674720168,6.147465239598541,30,approval_delay,,
 1-5,human_dispatcher,high_wait_p90_min,23.610489022000007,21.197620949047224,26.02335709495279,30,approval_delay,,
 1-5,human_dispatcher,crisis_under_60_pct,53.94733044733044,45.37443355050755,62.52022734415333,30,approval_delay,,
@@ -65,6 +70,7 @@ approval_delay,policy,metric,mean,ci_low,ci_high,n,knob,risk_multiplier,extra_st
 1-5,human_dispatcher,overtime_hours,14.055630618333335,13.661160639898291,14.45010059676838,30,approval_delay,,
 1-5,human_dispatcher,night_crisis_under_60_pct,43.93374741200829,26.559044917207,61.30844990680957,23,approval_delay,,
 1-5,human_dispatcher,staff,44.0,44.0,44.0,30,approval_delay,,
+1-5,human_dispatcher,relays,0.0,0.0,0.0,30,approval_delay,,
 1-5,nearest,high_wait_mean_min,5.562959032936145,5.114665712403665,6.011252353468624,30,approval_delay,,
 1-5,nearest,high_wait_p90_min,23.404374884833334,21.208407983504483,25.600341786162186,30,approval_delay,,
 1-5,nearest,crisis_under_60_pct,56.42352092352092,48.285726984728804,64.56131486231303,30,approval_delay,,
@@ -76,6 +82,7 @@ approval_delay,policy,metric,mean,ci_low,ci_high,n,knob,risk_multiplier,extra_st
 1-5,nearest,overtime_hours,14.231666796083335,13.841564018804654,14.621769573362016,30,approval_delay,,
 1-5,nearest,night_crisis_under_60_pct,43.93374741200829,26.559044917207,61.30844990680957,23,approval_delay,,
 1-5,nearest,staff,44.0,44.0,44.0,30,approval_delay,,
+1-5,nearest,relays,0.0,0.0,0.0,30,approval_delay,,
 1-5,risk_plus_live_traffic,high_wait_mean_min,5.100610840275633,4.645815344709705,5.55540633584156,30,approval_delay,,
 1-5,risk_plus_live_traffic,high_wait_p90_min,20.222238661555558,17.87306066598573,22.571416657125386,30,approval_delay,,
 1-5,risk_plus_live_traffic,crisis_under_60_pct,56.42352092352092,48.285726984728804,64.56131486231303,30,approval_delay,,
@@ -87,6 +94,7 @@ approval_delay,policy,metric,mean,ci_low,ci_high,n,knob,risk_multiplier,extra_st
 1-5,risk_plus_live_traffic,overtime_hours,13.747635208175925,13.329822350410982,14.165448065940868,30,approval_delay,,
 1-5,risk_plus_live_traffic,night_crisis_under_60_pct,43.93374741200829,26.559044917207,61.30844990680957,23,approval_delay,,
 1-5,risk_plus_live_traffic,staff,44.0,44.0,44.0,30,approval_delay,,
+1-5,risk_plus_live_traffic,relays,0.0,0.0,0.0,30,approval_delay,,
 1-5,risk_priority,high_wait_mean_min,5.100610840275633,4.645815344709705,5.55540633584156,30,approval_delay,,
 1-5,risk_priority,high_wait_p90_min,20.222238661555558,17.87306066598573,22.571416657125386,30,approval_delay,,
 1-5,risk_priority,crisis_under_60_pct,56.42352092352092,48.285726984728804,64.56131486231303,30,approval_delay,,
@@ -98,6 +106,7 @@ approval_delay,policy,metric,mean,ci_low,ci_high,n,knob,risk_multiplier,extra_st
 1-5,risk_priority,overtime_hours,13.755206704935185,13.338244611633858,14.172168798236513,30,approval_delay,,
 1-5,risk_priority,night_crisis_under_60_pct,43.93374741200829,26.559044917207,61.30844990680957,23,approval_delay,,
 1-5,risk_priority,staff,44.0,44.0,44.0,30,approval_delay,,
+1-5,risk_priority,relays,0.0,0.0,0.0,30,approval_delay,,
 1-5,vela_timeout,high_wait_mean_min,5.092439744745396,4.638853420188435,5.546026069302356,30,approval_delay,,
 1-5,vela_timeout,high_wait_p90_min,20.06223515188889,17.714001097808552,22.410469205969225,30,approval_delay,,
 1-5,vela_timeout,crisis_under_60_pct,56.42352092352092,48.285726984728804,64.56131486231303,30,approval_delay,,
@@ -109,6 +118,7 @@ approval_delay,policy,metric,mean,ci_low,ci_high,n,knob,risk_multiplier,extra_st
 1-5,vela_timeout,overtime_hours,13.747635208175925,13.329822350410982,14.165448065940868,30,approval_delay,,
 1-5,vela_timeout,night_crisis_under_60_pct,43.93374741200829,26.559044917207,61.30844990680957,23,approval_delay,,
 1-5,vela_timeout,staff,44.0,44.0,44.0,30,approval_delay,,
+1-5,vela_timeout,relays,0.0,0.0,0.0,30,approval_delay,,
 5-15,human_dispatcher,high_wait_mean_min,5.660337957159355,5.173210674720168,6.147465239598541,30,approval_delay,,
 5-15,human_dispatcher,high_wait_p90_min,23.610489022000007,21.197620949047224,26.02335709495279,30,approval_delay,,
 5-15,human_dispatcher,crisis_under_60_pct,53.94733044733044,45.37443355050755,62.52022734415333,30,approval_delay,,
@@ -120,6 +130,7 @@ approval_delay,policy,metric,mean,ci_low,ci_high,n,knob,risk_multiplier,extra_st
 5-15,human_dispatcher,overtime_hours,14.055630618333335,13.661160639898291,14.45010059676838,30,approval_delay,,
 5-15,human_dispatcher,night_crisis_under_60_pct,43.93374741200829,26.559044917207,61.30844990680957,23,approval_delay,,
 5-15,human_dispatcher,staff,44.0,44.0,44.0,30,approval_delay,,
+5-15,human_dispatcher,relays,0.0,0.0,0.0,30,approval_delay,,
 5-15,nearest,high_wait_mean_min,5.239821317026124,4.768265054611575,5.711377579440672,30,approval_delay,,
 5-15,nearest,high_wait_p90_min,21.397620514000007,18.846050278516902,23.94919074948311,30,approval_delay,,
 5-15,nearest,crisis_under_60_pct,55.256854256854254,46.84772419903917,63.66598431466934,30,approval_delay,,
@@ -131,6 +142,7 @@ approval_delay,policy,metric,mean,ci_low,ci_high,n,knob,risk_multiplier,extra_st
 5-15,nearest,overtime_hours,14.22465116526852,13.815200248778133,14.634102081758908,30,approval_delay,,
 5-15,nearest,night_crisis_under_60_pct,43.93374741200829,26.559044917207,61.30844990680957,23,approval_delay,,
 5-15,nearest,staff,44.0,44.0,44.0,30,approval_delay,,
+5-15,nearest,relays,0.0,0.0,0.0,30,approval_delay,,
 5-15,risk_plus_live_traffic,high_wait_mean_min,5.2580241280196525,4.788007399496381,5.728040856542924,30,approval_delay,,
 5-15,risk_plus_live_traffic,high_wait_p90_min,21.708338195277786,19.20469993630954,24.21197645424603,30,approval_delay,,
 5-15,risk_plus_live_traffic,crisis_under_60_pct,55.256854256854254,46.84772419903917,63.66598431466934,30,approval_delay,,
@@ -142,6 +154,7 @@ approval_delay,policy,metric,mean,ci_low,ci_high,n,knob,risk_multiplier,extra_st
 5-15,risk_plus_live_traffic,overtime_hours,13.995958470175927,13.586819863743042,14.405097076608811,30,approval_delay,,
 5-15,risk_plus_live_traffic,night_crisis_under_60_pct,43.93374741200829,26.559044917207,61.30844990680957,23,approval_delay,,
 5-15,risk_plus_live_traffic,staff,44.0,44.0,44.0,30,approval_delay,,
+5-15,risk_plus_live_traffic,relays,0.0,0.0,0.0,30,approval_delay,,
 5-15,risk_priority,high_wait_mean_min,5.2580241280196525,4.788007399496381,5.728040856542924,30,approval_delay,,
 5-15,risk_priority,high_wait_p90_min,21.708338195277786,19.20469993630954,24.21197645424603,30,approval_delay,,
 5-15,risk_priority,crisis_under_60_pct,55.256854256854254,46.84772419903917,63.66598431466934,30,approval_delay,,
@@ -153,6 +166,7 @@ approval_delay,policy,metric,mean,ci_low,ci_high,n,knob,risk_multiplier,extra_st
 5-15,risk_priority,overtime_hours,13.999989737842592,13.591197265814614,14.40878220987057,30,approval_delay,,
 5-15,risk_priority,night_crisis_under_60_pct,43.93374741200829,26.559044917207,61.30844990680957,23,approval_delay,,
 5-15,risk_priority,staff,44.0,44.0,44.0,30,approval_delay,,
+5-15,risk_priority,relays,0.0,0.0,0.0,30,approval_delay,,
 5-15,vela_timeout,high_wait_mean_min,5.142782339139502,4.6952087017657655,5.590355976513238,30,approval_delay,,
 5-15,vela_timeout,high_wait_p90_min,20.43080890405557,18.003878587469348,22.857739220641793,30,approval_delay,,
 5-15,vela_timeout,crisis_under_60_pct,56.42352092352092,48.285726984728804,64.56131486231303,30,approval_delay,,
@@ -164,6 +178,7 @@ approval_delay,policy,metric,mean,ci_low,ci_high,n,knob,risk_multiplier,extra_st
 5-15,vela_timeout,overtime_hours,13.997116212259261,13.582768912761953,14.411463511756569,30,approval_delay,,
 5-15,vela_timeout,night_crisis_under_60_pct,43.93374741200829,26.559044917207,61.30844990680957,23,approval_delay,,
 5-15,vela_timeout,staff,44.0,44.0,44.0,30,approval_delay,,
+5-15,vela_timeout,relays,0.0,0.0,0.0,30,approval_delay,,
 ,human_dispatcher,high_wait_mean_min,5.660337957159355,5.173210674720168,6.147465239598541,30,risk_multiplier,1.0,
 ,human_dispatcher,high_wait_p90_min,23.610489022000007,21.197620949047224,26.02335709495279,30,risk_multiplier,1.0,
 ,human_dispatcher,crisis_under_60_pct,53.94733044733044,45.37443355050755,62.52022734415333,30,risk_multiplier,1.0,
@@ -175,6 +190,7 @@ approval_delay,policy,metric,mean,ci_low,ci_high,n,knob,risk_multiplier,extra_st
 ,human_dispatcher,overtime_hours,14.055630618333335,13.661160639898291,14.45010059676838,30,risk_multiplier,1.0,
 ,human_dispatcher,night_crisis_under_60_pct,43.93374741200829,26.559044917207,61.30844990680957,23,risk_multiplier,1.0,
 ,human_dispatcher,staff,44.0,44.0,44.0,30,risk_multiplier,1.0,
+,human_dispatcher,relays,0.0,0.0,0.0,30,risk_multiplier,1.0,
 ,nearest,high_wait_mean_min,5.562959032936145,5.114665712403665,6.011252353468624,30,risk_multiplier,1.0,
 ,nearest,high_wait_p90_min,23.404374884833334,21.208407983504483,25.600341786162186,30,risk_multiplier,1.0,
 ,nearest,crisis_under_60_pct,56.42352092352092,48.285726984728804,64.56131486231303,30,risk_multiplier,1.0,
@@ -186,6 +202,7 @@ approval_delay,policy,metric,mean,ci_low,ci_high,n,knob,risk_multiplier,extra_st
 ,nearest,overtime_hours,14.231666796083335,13.841564018804654,14.621769573362016,30,risk_multiplier,1.0,
 ,nearest,night_crisis_under_60_pct,43.93374741200829,26.559044917207,61.30844990680957,23,risk_multiplier,1.0,
 ,nearest,staff,44.0,44.0,44.0,30,risk_multiplier,1.0,
+,nearest,relays,0.0,0.0,0.0,30,risk_multiplier,1.0,
 ,risk_plus_live_traffic,high_wait_mean_min,5.100610840275633,4.645815344709705,5.55540633584156,30,risk_multiplier,1.0,
 ,risk_plus_live_traffic,high_wait_p90_min,20.222238661555558,17.87306066598573,22.571416657125386,30,risk_multiplier,1.0,
 ,risk_plus_live_traffic,crisis_under_60_pct,56.42352092352092,48.285726984728804,64.56131486231303,30,risk_multiplier,1.0,
@@ -197,6 +214,7 @@ approval_delay,policy,metric,mean,ci_low,ci_high,n,knob,risk_multiplier,extra_st
 ,risk_plus_live_traffic,overtime_hours,13.747635208175925,13.329822350410982,14.165448065940868,30,risk_multiplier,1.0,
 ,risk_plus_live_traffic,night_crisis_under_60_pct,43.93374741200829,26.559044917207,61.30844990680957,23,risk_multiplier,1.0,
 ,risk_plus_live_traffic,staff,44.0,44.0,44.0,30,risk_multiplier,1.0,
+,risk_plus_live_traffic,relays,0.0,0.0,0.0,30,risk_multiplier,1.0,
 ,risk_priority,high_wait_mean_min,5.100610840275633,4.645815344709705,5.55540633584156,30,risk_multiplier,1.0,
 ,risk_priority,high_wait_p90_min,20.222238661555558,17.87306066598573,22.571416657125386,30,risk_multiplier,1.0,
 ,risk_priority,crisis_under_60_pct,56.42352092352092,48.285726984728804,64.56131486231303,30,risk_multiplier,1.0,
@@ -208,6 +226,7 @@ approval_delay,policy,metric,mean,ci_low,ci_high,n,knob,risk_multiplier,extra_st
 ,risk_priority,overtime_hours,13.755206704935185,13.338244611633858,14.172168798236513,30,risk_multiplier,1.0,
 ,risk_priority,night_crisis_under_60_pct,43.93374741200829,26.559044917207,61.30844990680957,23,risk_multiplier,1.0,
 ,risk_priority,staff,44.0,44.0,44.0,30,risk_multiplier,1.0,
+,risk_priority,relays,0.0,0.0,0.0,30,risk_multiplier,1.0,
 ,vela_timeout,high_wait_mean_min,5.092439744745396,4.638853420188435,5.546026069302356,30,risk_multiplier,1.0,
 ,vela_timeout,high_wait_p90_min,20.06223515188889,17.714001097808552,22.410469205969225,30,risk_multiplier,1.0,
 ,vela_timeout,crisis_under_60_pct,56.42352092352092,48.285726984728804,64.56131486231303,30,risk_multiplier,1.0,
@@ -219,6 +238,7 @@ approval_delay,policy,metric,mean,ci_low,ci_high,n,knob,risk_multiplier,extra_st
 ,vela_timeout,overtime_hours,13.747635208175925,13.329822350410982,14.165448065940868,30,risk_multiplier,1.0,
 ,vela_timeout,night_crisis_under_60_pct,43.93374741200829,26.559044917207,61.30844990680957,23,risk_multiplier,1.0,
 ,vela_timeout,staff,44.0,44.0,44.0,30,risk_multiplier,1.0,
+,vela_timeout,relays,0.0,0.0,0.0,30,risk_multiplier,1.0,
 ,human_dispatcher,high_wait_mean_min,6.60499366914854,6.101203258939245,7.108784079357834,30,risk_multiplier,2.0,
 ,human_dispatcher,high_wait_p90_min,27.31501326555556,25.3853244290743,29.244702102036822,30,risk_multiplier,2.0,
 ,human_dispatcher,crisis_under_60_pct,53.6528813320609,47.68594396487279,59.61981869924901,30,risk_multiplier,2.0,
@@ -230,6 +250,7 @@ approval_delay,policy,metric,mean,ci_low,ci_high,n,knob,risk_multiplier,extra_st
 ,human_dispatcher,overtime_hours,14.156197866990741,13.760876633059137,14.551519100922345,30,risk_multiplier,2.0,
 ,human_dispatcher,night_crisis_under_60_pct,43.189153439153436,33.168620336047056,53.20968654225982,30,risk_multiplier,2.0,
 ,human_dispatcher,staff,44.0,44.0,44.0,30,risk_multiplier,2.0,
+,human_dispatcher,relays,0.0,0.0,0.0,30,risk_multiplier,2.0,
 ,nearest,high_wait_mean_min,6.355863656233974,5.9022872297800575,6.809440082687891,30,risk_multiplier,2.0,
 ,nearest,high_wait_p90_min,25.040117236944443,23.083936769908846,26.99629770398004,30,risk_multiplier,2.0,
 ,nearest,crisis_under_60_pct,55.770915387788456,50.136160944698666,61.405669830878246,30,risk_multiplier,2.0,
@@ -241,6 +262,7 @@ approval_delay,policy,metric,mean,ci_low,ci_high,n,knob,risk_multiplier,extra_st
 ,nearest,overtime_hours,14.33223404474074,13.944845743330838,14.719622346150643,30,risk_multiplier,2.0,
 ,nearest,night_crisis_under_60_pct,43.189153439153436,33.168620336047056,53.20968654225982,30,risk_multiplier,2.0,
 ,nearest,staff,44.0,44.0,44.0,30,risk_multiplier,2.0,
+,nearest,relays,0.0,0.0,0.0,30,risk_multiplier,2.0,
 ,risk_plus_live_traffic,high_wait_mean_min,5.8861544415571165,5.417607305601115,6.354701577513118,30,risk_multiplier,2.0,
 ,risk_plus_live_traffic,high_wait_p90_min,22.928532640277783,21.020210862063507,24.83685441849206,30,risk_multiplier,2.0,
 ,risk_plus_live_traffic,crisis_under_60_pct,55.770915387788456,50.136160944698666,61.405669830878246,30,risk_multiplier,2.0,
@@ -252,6 +274,7 @@ approval_delay,policy,metric,mean,ci_low,ci_high,n,knob,risk_multiplier,extra_st
 ,risk_plus_live_traffic,overtime_hours,13.84820245683333,13.432287156790245,14.264117756876416,30,risk_multiplier,2.0,
 ,risk_plus_live_traffic,night_crisis_under_60_pct,43.189153439153436,33.168620336047056,53.20968654225982,30,risk_multiplier,2.0,
 ,risk_plus_live_traffic,staff,44.0,44.0,44.0,30,risk_multiplier,2.0,
+,risk_plus_live_traffic,relays,0.0,0.0,0.0,30,risk_multiplier,2.0,
 ,risk_priority,high_wait_mean_min,5.8861544415571165,5.417607305601115,6.354701577513118,30,risk_multiplier,2.0,
 ,risk_priority,high_wait_p90_min,22.928532640277783,21.020210862063507,24.83685441849206,30,risk_multiplier,2.0,
 ,risk_priority,crisis_under_60_pct,55.770915387788456,50.136160944698666,61.405669830878246,30,risk_multiplier,2.0,
@@ -263,6 +286,7 @@ approval_delay,policy,metric,mean,ci_low,ci_high,n,knob,risk_multiplier,extra_st
 ,risk_priority,overtime_hours,13.855773953592593,13.440691818520586,14.2708560886646,30,risk_multiplier,2.0,
 ,risk_priority,night_crisis_under_60_pct,43.189153439153436,33.168620336047056,53.20968654225982,30,risk_multiplier,2.0,
 ,risk_priority,staff,44.0,44.0,44.0,30,risk_multiplier,2.0,
+,risk_priority,relays,0.0,0.0,0.0,30,risk_multiplier,2.0,
 ,vela_timeout,high_wait_mean_min,5.869193026873111,5.400962603303613,6.337423450442609,30,risk_multiplier,2.0,
 ,vela_timeout,high_wait_p90_min,22.721005363611123,20.76684953027,24.675161196952246,30,risk_multiplier,2.0,
 ,vela_timeout,crisis_under_60_pct,55.770915387788456,50.136160944698666,61.405669830878246,30,risk_multiplier,2.0,
@@ -274,6 +298,7 @@ approval_delay,policy,metric,mean,ci_low,ci_high,n,knob,risk_multiplier,extra_st
 ,vela_timeout,overtime_hours,13.84820245683333,13.432287156790245,14.264117756876416,30,risk_multiplier,2.0,
 ,vela_timeout,night_crisis_under_60_pct,43.189153439153436,33.168620336047056,53.20968654225982,30,risk_multiplier,2.0,
 ,vela_timeout,staff,44.0,44.0,44.0,30,risk_multiplier,2.0,
+,vela_timeout,relays,0.0,0.0,0.0,30,risk_multiplier,2.0,
 ,human_dispatcher,high_wait_mean_min,7.756572076830276,7.221050455250602,8.29209369840995,30,risk_multiplier,3.0,
 ,human_dispatcher,high_wait_p90_min,30.70418134055557,28.854625634535275,32.55373704657587,30,risk_multiplier,3.0,
 ,human_dispatcher,crisis_under_60_pct,54.93082322161269,50.76974578037173,59.091900662853654,30,risk_multiplier,3.0,
@@ -285,6 +310,7 @@ approval_delay,policy,metric,mean,ci_low,ci_high,n,knob,risk_multiplier,extra_st
 ,human_dispatcher,overtime_hours,14.34912593887037,13.95373588584312,14.744515991897622,30,risk_multiplier,3.0,
 ,human_dispatcher,night_crisis_under_60_pct,42.57457357457358,35.223836968900464,49.92531018024669,30,risk_multiplier,3.0,
 ,human_dispatcher,staff,44.0,44.0,44.0,30,risk_multiplier,3.0,
+,human_dispatcher,relays,0.0,0.0,0.0,30,risk_multiplier,3.0,
 ,nearest,high_wait_mean_min,7.295470382464903,6.78482005723572,7.806120707694086,30,risk_multiplier,3.0,
 ,nearest,high_wait_p90_min,27.49820780466668,25.69932040418944,29.297095205143922,30,risk_multiplier,3.0,
 ,nearest,crisis_under_60_pct,57.69913142413143,53.414394783562216,61.983868064700644,30,risk_multiplier,3.0,
@@ -296,6 +322,7 @@ approval_delay,policy,metric,mean,ci_low,ci_high,n,knob,risk_multiplier,extra_st
 ,nearest,overtime_hours,14.53873106961111,14.13041533147014,14.94704680775208,30,risk_multiplier,3.0,
 ,nearest,night_crisis_under_60_pct,42.57457357457358,35.223836968900464,49.92531018024669,30,risk_multiplier,3.0,
 ,nearest,staff,44.0,44.0,44.0,30,risk_multiplier,3.0,
+,nearest,relays,0.0,0.0,0.0,30,risk_multiplier,3.0,
 ,risk_plus_live_traffic,high_wait_mean_min,6.814534121580669,6.302128668241423,7.3269395749199155,30,risk_multiplier,3.0,
 ,risk_plus_live_traffic,high_wait_p90_min,25.312334700666675,23.380417367886704,27.244252033446646,30,risk_multiplier,3.0,
 ,risk_plus_live_traffic,crisis_under_60_pct,57.490798090798094,53.21856356408185,61.76303261751434,30,risk_multiplier,3.0,
@@ -307,6 +334,7 @@ approval_delay,policy,metric,mean,ci_low,ci_high,n,knob,risk_multiplier,extra_st
 ,risk_plus_live_traffic,overtime_hours,14.062944412907408,13.632157237149732,14.493731588665083,30,risk_multiplier,3.0,
 ,risk_plus_live_traffic,night_crisis_under_60_pct,42.57457357457358,35.223836968900464,49.92531018024669,30,risk_multiplier,3.0,
 ,risk_plus_live_traffic,staff,44.0,44.0,44.0,30,risk_multiplier,3.0,
+,risk_plus_live_traffic,relays,0.0,0.0,0.0,30,risk_multiplier,3.0,
 ,risk_priority,high_wait_mean_min,6.81521999263691,6.303263930717097,7.327176054556724,30,risk_multiplier,3.0,
 ,risk_priority,high_wait_p90_min,25.324593909555567,23.39858262143282,27.250605197678315,30,risk_multiplier,3.0,
 ,risk_priority,crisis_under_60_pct,57.490798090798094,53.21856356408185,61.76303261751434,30,risk_multiplier,3.0,
@@ -318,6 +346,7 @@ approval_delay,policy,metric,mean,ci_low,ci_high,n,knob,risk_multiplier,extra_st
 ,risk_priority,overtime_hours,14.070515909666666,13.640555267542593,14.500476551790738,30,risk_multiplier,3.0,
 ,risk_priority,night_crisis_under_60_pct,42.57457357457358,35.223836968900464,49.92531018024669,30,risk_multiplier,3.0,
 ,risk_priority,staff,44.0,44.0,44.0,30,risk_multiplier,3.0,
+,risk_priority,relays,0.0,0.0,0.0,30,risk_multiplier,3.0,
 ,vela_timeout,high_wait_mean_min,6.792349679763145,6.2802012175884085,7.304498141937882,30,risk_multiplier,3.0,
 ,vela_timeout,high_wait_p90_min,25.271829683888896,23.32709335708823,27.21656601068956,30,risk_multiplier,3.0,
 ,vela_timeout,crisis_under_60_pct,57.490798090798094,53.21856356408185,61.76303261751434,30,risk_multiplier,3.0,
@@ -329,6 +358,7 @@ approval_delay,policy,metric,mean,ci_low,ci_high,n,knob,risk_multiplier,extra_st
 ,vela_timeout,overtime_hours,14.06955083275,13.63800240587917,14.50109925962083,30,risk_multiplier,3.0,
 ,vela_timeout,night_crisis_under_60_pct,42.57457357457358,35.223836968900464,49.92531018024669,30,risk_multiplier,3.0,
 ,vela_timeout,staff,44.0,44.0,44.0,30,risk_multiplier,3.0,
+,vela_timeout,relays,0.0,0.0,0.0,30,risk_multiplier,3.0,
 ,human_dispatcher,high_wait_mean_min,5.660337957159355,5.173210674720168,6.147465239598541,30,extra_staff,,current
 ,human_dispatcher,high_wait_p90_min,23.610489022000007,21.197620949047224,26.02335709495279,30,extra_staff,,current
 ,human_dispatcher,crisis_under_60_pct,53.94733044733044,45.37443355050755,62.52022734415333,30,extra_staff,,current
@@ -340,6 +370,7 @@ approval_delay,policy,metric,mean,ci_low,ci_high,n,knob,risk_multiplier,extra_st
 ,human_dispatcher,overtime_hours,14.055630618333335,13.661160639898291,14.45010059676838,30,extra_staff,,current
 ,human_dispatcher,night_crisis_under_60_pct,43.93374741200829,26.559044917207,61.30844990680957,23,extra_staff,,current
 ,human_dispatcher,staff,44.0,44.0,44.0,30,extra_staff,,current
+,human_dispatcher,relays,0.0,0.0,0.0,30,extra_staff,,current
 ,nearest,high_wait_mean_min,5.562959032936145,5.114665712403665,6.011252353468624,30,extra_staff,,current
 ,nearest,high_wait_p90_min,23.404374884833334,21.208407983504483,25.600341786162186,30,extra_staff,,current
 ,nearest,crisis_under_60_pct,56.42352092352092,48.285726984728804,64.56131486231303,30,extra_staff,,current
@@ -351,6 +382,7 @@ approval_delay,policy,metric,mean,ci_low,ci_high,n,knob,risk_multiplier,extra_st
 ,nearest,overtime_hours,14.231666796083335,13.841564018804654,14.621769573362016,30,extra_staff,,current
 ,nearest,night_crisis_under_60_pct,43.93374741200829,26.559044917207,61.30844990680957,23,extra_staff,,current
 ,nearest,staff,44.0,44.0,44.0,30,extra_staff,,current
+,nearest,relays,0.0,0.0,0.0,30,extra_staff,,current
 ,risk_plus_live_traffic,high_wait_mean_min,5.100610840275633,4.645815344709705,5.55540633584156,30,extra_staff,,current
 ,risk_plus_live_traffic,high_wait_p90_min,20.222238661555558,17.87306066598573,22.571416657125386,30,extra_staff,,current
 ,risk_plus_live_traffic,crisis_under_60_pct,56.42352092352092,48.285726984728804,64.56131486231303,30,extra_staff,,current
@@ -362,6 +394,7 @@ approval_delay,policy,metric,mean,ci_low,ci_high,n,knob,risk_multiplier,extra_st
 ,risk_plus_live_traffic,overtime_hours,13.747635208175925,13.329822350410982,14.165448065940868,30,extra_staff,,current
 ,risk_plus_live_traffic,night_crisis_under_60_pct,43.93374741200829,26.559044917207,61.30844990680957,23,extra_staff,,current
 ,risk_plus_live_traffic,staff,44.0,44.0,44.0,30,extra_staff,,current
+,risk_plus_live_traffic,relays,0.0,0.0,0.0,30,extra_staff,,current
 ,risk_priority,high_wait_mean_min,5.100610840275633,4.645815344709705,5.55540633584156,30,extra_staff,,current
 ,risk_priority,high_wait_p90_min,20.222238661555558,17.87306066598573,22.571416657125386,30,extra_staff,,current
 ,risk_priority,crisis_under_60_pct,56.42352092352092,48.285726984728804,64.56131486231303,30,extra_staff,,current
@@ -373,6 +406,7 @@ approval_delay,policy,metric,mean,ci_low,ci_high,n,knob,risk_multiplier,extra_st
 ,risk_priority,overtime_hours,13.755206704935185,13.338244611633858,14.172168798236513,30,extra_staff,,current
 ,risk_priority,night_crisis_under_60_pct,43.93374741200829,26.559044917207,61.30844990680957,23,extra_staff,,current
 ,risk_priority,staff,44.0,44.0,44.0,30,extra_staff,,current
+,risk_priority,relays,0.0,0.0,0.0,30,extra_staff,,current
 ,vela_timeout,high_wait_mean_min,5.092439744745396,4.638853420188435,5.546026069302356,30,extra_staff,,current
 ,vela_timeout,high_wait_p90_min,20.06223515188889,17.714001097808552,22.410469205969225,30,extra_staff,,current
 ,vela_timeout,crisis_under_60_pct,56.42352092352092,48.285726984728804,64.56131486231303,30,extra_staff,,current
@@ -384,61 +418,67 @@ approval_delay,policy,metric,mean,ci_low,ci_high,n,knob,risk_multiplier,extra_st
 ,vela_timeout,overtime_hours,13.747635208175925,13.329822350410982,14.165448065940868,30,extra_staff,,current
 ,vela_timeout,night_crisis_under_60_pct,43.93374741200829,26.559044917207,61.30844990680957,23,extra_staff,,current
 ,vela_timeout,staff,44.0,44.0,44.0,30,extra_staff,,current
-,human_dispatcher,high_wait_mean_min,5.7399068489204925,5.250530686379435,6.22928301146155,30,extra_staff,,night_legal
-,human_dispatcher,high_wait_p90_min,24.046234257500007,21.616378941954594,26.47608957304542,30,extra_staff,,night_legal
+,vela_timeout,relays,0.0,0.0,0.0,30,extra_staff,,current
+,human_dispatcher,high_wait_mean_min,5.670398432163771,5.183180006605903,6.1576168577216395,30,extra_staff,,night_legal
+,human_dispatcher,high_wait_p90_min,23.672896858833337,21.26260983382569,26.083183883840984,30,extra_staff,,night_legal
 ,human_dispatcher,crisis_under_60_pct,54.42352092352091,45.77007919781172,63.076962649230104,30,extra_staff,,night_legal
 ,human_dispatcher,crisis_response_mean_min,48.38470458883347,40.781048876405215,55.98836030126173,29,extra_staff,,night_legal
 ,human_dispatcher,crisis_response_p90_min,79.61278780787359,61.453997257266565,97.77157835848061,29,extra_staff,,night_legal
-,human_dispatcher,unattended_pct,19.58183248468054,19.050264960050317,20.113400009310762,30,extra_staff,,night_legal
-,human_dispatcher,travel_km,3799.9733583147095,3735.173945395337,3864.772771234082,30,extra_staff,,night_legal
-,human_dispatcher,utilization_pct,25.684994816184126,25.34367604177698,26.026313590591272,30,extra_staff,,night_legal
-,human_dispatcher,overtime_hours,13.094379104361112,12.728111611682795,13.460646597039428,30,extra_staff,,night_legal
+,human_dispatcher,unattended_pct,19.157357135624817,18.62688024478232,19.687834026467314,30,extra_staff,,night_legal
+,human_dispatcher,travel_km,3847.9590091906502,3782.3947640028805,3913.52325437842,30,extra_staff,,night_legal
+,human_dispatcher,utilization_pct,27.198293519394166,26.76671086394623,27.629876174842103,30,extra_staff,,night_legal
+,human_dispatcher,overtime_hours,13.886363263083334,13.499629603397185,14.273096922769483,30,extra_staff,,night_legal
 ,human_dispatcher,night_crisis_under_60_pct,45.02070393374742,27.426958569577064,62.61444929791777,23,extra_staff,,night_legal
 ,human_dispatcher,staff,48.0,48.0,48.0,30,extra_staff,,night_legal
-,nearest,high_wait_mean_min,5.6431480623245385,5.192456096699513,6.093840027949564,30,extra_staff,,night_legal
-,nearest,high_wait_p90_min,23.662395744388892,21.52217336825007,25.802618120527715,30,extra_staff,,night_legal
+,human_dispatcher,relays,2.7333333333333334,2.2058646436339124,3.2608020230327543,30,extra_staff,,night_legal
+,nearest,high_wait_mean_min,5.574270600352214,5.1261471092034245,6.022394091501003,30,extra_staff,,night_legal
+,nearest,high_wait_p90_min,23.45890084088889,21.26579152974741,25.65201015203037,30,extra_staff,,night_legal
 ,nearest,crisis_under_60_pct,56.89971139971139,48.69781987915249,65.1016029202703,30,extra_staff,,night_legal
 ,nearest,crisis_response_mean_min,41.44381303342844,33.92649016385175,48.96113590300513,29,extra_staff,,night_legal
 ,nearest,crisis_response_p90_min,76.1555907036207,57.01594161614065,95.29523979110076,29,extra_staff,,night_legal
-,nearest,unattended_pct,19.582433440755345,19.07045604473941,20.09441083677128,30,extra_staff,,night_legal
-,nearest,travel_km,3806.617873713258,3740.35155996381,3872.8841874627064,30,extra_staff,,night_legal
-,nearest,utilization_pct,25.692805492737232,25.351938938707352,26.033672046767112,30,extra_staff,,night_legal
-,nearest,overtime_hours,13.289772485129626,12.923587867589006,13.655957102670246,30,extra_staff,,night_legal
+,nearest,unattended_pct,19.15795809169962,18.645529292208536,19.670386891190702,30,extra_staff,,night_legal
+,nearest,travel_km,3854.865428655484,3788.0200877462225,3921.710769564745,30,extra_staff,,night_legal
+,nearest,utilization_pct,27.206391805729456,26.774885731915145,27.637897879543768,30,extra_staff,,night_legal
+,nearest,overtime_hours,14.086014513999999,13.701895760693084,14.470133267306913,30,extra_staff,,night_legal
 ,nearest,night_crisis_under_60_pct,45.02070393374742,27.426958569577064,62.61444929791777,23,extra_staff,,night_legal
 ,nearest,staff,48.0,48.0,48.0,30,extra_staff,,night_legal
-,risk_plus_live_traffic,high_wait_mean_min,5.173182398995011,4.713564009797463,5.632800788192559,30,extra_staff,,night_legal
-,risk_plus_live_traffic,high_wait_p90_min,20.656237249666667,18.238432234504753,23.07404226482858,30,extra_staff,,night_legal
+,nearest,relays,2.7333333333333334,2.2058646436339124,3.2608020230327543,30,extra_staff,,night_legal
+,risk_plus_live_traffic,high_wait_mean_min,5.1110238274541855,4.655310783247423,5.5667368716609475,30,extra_staff,,night_legal
+,risk_plus_live_traffic,high_wait_p90_min,20.25773549688889,17.899099752284215,22.616371241493567,30,extra_staff,,night_legal
 ,risk_plus_live_traffic,crisis_under_60_pct,56.89971139971139,48.69781987915249,65.1016029202703,30,extra_staff,,night_legal
 ,risk_plus_live_traffic,crisis_response_mean_min,41.38059464262384,33.65284573500538,49.1083435502423,29,extra_staff,,night_legal
 ,risk_plus_live_traffic,crisis_response_p90_min,76.08233025626438,56.58433867874595,95.58032183378282,29,extra_staff,,night_legal
-,risk_plus_live_traffic,unattended_pct,19.572214322517436,19.06408890279761,20.08033974223726,30,extra_staff,,night_legal
-,risk_plus_live_traffic,travel_km,3792.7942768783387,3731.7032068792887,3853.8853468773887,30,extra_staff,,night_legal
-,risk_plus_live_traffic,utilization_pct,25.675393891550055,25.339099873086763,26.011687910013347,30,extra_staff,,night_legal
-,risk_plus_live_traffic,overtime_hours,12.805740897222224,12.419379562306423,13.192102232138025,30,extra_staff,,night_legal
+,risk_plus_live_traffic,unattended_pct,19.147738973461706,18.64046939352836,19.655008553395053,30,extra_staff,,night_legal
+,risk_plus_live_traffic,travel_km,3841.0418318205648,3779.7983943176123,3902.2852693235172,30,extra_staff,,night_legal
+,risk_plus_live_traffic,utilization_pct,27.18898020454227,26.765491092934333,27.612469316150204,30,extra_staff,,night_legal
+,risk_plus_live_traffic,overtime_hours,13.601982926092592,13.19154938165492,14.012416470530265,30,extra_staff,,night_legal
 ,risk_plus_live_traffic,night_crisis_under_60_pct,45.02070393374742,27.426958569577064,62.61444929791777,23,extra_staff,,night_legal
 ,risk_plus_live_traffic,staff,48.0,48.0,48.0,30,extra_staff,,night_legal
-,risk_priority,high_wait_mean_min,5.173182398995011,4.713564009797463,5.632800788192559,30,extra_staff,,night_legal
-,risk_priority,high_wait_p90_min,20.656237249666667,18.238432234504753,23.07404226482858,30,extra_staff,,night_legal
+,risk_plus_live_traffic,relays,2.7333333333333334,2.2058646436339124,3.2608020230327543,30,extra_staff,,night_legal
+,risk_priority,high_wait_mean_min,5.1110238274541855,4.655310783247423,5.5667368716609475,30,extra_staff,,night_legal
+,risk_priority,high_wait_p90_min,20.25773549688889,17.899099752284215,22.616371241493567,30,extra_staff,,night_legal
 ,risk_priority,crisis_under_60_pct,56.89971139971139,48.69781987915249,65.1016029202703,30,extra_staff,,night_legal
 ,risk_priority,crisis_response_mean_min,41.38059464262384,33.65284573500538,49.1083435502423,29,extra_staff,,night_legal
 ,risk_priority,crisis_response_p90_min,76.08233025626438,56.58433867874595,95.58032183378282,29,extra_staff,,night_legal
-,risk_priority,unattended_pct,19.572214322517436,19.06408890279761,20.08033974223726,30,extra_staff,,night_legal
-,risk_priority,travel_km,3792.610323691592,3731.551494783557,3853.669152599627,30,extra_staff,,night_legal
-,risk_priority,utilization_pct,25.67516987635448,25.338974490756453,26.01136526195251,30,extra_staff,,night_legal
-,risk_priority,overtime_hours,12.813312393981484,12.429438078686648,13.19718670927632,30,extra_staff,,night_legal
+,risk_priority,unattended_pct,19.147738973461706,18.64046939352836,19.655008553395053,30,extra_staff,,night_legal
+,risk_priority,travel_km,3840.857878633818,3779.65436273493,3902.061394532706,30,extra_staff,,night_legal
+,risk_priority,utilization_pct,27.1887561893467,26.765355507533396,27.612156871160007,30,extra_staff,,night_legal
+,risk_priority,overtime_hours,13.609554422851852,13.200542252514717,14.018566593188988,30,extra_staff,,night_legal
 ,risk_priority,night_crisis_under_60_pct,45.02070393374742,27.426958569577064,62.61444929791777,23,extra_staff,,night_legal
 ,risk_priority,staff,48.0,48.0,48.0,30,extra_staff,,night_legal
-,vela_timeout,high_wait_mean_min,5.164903787452843,4.706491822918742,5.6233157519869446,30,extra_staff,,night_legal
-,vela_timeout,high_wait_p90_min,20.462778426111115,18.029715243536856,22.895841608685373,30,extra_staff,,night_legal
+,risk_priority,relays,2.7333333333333334,2.2058646436339124,3.2608020230327543,30,extra_staff,,night_legal
+,vela_timeout,high_wait_mean_min,5.102836807091731,4.64832206922749,5.5573515449559725,30,extra_staff,,night_legal
+,vela_timeout,high_wait_p90_min,20.092568087777774,17.731465623734877,22.45367055182067,30,extra_staff,,night_legal
 ,vela_timeout,crisis_under_60_pct,56.89971139971139,48.69781987915249,65.1016029202703,30,extra_staff,,night_legal
 ,vela_timeout,crisis_response_mean_min,40.93047148991448,33.21815258683515,48.64279039299381,29,extra_staff,,night_legal
 ,vela_timeout,crisis_response_p90_min,75.78713126488508,56.19875723935061,95.37550529041954,29,extra_staff,,night_legal
-,vela_timeout,unattended_pct,19.572214322517436,19.06408890279761,20.08033974223726,30,extra_staff,,night_legal
-,vela_timeout,travel_km,3792.7942768783387,3731.7032068792887,3853.8853468773887,30,extra_staff,,night_legal
-,vela_timeout,utilization_pct,25.67539525540227,25.339102024978164,26.01168848582638,30,extra_staff,,night_legal
-,vela_timeout,overtime_hours,12.805740897222224,12.419379562306423,13.192102232138025,30,extra_staff,,night_legal
+,vela_timeout,unattended_pct,19.147738973461706,18.64046939352836,19.655008553395053,30,extra_staff,,night_legal
+,vela_timeout,travel_km,3841.0418318205648,3779.7983943176123,3902.2852693235172,30,extra_staff,,night_legal
+,vela_timeout,utilization_pct,27.188981568394485,26.765493520870127,27.612469615918844,30,extra_staff,,night_legal
+,vela_timeout,overtime_hours,13.601982926092592,13.19154938165492,14.012416470530265,30,extra_staff,,night_legal
 ,vela_timeout,night_crisis_under_60_pct,45.02070393374742,27.426958569577064,62.61444929791777,23,extra_staff,,night_legal
 ,vela_timeout,staff,48.0,48.0,48.0,30,extra_staff,,night_legal
+,vela_timeout,relays,2.7333333333333334,2.2058646436339124,3.2608020230327543,30,extra_staff,,night_legal
 ,human_dispatcher,high_wait_mean_min,5.6218452047265695,5.150466087294587,6.093224322158552,30,extra_staff,,requested
 ,human_dispatcher,high_wait_p90_min,23.328073109222235,21.008482677424894,25.647663541019575,30,extra_staff,,requested
 ,human_dispatcher,crisis_under_60_pct,58.03607503607504,50.01304993015535,66.05910014199473,30,extra_staff,,requested
@@ -450,6 +490,7 @@ approval_delay,policy,metric,mean,ci_low,ci_high,n,knob,risk_multiplier,extra_st
 ,human_dispatcher,overtime_hours,14.049800889888889,13.656066182737046,14.443535597040732,30,extra_staff,,requested
 ,human_dispatcher,night_crisis_under_60_pct,54.58592132505176,37.87370830576279,71.29813434434072,23,extra_staff,,requested
 ,human_dispatcher,staff,47.0,47.0,47.0,30,extra_staff,,requested
+,human_dispatcher,relays,0.0,0.0,0.0,30,extra_staff,,requested
 ,nearest,high_wait_mean_min,5.526466304951588,5.092694690836612,5.9602379190665635,30,extra_staff,,requested
 ,nearest,high_wait_p90_min,22.999146678777784,20.825539818678916,25.172753538876652,30,extra_staff,,requested
 ,nearest,crisis_under_60_pct,59.57311207311207,52.203916282179435,66.94230786404471,30,extra_staff,,requested
@@ -461,6 +502,7 @@ approval_delay,policy,metric,mean,ci_low,ci_high,n,knob,risk_multiplier,extra_st
 ,nearest,overtime_hours,14.226005005583334,13.836551109885994,14.615458901280673,30,extra_staff,,requested
 ,nearest,night_crisis_under_60_pct,53.13664596273292,36.3590984946577,69.91419343080814,23,extra_staff,,requested
 ,nearest,staff,47.0,47.0,47.0,30,extra_staff,,requested
+,nearest,relays,0.0,0.0,0.0,30,extra_staff,,requested
 ,risk_plus_live_traffic,high_wait_mean_min,5.065038659959901,4.6255807193738026,5.504496600546,30,extra_staff,,requested
 ,risk_plus_live_traffic,high_wait_p90_min,19.80985209238889,17.578041530245947,22.041662654531834,30,extra_staff,,requested
 ,risk_plus_live_traffic,crisis_under_60_pct,59.57311207311207,52.203916282179435,66.94230786404471,30,extra_staff,,requested
@@ -472,6 +514,7 @@ approval_delay,policy,metric,mean,ci_low,ci_high,n,knob,risk_multiplier,extra_st
 ,risk_plus_live_traffic,overtime_hours,13.741973417675926,13.322737409631282,14.16120942572057,30,extra_staff,,requested
 ,risk_plus_live_traffic,night_crisis_under_60_pct,53.13664596273292,36.3590984946577,69.91419343080814,23,extra_staff,,requested
 ,risk_plus_live_traffic,staff,47.0,47.0,47.0,30,extra_staff,,requested
+,risk_plus_live_traffic,relays,0.0,0.0,0.0,30,extra_staff,,requested
 ,risk_priority,high_wait_mean_min,5.065038659959901,4.6255807193738026,5.504496600546,30,extra_staff,,requested
 ,risk_priority,high_wait_p90_min,19.80985209238889,17.578041530245947,22.041662654531834,30,extra_staff,,requested
 ,risk_priority,crisis_under_60_pct,59.57311207311207,52.203916282179435,66.94230786404471,30,extra_staff,,requested
@@ -483,6 +526,7 @@ approval_delay,policy,metric,mean,ci_low,ci_high,n,knob,risk_multiplier,extra_st
 ,risk_priority,overtime_hours,13.749544914435186,13.331141998316118,14.167947830554253,30,extra_staff,,requested
 ,risk_priority,night_crisis_under_60_pct,53.13664596273292,36.3590984946577,69.91419343080814,23,extra_staff,,requested
 ,risk_priority,staff,47.0,47.0,47.0,30,extra_staff,,requested
+,risk_priority,relays,0.0,0.0,0.0,30,extra_staff,,requested
 ,vela_timeout,high_wait_mean_min,5.056867564429664,4.6183912437206045,5.495343885138724,30,extra_staff,,requested
 ,vela_timeout,high_wait_p90_min,19.77724670405556,17.56175833531692,21.9927350727942,30,extra_staff,,requested
 ,vela_timeout,crisis_under_60_pct,59.57311207311207,52.203916282179435,66.94230786404471,30,extra_staff,,requested
@@ -494,6 +538,7 @@ approval_delay,policy,metric,mean,ci_low,ci_high,n,knob,risk_multiplier,extra_st
 ,vela_timeout,overtime_hours,13.741973417675926,13.322737409631282,14.16120942572057,30,extra_staff,,requested
 ,vela_timeout,night_crisis_under_60_pct,53.13664596273292,36.3590984946577,69.91419343080814,23,extra_staff,,requested
 ,vela_timeout,staff,47.0,47.0,47.0,30,extra_staff,,requested
+,vela_timeout,relays,0.0,0.0,0.0,30,extra_staff,,requested
 ,human_dispatcher,high_wait_mean_min,5.450147746592463,4.983724528012202,5.916570965172724,30,extra_staff,,targeted
 ,human_dispatcher,high_wait_p90_min,22.764449365055558,20.4156031336411,25.113295596470017,30,extra_staff,,targeted
 ,human_dispatcher,crisis_under_60_pct,53.94733044733044,45.37443355050755,62.52022734415333,30,extra_staff,,targeted
@@ -505,6 +550,7 @@ approval_delay,policy,metric,mean,ci_low,ci_high,n,knob,risk_multiplier,extra_st
 ,human_dispatcher,overtime_hours,15.14714052784259,14.699678712843555,15.594602342841624,30,extra_staff,,targeted
 ,human_dispatcher,night_crisis_under_60_pct,43.93374741200829,26.559044917207,61.30844990680957,23,extra_staff,,targeted
 ,human_dispatcher,staff,46.0,46.0,46.0,30,extra_staff,,targeted
+,human_dispatcher,relays,0.0,0.0,0.0,30,extra_staff,,targeted
 ,nearest,high_wait_mean_min,5.365820034585109,4.937078160589097,5.794561908581121,30,extra_staff,,targeted
 ,nearest,high_wait_p90_min,22.354387829222233,20.096227153027865,24.6125485054166,30,extra_staff,,targeted
 ,nearest,crisis_under_60_pct,56.42352092352092,48.285726984728804,64.56131486231303,30,extra_staff,,targeted
@@ -516,6 +562,7 @@ approval_delay,policy,metric,mean,ci_low,ci_high,n,knob,risk_multiplier,extra_st
 ,nearest,overtime_hours,15.143449241203705,14.722078298538111,15.564820183869298,30,extra_staff,,targeted
 ,nearest,night_crisis_under_60_pct,43.93374741200829,26.559044917207,61.30844990680957,23,extra_staff,,targeted
 ,nearest,staff,46.0,46.0,46.0,30,extra_staff,,targeted
+,nearest,relays,0.0,0.0,0.0,30,extra_staff,,targeted
 ,risk_plus_live_traffic,high_wait_mean_min,4.902339373015038,4.467569152298299,5.3371095937317765,30,extra_staff,,targeted
 ,risk_plus_live_traffic,high_wait_p90_min,19.23892794294445,16.940124586803343,21.537731299085557,30,extra_staff,,targeted
 ,risk_plus_live_traffic,crisis_under_60_pct,56.42352092352092,48.285726984728804,64.56131486231303,30,extra_staff,,targeted
@@ -527,6 +574,7 @@ approval_delay,policy,metric,mean,ci_low,ci_high,n,knob,risk_multiplier,extra_st
 ,risk_plus_live_traffic,overtime_hours,14.821516092407403,14.390582885189781,15.252449299625026,30,extra_staff,,targeted
 ,risk_plus_live_traffic,night_crisis_under_60_pct,43.93374741200829,26.559044917207,61.30844990680957,23,extra_staff,,targeted
 ,risk_plus_live_traffic,staff,46.0,46.0,46.0,30,extra_staff,,targeted
+,risk_plus_live_traffic,relays,0.0,0.0,0.0,30,extra_staff,,targeted
 ,risk_priority,high_wait_mean_min,4.902339373015038,4.467569152298299,5.3371095937317765,30,extra_staff,,targeted
 ,risk_priority,high_wait_p90_min,19.23892794294445,16.940124586803343,21.537731299085557,30,extra_staff,,targeted
 ,risk_priority,crisis_under_60_pct,56.42352092352092,48.285726984728804,64.56131486231303,30,extra_staff,,targeted
@@ -538,6 +586,7 @@ approval_delay,policy,metric,mean,ci_low,ci_high,n,knob,risk_multiplier,extra_st
 ,risk_priority,overtime_hours,14.829087589166665,14.398445535415961,15.25972964291737,30,extra_staff,,targeted
 ,risk_priority,night_crisis_under_60_pct,43.93374741200829,26.559044917207,61.30844990680957,23,extra_staff,,targeted
 ,risk_priority,staff,46.0,46.0,46.0,30,extra_staff,,targeted
+,risk_priority,relays,0.0,0.0,0.0,30,extra_staff,,targeted
 ,vela_timeout,high_wait_mean_min,4.894497372780006,4.460871104184532,5.3281236413754804,30,extra_staff,,targeted
 ,vela_timeout,high_wait_p90_min,19.15149884072223,16.86495684435269,21.43804083709177,30,extra_staff,,targeted
 ,vela_timeout,crisis_under_60_pct,56.42352092352092,48.285726984728804,64.56131486231303,30,extra_staff,,targeted
@@ -549,3 +598,4 @@ approval_delay,policy,metric,mean,ci_low,ci_high,n,knob,risk_multiplier,extra_st
 ,vela_timeout,overtime_hours,14.821516092407403,14.390582885189781,15.252449299625026,30,extra_staff,,targeted
 ,vela_timeout,night_crisis_under_60_pct,43.93374741200829,26.559044917207,61.30844990680957,23,extra_staff,,targeted
 ,vela_timeout,staff,46.0,46.0,46.0,30,extra_staff,,targeted
+,vela_timeout,relays,0.0,0.0,0.0,30,extra_staff,,targeted

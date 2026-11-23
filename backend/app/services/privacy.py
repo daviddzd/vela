@@ -130,7 +130,7 @@ def _stop_home_visits(db: Session, patient_id: str, institution_id: str) -> dict
                            WHERE request_id = :r"""), {"r": rid})
         publish(db, "request.updated", institution_id, request_id=rid, status="cancelled")
     in_progress = db.execute(text("""
-        SELECT r.request_id FROM service_requests r JOIN assignments a USING (request_id)
+        SELECT DISTINCT r.request_id FROM service_requests r JOIN assignments a USING (request_id)
         WHERE r.patient_id = :p AND a.status = 'active' AND a.arrived_at IS NOT NULL AND a.finished_at IS NULL"""),
         {"p": patient_id}).scalars().all()
     name = _patient(db, patient_id).full_name

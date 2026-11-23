@@ -82,6 +82,26 @@ def staff(user: CurrentUser = Depends(COORD), db: Session = Depends(tenant_db)) 
     return {"now": now.isoformat(), "week_start": week_start.date().isoformat(), "workdays_per_week": workdays, "staff": out}
 
 
+@router.get("/coverage")
+def week_coverage(user: CurrentUser = Depends(COORD), db: Session = Depends(tenant_db)) -> dict:
+    """"Cobertura de la semana": the next 7 days (from today), by day, the slots in which a skill of the institution's
+    plan has nobody on shift (app/services/coverage.py), and who rests that day. The worker raises the same gaps as
+    alerts for coordination (operations.coverage_alerts)."""
+    first = ops.now().date()
+    gaps = ops.coverage_gaps(db, user.institution_id, first)
+    resting = db.execute(text("""SELECT rest_day, first_name || ' ' || paternal_surname AS name FROM caregivers
+                                 WHERE active ORDER BY name""")).all()
+    days = []
+    for i in range(7):
+        day = first + timedelta(days=i)
+        days.append({"date": day.isoformat(), "weekday": day.isoweekday(),
+                     "resting": [r.name for r in resting if r.rest_day == day.isoweekday()],
+                     "gaps": [{"skill": g["skill"], "start": g["start"].isoformat(), "end": g["end"].isoformat(),
+                               "message": ops.coverage_message(g)}
+                              for g in gaps if g["start"].astimezone(MEXICO_CITY).date() == day]})
+    return {"from": first.isoformat(), "days": days, "gaps": len(gaps)}
+
+
 @router.get("/{caregiver_id}/day")
 def day(caregiver_id: str, on: date | None = None, user: CurrentUser = Depends(COORD),
         db: Session = Depends(tenant_db)) -> dict:

@@ -6,6 +6,7 @@ import { Button, Card, Notice } from "../components/ui";
 import { AlertTriangle, CheckCircle2, Icon, Star } from "../components/icons";
 import { es } from "../i18n/es";
 import { formatDateTime, formatTime } from "../lib/format";
+import { relayText } from "../lib/relay";
 
 export function ApprovalsPage() {
   const [items, setItems] = useState<Approval[] | null>(null);
@@ -59,6 +60,7 @@ export function ApprovalsPage() {
                   <li key={o.caregiver_id} className={`rounded-card border-2 p-3 ${o.rank === 1 ? "border-teal" : "border-muted/40"}`}>
                     <p className="font-bold">{o.rank === 1 ? <><Icon as={Star} /> {es.approvals.proposed}</> : es.approvals.alternative}</p>
                     <p>{o.caregiver_name}</p>
+                    {o.relay_caregiver_name && <p>{relayText(o.relay_caregiver_name, o.relay_at)}</p>}
                     <p className="text-muted">{es.common.travel}: {Math.round(o.travel_min)} {es.common.minutes} · {es.common.leaves} {formatTime(o.planned_start)}</p>
                     <Button className="mt-2 w-full" icon={CheckCircle2} variant={o.rank === 1 ? "primary" : "secondary"}
                       disabled={busy === item.request_id} onClick={() => approve(item, o)}>
