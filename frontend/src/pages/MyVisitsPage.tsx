@@ -42,15 +42,19 @@ export function MyVisitsPage() {
         {visits?.map((v) => (
           <Card key={v.assignment_id}>
             <div className="flex flex-wrap items-center justify-between gap-2">
-              <h2>{formatTime(v.scheduled_for)} · {v.patient_name}</h2>
+              <h2>{formatTime(v.relay_role === "relay" ? v.relay_at : v.scheduled_for)} · {v.patient_name}</h2>
               <StatusBadge status={v.status} />
             </div>
             <p>{v.service_name}</p>
+            {v.relay_role && v.relay_at && (
+              <p className="font-bold">{fill(v.relay_role === "first" ? es.visits.relayFirst : es.visits.relayRelay,
+                { name: v.relay_partner_name ?? "", time: formatTime(v.relay_at) })}</p>)}
+            {v.step === "wait" && v.relay_role === "relay" && <p>{fill(es.visits.waitFirst, { name: v.relay_partner_name ?? "" })}</p>}
             <p className="text-muted">{es.visits.district}: {v.district_name} · {es.common.leaves} {formatTime(v.planned_start)} ({Math.round(v.travel_min)} {es.common.minutes})</p>
             <div className="mt-4 grid gap-3 sm:grid-cols-3">
-              <Button icon={Navigation} className="min-h-16 text-xl" disabled={v.status !== "assigned"}
+              <Button icon={Navigation} className="min-h-16 text-xl" disabled={v.step !== "arrive"}
                 onClick={() => step(api.arrive, v.assignment_id)}>{es.visits.arrived}</Button>
-              <Button icon={CheckCircle2} className="min-h-16 text-xl" disabled={v.status !== "in_progress"}
+              <Button icon={CheckCircle2} className="min-h-16 text-xl" disabled={v.step !== "finish"}
                 onClick={() => step(api.finish, v.assignment_id)}>{es.visits.finished}</Button>
               {/* only caregivers use the voice assistant (/voz); physicians record in their own notes */}
               {user?.role === "caregiver" && (

@@ -25,6 +25,7 @@ def tick() -> None:
         queue.create_alerts(db)
         unattended = queue.mark_unattended(db)
         operations.labor_alerts(db)          # shifts above the legal maximum (art. 61): alert, never auto-change
+        operations.coverage_alerts(db)       # skills with nobody on shift this week (rest days / out of service)
     print(f"worker tick {datetime.now(MEXICO_CITY):%Y-%m-%d %H:%M:%S %Z} "
           f"contingency={len(changed)} care_plan={len(planned)} queue={retried} timeout={len(by_timeout)} unattended={unattended}", flush=True)
 

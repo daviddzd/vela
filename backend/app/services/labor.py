@@ -106,6 +106,12 @@ def next_rest_day(person: dict, others: list[dict]) -> int:
     return min(range(1, 8), key=lambda d: (group[d], whole[d], d))
 
 
+def needs_relay(duration_min: float) -> bool:
+    """A service longer than ANY legal shift (art. 61: at most 8 h) can never be covered by one person working a legal
+    shift, so the dispatcher may cover it with two consecutive people (a relay). E.g. SRV-04 / SRV-07, 12 h."""
+    return duration_min > max(MAX_HOURS.values()) * 60
+
+
 MAIN_SKILL_ORDER = ("physician", "nursing", "therapy", "caregiving")
 
 

@@ -25,7 +25,7 @@ from sqlalchemy.orm import Session
 from app.core.audit import audit
 from app.core.events import publish
 from app.services import dispatcher as dsp
-from app.services import labor
+from app.services import coverage, labor
 from app.services.dispatcher import MEXICO_CITY
 
 AUTO_PRIORITIES = ("low", "medium")       # applied at once (CLAUDE.md rule 3)
@@ -169,6 +169,70 @@ def labor_alerts(db: Session) -> int:
     return created
 
 
+# ---- coverage of the week (app/services/coverage.py) ----------------------------------------------------
+
+SKILL_ES = {"physician": "medicina", "nursing": "enfermería", "therapy": "terapia", "caregiving": "cuidados"}  # = es.ts
+COVERAGE_ALERT = ("{day} {start}–{end}: sin {skill} en turno (por día de descanso o fuera de servicio). "
+                  "Cambia un día de descanso en Personal si hace falta cubrirlo.")
+
+
+def coverage_people(db: Session, institution_id: str) -> list[coverage.Person]:
+    rows = db.execute(text("""
+        SELECT c.caregiver_id, c.shift_start, c.shift_end, c.rest_day, c.active, array_agg(DISTINCT k.skill) AS skills,
+               coalesce((SELECT array_agg(ARRAY[u.starts_at::text, coalesce(u.ends_at::text, '')])
+                         FROM caregiver_unavailability u WHERE u.caregiver_id = c.caregiver_id AND u.active), '{}') AS out
+        FROM caregivers c JOIN caregiver_skills k USING (caregiver_id)
+        WHERE c.institution_id = :i GROUP BY c.caregiver_id"""), {"i": institution_id}).all()
+    return [coverage.Person(dsp.Caregiver(r.caregiver_id, frozenset(r.skills), r.shift_start, r.shift_end, 0.0, 0.0,
+                                          active=r.active, rest_day=r.rest_day),
+                            tuple((datetime.fromisoformat(s), datetime.fromisoformat(e) if e else None) for s, e in r.out))
+            for r in rows]
+
+
+def coverage_gaps(db: Session, institution_id: str, first_day=None) -> list[dict]:
+    """Gaps of the next 7 days (from today, Mexico City) of one institution; gaps that are already over are left out."""
+    return [g for g in coverage.week_gaps(coverage_people(db, institution_id), first_day or now().date())
+            if g["end"] > now()]
+
+
+def coverage_message(gap: dict) -> str:
+    """'Martes 1 8:00–10:00: sin enfermería en turno …' (a gap across midnight names the day it ends)."""
+    s, e = gap["start"].astimezone(MEXICO_CITY), gap["end"].astimezone(MEXICO_CITY)
+    hm = lambda t: f"{t.hour}:{t.minute:02d}"                                     # noqa: E731
+    if e.date() == s.date():
+        end = hm(e)
+    elif e.date() == s.date() + timedelta(days=1) and e.hour == 0 and e.minute == 0:
+        end = "24:00"
+    else:
+        end = f"{labor.WEEKDAYS_ES[e.isoweekday()]} {hm(e)}"
+    return COVERAGE_ALERT.format(day=f"{labor.WEEKDAYS_ES[s.isoweekday()].capitalize()} {s.day}", start=hm(s),
+                                 end=end, skill=SKILL_ES.get(gap["skill"], gap["skill"]))
+
+
+def coverage_alerts(db: Session) -> int:
+    """One open alert per gap of the next 7 days (code coverage:<skill>:<start>); alerts of gaps that no longer exist
+    (someone changed a rest day, came back to service, or the gap is over) are resolved. Returns how many were created."""
+    created = 0
+    for inst in db.execute(text("SELECT institution_id FROM institutions WHERE active")).scalars().all():
+        gaps = coverage_gaps(db, inst)
+        codes = {f"coverage:{g['skill']}:{g['start'].astimezone(MEXICO_CITY):%Y%m%d%H%M}": g for g in gaps}
+        open_codes = set(db.execute(text("""SELECT code FROM alerts WHERE institution_id = :i AND type = 'coverage'
+                                            AND status <> 'resolved'"""), {"i": inst}).scalars().all())
+        stale = list(open_codes - set(codes))
+        if stale:
+            db.execute(text("""UPDATE alerts SET status = 'resolved' WHERE institution_id = :i AND type = 'coverage'
+                               AND code = ANY(:c) AND status <> 'resolved'"""), {"i": inst, "c": stale})
+        for code, g in codes.items():
+            if code in open_codes:
+                continue
+            alert_id = db.scalar(text("""INSERT INTO alerts (institution_id, type, level, message, code)
+                                         VALUES (:i, 'coverage', 'watch', :m, :c) RETURNING alert_id"""),
+                                 {"i": inst, "m": coverage_message(g), "c": code})
+            publish(db, "alert.created", inst, alert_id=alert_id)
+            created += 1
+    return created
+
+
 def set_rest_day(db: Session, *, caregiver_id: str, rest_day: int, user_id: str) -> dict:
     """Change the weekly rest day. Pending visits that now fall on it are re-dispatched with the SAME logic as
     "fuera de servicio" (low/medium at once, high through approval or the time limit)."""
@@ -181,9 +245,8 @@ def set_rest_day(db: Session, *, caregiver_id: str, rest_day: int, user_id: str)
                                 WHERE caregiver_id = :c AND status = 'active' AND arrived_at IS NULL
                                   AND planned_start > now()"""), {"c": caregiver_id}).all():
         if cg is None or not dsp.within_shift(cg, a.planned_start, a.planned_end):
-            db.execute(text("UPDATE assignments SET status = 'cancelled' WHERE assignment_id = :a"), {"a": a.assignment_id})
-            set_status(db, a.request_id, "queued", "caregiver_unavailable")
-            moved.append(a.request_id)
+            if release_request(db, a.request_id, a.assignment_id):
+                moved.append(a.request_id)
     if moved:
         dispatch_requests(db, inst, moved)
     audit(db, user_id=user_id, institution_id=inst, action="caregiver_rest_day_changed", entity="caregiver",
@@ -197,11 +260,14 @@ def load_holds(db: Session, institution_id: str) -> list[dsp.Hold]:
     minutes = settings_yaml()["approval"]["hold_minutes"]
     rows = db.execute(text("""
         SELECT p.request_id, p.caregiver_id, p.planned_start, p.planned_end,
+               p.relay_caregiver_id, p.relay_planned_start, p.relay_planned_end,
                p.created_at + :m * interval '1 minute' AS expires
         FROM assignment_proposals p JOIN service_requests r USING (request_id)
         WHERE p.institution_id = :i AND p.status = 'open' AND p.rank = 1 AND r.status = 'queued'"""),
         {"i": institution_id, "m": minutes}).all()
-    return [dsp.Hold(r.request_id, r.caregiver_id, r.planned_start, r.planned_end, r.expires) for r in rows]
+    holds = [dsp.Hold(r.request_id, r.caregiver_id, r.planned_start, r.planned_end, r.expires) for r in rows]
+    return holds + [dsp.Hold(r.request_id, r.relay_caregiver_id, r.relay_planned_start, r.relay_planned_end, r.expires)
+                    for r in rows if r.relay_caregiver_id]        # a relay reserves both people
 
 
 def options_for(db: Session, request_id: str) -> list[dsp.Option]:
@@ -249,12 +315,12 @@ def caregiver_out_of_service(db: Session, *, caregiver_id: str, reason: str, ori
     inst = db.scalar(text("SELECT institution_id FROM caregivers WHERE caregiver_id = :c"), {"c": caregiver_id})
     db.execute(text("""INSERT INTO caregiver_unavailability (caregiver_id, institution_id, reason, origin, run_id)
                        VALUES (:c, :i, :r, :o, :run)"""), {"c": caregiver_id, "i": inst, "r": reason, "o": origin, "run": run_id})
-    pending = db.execute(text("""
-        UPDATE assignments SET status = 'cancelled'
-        WHERE caregiver_id = :c AND status = 'active' AND arrived_at IS NULL AND planned_end > now()
-        RETURNING request_id"""), {"c": caregiver_id}).scalars().all()
+    rows = db.execute(text("""
+        SELECT request_id, assignment_id FROM assignments
+        WHERE caregiver_id = :c AND status = 'active' AND arrived_at IS NULL AND planned_end > now()"""),
+        {"c": caregiver_id}).all()
+    pending = [r.request_id for r in rows if release_request(db, r.request_id, r.assignment_id)]
     for rid in pending:
-        set_status(db, rid, "queued", "caregiver_unavailable")
         db.execute(text("UPDATE assignment_proposals SET status = 'superseded' WHERE request_id = :r AND status = 'open'"),
                    {"r": rid})
     dispatch_requests(db, inst, list(pending))
@@ -270,6 +336,35 @@ def caregiver_out_of_service(db: Session, *, caregiver_id: str, reason: str, ori
     audit(db, user_id=user_id, institution_id=inst, action="caregiver_out_of_service", entity="caregiver",
           entity_id=caregiver_id, detail={"reason": reason, "origin": origin, "pending": len(pending), "result": result})
     return {"caregiver_id": caregiver_id, "institution_id": inst, "pending": len(pending), "result": result}
+
+
+def release_request(db: Session, request_id: str, assignment_id: str) -> bool:
+    """A person of an assignment can no longer go. One person: the request goes back to the queue (True).
+    Relay (two people): if nobody has arrived yet, BOTH legs are cancelled and the whole service is re-dispatched
+    (True); if the first person is already there, only the relay is cancelled, the service stays in progress and
+    coordination gets an alert to cover the relay (False: nothing to re-dispatch)."""
+    started = db.scalar(text("""SELECT bool_or(arrived_at IS NOT NULL) FROM assignments
+                                WHERE request_id = :r AND status = 'active'"""), {"r": request_id})
+    if started:
+        db.execute(text("UPDATE assignments SET status = 'cancelled' WHERE assignment_id = :a"), {"a": assignment_id})
+        inst, patient = db.execute(text("SELECT institution_id, patient_id FROM service_requests WHERE request_id = :r"),
+                                   {"r": request_id}).one()
+        alert_id = db.scalar(text("""INSERT INTO alerts (institution_id, type, level, patient_id, message, request_id, code)
+                                     VALUES (:i, 'anomaly', 'high', :p, :m, :r, 'relay_uncovered')
+                                     ON CONFLICT (request_id, code) WHERE request_id IS NOT NULL DO NOTHING
+                                     RETURNING alert_id"""),
+                             {"i": inst, "p": patient, "r": request_id, "m": RELAY_UNCOVERED.format(request_id=request_id)})
+        if alert_id:
+            publish(db, "alert.created", inst, alert_id=alert_id, request_id=request_id)
+        return False
+    db.execute(text("UPDATE assignments SET status = 'cancelled' WHERE request_id = :r AND status = 'active'"),
+               {"r": request_id})
+    set_status(db, request_id, "queued", "caregiver_unavailable")
+    return True
+
+
+RELAY_UNCOVERED = ("La persona que iba a hacer el relevo de la solicitud {request_id} ya no puede ir. La primera persona "
+                   "sigue en el domicilio: busca quién la releve al final de su turno.")
 
 
 def duty_coordinator(db: Session, institution_id: str) -> str:
@@ -383,13 +478,15 @@ def save_assignment(db: Session, institution_id: str, request_id: str, options: 
             return None
         o = options[0]
         try:
-            with db.begin_nested():
-                aid = db.scalar(text("""
+            with db.begin_nested():              # a relay inserts both people, or neither
+                ids = [db.scalar(text("""
                     INSERT INTO assignments (request_id, institution_id, caregiver_id, assigned_by, approval,
-                                             assigned_at, planned_start, planned_end, travel_min)
-                    VALUES (:r, :i, :c, :by, :ap, now(), :ps, :pe, :t) RETURNING assignment_id"""),
-                    {"r": request_id, "i": institution_id, "c": o.caregiver_id, "by": assigned_by,
-                     "ap": approval, "ps": o.planned_start, "pe": o.planned_end, "t": o.travel_min})
+                                             assigned_at, planned_start, planned_end, travel_min, leg)
+                    VALUES (:r, :i, :c, :by, :ap, now(), :ps, :pe, :t, :leg) RETURNING assignment_id"""),
+                    {"r": request_id, "i": institution_id, "c": leg.caregiver_id, "by": assigned_by,
+                     "ap": approval, "ps": leg.planned_start, "pe": leg.planned_end, "t": leg.travel_min, "leg": n})
+                       for n, leg in enumerate(o.legs, start=1)]
+            aid = ids[0]
         except IntegrityError:
             options = options_for(db, request_id)   # someone took the slot: recompute
             continue
@@ -402,7 +499,8 @@ def save_assignment(db: Session, institution_id: str, request_id: str, options: 
                                                                                             "assignment_approved"),
               entity="assignment", entity_id=aid,
               detail={"request_id": request_id, "caregiver_id": o.caregiver_id, "travel_min": o.travel_min,
-                      "policy": policy()})
+                      "policy": policy(), **({"relay_caregiver_id": o.relay.caregiver_id, "relay_assignment_id": ids[1],
+                                              "relay_at": o.planned_end.isoformat()} if o.relay else {})})
         publish(db, "assignment.approved", institution_id, request_id=request_id, assignment_id=aid,
                 approval=approval)
         return aid
@@ -416,10 +514,13 @@ def save_proposals(db: Session, institution_id: str, request_id: str, options: l
     for rank, o in enumerate(options[:3], start=1):
         db.execute(text("""
             INSERT INTO assignment_proposals (request_id, institution_id, rank, caregiver_id, travel_min,
-                                              planned_start, planned_end, policy)
-            VALUES (:r, :i, :rank, :c, :t, :ps, :pe, :pol)"""),
+                                              planned_start, planned_end, policy, relay_caregiver_id,
+                                              relay_travel_min, relay_planned_start, relay_planned_end)
+            VALUES (:r, :i, :rank, :c, :t, :ps, :pe, :pol, :rc, :rt, :rps, :rpe)"""),
             {"r": request_id, "i": institution_id, "rank": rank, "c": o.caregiver_id, "t": o.travel_min,
-             "ps": o.planned_start, "pe": o.planned_end, "pol": policy()})
+             "ps": o.planned_start, "pe": o.planned_end, "pol": policy(),
+             "rc": o.relay and o.relay.caregiver_id, "rt": o.relay and o.relay.travel_min,
+             "rps": o.relay and o.relay.planned_start, "rpe": o.relay and o.relay.planned_end})
     if options:
         publish(db, "assignment.proposed", institution_id, request_id=request_id)
 
@@ -450,9 +551,13 @@ def reassign(db: Session, *, user_id: str, institution_id: str, assignment_id: s
     a = db.execute(text("""SELECT request_id, caregiver_id, arrived_at FROM assignments
                            WHERE assignment_id = :a AND status = 'active' FOR UPDATE"""),
                    {"a": assignment_id}).one_or_none()
-    if a is None or a.arrived_at is not None:
+    if a is None or a.arrived_at is not None or db.scalar(text(
+            "SELECT bool_or(arrived_at IS NOT NULL) FROM assignments WHERE request_id = :r AND status = 'active'"),
+            {"r": a.request_id}):
         raise InvalidState("not reassignable")
-    db.execute(text("UPDATE assignments SET status = 'reassigned' WHERE assignment_id = :a"), {"a": assignment_id})
+    # A relay is reassigned as a whole: both people are released and the service is planned again
+    db.execute(text("UPDATE assignments SET status = 'reassigned' WHERE request_id = :r AND status = 'active'"),
+               {"r": a.request_id})
     chosen = [o for o in options_for(db, a.request_id) if o.caregiver_id == caregiver_id]
     new_id = save_assignment(db, institution_id, a.request_id, chosen, approval="coordinator",
                              assigned_by=user_id) if chosen else None
@@ -488,18 +593,31 @@ def confirm_visit(db: Session, *, user_id: str, institution_id: str, assignment_
 
 
 def _visit_step(db, assignment_id, from_status, to_status, column, user_id, institution_id, action) -> None:
+    """Llegué / Terminé. With a relay (two people) the service starts when the FIRST person arrives and ends when
+    the RELAY finishes: the first person's "Terminé" and the relay's "Llegué" are recorded without changing it."""
+    leg = db.execute(text("""SELECT a.leg, a.arrived_at, EXISTS (SELECT 1 FROM assignments b WHERE b.request_id = a.request_id
+                                        AND b.status = 'active' AND b.leg = 2) AS has_relay
+                             FROM assignments a WHERE a.assignment_id = :a AND a.status = 'active'"""),
+                     {"a": assignment_id}).one_or_none()
+    if leg is None:
+        raise InvalidState(from_status)
+    middle = (leg.has_relay and leg.leg == 1 and column == "finished_at") or (leg.leg == 2 and column == "arrived_at")
+    expected = "in_progress" if leg.leg == 2 else from_status
+    if leg.leg == 2 and column == "finished_at" and leg.arrived_at is None:
+        raise InvalidState(from_status)
     # "Terminé" is never earlier than "Llegué", even if the laptop clock jumps back (WSL2 re-syncs ~3 s back)
     value = "greatest(clock_timestamp(), a.arrived_at + interval '1 second')" if column == "finished_at" else "clock_timestamp()"
     rid = db.scalar(text(f"""
         UPDATE assignments a SET {column} = {value} FROM service_requests r
-        WHERE a.assignment_id = :a AND a.status = 'active' AND r.request_id = a.request_id
-          AND r.status = :from RETURNING r.request_id"""), {"a": assignment_id, "from": from_status})
+        WHERE a.assignment_id = :a AND a.status = 'active' AND a.{column} IS NULL AND r.request_id = a.request_id
+          AND r.status = :from RETURNING r.request_id"""), {"a": assignment_id, "from": expected})
     if rid is None:
         raise InvalidState(from_status)
-    set_status(db, rid, to_status)
+    if not middle:
+        set_status(db, rid, to_status)
     audit(db, user_id=user_id, institution_id=institution_id, action=action, entity="assignment",
-          entity_id=assignment_id)
-    publish(db, "visit.arrived" if to_status == "in_progress" else "visit.finished", institution_id,
+          entity_id=assignment_id, detail={"relay_leg": leg.leg} if leg.has_relay or leg.leg == 2 else None)
+    publish(db, "visit.arrived" if column == "arrived_at" else "visit.finished", institution_id,
             request_id=rid, assignment_id=assignment_id)
 
 

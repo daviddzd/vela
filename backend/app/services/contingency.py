@@ -240,7 +240,7 @@ def _route_items(db, ev) -> list[dict]:
             JOIN patients pa ON pa.patient_id = r.patient_id JOIN persons pe ON pe.person_id = pa.person_id
             WHERE a.status = 'active' AND a.arrived_at IS NULL AND a.planned_start > now()
               AND (a.planned_start AT TIME ZONE 'America/Mexico_City')::date = (now() AT TIME ZONE 'America/Mexico_City')::date""")).mappings().all():
-        arrival = a["planned_end"] - timedelta(minutes=a["duration_min"])
+        arrival = a["planned_start"] + timedelta(minutes=a["travel_min"] or 0)   # also right for each person of a relay
         km = dsp.haversine_km(a["clat"], a["clon"], a["plat"], a["plon"])
         cg_district = min(centroids, key=lambda d: dsp.haversine_km(a["clat"], a["clon"], *centroids[d]))
         crosses = a["district_id"] in blocked or cg_district in blocked

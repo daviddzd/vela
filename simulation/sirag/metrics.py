@@ -24,7 +24,7 @@ def summarize(model: Model, requests) -> dict:
     crisis_ok = [r for r in crises if not r.unattended
                  and (r.assigned["arrival"] - r.requested).total_seconds() / 60 <= 60]
     cresp = [(r.assigned["arrival"] - r.requested).total_seconds() / 60 for r in crises if not r.unattended]
-    work_min = sum((r.assigned["planned_end"] - r.assigned["planned_start"]).total_seconds() / 60 for r in attended)
+    work_min = sum(r.assigned["work_min"] for r in attended)          # both people of a relay
     # Available time = shift minutes on the days each person WORKS (their weekly rest day excluded, LFT art. 69),
     # for everyone the model staffed (including hired staff in the sensitivity scenarios).
     sim_days = [(START + timedelta(days=d)).date() for d in range(prm.days)]
@@ -52,6 +52,7 @@ def summarize(model: Model, requests) -> dict:
                                                (r.assigned["arrival"] - r.requested).total_seconds() / 60 <= 60)
                                      / len(night_crises) if night_crises else np.nan,
         "staff": sum(len(pool) for pool in model.caregivers.values()),
+        "relays": sum(1 for r in attended if r.assigned.get("relay")),
         "overtime_hours": sum(r.assigned["overtime_min"] for r in attended) / 60,
         # for the validation: without the 8 h / 12 h shift services (see docs/dev/sirag_d_modelo.md)
         "unattended_short_pct": 100 * sum(r.unattended for r in short) / len(short) if short else np.nan,

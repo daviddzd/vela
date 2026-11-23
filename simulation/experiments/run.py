@@ -6,7 +6,8 @@ Main:         5 policies x 3 scenarios x 30 replications of 7 days, seed 2026, c
 Sensitivity:  (clearly separated, NOT main results) on the "normal" scenario:
               approval delay 0 / 1-5 / 5-15 min, crisis risk x1 / x2 / x3 (stress_test knob), and
               "¿y si contratamos?": +1 night nurse per 24 h institution and +1 day caregiver in INS-A; and
-              "Cumplir jornada nocturna": each 12-h night shift split into two legal 7-h shifts (night staff x2).
+              "Cumplir jornada nocturna": each 12-h night shift split into two legal 7-h shifts (night staff x2);
+              12-h services are then covered by relays (two people, dispatcher.relay_options, as in the operation).
 Labor rules (LFT arts. 60, 61, 69; backend/app/services/labor.py) apply to EVERY run: weekly rest day and legal
 shifts. Only the validation against the seed history uses the seed staffing (7 days a week, as it happened).
 Outputs in simulation/results/: summary.csv, window.csv, tests.csv, validation.csv, sensitivity.csv,
@@ -35,7 +36,7 @@ RESULTS = ROOT / "simulation" / "results"
 SCENARIOS = ["normal", "contingency_east", "contingency_east_roadblocks"]
 MAIN_METRICS = ["high_wait_mean_min", "high_wait_p90_min", "crisis_under_60_pct", "crisis_response_mean_min",
                 "crisis_response_p90_min", "unattended_pct",
-                "travel_km", "utilization_pct", "overtime_hours", "night_crisis_under_60_pct", "staff"]
+                "travel_km", "utilization_pct", "overtime_hours", "night_crisis_under_60_pct", "staff", "relays"]
 WINDOW_METRICS = ["win_at_risk_entries", "win_crises", "win_crisis_under_60_pct", "win_high_wait_mean_min", "win_unattended_pct", "win_requests"]
 
 
@@ -93,7 +94,7 @@ def main() -> int:
                                                                            "crises", "win_crises"]].sum()
     effect.to_csv(RESULTS / "contingency_effect.csv")
     st.summary(runs, WINDOW_METRICS, ["scenario", "policy"]).to_csv(RESULTS / "window.csv", index=False)
-    st.compare(runs, [m for m in MAIN_METRICS if m != "staff"] + ["win_crisis_under_60_pct", "win_high_wait_mean_min"]).to_csv(
+    st.compare(runs, [m for m in MAIN_METRICS if m not in ("staff", "relays")] + ["win_crisis_under_60_pct", "win_high_wait_mean_min"]).to_csv(
         RESULTS / "tests.csv", index=False)
 
     # Sensitivity: the main 1-5 min / x1 runs of the normal scenario are the middle level of each knob.

@@ -19,6 +19,7 @@ export class ApiError extends Error {
 export type Option = {
   rank: number; caregiver_id: string; caregiver_name: string; caregiver_type: string;
   travel_min: number; planned_start: string; planned_end: string;
+  relay_caregiver_id: string | null; relay_caregiver_name: string | null; relay_at: string | null;
 };
 export type Approval = {
   request_id: string; patient_id: string; patient_name: string; service_name: string;
@@ -27,10 +28,13 @@ export type Approval = {
 export type Visit = {
   assignment_id: string; request_id: string; status: string; scheduled_for: string; planned_start: string;
   travel_min: number; service_name: string; patient_name: string; district_name: string; priority: string; patient_id: string;
+  relay_role: "first" | "relay" | null; relay_partner_name: string | null; relay_at: string | null;
+  step: "arrive" | "finish" | "wait" | "done";
 };
 export type FamilyVisit = {
   request_id: string; status: string; status_reason: string | null; scheduled_for: string; service_name: string;
   assignment_id: string | null; caregiver_name: string | null; family_confirmed: boolean | null;
+  relay_caregiver_name?: string | null; relay_at?: string | null;
 };
 export type FamilyOverview = {
   patient_id: string; patient_name: string; can_request_services: boolean; home_care_consent: boolean;
@@ -44,7 +48,8 @@ export type Board = {
   now: string; counters: { queued: number; on_the_way: number; in_visit: number; done_today: number };
   queue: BoardQueueItem[]; alerts: BoardAlert[];
   visits: { request_id: string; patient_id: string; status: string; priority: string; scheduled_for: string; service_name: string;
-    patient_name: string; lat: number; lon: number; caregiver_name: string | null }[];
+    patient_name: string; lat: number; lon: number; caregiver_name: string | null;
+    relay_caregiver_name: string | null; relay_at: string | null }[];
   staff: { caregiver_id: string; name: string; type: string; lat: number; lon: number }[];
 };
 export type Service = { service_id: string; name: string; duration_min: number };
@@ -93,6 +98,7 @@ export const api = {
   endPlan: (id: string, plan: string) =>
     request<any>(`/api/patients/${encodeURIComponent(id)}/care-plans/${plan}/end`, { method: "POST" }),
   staff: () => request<any>("/api/staff"),
+  staffCoverage: () => request<any>("/api/staff/coverage"),
   staffDay: (id: string, on?: string) => request<any>(`/api/staff/${id}/day${on ? `?on=${on}` : ""}`),
   staffOut: (id: string, reason: string) =>
     request<any>(`/api/staff/${id}/out-of-service`, { method: "POST", body: JSON.stringify({ reason }) }),

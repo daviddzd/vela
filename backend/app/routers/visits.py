@@ -14,18 +14,30 @@ STAFF = (CAREGIVER, PHYSICIAN)
 
 @router.get("/mine")
 def my_visits(user: CurrentUser = Depends(require_role(*STAFF)), db: Session = Depends(tenant_db)) -> list[dict]:
-    """Today's visits (Mexico City date), only the caregiver's own."""
+    """Today's visits (Mexico City date), only the caregiver's own. With a relay (two people, dispatcher.relay_options)
+    each person sees their own part: `relay_role` 'first' (someone takes over at relay_at) or 'relay' (takes over at
+    relay_at), the other person's name, and `step`, the button that applies to THEM (arrive / finish / done)."""
     rows = db.execute(text("""
         SELECT a.assignment_id, r.request_id, r.patient_id, r.status, r.scheduled_for, a.planned_start, a.planned_end,
                a.travel_min::float AS travel_min, a.arrived_at, a.finished_at, s.name AS service_name, r.priority,
-               pe.first_name || ' ' || pe.paternal_surname AS patient_name, d.name AS district_name
+               pe.first_name || ' ' || pe.paternal_surname AS patient_name, d.name AS district_name,
+               CASE WHEN o.assignment_id IS NULL THEN NULL WHEN a.leg = 1 THEN 'first' ELSE 'relay' END AS relay_role,
+               oc.first_name || ' ' || oc.paternal_surname AS relay_partner_name,
+               CASE WHEN o.assignment_id IS NULL THEN NULL WHEN a.leg = 1 THEN a.planned_end ELSE o.planned_end END AS relay_at,
+               CASE WHEN a.finished_at IS NOT NULL OR r.status IN ('completed','closed') THEN 'done'
+                    WHEN a.arrived_at IS NOT NULL THEN 'finish'
+                    WHEN a.leg = 2 AND r.status <> 'in_progress' THEN 'wait'      -- the first person has not arrived
+                    WHEN a.leg = 1 AND r.status <> 'assigned' THEN 'wait'
+                    ELSE 'arrive' END AS step
         FROM assignments a JOIN service_requests r USING (request_id) JOIN services s USING (service_id)
         JOIN patients pa ON pa.patient_id = r.patient_id JOIN persons pe ON pe.person_id = pa.person_id
         JOIN districts d ON d.district_id = pe.district_id
+        LEFT JOIN assignments o ON o.request_id = a.request_id AND o.status = 'active' AND o.leg <> a.leg
+        LEFT JOIN caregivers oc ON oc.caregiver_id = o.caregiver_id
         WHERE a.caregiver_id = :c AND a.status = 'active'
-          AND (r.scheduled_for AT TIME ZONE 'America/Mexico_City')::date
-              = (now() AT TIME ZONE 'America/Mexico_City')::date
-        ORDER BY r.scheduled_for"""), {"c": user.caregiver_id}).mappings().all()
+          AND ((r.scheduled_for AT TIME ZONE 'America/Mexico_City')::date = (now() AT TIME ZONE 'America/Mexico_City')::date
+               OR (a.planned_start AT TIME ZONE 'America/Mexico_City')::date = (now() AT TIME ZONE 'America/Mexico_City')::date)
+        ORDER BY coalesce(a.planned_start, r.scheduled_for)"""), {"c": user.caregiver_id}).mappings().all()
     return [dict(r) for r in rows]
 
 

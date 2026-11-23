@@ -94,6 +94,14 @@ de la institución) y se miden en la sensibilidad «Cumplir jornada nocturna» (
 solo los días que cada persona trabaja. La semilla no se toca: es la línea base «antes de Vela», con personal
 asignado los 7 días.
 
+**Relevos (desde el 22 nov 2026).** Un servicio más largo que cualquier turno legal (más de 8 h: SRV-04 y SRV-07,
+de 12 h) que nadie puede cubrir solo se puede cubrir con **dos personas consecutivas de la misma habilidad**: la
+primera trabaja hasta el final de su turno y la segunda llega en ese momento (la frontera de turno) y se queda
+hasta el final. Siempre se prefiere a una sola persona (continuidad del cuidado). Es la misma función en la
+operación y en SIRAG-D (`dispatcher.relay_options`, usada por `rank_candidates`). Con la plantilla actual nadie
+necesita relevo (los nocturnos de 12 h cubren solos esos servicios): las corridas principales no cambian; los
+relevos aparecen en «Cumplir jornada nocturna» (sección 10).
+
 ## 3. Validación
 
 Escenario `normal` + `human_dispatcher` **con la plantilla tal como está en la semilla** (7 días, sin descanso:
@@ -182,6 +190,9 @@ crisis la ventaja frente al despacho humano crece. La sección 8 cuenta cómo se
 
 ## 8. Hallazgo de la simulación que cambió el producto
 
+**En una frase:** se detectó con la plantilla de 7 días (sin día de descanso); con la plantilla legal Vela sin
+límite de tiempo ya no queda peor que el despacho humano, pero el límite de tiempo sigue siendo la mejor opción.
+
 **Qué encontró la sensibilidad (corrida del 21 nov, plantilla de 7 días).** Con aprobación lenta (5–15 min),
 Vela quedaba **peor** que el despacho humano: espera p90 de prioridad alta +3.0 min (Wilcoxon-Holm p = 0.006).
 
@@ -226,8 +237,6 @@ diferencia significativa (Wilcoxon-Holm p = 1.0).
 
 Escenario normal, 30 réplicas, política Vela con límite de tiempo:
 
-| Personal | Sin atender | Crisis en < 60 min |
-|---|---|---|
 | Personal | Sin atender | Crisis en < 60 min | Crisis nocturnas en < 60 min |
 |---|---|---|---|
 | Actual (44 personas) | 19.1 % | 56.4 % | 43.9 % |
@@ -245,14 +254,25 @@ Los turnos de 20:00 a 08:00 (12 h) exceden las 7 h de la jornada nocturna (LFT a
 parte en dos turnos legales, 20:00–03:00 y 01:00–08:00, lo que duplica las plazas nocturnas: **+4 personas**
 (44 → 48; INS-B e INS-D). Escenario normal, 30 réplicas:
 
-| Política | Sin atender | Crisis en < 60 min | Crisis nocturnas en < 60 min |
-|---|---|---|---|
-| Vela (como opera hoy), turnos de 12 h | 19.1 % [18.5–19.6] | 56.4 % | 43.9 % [26.6–61.3] |
-| Vela (como opera hoy), dos turnos de 7 h | 19.6 % [19.1–20.1] | 56.9 % | 45.0 % [27.4–62.6] |
-| Despacho humano, turnos de 12 h | 19.1 % | 53.9 % | 43.9 % |
-| Despacho humano, dos turnos de 7 h | 19.6 % | 54.4 % | 45.0 % |
+Con **relevos** (corrida del 22 nov, después de agregarlos al despachador; los servicios de 12 h se cubren con
+dos personas, la primera de 20:00 a 03:00 y la segunda de 03:00 a 08:00):
 
-Cumplir la jornada nocturna cuesta 4 plazas y **no mejora** la atención: el «sin atender» sube medio punto
-porque los servicios de 12 h de noche ya no caben en un turno de 7 h, y las crisis nocturnas atendidas a tiempo
-apenas cambian (pocas crisis de noche, intervalos amplios). Es un costo de cumplimiento legal, no una mejora
-del servicio; lo decide la institución (Vela solo lo marca y avisa).
+| Política | Sin atender | Crisis en < 60 min | Crisis nocturnas en < 60 min | Relevos por semana |
+|---|---|---|---|---|
+| Vela (como opera hoy), turnos de 12 h | 19.07 % [18.55–19.58] | 56.4 % | 43.9 % [26.6–61.3] | 0 |
+| Vela (como opera hoy), dos turnos de 7 h | 19.15 % [18.64–19.66] | 56.9 % | 45.0 % [27.4–62.6] | 2.7 |
+| Despacho humano, turnos de 12 h | 19.08 % | 53.9 % | 43.9 % | 0 |
+| Despacho humano, dos turnos de 7 h | 19.16 % | 54.4 % | 45.0 % | 2.7 |
+
+Comparación pareada (mismas 30 réplicas, Vela como opera hoy, Wilcoxon): «sin atender» +0.08 puntos (p = 0.001;
+unas 0.5 solicitudes por semana de ~645), crisis nocturnas en < 60 min +1.1 puntos (p = 0.69; solo 23 réplicas
+tienen crisis de noche y en 1 cambia el resultado), crisis en < 60 min +0.5 puntos (p = 0.73).
+
+**Antes de los relevos** (misma noche, corrida anterior del 22 nov): el «sin atender» subía de 19.1 % a 19.6 %,
+porque los servicios de 12 h de noche ya no cabían en un turno de 7 h.
+
+**Qué cambió en la conclusión.** Con relevos, cumplir la jornada nocturna ya **no empeora** la atención de forma
+apreciable: el «sin atender» queda prácticamente igual (+0.08 puntos, detectable porque las réplicas son
+pareadas, pero de media solicitud por semana). Sigue **sin mejorarla**: las crisis nocturnas atendidas a tiempo no
+cambian. Cuesta las mismas 4 plazas. Es un costo de cumplimiento legal, no una mejora del servicio; lo decide la
+institución (Vela solo lo marca y avisa).

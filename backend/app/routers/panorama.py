@@ -59,7 +59,7 @@ def operation(user: CurrentUser = Depends(VIEWERS), db: Session = Depends(tenant
                  AND (CAST(:district AS text) IS NULL OR pe.district_id = :district)"""
     base = f"""FROM service_requests r
                JOIN patients pa ON pa.patient_id = r.patient_id JOIN persons pe ON pe.person_id = pa.person_id
-               LEFT JOIN assignments a ON a.request_id = r.request_id AND a.status = 'active'
+               LEFT JOIN assignments a ON a.request_id = r.request_id AND a.status = 'active' AND a.leg = 1
                WHERE (r.scheduled_for AT TIME ZONE '{TZ}')::date BETWEEN :from AND :to {filters}"""
 
     # Daily punctuality and unattended share. Denominator for "sin atender": requests whose outcome is
@@ -106,7 +106,7 @@ def operation(user: CurrentUser = Depends(VIEWERS), db: Session = Depends(tenant
                                 AND (a.finished_at AT TIME ZONE '{TZ}')::date = (now() AT TIME ZONE '{TZ}')::date) AS done_today
         FROM service_requests r
         JOIN patients pa ON pa.patient_id = r.patient_id JOIN persons pe ON pe.person_id = pa.person_id
-        LEFT JOIN assignments a ON a.request_id = r.request_id AND a.status = 'active'
+        LEFT JOIN assignments a ON a.request_id = r.request_id AND a.status = 'active' AND a.leg = 1
         WHERE r.scheduled_for > now() - interval '2 days' {filters}"""), params).mappings().one()
 
     return {"from": start.isoformat(), "to": end.isoformat(), "on_time_minutes": ON_TIME_MINUTES,

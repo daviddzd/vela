@@ -59,10 +59,41 @@ es **diurno** (8 h, permitido) y el vespertino 14:00–22:00 es **mixto** (2 h n
 en 14:00–21:30 en la operación y en la simulación. Los turnos nocturnos de 20:00 a 08:00 (12 h, 4 personas en
 INS-B e INS-D) **exceden las 7 h** del art. 61. Vela no cambia la plantilla por su cuenta: `/personal` los marca
 «Excede la jornada legal (art. 61)» y el worker crea una alerta para coordinación (una por persona, sin repetir).
-Sensibilidad «Cumplir jornada nocturna» (dos turnos de 7 h, 20:00–03:00 y 01:00–08:00): **+4 personas** (44 → 48);
-el «sin atender» sube de 19.1 % a 19.6 % (los servicios de 12 h de noche ya no caben en un turno de 7 h) y las
-crisis nocturnas atendidas en < 60 min pasan de 43.9 % a 45.0 % (sin diferencia: pocas crisis de noche). Cumplir
-la jornada es un costo legal, no una mejora del servicio; lo decide cada institución.
+Sensibilidad «Cumplir jornada nocturna» (dos turnos de 7 h, 20:00–03:00 y 01:00–08:00): **+4 personas** (44 → 48).
+Sin relevos, el «sin atender» subía de 19.1 % a 19.6 % (los servicios de 12 h de noche ya no cabían en un turno
+de 7 h). **Con relevos** (sección siguiente) queda en 19.15 % frente a 19.07 %: prácticamente igual. Las crisis
+nocturnas atendidas en < 60 min pasan de 43.9 % a 45.0 % (sin diferencia: pocas crisis de noche). Cumplir la
+jornada cuesta 4 plazas y ya no empeora el servicio, pero tampoco lo mejora; lo decide cada institución.
+
+### Relevos (decisión del equipo, 22 nov 2026)
+Un servicio más largo que cualquier turno legal (más de 8 h, art. 61: SRV-04 y SRV-07, de 12 h) que nadie puede
+cubrir solo se cubre con **dos personas consecutivas de la misma habilidad**: la primera trabaja hasta el final de
+su turno; la segunda llega en ese momento (la frontera de turno) y se queda hasta el final. Siempre se prefiere a
+una sola persona. Misma función en la operación y en SIRAG-D: `dispatcher.relay_options` (desde `rank_candidates`).
+
+En la operación (migración `0011`):
+- `assignments.leg`: 1 = primera persona, 2 = relevo; una asignación activa por solicitud **y por tramo**. Las
+  dos se guardan juntas o ninguna (la restricción `no_caregiver_overlap` protege a cada persona).
+- Aprobaciones: cada propuesta muestra también al relevo y la hora del cambio; la reserva cubre a las dos.
+- Visitas: el servicio empieza cuando llega la primera persona y termina cuando termina el relevo. En
+  `/mis-visitas` cada quien ve su parte («Te releva…» / «Relevas a…») y su propio botón; el relevo no puede
+  registrar su llegada antes que la primera persona.
+- Si alguien del relevo queda fuera de servicio o cambia su descanso **antes de que empiece**, se liberan los
+  dos y el servicio se vuelve a despachar completo. Si la primera persona ya está en el domicilio y el relevo no
+  puede ir, se cancela solo el relevo y coordinación recibe una alerta (`relay_uncovered`) para cubrirlo.
+- Reasignar un relevo lo vuelve a planear completo (con la persona elegida como primera).
+- Con la plantilla actual nadie necesita relevo (los nocturnos de 12 h cubren solos esos servicios): las corridas
+  principales de SIRAG-D no cambiaron (comprobado: resultados idénticos fuera de «Cumplir jornada nocturna»).
+
+## Cobertura de la semana (`/personal`)
+Para los próximos 7 días, por día y franja, las habilidades **sin nadie en turno** («martes 8:00–10:00: sin
+enfermería»), y quién descansa cada día (`app/services/coverage.py`, función pura; «en turno» es
+`dispatcher.within_shift`, la misma regla del despachador). Una habilidad debe estar cubierta en las horas en que
+la propia plantilla de la institución tiene a alguien con esa habilidad (la unión de sus turnos); el hueco aparece
+cuando ese día nadie está, por descanso o fuera de servicio. No juzga si la plantilla cubre todas las horas que la
+institución necesita (por ejemplo, médico de noche): eso lo decide la institución. El worker crea la misma alerta
+para coordinación (tipo `coverage`, una por franja, sin repetir) y la resuelve sola cuando el hueco desaparece
+(alguien cambió su descanso o volvió a servicio) o ya pasó.
 
 ## Mapas con calles
 `frontend/src/components/StreetMap.tsx`: MapLibre GL con el estilo «positron» de **OpenFreeMap** (libre, sin

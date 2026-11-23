@@ -32,7 +32,7 @@ def usage(db: Session, minutes_per_assignment: float) -> dict:
                count(a.assignment_id) FILTER (WHERE a.status <> 'reassigned' AND a.approval = 'coordinator') AS manual,
                count(a.assignment_id) FILTER (WHERE a.status <> 'reassigned' AND a.approval = 'timeout')   AS timeout
         FROM institutions i JOIN subscription_plans p USING (plan_id)
-        LEFT JOIN assignments a ON a.institution_id = i.institution_id
+        LEFT JOIN assignments a ON a.institution_id = i.institution_id AND a.leg = 1
         GROUP BY i.institution_id, i.name, i.active, p.name, p.monthly_price_mxn
         ORDER BY i.institution_id""")).mappings().all()
     rows = [dict(r) for r in per_inst]

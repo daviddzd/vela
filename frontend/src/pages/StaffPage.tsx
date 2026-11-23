@@ -63,6 +63,7 @@ export function StaffPage() {
           <p className="mt-2 text-sm text-muted">{fill(t.weekNote, { d: d.workdays_per_week })}</p>
         </Card>
         <div className="space-y-4">
+          <Coverage version={d} />
           {person && <Agenda person={person} onMsg={(m) => { setMsg(m); load(); }} />}
           <Card>
             <h2 className="text-teal">{t.mapTitle}</h2>
@@ -77,6 +78,39 @@ export function StaffPage() {
         </div>
       </div>
     </AppShell>
+  );
+}
+
+// "Cobertura de la semana": by day, the slots with a skill of the plan and nobody on shift (backend coverage.py)
+function Coverage({ version }: { version: unknown }) {
+  const [c, setC] = useState<any>(null);
+  useEffect(() => { api.staffCoverage().then(setC).catch(() => setC(null)); }, [version]);   // reload with the staff list
+  if (!c) return null;
+  const h24 = (iso: string) => new Date(iso).toLocaleTimeString("es-MX", { timeZone: "America/Mexico_City", hour: "numeric", minute: "2-digit", hourCycle: "h23" });
+  const dateOf = (iso: string) => new Date(iso).toLocaleDateString("en-CA", { timeZone: "America/Mexico_City" });   // YYYY-MM-DD
+  const isoWeekday = (date: string) => new Date(`${date}T12:00:00`).getDay() || 7;
+  const nextDate = (date: string) => new Date(Date.parse(`${date}T12:00:00Z`) + 864e5).toISOString().slice(0, 10);
+  const end = (g: any) => {                       // a gap across midnight names the day it ends
+    const s = dateOf(g.start), e = dateOf(g.end);
+    if (s === e) return h24(g.end);
+    if (e === nextDate(s) && h24(g.end) === "0:00") return "24:00";
+    return `${t.weekdayName[isoWeekday(e)]} ${h24(g.end)}`;
+  };
+  return (
+    <Card>
+      <h2 className="text-teal">{t.coverageTitle}</h2>
+      <p className="mt-1 text-sm">{t.coverageIntro}</p>
+      <p className="mt-2 font-bold" aria-live="polite">{c.gaps === 0 ? t.coverageNone : c.gaps === 1 ? t.coverageCountOne : fill(t.coverageCount, { n: c.gaps })}</p>
+      <ul className="mt-2 divide-y divide-teal/10">{c.days.map((day: any) => (
+        <li key={day.date} className="py-2">
+          <p className="font-bold capitalize">{t.weekdayName[day.weekday]} {Number(day.date.slice(8, 10))}</p>
+          {day.gaps.length === 0 ? <p className="text-sm text-ok"><Icon as={CheckCircle2} /> {t.coverageOk}</p>
+            : <ul>{day.gaps.map((g: any) => (
+              <li key={g.skill + g.start} className="font-bold text-danger"><Icon as={AlertTriangle} /> {fill(t.coverageGap,
+                { from: h24(g.start), to: end(g), skill: t.skills[g.skill] ?? g.skill })}</li>))}</ul>}
+          <p className="text-sm text-muted">{day.resting.length ? fill(t.coverageResting, { names: day.resting.join(", ") }) : t.coverageNobodyRests}</p>
+        </li>))}</ul>
+    </Card>
   );
 }
 

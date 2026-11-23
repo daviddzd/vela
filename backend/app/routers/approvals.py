@@ -22,8 +22,11 @@ class ChooseIn(BaseModel):
 def proposals(db: Session, request_id: str) -> list[dict]:
     rows = db.execute(text("""
         SELECT p.rank, p.caregiver_id, c.first_name || ' ' || c.paternal_surname AS caregiver_name,
-               c.type AS caregiver_type, p.travel_min::float AS travel_min, p.planned_start, p.planned_end
-        FROM assignment_proposals p JOIN caregivers c USING (caregiver_id)
+               c.type AS caregiver_type, p.travel_min::float AS travel_min, p.planned_start, p.planned_end,
+               p.relay_caregiver_id, rc.first_name || ' ' || rc.paternal_surname AS relay_caregiver_name,
+               CASE WHEN p.relay_caregiver_id IS NOT NULL THEN p.planned_end END AS relay_at
+        FROM assignment_proposals p JOIN caregivers c ON c.caregiver_id = p.caregiver_id
+        LEFT JOIN caregivers rc ON rc.caregiver_id = p.relay_caregiver_id
         WHERE p.request_id = :r AND p.status = 'open' ORDER BY p.rank"""), {"r": request_id}).mappings().all()
     return [dict(r) for r in rows]
 

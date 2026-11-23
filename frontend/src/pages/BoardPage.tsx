@@ -15,6 +15,7 @@ import { formatClock, formatLongDate, useServerClock } from "../lib/clock";
 import { formatTime } from "../lib/format";
 import { useBoardSocket } from "../lib/useBoardSocket";
 import type { ServiceRequest } from "../api/client";
+import { relayText } from "../lib/relay";
 
 // MapLibre is large: load it only when the board opens (phones on the family screen never download it).
 const VisitsMap = lazy(() => import("../components/VisitsMap").then((m) => ({ default: m.VisitsMap })));
@@ -111,7 +112,7 @@ export function BoardPage() {
           <ul className="mt-3 max-h-60 divide-y divide-teal/10 overflow-y-auto">
             {board?.visits.map((v) => (
               <li key={v.request_id} className="flex flex-wrap items-center justify-between gap-2 py-1">
-                <span>{formatTime(v.scheduled_for)} · <Link to={`/pacientes/${v.patient_id}`} className="underline decoration-teal/40 hover:text-teal">{v.patient_name}</Link> · {v.caregiver_name ?? es.family.pendingCaregiver}</span>
+                <span>{formatTime(v.scheduled_for)} · <Link to={`/pacientes/${v.patient_id}`} className="underline decoration-teal/40 hover:text-teal">{v.patient_name}</Link> · {v.caregiver_name ?? es.family.pendingCaregiver}{v.relay_caregiver_name && ` (${relayText(v.relay_caregiver_name, v.relay_at)})`}</span>
                 <StatusBadge status={v.status} />
               </li>
             ))}

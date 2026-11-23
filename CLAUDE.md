@@ -49,6 +49,12 @@ All data are **synthetic**. The team only knows Python: keep code simple, commen
     source listed in `docs/spec/09_datos.md` or `data/business/assumptions.csv`, or is labeled
     "supuesto". Do not invent statistics.
 
+## Feature freeze (team decision, 22 Nov 2026)
+Since the relays + week coverage change (branch `feature/relevos`), **no new features** until the defense.
+Only: bug fixes, text changes (UI copy, docs, demo script) and whatever comes out of the rehearsals.
+If a request looks like a new feature, say so and ask the team before starting. Pending exception already
+agreed: `feature/voz-clasificador-v2` (final evaluation with the team's phrases, pre-registered adoption rule).
+
 ## Stack
 | Layer | Choice |
 |---|---|
