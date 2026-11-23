@@ -6,7 +6,10 @@ import { es } from "../i18n/es";
 import { localInputValue } from "../lib/format";
 import { DateField } from "./DateField";
 import { AlertTriangle, Icon, Plus } from "./icons";
-import { Button, inputClass } from "./ui";
+import { Button, ChoiceList, inputClass } from "./ui";
+
+/** "30 min", "1 h", "12 h": how long the visit lasts, under the service name. */
+const duration = (min: number) => (min % 60 === 0 ? `${min / 60}\u00a0h` : `${min}\u00a0${es.common.minutes}`);
 
 const TIMES = Array.from({ length: (22 - 7) * 4 }, (_, i) =>
   `${String(7 + Math.floor(i / 4)).padStart(2, "0")}:${String((i % 4) * 15).padStart(2, "0")}`);
@@ -49,11 +52,8 @@ export function RequestForm({ coordinator = false, onCreated, patient }:
           <input required value={patientId} onChange={(e) => setPatientId(e.target.value)} className={inputClass} />
         </label>
       )}
-      <label className="block"><span className="font-bold">{es.family.service}</span>
-        <select value={serviceId} onChange={(e) => setServiceId(e.target.value)} className={inputClass}>
-          {services.map((s) => <option key={s.service_id} value={s.service_id}>{s.name} ({s.duration_min} {es.common.minutes})</option>)}
-        </select>
-      </label>
+      <ChoiceList legend={es.family.service} name="service" value={serviceId} onChange={setServiceId}
+        options={services.map((s) => ({ value: s.service_id, title: s.name, detail: duration(s.duration_min) }))} />
       <fieldset className="flex flex-wrap items-start gap-3">
         <legend className="sr-only">{es.family.when}</legend>
         <DateField label={es.family.when} value={day} onChange={setDay} required />

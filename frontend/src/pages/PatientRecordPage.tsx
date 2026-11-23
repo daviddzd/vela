@@ -11,12 +11,13 @@ import { RequestForm } from "../components/RequestForm";
 import { StatusBadge } from "../components/StatusBadge";
 import { Button, Card, inputClass, Notice } from "../components/ui";
 import { es } from "../i18n/es";
+import { formatShortDateTime } from "../lib/format";
 import { RiskBadge } from "./PatientsPage";
 
 const t = es.record;
 const fill = (s: string, v: Record<string, string | number>) => s.replace(/\{(\w+)\}/g, (_, k) => String(v[k] ?? ""));
 const dmy = (iso?: string | null) => (iso ? iso.slice(0, 10).split("-").reverse().join("/") : "—");
-const when = (iso: string) => new Date(iso).toLocaleString("es-MX", { timeZone: "America/Mexico_City", dateStyle: "short", timeStyle: "short" });
+const when = formatShortDateTime;
 
 export function PatientRecordPage() {
   const { id = "" } = useParams();

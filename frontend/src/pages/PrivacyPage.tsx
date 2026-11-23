@@ -12,12 +12,14 @@ import { DateField } from "../components/DateField";
 import { AlertTriangle, Ban, CheckCircle2, Icon } from "../components/icons";
 import { Button, Card, inputClass, Notice } from "../components/ui";
 import { es } from "../i18n/es";
+import { auditDetail, auditEntity } from "../lib/auditText";
+import { formatShortDateTime } from "../lib/format";
 import { useBoardSocket } from "../lib/useBoardSocket";
 
 const t = es.privacy;
 const fill = (s: string, v: Record<string, string | number>) => s.replace(/\{(\w+)\}/g, (_, k) => String(v[k] ?? ""));
 const dmy = (iso?: string | null) => (iso ? iso.slice(0, 10).split("-").reverse().join("/") : "—");
-const when = (iso: string) => new Date(iso).toLocaleString("es-MX", { timeZone: "America/Mexico_City", dateStyle: "short", timeStyle: "short" });
+const when = formatShortDateTime;
 const TYPES = ["health_data", "home_care", "voice_assistant"];
 
 type Tab = "notice" | "consents" | "arco" | "audit";
@@ -319,14 +321,17 @@ function AuditTab() {
               <tbody>{d.rows.map((r: any) => (
                 <tr key={r.audit_id} className="border-b border-teal/10 align-top">
                   <td className="whitespace-nowrap py-1 pr-3">{when(r.occurred_at)}</td>
-                  <td className="pr-3">{r.display_name ?? t.noUser}{r.role ? ` (${es.roles[r.role]})` : ""}</td>
+                  <td className="pr-3">{r.display_name ?? (r.action === "login_failed" ? t.noUser : t.systemUser)}{r.role ? ` (${es.roles[r.role]})` : ""}</td>
                   <td className="pr-3">{label(r.action)}</td>
-                  <td className="pr-3">{r.entity}{r.entity_id ? ` ${r.entity_id}` : ""}</td>
+                  <td className="pr-3">{auditEntity(r.entity)}{r.entity_id && <> <span className="whitespace-nowrap">{r.entity_id}</span></>}</td>
                   <td className="pr-3">{r.institution_id ?? "—"}</td>
                   <td className="whitespace-nowrap pr-3 font-bold">{r.allowed
                     ? <span className="text-ok"><Icon as={CheckCircle2} /> {t.allowed}</span>
                     : <span className="text-danger"><Icon as={Ban} /> {t.blocked}</span>}</td>
-                  <td className="max-w-xs break-words pr-3 text-muted">{r.detail ? JSON.stringify(r.detail) : ""}</td>
+                  <td className="min-w-48 max-w-sm break-words pr-3">{auditDetail(r.detail)}
+                    {r.detail && Object.keys(r.detail).length > 0 && (
+                      <details className="mt-1 text-muted"><summary className="cursor-pointer text-teal">{t.technicalDetail}</summary>
+                        <code className="block break-all text-xs">{JSON.stringify(r.detail)}</code></details>)}</td>
                 </tr>))}</tbody>
             </table>
           </div>
@@ -364,17 +369,17 @@ function BlockedSummary({ s }: { s: any }) {
     <div className="grid gap-4 xl:grid-cols-3">
       <ChartCard synthetic={false} question={fill(t.summaryQ, { from: dmy(s.start), to: dmy(s.end) })} keyValue={total.toLocaleString("es-MX")}
         keyLabel={t.blockedTotal} source={t.auditSource} note={fill(t.allowedTotal, { n: s.allowed.toLocaleString("es-MX") })}
-        table={{ columns: [t.byUser, "n"], rows: s.by_user.map((u: any) => [u.display_name ?? t.noUser, u.n]) }}>
+        table={{ columns: [t.byUser, t.blockedCount], rows: s.by_user.map((u: any) => [u.display_name ?? t.noUser, u.n]) }}>
         <h3 className="font-bold">{t.byUser}</h3>
         <ol className="mt-1 list-decimal pl-6">{s.by_user.map((u: any) => (
           <li key={u.user_id ?? "none"}>{u.display_name ?? t.noUser}{u.role ? ` (${es.roles[u.role]})` : ""}: <strong>{u.n}</strong></li>))}</ol>
       </ChartCard>
       <ChartCard synthetic={false} question={t.byAction} source={t.auditSource}
-        table={{ columns: [t.action, "n"], rows: s.by_action.map((r: any) => [label(r.action), r.n]) }}>
+        table={{ columns: [t.action, t.blockedCount], rows: s.by_action.map((r: any) => [label(r.action), r.n]) }}>
         <EChart option={bars} height={Math.max(160, 40 * s.by_action.length)} label={t.byAction} />
       </ChartCard>
       <ChartCard synthetic={false} question={t.byDay} source={t.auditSource}
-        table={{ columns: [t.when, "n"], rows: s.by_day.map((r: any) => [dmy(r.day), r.n]) }}>
+        table={{ columns: [t.when, t.blockedCount], rows: s.by_day.map((r: any) => [dmy(r.day), r.n]) }}>
         <EChart option={days} height={200} label={t.byDay} />
       </ChartCard>
     </div>

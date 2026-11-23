@@ -190,9 +190,13 @@ def coverage_people(db: Session, institution_id: str) -> list[coverage.Person]:
 
 
 def coverage_gaps(db: Session, institution_id: str, first_day=None) -> list[dict]:
-    """Gaps of the next 7 days (from today, Mexico City) of one institution; gaps that are already over are left out."""
-    return [g for g in coverage.week_gaps(coverage_people(db, institution_id), first_day or now().date())
-            if g["end"] > now()]
+    """Gaps of the next 7 days (from today, Mexico City) of one institution; gaps that are already over are left out.
+    It looks from the day BEFORE: a night gap that began yesterday at 21:30 keeps that start after midnight (same
+    message, same alert code) instead of turning into a new "00:00–08:00" gap."""
+    first = first_day or now().date()
+    week_end = datetime.combine(first + timedelta(days=7), datetime.min.time(), MEXICO_CITY)
+    return [g for g in coverage.week_gaps(coverage_people(db, institution_id), first - timedelta(days=1), days=8)
+            if g["end"] > now() and g["start"] < week_end]
 
 
 def coverage_message(gap: dict) -> str:

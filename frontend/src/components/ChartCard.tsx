@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 import { es } from "../i18n/es";
 
 export function ChartCard({ question, keyValue, keyLabel, children, source, table, note, className = "", synthetic = true }: {
-  question: string; keyValue?: ReactNode; keyLabel?: ReactNode; children: ReactNode; source: string;
+  question: string; keyValue?: ReactNode; keyLabel?: ReactNode; children: ReactNode; source: ReactNode;
   table?: { columns: string[]; rows: (string | number | null)[][] }; note?: ReactNode; className?: string;
   synthetic?: boolean;   // false for numbers that come from real sources / assumptions (e.g. /negocio)
 }) {

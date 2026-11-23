@@ -16,6 +16,9 @@ import { es } from "../i18n/es";
 import { ciRows, conclusion, fill, fmt, HUMAN, pick, POLICIES, SCENARIOS, VELA, VELA_TIMEOUT, type Results } from "./simulation/data";
 
 const t = es.sim;
+// The model document lives in the public repository (docs/dev/sirag_d_modelo.md); the card names it in Spanish.
+const MODEL_DOC_URL = "https://github.com/daviddzd/vela/blob/main/docs/dev/sirag_d_modelo.md";
+const source = <>{t.source} <a href={MODEL_DOC_URL} target="_blank" rel="noreferrer" className="underline">{t.sourceDoc}</a></>;
 const MAIN = ["high_wait_p90_min", "crisis_under_60_pct", "crisis_response_p90_min", "unattended_pct", "high_wait_mean_min",
   "crisis_response_mean_min", "travel_km", "utilization_pct", "overtime_hours"];
 const COMPARED = [VELA_TIMEOUT, VELA];
@@ -97,13 +100,13 @@ export function SimulationPage() {
         secs: fmt(r.info.elapsed_seconds, 0), workers: String(r.info.workers) })}</p>
 
       <div className="mt-4 space-y-4">
-        <ChartCard question={t.conclusionQ} source={t.source}>
+        <ChartCard question={t.conclusionQ} source={source}>
           <ul className="space-y-2 text-lg">
             {conclusion(r).map((line) => <li key={line} className="flex gap-2"><Icon as={CheckCircle2} className="mt-1 text-teal" /><span>{line}</span></li>)}
           </ul>
         </ChartCard>
 
-        <ChartCard question={t.findingQ} source={t.source}>
+        <ChartCard question={t.findingQ} source={source}>
           <p>{fill(t.findingIntro, cfg)}</p>
           <p className="mt-2 font-bold">{t.findingTable}</p>
           <ResponsiveTable head={[t.metric, t.policies[VELA], t.policies[VELA_TIMEOUT]]}
@@ -116,7 +119,7 @@ export function SimulationPage() {
         </ChartCard>
 
         <ChartCard question={t.metricQ} keyValue={`${fmt(pick(r.summary, "normal", VELA_TIMEOUT, metric)?.mean)} ${meta.unit}`}
-          keyLabel={`${meta.label} · ${t.policies[VELA_TIMEOUT]} · ${t.scenarios.normal}`} note={t.ciNote} source={t.source}
+          keyLabel={`${meta.label} · ${t.policies[VELA_TIMEOUT]} · ${t.scenarios.normal}`} note={t.ciNote} source={source}
           table={{ columns: [t.scenario, ...POLICIES.map((p) => t.policies[p])],
             rows: SCENARIOS.map((s) => [t.scenarios[s], ...POLICIES.map((p) => {
               const x = pick(r.summary, s, p, metric);
@@ -140,7 +143,7 @@ export function SimulationPage() {
         </ChartCard>
 
         {!present && <>
-        <ChartCard question={t.testsQ} note={t.testsNote} source={t.source}>
+        <ChartCard question={t.testsQ} note={t.testsNote} source={source}>
           <label className="block max-w-sm"><span className="font-bold">{t.scenario}</span>
             <select className={selectClass} value={scenario} onChange={(e) => setScenario(e.target.value)}>
               {SCENARIOS.map((s) => <option key={s} value={s}>{t.scenarios[s]}</option>)}
@@ -161,7 +164,7 @@ export function SimulationPage() {
         <div className="grid gap-4 xl:grid-cols-2">
           <ChartCard question={t.validationQ} keyValue={`${fmt(v.sim_mean)} %`} keyLabel={t.validationKeyLabel}
             note={fill(t.validationNote, { noStaff: fmt(v.no_staff, 0), total: fmt(v.total, 0), cancelled: fmt(v.cancelled, 0),
-              obsShort: `${fmt(v.pct_short_services)} %`, simShort: `${fmt(v.sim_short_mean)} %` })} source={t.source}>
+              obsShort: `${fmt(v.pct_short_services)} %`, simShort: `${fmt(v.sim_short_mean)} %` })} source={source}>
             <dl className="grid grid-cols-[1fr_auto] gap-x-4 gap-y-2">
               {[[t.observedAll, `${fmt(v.pct_all)} %`], [t.observedNoCancel, `${fmt(v.pct_without_cancelled)} %`],
                 [t.simulatedAll, `${fmt(v.sim_mean)} % [${fmt(v.sim_ci_low)}–${fmt(v.sim_ci_high)}]`],
@@ -171,7 +174,7 @@ export function SimulationPage() {
             </dl>
           </ChartCard>
 
-          <ChartCard question={t.contingencyQ} note={t.contingencyNote} source={t.source}>
+          <ChartCard question={t.contingencyQ} note={t.contingencyNote} source={source}>
             <ResponsiveTable head={["", ...SCENARIOS.map((s) => t.scenarios[s])]}
               rows={[
                 { key: "risk", cells: [t.atRisk, ...SCENARIOS.map((s) => fmt(r.contingency_effect.find((x) => x.scenario === s)?.win_at_risk_entries, 0))] },

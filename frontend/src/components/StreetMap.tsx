@@ -2,6 +2,8 @@
 // official district boundaries on top and the page's points as HTML markers (shape + optional label, details on
 // hover / tap / keyboard focus). Same inputs as CityMap. If the browser has no WebGL, or the style or the tiles do not
 // load in time (no internet at the venue), it falls back to CityMap, the district drawing that needs no internet.
+// CityMap is ALSO drawn on top while the street map loads (and if the GPU drops the WebGL context): the first visit
+// can take seconds to download the style and tiles, and the card must never be a blank box meanwhile.
 // Privacy: the tile service only learns which part of the city is on screen; points are drawn in the browser.
 import "maplibre-gl/dist/maplibre-gl.css";
 import * as maplibregl from "maplibre-gl";
@@ -54,6 +56,7 @@ export function StreetMap({ points, districtFill = {}, height = 440, label }:
   const markers = useRef<maplibregl.Marker[]>([]);
   const [failed, setFailed] = useState(() => !webglAvailable());
   const [ready, setReady] = useState(false);
+  const [glLost, setGlLost] = useState(false);       // GPU reset / sleep on Windows: MapLibre redraws when it is restored
 
   // create the map once; fall back if it cannot load the style or the first tiles in time
   useEffect(() => {
@@ -72,6 +75,8 @@ export function StreetMap({ points, districtFill = {}, height = 440, label }:
     m.addControl(new maplibregl.NavigationControl({ showCompass: false }), "top-right");
     const timer = setTimeout(() => { if (!done) setFailed(true); }, LOAD_TIMEOUT_MS);
     m.on("error", (e: any) => { if (!done && /style|Failed to fetch|NetworkError|tile/i.test(String(e?.error?.message ?? e))) setFailed(true); });
+    m.on("webglcontextlost", () => setGlLost(true));
+    m.on("webglcontextrestored", () => setGlLost(false));
     m.on("load", async () => {
       // place names in Spanish when OpenStreetMap has them (the style shows English names by default)
       for (const layer of m.getStyle().layers ?? []) {
@@ -137,5 +142,12 @@ export function StreetMap({ points, districtFill = {}, height = 440, label }:
       <p className="mt-1 text-sm text-muted">{es.map.fallback}</p>
     </>);
   }
-  return <div ref={el} style={{ height }} className="w-full overflow-hidden rounded-card" role="region" aria-label={label} />;
+  const cover = !ready || glLost;     // the street map is not drawn (yet): show the district drawing over it
+  return (<>
+    <div className="relative w-full" style={{ height }}>
+      <div ref={el} style={{ height }} className="w-full overflow-hidden rounded-card" role="region" aria-label={label} aria-hidden={cover} />
+      {cover && <div className="absolute inset-0 z-10 bg-white"><CityMap points={points} districtFill={districtFill} height={height} label={label} /></div>}
+    </div>
+    {cover && <p className="mt-1 text-sm text-muted" role="status">{es.map.loading}</p>}
+  </>);
 }
