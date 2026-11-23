@@ -627,6 +627,7 @@ export const es = {
     exceedsDetail: "{hours} h de {kind}; el máximo es {max} h. Lo decide la institución: Vela no cambia la plantilla.",
   },
   map: {
+    loading: "Cargando mapa de calles… mientras tanto, el dibujo de las alcaldías.",
     fallback: "Sin mapa de calles (sin internet o el navegador no lo admite): se muestra el dibujo de las alcaldías.",
     // MapLibre's own texts (buttons and help), in Spanish
     locale: {

@@ -20,8 +20,11 @@ export function EChart({ option, height, label }: { option: Record<string, unkno
 
   useEffect(() => {
     if (!el.current) return;
-    inst.current = echarts.init(el.current, undefined, { renderer: "canvas" });
-    const ro = new ResizeObserver(() => inst.current?.resize());
+    const node = el.current;
+    inst.current = echarts.init(node, undefined, { renderer: "canvas" });
+    // React removes the node before this effect's cleanup runs, so the observer can still fire once with a 0×0 box;
+    // resizing a map to 0×0 throws inside ECharts ("Cannot read properties of null"). Only follow real sizes.
+    const ro = new ResizeObserver(() => { if (node.isConnected && node.clientWidth && node.clientHeight) inst.current?.resize(); });
     ro.observe(el.current);
     return () => { ro.disconnect(); inst.current?.dispose(); };
   }, []);
