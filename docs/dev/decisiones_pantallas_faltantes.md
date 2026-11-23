@@ -48,16 +48,21 @@ por lo menos, un día de descanso con goce de salario íntegro». Para cambiarlo
 **¿Usan el mismo valor Panorama-AM y SIRAG-D?**
 - **Panorama-AM:** no usa días por semana. Compara las horas trabajadas **por día trabajado** con las horas del
   turno de ese día, así que el supuesto no cambia sus resultados.
-- **SIRAG-D:** **no**. Su utilización es tiempo de trabajo ÷ (minutos de turno por día × días simulados): supone
-  que todos trabajan los 7 días. Se dejó así a propósito, porque el modelo **también** deja trabajar a todos los 7
-  días (igual que el despachador real y la semilla: los cuidadores de la semilla tienen visitas los 7 días de la
-  semana). Cambiar solo el denominador inventaría capacidad que el modelo sí usa.
-- **En qué cambiarían los resultados con 6 días:** la utilización media del escenario normal pasaría de **26.2 %
-  a 30.6 %** para todas las políticas (se multiplica por 7/6); las diferencias entre políticas y sus pruebas
-  estadísticas no cambian, porque el factor es el mismo para todas.
-- **Hallazgo:** ni el despachador ni la simulación dan un día de descanso; un cuidador podría quedar asignado 7
-  días seguidos, lo que contradice el art. 69. Para corregirlo de fondo habría que asignar un día de descanso por
-  persona en el despachador, la semilla y SIRAG-D, y volver a correr los experimentos. Queda propuesto, no hecho.
+- **SIRAG-D (resuelto el 22 nov 2026, rama `feature/descanso-semanal`):** ahora cada persona descansa un día
+  fijo por semana en la operación y en la simulación (misma función, `backend/app/services/labor.py`), y la
+  utilización cuenta solo los días trabajados. Con eso la utilización del escenario normal es **28.1 %** (antes
+  26.2 % suponiendo 7 días). Detalle y todas las cifras nuevas: `docs/dev/sirag_d_modelo.md`, secciones 2.1 y 5.
+
+### Hallazgo: jornada legal (LFT arts. 60 y 61)
+El tipo de jornada sale de las horas (art. 60), no de la etiqueta: el turno «mixed» de la semilla (10:00–18:00)
+es **diurno** (8 h, permitido) y el vespertino 14:00–22:00 es **mixto** (2 h nocturnas) y excedía las 7.5 h: quedó
+en 14:00–21:30 en la operación y en la simulación. Los turnos nocturnos de 20:00 a 08:00 (12 h, 4 personas en
+INS-B e INS-D) **exceden las 7 h** del art. 61. Vela no cambia la plantilla por su cuenta: `/personal` los marca
+«Excede la jornada legal (art. 61)» y el worker crea una alerta para coordinación (una por persona, sin repetir).
+Sensibilidad «Cumplir jornada nocturna» (dos turnos de 7 h, 20:00–03:00 y 01:00–08:00): **+4 personas** (44 → 48);
+el «sin atender» sube de 19.1 % a 19.6 % (los servicios de 12 h de noche ya no caben en un turno de 7 h) y las
+crisis nocturnas atendidas en < 60 min pasan de 43.9 % a 45.0 % (sin diferencia: pocas crisis de noche). Cumplir
+la jornada es un costo legal, no una mejora del servicio; lo decide cada institución.
 
 ## Mapas con calles
 `frontend/src/components/StreetMap.tsx`: MapLibre GL con el estilo «positron» de **OpenFreeMap** (libre, sin
@@ -81,3 +86,21 @@ con un aviso. Comprobado bloqueando OpenFreeMap: aparece el respaldo.
 ## Día de la defensa
 `scripts/reset_demo.py` también regresa los planes de cuidado a la semilla si alguien los cambió en un ensayo (los
 planes creados en el ensayo se desactivan; no se borran porque visitas pasadas pueden apuntar a ellos).
+
+## Descanso semanal y día de la defensa (martes 1 dic 2026)
+Cada persona tiene un día de descanso fijo (`caregivers.rest_day`, migración `0010`), asignado en rotación con
+`labor.assign_rest_days` (la misma función en la migración, en SIRAG-D y en `scripts/reset_demo.py`) y editable en
+`/personal`; al cambiarlo, las visitas ya asignadas que caen en el nuevo día se reasignan con el despachador.
+Cobertura el martes 1 de diciembre (calculada con `dispatcher.within_shift`, la misma regla de asignación):
+
+| Institución | 9:00 | 15:00 | 22:00 | Descansa ese día |
+|---|---|---|---|---|
+| INS-A | 7 (cuidados, enfermería) | 13 (las 4 habilidades) | — (institución de día) | Karla Jiménez (terapia, 08–16), Karla Castillo (cuidadora, 08–16) |
+| INS-B | 2 (cuidados, terapia) | 7 (las 4 habilidades) | 1 (enfermería) | Daniela Moreno (enfermera, 08–16), Eduardo Reyes (cuidador, 20–08) |
+| INS-C | 2 (cuidados, terapia) | 5 (las 4 habilidades) | — | Alejandro Rojas (enfermero, 08–16) |
+| INS-D | 1 (cuidados) | 5 (cuidados, enfermería, medicina) | 2 (cuidados, enfermería) | Alejandra Domínguez (enfermera, 08–16) |
+| INS-E | 2 (cuidados, terapia) | 4 (cuidados, enfermería, terapia) | — | Karla Vázquez (enfermera, 08–16) |
+
+Todas tienen personal por la mañana y por la tarde. Ojo: en INS-B, C, D y E la única enfermera de turno de
+mañana descansa ese martes, así que de 8:00 a 10:00 no hay enfermería hasta que entra el turno de 10:00. Si se
+quiere evitar en la demostración, se cambia su día de descanso en `/personal` (las visitas se reasignan solas).

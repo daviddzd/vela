@@ -83,9 +83,21 @@ crisis se resuelve cuando se atiende). Por eso las comparaciones son **pareadas*
 | Duración real de las visitas | igual a la nominal | semilla (desviación observada = 0) |
 | Réplicas, horizonte, semilla, confianza | 30 × 7 días, 2026, 95 % | YAML |
 
+## 2.1 Reglas laborales (desde el 22 nov 2026)
+
+Todas las corridas aplican las reglas de la Ley Federal del Trabajo con las **mismas funciones** que la operación
+(`backend/app/services/labor.py`): cada persona descansa un día fijo por semana (art. 69; rotación que reparte los
+días dentro de cada turno y habilidad) y el despachador nunca asigna un turno que empiece ese día; el tipo de
+jornada sale de las horas (art. 60) y los turnos diurnos y mixtos no pasan del máximo del art. 61 (el vespertino
+14:00–22:00 es mixto y queda en 14:00–21:30). Los nocturnos de 12 h (20:00–08:00) se dejan como están (decisión
+de la institución) y se miden en la sensibilidad «Cumplir jornada nocturna» (sección 10). La utilización cuenta
+solo los días que cada persona trabaja. La semilla no se toca: es la línea base «antes de Vela», con personal
+asignado los 7 días.
+
 ## 3. Validación
 
-Escenario `normal` + `human_dispatcher` contra la línea base de la semilla, contando **solo** "sin atender
+Escenario `normal` + `human_dispatcher` **con la plantilla tal como está en la semilla** (7 días, sin descanso:
+`Params(labor_rules=False)`, porque así ocurrió el historial) contra la línea base de la semilla, contando **solo** "sin atender
 por falta de personal" (`no_staff_available`), sin las cancelaciones de familias:
 
 | | Línea base (semilla) | Simulación |
@@ -113,19 +125,28 @@ Kruskal-Wallis supondrían grupos independientes. Por métrica y escenario:
 
 Resultados en `simulation/results/tests.csv` y en `/simulacion`.
 
-## 5. Lo que dicen los resultados (corrida del 21 nov 2026: 450 corridas principales + 900 de sensibilidad en 199 s con 15 procesos)
+## 5. Lo que dicen los resultados (corrida del 22 nov 2026, con descanso semanal y jornada legal: 450 corridas principales + 1,050 de sensibilidad + 30 de validación en 300 s con 15 procesos)
 
 Cifras de **Vela con aprobación con límite de tiempo y reserva** (`vela_timeout`), la política con la que
 opera hoy el worker, frente al despacho humano. Media [IC 95 %] de 30 réplicas; pruebas pareadas con Holm.
 
 | Métrica | Escenario | Vela (como opera hoy) | Despacho humano | Resultado |
 |---|---|---|---|---|
-| Espera de prioridad alta, p90 | normal | **13.3 min** [10.5–16.2] | 16.4 [13.2–19.5] | mejor, p = 0.0002 |
-| Espera de prioridad alta, p90 | contingencia + bloqueo | 16.4 [13.6–19.2] | 20.3 [16.9–23.6] | mejor, p < 0.001 |
-| Respuesta a crisis, p90 | normal | 67.0 min [50.0–84.0] | 72.5 [56.2–88.8] | mejor, p < 0.001 |
-| Crisis atendidas en < 60 min | normal | 63.4 % [56.2–70.6] | 61.3 % [54.3–68.4] | sin diferencia (p = 1.0) |
-| Sin atender | normal | 14.7 % [14.3–15.1] | 14.7 % [14.3–15.1] | sin diferencia |
-| Horas extra en la semana | normal → bloqueo | 14.3 → 24.2 h | 14.8 → 24.7 h | mejor, p < 0.001 |
+| Espera de prioridad alta, p90 | normal | **20.1 min** [17.7–22.4] | 23.6 [21.2–26.0] | mejor, p < 0.001 |
+| Espera de prioridad alta, p90 | contingencia + bloqueo | 24.1 [22.2–26.1] | 27.2 [25.2–29.2] | mejor, p = 0.0003 |
+| Respuesta a crisis, p90 | normal | 76.0 min [56.4–95.6] | 80.0 [61.8–98.1] | mejor, p = 0.008 |
+| Crisis atendidas en < 60 min | normal | 56.4 % [48.3–64.6] | 53.9 % [45.4–62.5] | sin diferencia (p = 0.81) |
+| Crisis nocturnas (20–06 h) en < 60 min | normal | 43.9 % [26.6–61.3] | 43.9 % [26.6–61.3] | sin diferencia |
+| Sin atender | normal | 19.1 % [18.5–19.6] | 19.1 % [18.5–19.6] | sin diferencia |
+| Utilización del personal | normal | 28.1 % [27.6–28.6] | 28.1 % [27.6–28.6] | sin diferencia |
+| Horas extra en la semana | normal | 13.7 h [13.3–14.2] | 14.1 h [13.7–14.5] | mejor, p = 0.008 |
+| Horas extra en la semana | contingencia + bloqueo | 23.7 h [22.9–24.4] | 23.9 h [23.2–24.6] | sin diferencia (p = 0.051) |
+
+**Qué cambió frente a la corrida del 21 nov (plantilla de 7 días):** con el descanso de ley hay 1/7 menos
+turnos, así que todo empeora para todas las políticas: sin atender 14.7 % → 19.1 %, espera p90 de prioridad
+alta 13.3 → 20.1 min (humano 16.4 → 23.6), respuesta a crisis p90 67.0 → 76.0 min, crisis en < 60 min
+63.4 % → 56.4 %, utilización 26.2 % → 28.1 %. **La ventaja de Vela se mantiene** en espera de prioridad alta y
+respuesta a crisis; las horas extra con bloqueo **ya no son significativamente menores** (antes p < 0.001).
 
 - Las crisis de noche en instituciones de día no tienen personal de turno: ninguna política lo arregla, por
   eso el % en < 60 min casi no cambia.
@@ -133,7 +154,7 @@ opera hoy el worker, frente al despacho humano. Media [IC 95 %] de 30 réplicas;
 - **Contingencia donde ocurre** (24 h; GAM, Iztacalco, V. Carranza, Iztapalapa, Tláhuac; totales de 30
   semanas): entradas a "en riesgo" 136 → 145 (+9), crisis 21 → 21. En toda la semana: 1,429 → 1,439
   entradas, 186 → 186 crisis. **Con los coeficientes publicados el efecto del aire sobre las crisis es
-  pequeño**; el bloqueo pesa más (horas extra 14.3 → 24.2 h).
+  pequeño**; el bloqueo pesa más (horas extra 13.7 → 23.7 h).
 
 ## 6. Análisis de sensibilidad (aparte; no es resultado principal)
 
@@ -142,12 +163,12 @@ Espera p90 de prioridad alta, en minutos:
 
 | Supuesto | Nivel | Vela con límite y reserva (hoy) | Vela sin límite (con reserva) | Despacho humano |
 |---|---|---|---|---|
-| Retraso de aprobación | 0 (inmediata) | 13.1 | 13.1 | 16.4 |
-| | 1–5 min | 13.3 | 13.5 | 16.4 |
-| | 5–15 min | 13.3 | 14.2 | 16.4 |
-| Riesgo de crisis | ×1 | 13.3 | 13.5 | 16.4 |
-| | ×2 | 16.9 | 16.9 | 21.8 |
-| | ×3 | 19.4 | 19.7 | 26.0 |
+| Retraso de aprobación | 0 (inmediata) | 19.8 | 19.8 | 23.6 |
+| | 1–5 min | 20.1 | 20.2 | 23.6 |
+| | 5–15 min | 20.4 | 21.7 | 23.6 |
+| Riesgo de crisis | ×1 | 20.1 | 20.2 | 23.6 |
+| | ×2 | 22.7 | 22.9 | 27.3 |
+| | ×3 | 25.3 | 25.3 | 30.7 |
 
 Con la reserva y el límite de tiempo, la espera ya no depende de qué tan rápido apruebe coordinación; con más
 crisis la ventaja frente al despacho humano crece. La sección 8 cuenta cómo se llegó aquí.
@@ -161,8 +182,8 @@ crisis la ventaja frente al despacho humano crece. La sección 8 cuenta cómo se
 
 ## 8. Hallazgo de la simulación que cambió el producto
 
-**Qué encontró la sensibilidad.** Con aprobación lenta (5–15 min), Vela quedaba **peor** que el despacho
-humano: espera p90 de prioridad alta +3.0 min (Wilcoxon-Holm p = 0.006).
+**Qué encontró la sensibilidad (corrida del 21 nov, plantilla de 7 días).** Con aprobación lenta (5–15 min),
+Vela quedaba **peor** que el despacho humano: espera p90 de prioridad alta +3.0 min (Wilcoxon-Holm p = 0.006).
 
 **Decisiones del equipo (21 nov 2026).** Dos cambios, iguales en la operación y en la simulación:
 1. **Aprobación con límite de tiempo, solo para lo urgente.** Si una solicitud alta con visita en menos de
@@ -179,7 +200,7 @@ Valores en `config/simulation.yaml` (`approval.auto_apply_after_minutes`, `appro
 `approval.hold_minutes`).
 
 **Resultado** (sensibilidad, escenario normal, 30 réplicas, retraso de aprobación 5–15 min, frente al
-despacho humano):
+despacho humano; corrida del 21 nov con plantilla de 7 días, histórico de cómo se tomó la decisión):
 
 | Métrica | Vela sin límite ni reserva (antes) | Vela con límite, sin reserva | **Vela con límite y reserva (hoy)** |
 |---|---|---|---|
@@ -189,10 +210,17 @@ despacho humano):
 Con los dos cambios, una coordinación lenta ya no deja a Vela en desventaja: la espera de prioridad alta con
 5–15 min de retraso (13.3 min) queda igual que con aprobación de 1–5 min (13.3 min).
 
+**Con el descanso de ley (corrida del 22 nov):** Vela **sin** límite de tiempo (con reserva) ya no queda peor
+con aprobación de 5–15 min: −1.9 min de espera p90 frente al humano (p = 0.010) y respuesta a crisis −3.3 min
+sin diferencia significativa (p = 0.39). **Con** el límite de tiempo la ventaja es mayor y significativa en las
+dos: −3.2 min (p < 0.001) y −5.4 min (p = 0.010), y la espera con 5–15 min (20.4) casi no se aleja de la de
+1–5 min (20.1). El límite de tiempo sigue justificado, pero el hallazgo original («Vela peor que el humano»)
+dependía de la plantilla de 7 días.
+
 **La reserva no empeora a las demás** (escenario normal, Vela como opera hoy, 30 réplicas pareadas con y sin
-reserva, `simulation/experiments/holds_check.py` → `results/holds_check.csv`): sin atender 14.7 % → 14.7 %,
-espera p90 de prioridad media 15.5 → 15.5 min y baja 19.5 → 19.5 min, sin ninguna diferencia (la reserva solo
-reasignó 1 visita baja/media en 5 réplicas, sin cambiar su hora).
+reserva, `simulation/experiments/holds_check.py` → `results/holds_check.csv`, corrida del 22 nov): sin atender
+19.1 % con y sin reserva, espera p90 de prioridad media 23.8 → 23.8 min y baja 25.1 → 25.2 min, sin ninguna
+diferencia significativa (Wilcoxon-Holm p = 1.0).
 
 ## 9. ¿Y si contratamos? (sensibilidad)
 
@@ -200,11 +228,31 @@ Escenario normal, 30 réplicas, política Vela con límite de tiempo:
 
 | Personal | Sin atender | Crisis en < 60 min |
 |---|---|---|
-| Actual | 14.7 % | 63.4 % |
-| +1 enfermera de noche en cada institución de 24 h y +1 cuidador de día en INS-A | 14.7 % | 64.2 % |
-| +1 cuidador de día en INS-B y en INS-D (dirigido al cuello de botella) | **12.9 %** | 63.4 % |
+| Personal | Sin atender | Crisis en < 60 min | Crisis nocturnas en < 60 min |
+|---|---|---|---|
+| Actual (44 personas) | 19.1 % | 56.4 % | 43.9 % |
+| +1 enfermera de noche en cada institución de 24 h y +1 cuidador de día en INS-A (47) | 19.0 % | 59.6 % | 53.1 % |
+| +1 cuidador de día en INS-B y en INS-D, dirigido al cuello de botella (46) | **17.5 %** | 56.4 % | 43.9 % |
 
-La primera opción casi no cambia nada: INS-A no tiene planes de cuidador diurno de 8 h y la enfermería de
-noche solo atiende alguna crisis. El cuello de botella son las visitas de cuidador diurno de 8 h en INS-B y
-INS-D (un solo cuidador de turno 08–16 en cada una). Las crisis nocturnas en instituciones de día no mejoran
-con ninguna de las dos.
+(Corrida del 21 nov, plantilla de 7 días: 14.7 %, 14.7 % y 12.9 % sin atender.) Las conclusiones no cambian:
+la primera opción casi no toca el «sin atender» pero sube las crisis atendidas a tiempo, sobre todo de noche;
+la segunda va al cuello de botella (visitas de cuidador diurno de 8 h en INS-B e INS-D) y baja el «sin atender»
+1.6 puntos. El personal contratado también descansa un día por semana.
+
+## 10. Cumplir jornada nocturna (sensibilidad)
+
+Los turnos de 20:00 a 08:00 (12 h) exceden las 7 h de la jornada nocturna (LFT art. 61). Escenario: cada uno se
+parte en dos turnos legales, 20:00–03:00 y 01:00–08:00, lo que duplica las plazas nocturnas: **+4 personas**
+(44 → 48; INS-B e INS-D). Escenario normal, 30 réplicas:
+
+| Política | Sin atender | Crisis en < 60 min | Crisis nocturnas en < 60 min |
+|---|---|---|---|
+| Vela (como opera hoy), turnos de 12 h | 19.1 % [18.5–19.6] | 56.4 % | 43.9 % [26.6–61.3] |
+| Vela (como opera hoy), dos turnos de 7 h | 19.6 % [19.1–20.1] | 56.9 % | 45.0 % [27.4–62.6] |
+| Despacho humano, turnos de 12 h | 19.1 % | 53.9 % | 43.9 % |
+| Despacho humano, dos turnos de 7 h | 19.6 % | 54.4 % | 45.0 % |
+
+Cumplir la jornada nocturna cuesta 4 plazas y **no mejora** la atención: el «sin atender» sube medio punto
+porque los servicios de 12 h de noche ya no caben en un turno de 7 h, y las crisis nocturnas atendidas a tiempo
+apenas cambian (pocas crisis de noche, intervalos amplios). Es un costo de cumplimiento legal, no una mejora
+del servicio; lo decide la institución (Vela solo lo marca y avisa).

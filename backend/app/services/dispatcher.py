@@ -25,6 +25,8 @@ from dataclasses import dataclass, field, replace
 from datetime import datetime, time, timedelta
 from zoneinfo import ZoneInfo
 
+from app.services import labor
+
 MEXICO_CITY = ZoneInfo("America/Mexico_City")
 POLICIES = ("nearest", "risk_priority", "risk_plus_live_traffic", "human_dispatcher")
 DEFAULT_POLICY = "risk_plus_live_traffic"
@@ -45,6 +47,7 @@ class Caregiver:
     lon: float
     busy: tuple[tuple[datetime, datetime], ...] = ()   # planned windows already booked
     active: bool = True
+    rest_day: int | None = None          # ISO weekday of the weekly rest (LFT art. 69); None = not set
 
 
 @dataclass(frozen=True)
@@ -130,12 +133,15 @@ def trip_minutes(km: float, arrive_at: datetime, traffic: TrafficProfile, extra_
 
 
 def within_shift(cg: Caregiver, start: datetime, end: datetime) -> bool:
-    """True if [start, end] fits inside one of the caregiver's shifts (local time).
+    """True if [start, end] fits inside one of the caregiver's shifts (local time), never in a shift that would
+    start on their weekly rest day (app/services/labor.py, LFT art. 69; same rule in the operation and SIRAG-D).
     Checks the shift that starts on the visit's day and the one that started the day before
     (night shifts that cross midnight)."""
     local_start, local_end = start.astimezone(MEXICO_CITY), end.astimezone(MEXICO_CITY)
     for days_back in (0, 1):
         day = local_start.date() - timedelta(days=days_back)
+        if not labor.works_on(cg.rest_day, day):        # no shift starts on the weekly rest day (art. 69)
+            continue
         s = datetime.combine(day, cg.shift_start, MEXICO_CITY)
         e = datetime.combine(day, cg.shift_end, MEXICO_CITY)
         if e <= s:

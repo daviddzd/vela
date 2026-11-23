@@ -1,13 +1,15 @@
 {
-  "finished_at": "2026-11-21T21:40:15",
-  "elapsed_seconds": 199.1,
+  "finished_at": "2026-11-22T18:27:25",
+  "elapsed_seconds": 299.9,
   "workers": 15,
   "replications": 30,
   "sensitivity_replications": 30,
   "runs_main": 450,
-  "runs_sensitivity": 900,
+  "runs_sensitivity": 1050,
+  "runs_validation": 30,
   "days": 7,
   "seed": 2026,
+  "labor_rules": "rest day (LFT art. 69) + legal shifts (arts. 60-61) in every experiment; validation uses the seed staffing (7 days)",
   "params_example": {
     "policy": "nearest",
     "scenario": "normal",
@@ -19,7 +21,9 @@
       5.0
     ],
     "risk_multiplier": 1.0,
-    "extra_staff": ""
+    "extra_staff": "",
+    "holds": true,
+    "labor_rules": true
   },
   "approval": {
     "auto_approve_priorities": [

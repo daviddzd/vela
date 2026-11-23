@@ -5,6 +5,6 @@ from simulation.sirag.model import Model, Params
 
 
 def run_one(params: Params) -> dict:
-    model = Model(load_world(), params)
+    model = Model(load_world(params.labor_rules), params)
     requests = model.run()
     return summarize(model, requests)
