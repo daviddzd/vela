@@ -39,7 +39,7 @@ export function PatientRecordPage() {
       <p className="mt-1"><RiskBadge level={r.risk_level} /></p>
       {msg && <div className="mt-3"><Notice kind="ok">{msg}</Notice></div>}
 
-      <div className="mt-4 grid gap-4 xl:grid-cols-3">
+      <div className="items-start mt-4 grid gap-4 xl:grid-cols-3">
         <Card>
           <h2 className="text-teal">{t.general}</h2>
           <dl className="mt-2 grid grid-cols-[auto_1fr] gap-x-4 gap-y-1">
@@ -72,7 +72,7 @@ export function PatientRecordPage() {
 
       <Plans r={r} onChange={(text) => { setMsg(text); load(); }} />
 
-      <div className="mt-4 grid gap-4 xl:grid-cols-[2fr_1fr]">
+      <div className="items-start mt-4 grid gap-4 xl:grid-cols-[2fr_1fr]">
         <Card>
           <h2 className="text-teal">{t.history}</h2>
           {r.history.length === 0 ? <p className="mt-2">{t.noHistory}</p> : (

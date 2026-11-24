@@ -8,6 +8,7 @@ from sqlalchemy.orm import Session
 from app.core.config import MEXICO_CITY
 from app.core.deps import CurrentUser, require_role, tenant_db
 from app.core.roles import COORDINATOR, OWNER
+from app.services import care_plans
 from app.services import dispatcher as dsp
 from app.services import operations as ops
 
@@ -78,6 +79,20 @@ def board(user: CurrentUser = Depends(require_role(COORDINATOR, OWNER)), db: Ses
         SELECT caregiver_id, first_name || ' ' || paternal_surname AS name, type, base_lat::float AS lat,
                base_lon::float AS lon FROM caregivers WHERE active""")).mappings().all()
 
+    # "Próximas visitas de hoy y mañana" (shown when nobody is waiting): requests that exist and are not started,
+    # plus the care-plan visits the worker will create on the day (care_plans.forecast, same deterministic draw).
+    soon = db.execute(text(f"""
+        SELECT r.request_id, r.patient_id, r.scheduled_for, r.status, s.name AS service_name,
+               pe.first_name || ' ' || pe.paternal_surname AS patient_name,
+               c.first_name || ' ' || c.paternal_surname AS caregiver_name
+        FROM service_requests r JOIN services s USING (service_id)
+        JOIN patients pa ON pa.patient_id = r.patient_id JOIN persons pe ON pe.person_id = pa.person_id
+        LEFT JOIN assignments a ON a.request_id = r.request_id AND a.status = 'active' AND a.leg = 1
+        LEFT JOIN caregivers c ON c.caregiver_id = a.caregiver_id
+        WHERE r.status IN ('validated','queued','assigned') AND r.scheduled_for > now()
+          AND (r.scheduled_for AT TIME ZONE 'America/Mexico_City')::date <= {TODAY} + 1""")).mappings().all()
+    upcoming = sorted([dict(v) for v in soon] + care_plans.forecast(db, days=2), key=lambda v: v["scheduled_for"])
+
     return {"now": ops.now().isoformat(), "counters": dict(counters), "queue": queue,
             "alerts": [dict(a) for a in alerts], "visits": [dict(v) for v in visits],
-            "staff": [dict(s) for s in staff]}
+            "staff": [dict(s) for s in staff], "upcoming": upcoming}

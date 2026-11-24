@@ -66,10 +66,10 @@ export function BoardPage() {
         ))}
       </ul>
 
-      <div className="mt-4 grid gap-4 lg:grid-cols-3">
+      <div className="items-start mt-4 grid gap-4 lg:grid-cols-3">
         <Card className="lg:col-span-2">
           <h2>{es.board.queueTitle}</h2>
-          {board && board.queue.length === 0 && <p className="mt-2">{es.board.queueEmpty}</p>}
+          {board && board.queue.length === 0 && <AllClear board={board} />}
           <ol className="mt-2 divide-y divide-teal/10">
             {board?.queue.map((q) => (
               <li key={q.request_id} className="flex flex-wrap items-center justify-between gap-2 py-2">
@@ -96,17 +96,30 @@ export function BoardPage() {
           <h2>{es.board.alertsTitle}</h2>
           {board && board.alerts.length === 0 && <p className="mt-2">{es.board.alertsEmpty}</p>}
           <ul className="mt-2 space-y-2">
-            {board?.alerts.map((a) => a.type === "emergency_review" ? <ReviewAlert key={a.alert_id} a={a} now={now} onDone={refresh} /> : (
-              <li key={a.alert_id} className="rounded-card border-2 border-danger p-2">
-                <Icon as={AlertTriangle} /> {a.message}
-                <span className="block text-muted">{formatWhen(a.created_at, board ? new Date(board.now) : undefined)}</span>
-              </li>
-            ))}
+            {board && groupAlerts(board.alerts).map((g) => g.critical
+              ? (g.items[0].type === "emergency_review"
+                ? <ReviewAlert key={g.key} a={g.items[0]} now={now} onDone={refresh} />
+                : <li key={g.key} className="rounded-card border-4 border-danger bg-danger/5 p-2 font-bold" role="alert">
+                    <Icon as={AlertTriangle} /> {g.items[0].message}
+                    <span className="block font-normal text-muted">{formatWhen(g.items[0].created_at, new Date(board.now))}</span></li>)
+              : g.items.length === 1
+                ? <li key={g.key} className="rounded-card border-2 border-danger p-2">
+                    <Icon as={AlertTriangle} /> {g.items[0].message}
+                    <span className="block text-muted">{formatWhen(g.items[0].created_at, new Date(board.now))}</span></li>
+                : <li key={g.key} className="rounded-card border-2 border-danger p-2">
+                    <p className="font-bold"><Icon as={AlertTriangle} /> {(es.board.alertGroups[g.items[0].type] ?? es.board.alertGroups.other).replace("{n}", String(g.items.length))}</p>
+                    <details className="mt-1">
+                      <summary className="min-h-12 cursor-pointer font-bold text-teal flex items-center">{es.board.alertGroupShow.replace("{n}", String(g.items.length))}</summary>
+                      <ul className="mt-1 space-y-2">{g.items.map((a) => (
+                        <li key={a.alert_id} className="border-t border-danger/20 pt-2">{a.message}
+                          <span className="block text-muted">{formatWhen(a.created_at, new Date(board.now))}</span></li>))}</ul>
+                    </details>
+                  </li>)}
           </ul>
         </Card>
       </div>
 
-      <div className="mt-4 grid gap-4 lg:grid-cols-3">
+      <div className="items-start mt-4 grid gap-4 lg:grid-cols-3">
         <Card className="lg:col-span-2">
           <h2>{es.board.mapTitle}</h2>
           <div className="mt-2">
@@ -163,4 +176,35 @@ function ReviewAlert({ a, now, onDone }: { a: BoardAlert; now: Date; onDone: () 
       {error && <p className="mt-1 font-bold text-danger">{error}</p>}
     </li>
   );
+}
+
+/** Alerts of the same type go in one card ("2 turnos nocturnos exceden la jornada legal"); critical ones (emergencies
+ *  and amber voice reviews) are never grouped and always go first. */
+function groupAlerts(alerts: BoardAlert[]): { key: string; critical: boolean; items: BoardAlert[] }[] {
+  const isCritical = (a: BoardAlert) => a.level === "critical" || a.type === "emergency" || a.type === "emergency_review";
+  const critical = alerts.filter(isCritical).map((a) => ({ key: a.alert_id, critical: true, items: [a] }));
+  const groups = new Map<string, BoardAlert[]>();
+  for (const a of alerts.filter((x) => !isCritical(x))) groups.set(a.type, [...(groups.get(a.type) ?? []), a]);
+  return [...critical, ...[...groups.entries()].map(([type, items]) => ({ key: `group-${type}`, critical: false, items }))];
+}
+
+/** Nobody is waiting: say so, and show what comes next (today and tomorrow), including the care-plan visits the
+ *  worker will create on the day (care_plans.forecast). */
+function AllClear({ board }: { board: Board }) {
+  const now = new Date(board.now);
+  const shown = board.upcoming.slice(0, 12);
+  return (<>
+    <p className="mt-2 text-xl font-bold text-ok">{es.board.allClear} <Icon as={CheckCircle2} /></p>
+    <h3 className="mt-3 font-bold">{es.board.upcomingTitle}</h3>
+    {board.upcoming.length === 0 ? <p className="mt-1">{es.board.upcomingNone}</p> : (
+      <ul className="mt-1 divide-y divide-teal/10">{shown.map((v, i) => (
+        <li key={v.request_id ?? `${v.patient_id}-${i}`} className="py-1.5">
+          <strong className="tabular-nums">{formatWhen(v.scheduled_for, now)}</strong>{" · "}
+          <Link to={`/pacientes/${v.patient_id}`} className="underline decoration-teal/40 hover:text-teal">{v.patient_name}</Link>
+          {" · "}{v.service_name}{" · "}
+          {v.caregiver_name ? <strong>{v.caregiver_name}</strong>
+            : <span className="text-muted">{v.status === "planned" ? es.family.plannedNote : es.family.pendingCaregiver}</span>}
+        </li>))}</ul>)}
+    {board.upcoming.length > shown.length && <p className="mt-1 text-muted">{es.board.upcomingMore.replace("{n}", String(board.upcoming.length - shown.length))}</p>}
+  </>);
 }

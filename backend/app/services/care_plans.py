@@ -119,3 +119,37 @@ def new_plan(db: Session, *, patient_id: str, institution_id: str, service_id: s
         VALUES ('PLN-' || upper(substr(gen_random_uuid()::text, 1, 8)), :p, :i, :s, :t, :r, true, :u, now(), :old)
         RETURNING care_plan_id"""), {"p": patient_id, "i": institution_id, "s": service_id, "t": times_per_week,
                                      "r": reason, "u": user_id, "old": replaces})
+
+
+# ---- forecast: the plan's visits of the next days, BEFORE the worker creates them -------------------------------
+# The draw above is deterministic, so the same function tells today which days and at what time each plan will have
+# a visit. A visit the worker already created (a request with that care_plan_id + plan_date) is not repeated here:
+# the screens show the request itself (with who goes). Used by /familia ("Próximas visitas") and the board.
+
+def forecast(db: Session, *, now: datetime | None = None, days: int = 7, patient_id: str | None = None) -> list[dict]:
+    """Plan visits from now to the end of the `days`-th day (today = day 1) not created yet, in time order.
+    Runs inside the caller's tenant scope (RLS), so a coordinator only sees their institution."""
+    now = now or ops.now()
+    today = now.astimezone(MEXICO_CITY).date()
+    last = today + timedelta(days=days - 1)
+    plans = db.execute(text("""
+        SELECT cp.care_plan_id, cp.patient_id, cp.service_id, cp.times_per_week::float AS tpw, s.name AS service_name,
+               pe.first_name || ' ' || pe.paternal_surname AS patient_name
+        FROM care_plans cp JOIN services s USING (service_id) JOIN patients pa USING (patient_id)
+        JOIN persons pe ON pe.person_id = pa.person_id JOIN institutions i ON i.institution_id = cp.institution_id
+        WHERE cp.active AND pa.active AND i.active AND (CAST(:p AS text) IS NULL OR cp.patient_id = :p)"""),
+        {"p": patient_id}).all()
+    created = {(r.care_plan_id, r.plan_date) for r in db.execute(text("""
+        SELECT care_plan_id, plan_date FROM service_requests
+        WHERE care_plan_id IS NOT NULL AND plan_date BETWEEN :a AND :b"""), {"a": today, "b": last}).all()}
+    out = []
+    for p in plans:
+        for d in range(days):
+            day = today + timedelta(days=d)
+            if (p.care_plan_id, day) in created:
+                continue
+            at = planned_visit(p.care_plan_id, day, p.tpw, p.service_id)
+            if at is not None and at > now:
+                out.append({"care_plan_id": p.care_plan_id, "patient_id": p.patient_id, "patient_name": p.patient_name,
+                            "service_name": p.service_name, "scheduled_for": at, "status": "planned"})
+    return sorted(out, key=lambda v: v["scheduled_for"])

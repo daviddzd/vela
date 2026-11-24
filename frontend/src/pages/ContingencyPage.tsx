@@ -64,7 +64,7 @@ export function ContingencyPage() {
       {d.scenario && <div className="mt-2"><Notice>{t.demoRunning.replace("{scenario}", es.demo.scenarios[d.scenario.scenario] ?? d.scenario.scenario)}</Notice></div>}
       {msg && <div className="mt-2"><Notice kind="ok">{msg}</Notice></div>}
 
-      <div className="mt-4 grid gap-4 xl:grid-cols-5">
+      <div className="items-start mt-4 grid gap-4 xl:grid-cols-5">
         <div className="space-y-4 xl:col-span-3">
           <ChartCard question={t.statusQ} keyValue={<span className={TONE[worst]}><Icon as={LEVEL_ICON[worst]} /> {t.levels[worst]}</span>}
             source={t.source}>

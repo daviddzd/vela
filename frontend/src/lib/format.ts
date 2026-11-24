@@ -36,13 +36,14 @@ export function dayKey(d: Date): string {
   return new Intl.DateTimeFormat("en-CA", { timeZone: TZ, year: "numeric", month: "2-digit", day: "2-digit" }).format(d);
 }
 
-/** A moment on the board (alerts, queue, visits): "15:57" today, "ayer, 21:22" yesterday, "24/11/2026, 11:00" any other day. */
+/** A moment on the board (alerts, queue, visits): "15:57" today, "ayer, 21:22", "mañana, 08:00", "26/11/2026, 11:00" any other day. */
 export function formatWhen(iso: string | null | undefined, now: Date = new Date()): string {
   if (!iso) return "—";
   const d = new Date(iso);
   const time = formatTime(iso);
   if (dayKey(d) === dayKey(now)) return time;
   if (dayKey(d) === dayKey(new Date(now.getTime() - 86_400_000))) return `${es.dates.yesterday}, ${time}`;
+  if (dayKey(d) === dayKey(new Date(now.getTime() + 86_400_000))) return `${es.dates.tomorrow}, ${time}`;
   return `${formatDate(d)}, ${time}`;
 }
 

@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 from app.core.deps import CurrentUser, require_role, tenant_db
 from app.core.guards import deny, family_patient_id, not_found_or_cross_tenant
 from app.core.roles import FAMILY
+from app.services import care_plans
 from app.services import operations as ops
 
 router = APIRouter(prefix="/api/family", tags=["family"])
@@ -32,9 +33,17 @@ def overview(user: CurrentUser = Depends(require_role(FAMILY)), db: Session = De
                fm.can_request_services
         FROM patients pa JOIN persons pe USING (person_id) JOIN family_members fm ON fm.patient_id = pa.patient_id
         WHERE fm.family_member_id = :f"""), {"f": user.family_member_id}).mappings().one()
+    # "Próximas visitas": the next 7 days = requests that already exist (with who goes) + the plan's visits the worker
+    # will create on the day (care_plans.forecast, the same deterministic draw), marked "planned".
     upcoming = db.execute(text(VISIT_SQL.format(
-        where="AND r.status IN ('validated','queued','assigned','in_progress') AND r.scheduled_for > now() - interval '12 hours'",
-        order="r.scheduled_for", limit=5)), {"p": p}).mappings().all()
+        where="""AND r.status IN ('validated','queued','assigned','in_progress') AND r.scheduled_for > now() - interval '12 hours'
+                 AND r.scheduled_for < now() + interval '7 days'""",
+        order="r.scheduled_for", limit=50)), {"p": p}).mappings().all()
+    planned = care_plans.forecast(db, days=7, patient_id=p)
+    week = sorted([dict(r) for r in upcoming] + planned, key=lambda v: v["scheduled_for"])
+    last_visits = db.execute(text(VISIT_SQL.format(
+        where="AND r.scheduled_for < now() AND r.status NOT IN ('rejected')", order="r.scheduled_for DESC", limit=3)),
+        {"p": p}).mappings().all()
     to_confirm = db.execute(text(VISIT_SQL.format(
         where="AND r.status = 'completed' AND NOT a.family_confirmed", order="r.scheduled_for DESC", limit=5)),
         {"p": p}).mappings().all()
@@ -45,7 +54,7 @@ def overview(user: CurrentUser = Depends(require_role(FAMILY)), db: Session = De
     return {**info, "home_care_consent": ops.has_valid_consent(db, p, "home_care"),
             "notices": [dict(n) for n in notices],
             "next_visit": dict(upcoming[0]) if upcoming else None,
-            "upcoming": [dict(r) for r in upcoming], "to_confirm": [dict(r) for r in to_confirm],
+            "upcoming": week, "last_visits": [dict(r) for r in last_visits], "to_confirm": [dict(r) for r in to_confirm],
             "recent_requests": [dict(r) for r in recent]}
 
 

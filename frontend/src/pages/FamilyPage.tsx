@@ -6,6 +6,7 @@ import { RequestForm } from "../components/RequestForm";
 import { RequestResult } from "../components/RequestResult";
 import { StatusBadge } from "../components/StatusBadge";
 import { Button, Card, Notice } from "../components/ui";
+import { CalendarClock } from "lucide-react";
 import { Icon, Mic, ThumbsUp } from "../components/icons";
 import { Link } from "react-router";
 import { es } from "../i18n/es";
@@ -33,7 +34,6 @@ export function FamilyPage() {
     load();
   };
 
-  const next = data?.next_visit;
   return (
     <AppShell>
       <div className="flex flex-wrap items-center justify-between gap-3">
@@ -42,23 +42,26 @@ export function FamilyPage() {
           className="inline-flex min-h-12 items-center gap-2 rounded-card bg-teal px-4 font-bold text-white hover:bg-teal-dark">
           <Icon as={Mic} /> {es.family.voiceAssistant}</Link>
       </div>
-      <div className="mt-4 grid gap-4 lg:grid-cols-2">
+      <div className="items-start mt-4 grid gap-4 lg:grid-cols-2">
         {error && <div className="lg:col-span-2"><Notice kind="error">{error}</Notice></div>}
         {notice && <div className="lg:col-span-2"><Notice kind="ok">{notice}</Notice></div>}
         {data?.notices.map((n) => (
           <div key={n.created_at} className="lg:col-span-2"><Notice kind="info">{n.message}</Notice></div>))}
 
         <Card>
-          <h2>{es.family.nextVisit}</h2>
-          {!data ? <p>{es.common.loading}</p> : !next ? <p className="mt-2">{es.family.noNextVisit}</p> : (
-            <div className="mt-2 space-y-1">
-              <p className="text-xl font-bold">{formatDateTime(next.scheduled_for)}</p>
-              <p>{next.service_name}</p>
-              <p><StatusBadge status={next.status} /></p>
-              <p>{es.family.caregiver}: <strong>{next.caregiver_name ?? es.family.pendingCaregiver}</strong>
-                {next.relay_caregiver_name && ` · ${relayText(next.relay_caregiver_name, next.relay_at)}`}</p>
-              {next.status_reason && <p className="text-muted">{es.statusReason[next.status_reason] ?? ""}</p>}
-            </div>
+          <h2>{es.family.upcomingTitle}</h2>
+          <p className="text-sm text-muted">{es.family.upcomingNote}</p>
+          {!data ? <p>{es.common.loading}</p> : data.upcoming.length === 0 ? <p className="mt-2">{es.family.upcomingNone}</p> : (
+            <ul className="mt-2 divide-y divide-teal/10">{data.upcoming.map((v, i) => (
+              <li key={v.request_id ?? `${v.scheduled_for}-${i}`} className="py-2">
+                <p className={i === 0 ? "text-xl font-bold" : "font-bold"}>{formatDateTime(v.scheduled_for)}</p>
+                <p>{v.service_name}</p>
+                {v.status === "planned"
+                  ? <p className="text-muted"><Icon as={CalendarClock} /> {es.family.plannedNote}</p>
+                  : <p className="flex flex-wrap items-center gap-2"><StatusBadge status={v.status} />
+                      <span>{es.family.caregiver}: <strong>{v.caregiver_name ?? es.family.pendingCaregiver}</strong>
+                        {v.relay_caregiver_name && ` · ${relayText(v.relay_caregiver_name, v.relay_at)}`}</span></p>}
+              </li>))}</ul>
           )}
           {data?.to_confirm.map((v) => (
             <div key={v.assignment_id} className="mt-4 border-t border-teal/15 pt-4">
@@ -81,11 +84,11 @@ export function FamilyPage() {
           </div>
         </Card>
 
-        {data && data.recent_requests.length > 0 && (
+        {data && data.last_visits.length > 0 && (
           <Card className="lg:col-span-2">
-            <h2>{es.family.recent}</h2>
+            <h2>{es.family.lastVisits}</h2>
             <ul className="mt-2 divide-y divide-teal/10">
-              {data.recent_requests.map((r) => (
+              {data.last_visits.map((r) => (
                 <li key={r.request_id} className="flex flex-wrap items-center justify-between gap-2 py-2">
                   <span>{formatDateTime(r.scheduled_for)} · {r.service_name}</span>
                   <StatusBadge status={r.status} />

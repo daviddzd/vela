@@ -109,7 +109,7 @@ export function OperationView({ filters }: { filters: Filters }) {
         ))}
       </ul>
 
-      <div className="grid gap-4 xl:grid-cols-2">
+      <div className="items-start grid gap-4 xl:grid-cols-2">
         <ChartCard question={t.onTimeQ} keyValue={pct(vela.on_time_pct ?? baseline.on_time_pct)}
           keyLabel={vela.on_time_pct == null ? `${t.onTimeKey} · ${t.baseline}` : `${t.onTimeKey} · ${t.withVela}`}
           note={t.onTimeNote} source={t.onTimeSource}
