@@ -321,7 +321,7 @@ def simulation_more() -> None:
         level = r["approval_delay"] or r["risk_multiplier"] or r["extra_staff"]
         level = level.replace(".0", "")
         key = f"sens.{r['knob']}.{level}.{r['policy']}.{r['metric']}"
-        kind = "pct" if r["metric"].endswith("_pct") else "dec"
+        kind = "pct" if r["metric"].endswith("_pct") else ("int" if r["metric"] == "staff" else "dec")
         add(key, float(r["mean"]), f"Sensibilidad {r['knob']}={level}: {r['metric']} · {names.get(r['policy'])}", src, kind=kind)
         add(key + ".ci", f"{float(r['ci_low']):.1f}–{float(r['ci_high']):.1f}", f"IC 95 % de {key}", src)
 
@@ -750,6 +750,8 @@ def code() -> None:
         ("code.class_weight_urgent", "voice/triage/classifier.py", r"CLASS_WEIGHT = \{0: [\d.]+, 1: ([\d.]+),",
          "Peso de la clase «urgente» al entrenar (supuesto)", ""),
         ("code.panorama_days", "backend/app/routers/panorama.py", r"days: int = (\d+)", "Días que muestra Panorama por omisión", "días"),
+        ("code.min_visits_rate", "backend/app/routers/panorama.py", r"MIN_VISITS_FOR_RATE = (\d+)",
+         "Visitas «Con Enlaza» mínimas para mostrar un porcentaje en Panorama (supuesto del equipo)", "visitas"),
         ("code.worker_tick", "backend/app/worker.py", r"TICK_SECONDS = (\d+)", "Cada cuántos segundos da una vuelta el worker", "s"),
     ]
     for key, rel, pattern, label, unit in items:

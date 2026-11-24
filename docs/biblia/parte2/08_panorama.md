@@ -53,14 +53,16 @@ necesitas para decidir ahora** (velocidad, gasolina, una luz roja si algo falla)
 | ¿Cómo está el aire? | serie por hora de O₃ y de PM2.5 por estación, con la línea del umbral de Fase I |
 | ¿Cuándo es peor el tráfico? | mapa de calor hora × tipo de día (TomTom) |
 
-![«¿Estamos cumpliendo?»: puntualidad y «sin atender» por día. La línea punteada es la línea base (historial «antes de Enlaza»); el punto teal, lo que lleva la operación del prototipo.](capturas/tarjeta_operacion_05.png){.media}
+![«¿Estamos cumpliendo?»: puntualidad y «sin atender» por día. La línea punteada es la línea base (historial «antes de Enlaza»). Mientras la operación del prototipo tenga menos de {{ code.min_visits_rate }}, «Con Enlaza» dice «datos insuficientes (N visitas)» en lugar de un porcentaje.](capturas/tarjeta_operacion_05.png){.media}
 
 ![«¿Qué enfermedades pesan más?»: la población sintética (teal) contra la referencia oficial (azul) y la referencia ajustada de la ENASEM (magenta, con el supuesto explicado debajo).](capturas/tarjeta_poblacion_02.png){.media}
 
 ### La línea base y «Con Enlaza»
 
 La migración `0004` marca `is_baseline = verdadero` en las {{ seed.service_requests }} solicitudes de la semilla: son el
-historial «antes de Enlaza» (despacho manual simulado). Todo lo que crea el sistema es «Con Enlaza». En todo el historial,
+historial «antes de Enlaza» (despacho manual simulado). Todo lo que crea el sistema es «Con Enlaza». Con menos de
+{{ code.min_visits_rate }} reales, la tarjeta no muestra porcentaje de «Con Enlaza» sino «datos insuficientes (N visitas)»: unas pocas visitas
+de ensayo se leerían como «100 % puntual» (decisión del equipo, 24 nov 2026). En todo el historial,
 la puntualidad de la línea base es {{ seed.punctual_pct }} y el «sin atender», sin contar cancelaciones, es
 {{ sim.val_real_nocancel_pct }}; la tarjeta muestra los últimos {{ code.panorama_days }} (por eso sus cifras pueden diferir un poco).
 
@@ -103,12 +105,13 @@ la tarjeta lo explica (@ref(cap-datos)).
 
 ## Números clave
 
-{{ tabla code.on_time seed.punctual_pct sim.val_real_nocancel_pct seed.broad_multimorbidity_pct cal.ref_multimorbidity seed.hypertension_pct cal.ref_hypertension code.small_cell ref.air_stations ref.traffic_rows repo.tests_panorama }}
+{{ tabla code.on_time code.min_visits_rate seed.punctual_pct sim.val_real_nocancel_pct seed.broad_multimorbidity_pct cal.ref_multimorbidity seed.hypertension_pct cal.ref_hypertension code.small_cell ref.air_stations ref.traffic_rows repo.tests_panorama }}
 
 ## Limitaciones honestas
 
-- **«Con Enlaza» tiene pocos datos**: se llena con la operación del prototipo (unos días, con ensayos que se limpian). No es
-  una comparación estadística; para eso está SIRAG-D.
+- **«Con Enlaza» tiene pocos datos**: se llena con la operación del prototipo (unos días, con ensayos que se limpian). Por
+  eso, con menos de {{ code.min_visits_rate }}, no se muestra un porcentaje. No es una comparación estadística; para eso está
+  SIRAG-D.
 - **«Puntual» = a lo más {{ code.on_time }} tarde** es un supuesto del equipo.
 - **La población es sintética**: el mapa de riesgo muestra el mundo simulado, no a la CDMX real persona por persona.
 - **El aire es la serie calibrada**, no la medición oficial del día.

@@ -42,7 +42,13 @@ partes:
     titulo: "Parte III · Por materia"
     kicker: "Parte III"
     descripcion: "Un capítulo por materia: los conceptos desde cero, dónde se ven en Enlaza y cómo defenderlos."
-    capitulos: []
+    capitulos:
+      - parte3/14_sie.md
+      - parte3/15_simulacion.md
+      - parte3/16_computo_cognitivo.md
+      - parte3/17_visualizacion.md
+      - parte3/18_emprendimiento.md
+      - parte3/19_practica_profesional.md
 
   - id: parte-4
     titulo: "Parte IV · Historia y decisiones"
