@@ -108,10 +108,10 @@ export const es = {
     caregiver: "Cuidador/enfermería",
     family: "Familiar",
   } as Record<string, string>,
-  // The role under the user's name in the header. Empty when the test accounts already carry it in their name:
-  // coordination accounts are called "Coordinación Clínica Oriente", so only the institution is shown.
+  // The line under the user's name in the header. It never repeats the name: coordination accounts are called
+  // "Coordinación Clínica Oriente", so only the institution is shown; Dirección sees every institution.
   roleInHeader: {
-    owner: "Dirección",
+    owner: "Todas las instituciones",   // its account is "Dirección Enlaza": the role would repeat the name
     coordinator: "",
     physician: "Médico",
     caregiver: "Cuidador/enfermería",
