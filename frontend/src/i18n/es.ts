@@ -102,8 +102,17 @@ export const es = {
     errorGeneric: "No pudimos iniciar sesión. Revisa tu conexión e inténtalo de nuevo.",
   },
   roles: {
-    owner: "Dirección Enlaza",
+    owner: "Dirección",
     coordinator: "Coordinación",
+    physician: "Médico",
+    caregiver: "Cuidador/enfermería",
+    family: "Familiar",
+  } as Record<string, string>,
+  // The role under the user's name in the header. Empty when the test accounts already carry it in their name:
+  // coordination accounts are called "Coordinación Clínica Oriente", so only the institution is shown.
+  roleInHeader: {
+    owner: "Dirección",
+    coordinator: "",
     physician: "Médico",
     caregiver: "Cuidador/enfermería",
     family: "Familiar",

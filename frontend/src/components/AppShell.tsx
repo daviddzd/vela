@@ -19,6 +19,9 @@ export function AppShell({ children, bare = false }: { children: ReactNode; bare
   if (!user) return null;
   if (bare) return <main className="mx-auto max-w-[1880px] px-6 py-6">{children}</main>;
 
+  // "Médico · INS-A"; coordination shows only the institution (its accounts carry the role in their name)
+  const roleLine = [es.roleInHeader[user.role] ?? es.roles[user.role], user.institution_id].filter(Boolean).join(" · ");
+
   const onLogout = async () => {
     await logout();
     navigate("/entrar", { replace: true });
@@ -52,7 +55,7 @@ export function AppShell({ children, bare = false }: { children: ReactNode; bare
                 full name on hover, so the header never overflows and "Cerrar sesión" is never cut */}
             <p className="hidden w-52 text-right leading-tight 2xl:block" title={user.display_name}>
               <span className="line-clamp-2 font-bold">{user.display_name}</span>
-              <span className="text-sm text-muted">{es.roles[user.role]}{user.institution_id ? ` · ${user.institution_id}` : ""}</span>
+              <span className="text-sm text-muted">{roleLine}</span>
             </p>
             <LogoutButton onLogout={onLogout} />
           </div>
@@ -61,7 +64,7 @@ export function AppShell({ children, bare = false }: { children: ReactNode; bare
         {open && (
           <nav id="main-menu" aria-label={es.shell.menu} className="border-t border-navy/15 px-4 pb-3 xl:hidden">
             <p className="py-2"><span className="font-bold">{user.display_name}</span>
-              <span className="text-muted"> · {es.roles[user.role]}{user.institution_id ? ` · ${user.institution_id}` : ""}</span></p>
+              <span className="text-muted"> · {roleLine}</span></p>
             <ul className="grid gap-1 sm:grid-cols-2">
               {user.screens.map((path) => (
                 <li key={path}><NavLink to={path} className={({ isActive }) => `${link({ isActive })} w-full`}>
