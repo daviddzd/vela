@@ -230,7 +230,7 @@ function ArcoTab({ role }: { role: string }) {
     catch (err) { setError(err instanceof ApiError ? err.message : es.common.error); }
   };
   return (
-    <div className="grid gap-4 lg:grid-cols-2">
+    <div className="items-start grid gap-4 lg:grid-cols-2">
       <Card>
         <p>{t.arcoIntro}</p>
         <p className="mt-2 font-bold">{fill(t.arcoDeadline, { days })}</p>
@@ -366,7 +366,7 @@ function BlockedSummary({ s }: { s: any }) {
     series: [{ type: "bar", barMaxWidth: 28, data: s.by_day.map((r: any) => r.n), itemStyle: { color: chart.series[0], borderRadius: [4, 4, 0, 0] } }],
   }), [s]);
   return (
-    <div className="grid gap-4 xl:grid-cols-3">
+    <div className="items-start grid gap-4 xl:grid-cols-3">
       <ChartCard synthetic={false} question={fill(t.summaryQ, { from: dmy(s.start), to: dmy(s.end) })} keyValue={total.toLocaleString("es-MX")}
         keyLabel={t.blockedTotal} source={t.auditSource} note={fill(t.allowedTotal, { n: s.allowed.toLocaleString("es-MX") })}
         table={{ columns: [t.byUser, t.blockedCount], rows: s.by_user.map((u: any) => [u.display_name ?? t.noUser, u.n]) }}>

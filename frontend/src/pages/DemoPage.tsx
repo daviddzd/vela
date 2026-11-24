@@ -35,7 +35,7 @@ export function DemoPage() {
       <h1 className="text-teal">{es.screens["/demo"]}</h1>
       <p className="mt-1 max-w-4xl">{t.intro}</p>
       {msg && <div className="mt-3"><Notice kind="ok">{msg}</Notice></div>}
-      <div className="mt-4 grid gap-4 xl:grid-cols-2">
+      <div className="items-start mt-4 grid gap-4 xl:grid-cols-2">
         <Card>
           <h2 className="text-teal">{t.worldQ}</h2>
           <ul className="mt-3 space-y-3">

@@ -99,7 +99,7 @@ export function BusinessPage() {
         <Kpi label={t.kpiPayback} value={m.payback_month ? fill(t.kpiBreakevenValue, { m: m.payback_month, y: Math.ceil(m.payback_month / 12) }) : t.never} src={<span className="text-sm text-muted">{t.derived}</span>} />
       </div>
 
-      <div className="mt-4 grid gap-4 xl:grid-cols-[minmax(0,380px)_1fr]">
+      <div className="items-start mt-4 grid gap-4 xl:grid-cols-[minmax(0,380px)_1fr]">
         <Card>
           <div className="flex items-center justify-between gap-2">
             <h2 className="text-teal">{t.controlsQ}</h2>

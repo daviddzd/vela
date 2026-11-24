@@ -159,7 +159,7 @@ export function PanoramaView({ filters }: { filters: Filters }) {
     : { icon: CheckCircle2, text: t.airOk, cls: "text-ok" };
 
   return (
-    <div className="grid gap-4 xl:grid-cols-2">
+    <div className="items-start grid gap-4 xl:grid-cols-2">
       <ChartCard className="xl:col-span-2" question={t.riskQ}
         keyValue={pct(selected ? selected[indicator] : pop.city[indicator])}
         keyLabel={selected ? `${selected.district_name}` : t.cityValue}

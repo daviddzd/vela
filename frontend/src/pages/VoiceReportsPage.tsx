@@ -38,7 +38,7 @@ export function VoiceReportsPage() {
           {t.filterAll}</Button>
         <span className="font-bold">{t.unreviewedCount.replace("{n}", String(pending))}</span>
       </div>
-      <div className="mt-4 grid gap-4 xl:grid-cols-2">
+      <div className="items-start mt-4 grid gap-4 xl:grid-cols-2">
         {shown?.length === 0 && <Card>{t.empty}</Card>}
         {shown?.map((r) => {
           const lv = LEVEL[r.triage_label as keyof typeof LEVEL];

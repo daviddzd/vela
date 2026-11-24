@@ -51,7 +51,7 @@ export function StaffPage() {
       <h1 className="text-teal">{es.screens["/personal"]}</h1>
       <p className="mt-1">{t.intro}</p>
       {msg && <div className="mt-3"><Notice kind={msg.kind}>{msg.text}</Notice></div>}
-      <div className="mt-4 grid gap-4 xl:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)]">
+      <div className="items-start mt-4 grid gap-4 xl:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)]">
         <Card>
           <ul className="divide-y divide-teal/10">{d.staff.map((c: any) => (
             <li key={c.caregiver_id}>

@@ -161,7 +161,7 @@ export function SimulationPage() {
           </div>
         </ChartCard>
 
-        <div className="grid gap-4 xl:grid-cols-2">
+        <div className="items-start grid gap-4 xl:grid-cols-2">
           <ChartCard question={t.validationQ} keyValue={`${fmt(v.sim_mean)} %`} keyLabel={t.validationKeyLabel}
             note={fill(t.validationNote, { noStaff: fmt(v.no_staff, 0), total: fmt(v.total, 0), cancelled: fmt(v.cancelled, 0),
               obsShort: `${fmt(v.pct_short_services)} %`, simShort: `${fmt(v.sim_short_mean)} %` })} source={source}>

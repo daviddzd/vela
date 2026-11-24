@@ -33,6 +33,7 @@ export type Visit = {
   arrived_at: string | null; arrive_from: string | null; expected_min: number | null;
 };
 export type FamilyVisit = {
+  // status "planned" = a care-plan visit the worker creates on the day (care_plans.forecast)
   request_id: string; status: string; status_reason: string | null; scheduled_for: string; service_name: string;
   assignment_id: string | null; caregiver_name: string | null; family_confirmed: boolean | null;
   relay_caregiver_name?: string | null; relay_at?: string | null;
@@ -40,6 +41,7 @@ export type FamilyVisit = {
 export type FamilyOverview = {
   patient_id: string; patient_name: string; can_request_services: boolean; home_care_consent: boolean;
   next_visit: FamilyVisit | null; to_confirm: FamilyVisit[]; recent_requests: FamilyVisit[];
+  upcoming: FamilyVisit[]; last_visits: FamilyVisit[];
   notices: { message: string; created_at: string }[];
 };
 export type BoardQueueItem = { request_id: string; patient_id: string; priority: string; status_reason: string | null; scheduled_for: string;
@@ -53,6 +55,8 @@ export type Board = {
     patient_name: string; lat: number; lon: number; caregiver_name: string | null;
     relay_caregiver_name: string | null; relay_at: string | null }[];
   staff: { caregiver_id: string; name: string; type: string; lat: number; lon: number }[];
+  upcoming: { request_id?: string; patient_id: string; patient_name: string; service_name: string; scheduled_for: string;
+    status: string; caregiver_name?: string | null }[];       // status "planned" = care-plan visit not created yet
 };
 export type Service = { service_id: string; name: string; duration_min: number };
 export type ServiceRequest = FamilyVisit & { priority: string; caregiver_id: string | null };
