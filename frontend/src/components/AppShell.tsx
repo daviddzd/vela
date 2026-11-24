@@ -36,7 +36,7 @@ export function AppShell({ children, bare = false }: { children: ReactNode; bare
         <div className="mx-auto flex max-w-[1880px] items-center gap-3 px-4 py-2">
           <img src="/logo.svg" alt={`${es.app.name} · ${es.app.tagline}`} className="h-10 shrink-0 xl:h-9 2xl:h-10" />
 
-          <nav aria-label={es.shell.menu} className="hidden min-w-0 flex-1 xl:block">
+          <nav aria-label={es.shell.menu} className="hidden shrink-0 xl:block">
             <ul className="flex items-center gap-0.5">
               {user.screens.map((path) => (
                 <li key={path}><NavLink to={path} className={link}>{es.nav.short[path] ?? es.screens[path]}</NavLink></li>
@@ -50,12 +50,12 @@ export function AppShell({ children, bare = false }: { children: ReactNode; bare
           </button>
 
           {/* Desktop / projector: logout always visible; the user's name only when there is room (>= 1536 px) */}
-          <div className="hidden shrink-0 items-center gap-3 xl:ml-auto xl:flex">
-            {/* a long name ("Coordinación Red Vecinal Iztacalco") wraps in at most two lines inside a fixed width, the
-                full name on hover, so the header never overflows and "Cerrar sesión" is never cut */}
-            <p className="hidden w-52 text-right leading-tight 2xl:block" title={user.display_name}>
-              <span className="line-clamp-2 font-bold">{user.display_name}</span>
-              <span className="text-sm text-muted">{roleLine}</span>
+          <div className="hidden min-w-0 items-center gap-3 xl:ml-auto xl:flex">   {/* the name shrinks (ellipsis), never the menu */}
+            {/* the name stays on ONE line inside a maximum width: a longer one ends in "…" and shows whole on hover
+                (title), so the header never overflows and "Cerrar sesión" is never cut */}
+            <p className="hidden min-w-0 max-w-64 pl-4 text-right leading-tight 2xl:block" title={user.display_name}>
+              <span className="block truncate font-bold">{user.display_name}</span>
+              <span className="block truncate text-sm text-muted">{roleLine}</span>
             </p>
             <LogoutButton onLogout={onLogout} />
           </div>
@@ -63,8 +63,8 @@ export function AppShell({ children, bare = false }: { children: ReactNode; bare
 
         {open && (
           <nav id="main-menu" aria-label={es.shell.menu} className="border-t border-navy/15 px-4 pb-3 xl:hidden">
-            <p className="py-2"><span className="font-bold">{user.display_name}</span>
-              <span className="text-muted"> · {roleLine}</span></p>
+            <p className="py-2" title={user.display_name}><span className="block truncate font-bold">{user.display_name}</span>
+              <span className="block truncate text-muted">{roleLine}</span></p>
             <ul className="grid gap-1 sm:grid-cols-2">
               {user.screens.map((path) => (
                 <li key={path}><NavLink to={path} className={({ isActive }) => `${link({ isActive })} w-full`}>

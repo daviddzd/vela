@@ -104,7 +104,7 @@ export const es = {
   roles: {
     owner: "Dirección",
     coordinator: "Coordinación",
-    physician: "Médico",
+    physician: "Medicina",   // neutral form, like "Cuidador/enfermería"
     caregiver: "Cuidador/enfermería",
     family: "Familiar",
   } as Record<string, string>,
@@ -113,7 +113,7 @@ export const es = {
   roleInHeader: {
     owner: "Todas las instituciones",   // its account is "Dirección Enlaza": the role would repeat the name
     coordinator: "",
-    physician: "Médico",
+    physician: "Medicina",   // neutral form, like "Cuidador/enfermería"
     caregiver: "Cuidador/enfermería",
     family: "Familiar",
   } as Record<string, string>,
