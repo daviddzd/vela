@@ -33,7 +33,7 @@ export function PrivacyPage() {
 
   return (
     <AppShell>
-      <h1 className="text-teal">{es.screens["/privacidad"]}</h1>
+      <h1 className="text-navy">{es.screens["/privacidad"]}</h1>
       <div role="tablist" aria-label={es.screens["/privacidad"]} className="mt-3 flex flex-wrap gap-2">
         {tabs.map((k) => (
           <Button key={k} role="tab" aria-selected={tab === k} variant={tab === k ? "primary" : "secondary"} onClick={() => setTab(k)}>
@@ -58,8 +58,8 @@ function inline(s: string): ReactNode[] {
 function Markdown({ text }: { text: string }) {
   const blocks = text.split(/\n\s*\n/).map((b) => b.trim()).filter(Boolean);
   return (<div className="max-w-3xl space-y-3">{blocks.map((b, i) => {
-    if (b.startsWith("# ")) return <h2 key={i} className="text-teal">{b.slice(2)}</h2>;
-    if (b.startsWith("> ")) return <p key={i} className="border-l-4 border-teal/40 pl-3 text-muted">{inline(b.slice(2))}</p>;
+    if (b.startsWith("# ")) return <h2 key={i} className="text-navy">{b.slice(2)}</h2>;
+    if (b.startsWith("> ")) return <p key={i} className="border-l-4 border-navy/40 pl-3 text-muted">{inline(b.slice(2))}</p>;
     if (b.split("\n").every((l) => l.startsWith("- ")))
       return <ul key={i} className="list-disc space-y-1 pl-6">{b.split("\n").map((l, j) => <li key={j}>{inline(l.slice(2))}</li>)}</ul>;
     return <p key={i}>{inline(b)}</p>;
@@ -107,13 +107,13 @@ function ConsentsTab() {
       <ul className="grid gap-3 lg:grid-cols-2">
         {shown.map((p: any) => (
           <li key={p.patient_id}><Card>
-            <h2 className="text-teal">{p.name} <span className="text-base text-muted">· {p.patient_id}</span></h2>
+            <h2 className="text-navy">{p.name} <span className="text-base text-muted">· {p.patient_id}</span></h2>
             <ul className="mt-2 space-y-3">{TYPES.map((k) => {
               const c = p.consents[k];
               const st = consentState(c, d.today);
               const [icon, cls] = STATE_LOOK[st];
               return (
-                <li key={k} className="border-t border-teal/10 pt-2">
+                <li key={k} className="border-t border-navy/10 pt-2">
                   <p><span className="font-bold">{t.types[k]}:</span> <span className={`font-bold ${cls}`}><Icon as={icon} /> {t.state[st]}</span></p>
                   {c && <p className="text-sm">
                     {t.validity} {fill(t.fromTo, { from: dmy(c.signed_on), to: dmy(c.expires_on) })} · {t.signedBy}: {t.grantedBy[c.granted_by]}
@@ -141,7 +141,7 @@ function Dialog({ title, children }: { title: string; children: ReactNode }) {
   return (
     <div className="fixed inset-0 z-40 flex items-center justify-center bg-ink/50 p-4" role="dialog" aria-modal="true" aria-label={title}>
       <div className="max-h-[90vh] w-full max-w-lg overflow-auto rounded-card bg-white p-5">
-        <h2 className="text-teal">{title}</h2>{children}
+        <h2 className="text-navy">{title}</h2>{children}
       </div>
     </div>
   );
@@ -239,7 +239,7 @@ function ArcoTab({ role }: { role: string }) {
             <fieldset><legend className="font-bold">{t.whichRight}</legend>
               {Object.keys(t.rights).map((k) => (
                 <label key={k} className="flex min-h-12 items-start gap-3 py-1">
-                  <input type="radio" name="right" className="mt-1 size-6 shrink-0 accent-teal" checked={f.right_type === k} onChange={() => setF({ ...f, right_type: k })} />
+                  <input type="radio" name="right" className="mt-1 size-6 shrink-0 accent-navy" checked={f.right_type === k} onChange={() => setF({ ...f, right_type: k })} />
                   <span><strong>{t.rights[k]}</strong> — {t.rightHelp[k]}</span>
                 </label>))}
             </fieldset>
@@ -255,10 +255,10 @@ function ArcoTab({ role }: { role: string }) {
           </form>)}
       </Card>
       <Card>
-        <h2 className="text-teal">{t.arcoList}</h2>
+        <h2 className="text-navy">{t.arcoList}</h2>
         {list === null ? <p>{es.common.loading}</p> : list.length === 0 ? <p className="mt-2">{t.arcoEmpty}</p> : (
           <ul className="mt-2 space-y-3">{list.map((a) => (
-            <li key={a.arco_id} className="border-t border-teal/10 pt-2">
+            <li key={a.arco_id} className="border-t border-navy/10 pt-2">
               <p><strong>{a.arco_id}</strong> · {t.rights[a.right_type]} · {t.arcoStatus[a.status]}</p>
               <p className="text-sm">{a.requested_by} · {when(a.received_at)} · <strong>{fill(t.dueOn, { d: dmy(a.due_on) })}</strong></p>
               <p className="text-sm text-muted">{a.description}</p>
@@ -316,10 +316,10 @@ function AuditTab() {
           <p className="text-sm text-muted">{t.auditNote}</p>
           <div className="mt-2 overflow-x-auto">
             <table className="w-full text-left text-sm">
-              <thead><tr className="border-b border-teal/20">{[t.when, t.user, t.action, t.entity, t.institution, t.allowedFilter, t.detail].map((h) =>
+              <thead><tr className="border-b border-navy/20">{[t.when, t.user, t.action, t.entity, t.institution, t.allowedFilter, t.detail].map((h) =>
                 <th key={h} className="py-1 pr-3">{h}</th>)}</tr></thead>
               <tbody>{d.rows.map((r: any) => (
-                <tr key={r.audit_id} className="border-b border-teal/10 align-top">
+                <tr key={r.audit_id} className="border-b border-navy/10 align-top">
                   <td className="whitespace-nowrap py-1 pr-3">{when(r.occurred_at)}</td>
                   <td className="pr-3">{r.display_name ?? (r.action === "login_failed" ? t.noUser : t.systemUser)}{r.role ? ` (${es.roles[r.role]})` : ""}</td>
                   <td className="pr-3">{label(r.action)}</td>
@@ -330,7 +330,7 @@ function AuditTab() {
                     : <span className="text-danger"><Icon as={Ban} /> {t.blocked}</span>}</td>
                   <td className="min-w-48 max-w-sm break-words pr-3">{auditDetail(r.detail)}
                     {r.detail && Object.keys(r.detail).length > 0 && (
-                      <details className="mt-1 text-muted"><summary className="cursor-pointer text-teal">{t.technicalDetail}</summary>
+                      <details className="mt-1 text-muted"><summary className="cursor-pointer text-navy">{t.technicalDetail}</summary>
                         <code className="block break-all text-xs">{JSON.stringify(r.detail)}</code></details>)}</td>
                 </tr>))}</tbody>
             </table>

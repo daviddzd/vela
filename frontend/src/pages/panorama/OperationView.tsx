@@ -103,7 +103,7 @@ export function OperationView({ filters }: { filters: Filters }) {
       <ul className="grid grid-cols-2 gap-3 lg:grid-cols-4">
         {COUNTERS.map((k) => (
           <li key={k}><Card className="text-center">
-            <p className="figure text-4xl text-teal">{data.counters[k]}</p>
+            <p className="figure text-4xl text-navy">{data.counters[k]}</p>
             <p className="font-bold"><Icon as={COUNTER_ICON[k]} /> {es.board.counters[k]}</p>
           </Card></li>
         ))}
@@ -137,7 +137,7 @@ export function OperationView({ filters }: { filters: Filters }) {
             <legend className="sr-only">{t.loadQ}</legend>
             {(["today", "history"] as const).map((m) => (
               <label key={m} className="flex min-h-12 items-center gap-2">
-                <input type="radio" name="load-mode" checked={mode === m} onChange={() => setMode(m)} className="size-6 accent-teal" />
+                <input type="radio" name="load-mode" checked={mode === m} onChange={() => setMode(m)} className="size-6 accent-navy" />
                 {m === "today" ? t.loadToday : t.loadHistory}
               </label>
             ))}
@@ -152,7 +152,7 @@ export function OperationView({ filters }: { filters: Filters }) {
       <ChartCard question={t.queueQ} keyValue={queued} keyLabel={queued === 1 ? t.queueKeyLabelOne : t.queueKeyLabel} source={t.queueSource}>
         <ul className="grid gap-3 sm:grid-cols-3">
           {data.queue_by_priority.map((q) => (
-            <li key={q.priority} className="rounded-card border-2 border-teal/20 p-3">
+            <li key={q.priority} className="rounded-card border-2 border-navy/20 p-3">
               <p className="font-bold"><Icon as={PRIORITY_ICON[q.priority]} /> {es.priority[q.priority]}</p>
               <p className="figure text-3xl">{q.waiting}</p>
               <p className="text-muted">{q.max_wait_min == null ? t.noWait : `${t.maxWait}: ${q.max_wait_min} ${es.common.minutes}`}</p>

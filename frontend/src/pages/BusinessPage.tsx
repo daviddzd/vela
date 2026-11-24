@@ -25,13 +25,13 @@ type Row = { key: string; value: number | string; unit: string; description_es: 
 function Src({ row }: { row?: Row }) {
   if (!row) return null;
   if (row.type === "assumption")
-    return <span className="rounded border border-muted/60 bg-cream px-1.5 text-sm font-bold text-ink">{t.assumption}</span>;
-  return <a className="text-sm text-teal underline" href={row.url} target="_blank" rel="noreferrer">{row.source}</a>;
+    return <span className="rounded border border-muted/60 bg-sky-soft px-1.5 text-sm font-bold text-ink">{t.assumption}</span>;
+  return <a className="text-sm text-navy underline" href={row.url} target="_blank" rel="noreferrer">{row.source}</a>;
 }
 
 function Kpi({ label, value, src }: { label: string; value: ReactNode; src: ReactNode }) {
   return (
-    <div className="rounded-card border border-teal/20 bg-white p-4">
+    <div className="rounded-card border border-navy/20 bg-white p-4">
       <p className="text-muted">{label}</p>
       <p className="figure text-3xl">{value}</p>
       <p className="mt-1">{src}</p>
@@ -87,7 +87,7 @@ export function BusinessPage() {
 
   return (
     <AppShell>
-      <h1 className="text-teal">{es.screens["/negocio"]}</h1>
+      <h1 className="text-navy">{es.screens["/negocio"]}</h1>
       <p className="mt-1 max-w-4xl">{t.intro}</p>
       <p className="mt-1 text-muted">{t.nominal}</p>
 
@@ -102,7 +102,7 @@ export function BusinessPage() {
       <div className="items-start mt-4 grid gap-4 xl:grid-cols-[minmax(0,380px)_1fr]">
         <Card>
           <div className="flex items-center justify-between gap-2">
-            <h2 className="text-teal">{t.controlsQ}</h2>
+            <h2 className="text-navy">{t.controlsQ}</h2>
             {busy && <span className="text-muted" role="status">{t.recalculating}</span>}
           </div>
           <fieldset className="mt-3 space-y-2">
@@ -126,7 +126,7 @@ export function BusinessPage() {
           <div className="mt-4 space-y-2">
             <NumberField label={t.churn} value={values.monthly_churn} step={0.5} onChange={(v) => set("monthly_churn", v)} src={<Src row={a.monthly_churn} />} />
             <label className="flex min-h-12 items-center gap-3">
-              <input type="checkbox" className="size-6 shrink-0 accent-teal" checked={values.price_inflation_adjustment >= 0.5}
+              <input type="checkbox" className="size-6 shrink-0 accent-navy" checked={values.price_inflation_adjustment >= 0.5}
                 onChange={(e) => set("price_inflation_adjustment", e.target.checked ? 1 : 0)} />
               <span>{values.price_inflation_adjustment >= 0.5 ? fill(t.priceAdjust, { infl: num(Number(a.inflation_annual_oct_2026.value), 2) }) : t.priceAdjustOff}{" "}
                 <Src row={a.inflation_annual_oct_2026} /></span>
@@ -150,7 +150,7 @@ export function BusinessPage() {
           <ChartCard synthetic={false} question={t.npvQ} source={`${a.tiie_28_days.source} (TIIE) · ${t.assumption}`} note={fill(t.npvNote, { tiie: num(Number(a.tiie_28_days.value), 4) })}>
             <ul className="grid gap-3 sm:grid-cols-3">
               {m.npv.map((n: any) => (
-                <li key={n.rate_pct} className={`rounded-card border-2 p-3 ${n.rate_pct === Number(a.discount_rate_base.value) ? "border-teal" : "border-teal/20"}`}>
+                <li key={n.rate_pct} className={`rounded-card border-2 p-3 ${n.rate_pct === Number(a.discount_rate_base.value) ? "border-navy" : "border-navy/20"}`}>
                   <p className="text-muted">{fill(t.npvRate, { r: n.rate_pct })}</p>
                   <p className={`figure text-2xl ${n.npv < 0 ? "text-danger" : ""}`}>{mxn(n.npv)}</p>
                 </li>))}
@@ -229,12 +229,12 @@ function YearsTable({ m, a, values }: { m: any; a: Record<string, Row>; values: 
   const head = [t.year, t.colCustomers, t.colNew, t.colLost, t.revenue, t.colFixed, t.colSupport, t.colHosting, t.colCac, t.profit, t.cash];
   return (
     <Card className="mt-4">
-      <h2 className="text-teal">{t.yearsQ}</h2>
+      <h2 className="text-navy">{t.yearsQ}</h2>
       <div className="mt-2 overflow-x-auto">
         <table className="w-full text-left tabular-nums">
-          <thead><tr className="border-b border-teal/20">{head.map((h) => <th key={h} className="py-1 pr-3 align-bottom">{h}</th>)}</tr></thead>
+          <thead><tr className="border-b border-navy/20">{head.map((h) => <th key={h} className="py-1 pr-3 align-bottom">{h}</th>)}</tr></thead>
           <tbody>{m.years.map((y: any) => (
-            <tr key={y.year} className="border-b border-teal/10">
+            <tr key={y.year} className="border-b border-navy/10">
               <td className="py-1 pr-3 font-bold">{y.year}</td><td className="pr-3">{num(y.customers_end)}</td>
               <td className="pr-3">{num(y.new)}</td><td className="pr-3">{num(y.lost)}</td>
               <td className="pr-3">{mxn(y.revenue)}</td><td className="pr-3">{mxn(y.cost_fixed)}</td><td className="pr-3">{mxn(y.cost_support)}</td>
@@ -260,9 +260,9 @@ function SourceTable({ rows }: { rows: Row[] }) {
   return (
     <div className="overflow-x-auto">
       <table className="w-full text-left">
-        <thead><tr className="border-b border-teal/20"><th className="py-1 pr-3">{t.colConcept}</th><th className="pr-3">{t.colValue}</th><th>{t.source}</th></tr></thead>
+        <thead><tr className="border-b border-navy/20"><th className="py-1 pr-3">{t.colConcept}</th><th className="pr-3">{t.colValue}</th><th>{t.source}</th></tr></thead>
         <tbody>{rows.map((r) => (
-          <tr key={r.key} className="border-b border-teal/10 align-top">
+          <tr key={r.key} className="border-b border-navy/10 align-top">
             <td className="py-1 pr-3">{r.description_es}</td>
             <td className="whitespace-nowrap pr-3 font-bold tabular-nums">{typeof r.value === "number" ? `${num(r.value, r.value % 1 ? 2 : 0)} ${t.units[r.unit] ?? r.unit}` : r.value}</td>
             <td><Src row={r} /></td>
@@ -275,7 +275,7 @@ function SourceTable({ rows }: { rows: Row[] }) {
 function Competition({ d }: { d: any }) {
   return (
     <Card className="mt-4">
-      <h2 className="text-teal">{t.competitionQ}</h2>
+      <h2 className="text-navy">{t.competitionQ}</h2>
       <p className="mt-1 text-muted">{t.competitionNote}</p>
       <div className="mt-2"><SourceTable rows={[...d.plans, ...d.competitors]} /></div>
     </Card>
@@ -287,7 +287,7 @@ function Usage({ d }: { d: any }) {
   const a = d.assumptions;
   return (
     <Card className="mt-4">
-      <h2 className="text-teal">{t.usageQ}</h2>
+      <h2 className="text-navy">{t.usageQ}</h2>
       <p className="mt-1 text-muted">{t.usageNote} {u.first_activity && fill(t.since, { d: u.first_activity.split("-").reverse().join("/") })}</p>
       <div className="mt-3 grid gap-3 sm:grid-cols-3">
         <Kpi label={t.colCoordinated} value={num(u.totals.coordinated)} src={<span className="text-sm">{fill(t.autoPct, { pct: num(u.auto_pct, 1) })}</span>} />
@@ -296,10 +296,10 @@ function Usage({ d }: { d: any }) {
       </div>
       <div className="mt-3 overflow-x-auto">
         <table className="w-full text-left tabular-nums">
-          <thead><tr className="border-b border-teal/20">{[t.colInstitution, t.colPlan, t.colCoordinated, t.colAuto, t.colManual, t.colTimeout].map((h) =>
+          <thead><tr className="border-b border-navy/20">{[t.colInstitution, t.colPlan, t.colCoordinated, t.colAuto, t.colManual, t.colTimeout].map((h) =>
             <th key={h} className="py-1 pr-3 align-bottom">{h}</th>)}</tr></thead>
           <tbody>{u.institutions.map((i: any) => (
-            <tr key={i.institution_id} className="border-b border-teal/10">
+            <tr key={i.institution_id} className="border-b border-navy/10">
               <td className="py-1 pr-3 font-bold">{i.name}</td><td className="pr-3">{i.plan} · {mxn(i.price)}</td>
               <td className="pr-3">{num(i.coordinated)}</td><td className="pr-3">{num(i.auto)}</td>
               <td className="pr-3">{num(i.manual)}</td><td className="pr-3">{num(i.timeout)}</td>
@@ -314,7 +314,7 @@ function Investment({ m }: { m: any }) {
   const u = m.unit, inv = m.investment;
   return (
     <section className="mt-4" aria-labelledby="inv-title">
-      <h2 id="inv-title" className="text-teal">{t.investmentQ}</h2>
+      <h2 id="inv-title" className="text-navy">{t.investmentQ}</h2>
       <div className="mt-2 grid gap-3 md:grid-cols-3">
         <Kpi label={t.kpiInvestment} value={inv.month ? mxn(inv.amount) : t.noInvestment}
           src={inv.month && <span className="text-sm">{fill(t.kpiInvestmentWhen, { m: inv.month, y: Math.ceil(inv.month / 12) })} · <span className="text-muted">{t.derived}</span></span>} />
@@ -332,14 +332,14 @@ function Investment({ m }: { m: any }) {
 function WhatIf({ m }: { m: any }) {
   const w = m.what_if;
   const row = (label: string, value: number | null, now: number, fmt: (x: number) => string) => (
-    <li className="rounded-card border border-teal/20 bg-white p-4">
+    <li className="rounded-card border border-navy/20 bg-white p-4">
       <p className="text-muted">{label}</p>
       <p className="figure text-2xl">{value == null ? t.whatIfNone : fmt(value)}</p>
       <p className="text-sm">{fill(t.whatIfNow, { v: fmt(now) })}</p>
     </li>);
   return (
     <Card className="mt-4">
-      <h2 className="text-teal">{fill(t.whatIfQ, { r: num(w.rate_pct) })}</h2>
+      <h2 className="text-navy">{fill(t.whatIfQ, { r: num(w.rate_pct) })}</h2>
       {w.npv_now >= 0 ? <p className="mt-1">{fill(t.whatIfAlready, { r: num(w.rate_pct), npv: mxn(w.npv_now) })}</p> : (<>
         <p className="mt-1 text-muted">{t.whatIfIntro}</p>
         <ul className="mt-3 grid gap-3 md:grid-cols-3">
@@ -362,18 +362,18 @@ function RealMarket({ a, m }: { a: Record<string, Row>; m: any }) {
   const pct = (x: number | null) => (x == null ? "—" : `${num(x, 1)} %`);
   return (
     <Card className="mt-4">
-      <h2 className="text-teal">{t.marketRealQ}</h2>
+      <h2 className="text-navy">{t.marketRealQ}</h2>
       <p className="mt-1 text-muted">{t.marketRealIntro} <Src row={a.denue_residences_private_cdmx} /> · <Src row={a.target_market_private_only} /></p>
       <div className="mt-2 overflow-x-auto">
         <table className="w-full text-left tabular-nums">
-          <thead><tr className="border-b border-teal/20">{[t.segment, t.privateCdmx, t.publicCdmx, t.privateEdomex, t.publicEdomex].map((h) =>
+          <thead><tr className="border-b border-navy/20">{[t.segment, t.privateCdmx, t.publicCdmx, t.privateEdomex, t.publicEdomex].map((h) =>
             <th key={h} className="py-1 pr-3">{h}</th>)}</tr></thead>
           <tbody>
             {rows.map(([seg, ...keys]) => (
-              <tr key={seg} className="border-b border-teal/10">
+              <tr key={seg} className="border-b border-navy/10">
                 <td className="py-1 pr-3">{t.segments[seg]}</td>{keys.map((k, i) => <td key={i} className="pr-3">{k ? cell(k) : "—"}</td>)}
               </tr>))}
-            <tr className="border-b border-teal/10"><td className="py-1 pr-3">{t.segments.geriatric}</td><td colSpan={4} className="text-muted">{t.noClass}</td></tr>
+            <tr className="border-b border-navy/10"><td className="py-1 pr-3">{t.segments.geriatric}</td><td colSpan={4} className="text-muted">{t.noClass}</td></tr>
           </tbody>
         </table>
       </div>
@@ -414,22 +414,22 @@ function Scenarios({ m, a, values }: { m: any; a: Record<string, Row>; values: R
   const opt = (x: number | null, f: (n: number) => string) => (x == null ? t.whatIfNone : f(x));
   return (
     <Card className="mt-4">
-      <h2 className="text-teal">{t.scenariosQ}</h2>
+      <h2 className="text-navy">{t.scenariosQ}</h2>
       <p className="mt-1 text-muted">{t.scenariosIntro}</p>
       <div className="mt-3 overflow-x-auto">
         <table className="w-full text-left tabular-nums">
-          <thead><tr className="border-b border-teal/20 align-bottom">
+          <thead><tr className="border-b border-navy/20 align-bottom">
             <th className="py-1 pr-3" />
             {keys.map((k) => (
-              <th key={k} className={`py-2 pr-3 ${k === "recommended" ? "rounded-t-card bg-teal/10" : ""}`}>
-                {k === "recommended" ? <span className="rounded bg-teal px-2 py-0.5 text-white">{t.recommendedBadge}</span> : t.scen[k]}
+              <th key={k} className={`py-2 pr-3 ${k === "recommended" ? "rounded-t-card bg-navy/10" : ""}`}>
+                {k === "recommended" ? <span className="rounded bg-navy px-2 py-0.5 text-white">{t.recommendedBadge}</span> : t.scen[k]}
                 <span className="block text-sm font-normal text-muted">{help(k)}</span>
               </th>))}
           </tr></thead>
           <tbody>{rows.map(([label, f]) => (
-            <tr key={label} className="border-b border-teal/10 align-top">
+            <tr key={label} className="border-b border-navy/10 align-top">
               <th scope="row" className="py-1.5 pr-3 font-bold">{label}</th>
-              {keys.map((k) => <td key={k} className={`py-1.5 pr-3 ${k === "recommended" ? "bg-teal/10" : ""}`}>{f(k)}</td>)}
+              {keys.map((k) => <td key={k} className={`py-1.5 pr-3 ${k === "recommended" ? "bg-navy/10" : ""}`}>{f(k)}</td>)}
             </tr>))}</tbody>
         </table>
       </div>

@@ -9,7 +9,7 @@ import { es } from "../i18n/es";
 export function ProtectedRoute({ path, children }: { path: string; children: ReactNode }) {
   const { user, loading } = useAuth();
   if (loading) return <p className="p-8">{es.shell.loading}</p>;
-  if (!user) return <Navigate to="/" replace />;
+  if (!user) return <Navigate to="/entrar" replace />;
   if (!user.screens.includes(path)) return <Navigate to={user.home} replace />;
   return <>{children}</>;
 }

@@ -22,7 +22,7 @@ async def lifespan(app: FastAPI):
         task.cancel()
 
 
-app = FastAPI(title="Vela API", docs_url="/api/docs", openapi_url="/api/openapi.json", lifespan=lifespan)
+app = FastAPI(title="Enlaza API", docs_url="/api/docs", openapi_url="/api/openapi.json", lifespan=lifespan)
 app.include_router(health.router)
 app.include_router(auth.router)
 app.include_router(patients.router)

@@ -2,13 +2,13 @@
 //   categorical  #00879C (chart teal) · #E8704A (brand coral) · #6250D6 (violet)  → all checks pass,
 //                worst CVD ΔE 12.6, normal-vision ΔE 19.3 (also with --pairs all)
 //   sequential   5 teal steps, light → dark (ordinal checks pass; light end ≥ 2:1 on white)
-// The brand teal #0F5C6E stays for UI chrome: as a chart series it fails the chroma floor (reads gray).
+// Enlaza (23 Nov 2026): series kept (validated); UI chrome uses the navy / teal of the logo (index.css).
 // Text never wears a series color: labels and values use ink / muted.
 export const chart = {
   series: ["#00879C", "#E8704A", "#6250D6"],
   ramp: ["#86BFCB", "#5DA6B6", "#3A8CA0", "#1E7187", "#0F5C6E"],
-  ink: "#1F2A30",
-  muted: "#5B6870",
+  ink: "#1B2B38",
+  muted: "#4F5F6B",
   grid: "#E3E7E9",          // hairline gridlines, one step off the surface
   surface: "#FFFFFF",
   threshold: "#C0392B",     // contingency threshold line (status "danger", always with a text label)

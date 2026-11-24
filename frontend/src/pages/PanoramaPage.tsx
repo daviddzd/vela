@@ -37,12 +37,12 @@ export function PanoramaPage() {
 
   return (
     <AppShell>
-      <h1 className="text-teal">{es.screens["/panorama"]}</h1>
+      <h1 className="text-navy">{es.screens["/panorama"]}</h1>
       <p className="mt-1 max-w-4xl text-muted">{t.laborNote}</p>
       <div role="tablist" aria-label={es.screens["/panorama"]} className="mt-3 flex gap-2">
         {(["operation", "panorama"] as const).map((k) => (
           <button key={k} role="tab" aria-selected={tab === k} onClick={() => setTab(k)}
-            className={`min-h-12 rounded-card px-4 font-bold ${tab === k ? "bg-teal text-white" : "border-2 border-teal bg-white text-teal"}`}>
+            className={`min-h-12 rounded-card px-4 font-bold ${tab === k ? "bg-navy text-white" : "border-2 border-navy bg-white text-navy"}`}>
             {t.tabs[k]}
           </button>
         ))}

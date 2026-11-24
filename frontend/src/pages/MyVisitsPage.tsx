@@ -49,7 +49,7 @@ export function MyVisitsPage() {
 
   return (
     <AppShell>
-      <h1 className="text-teal">{es.screens["/mis-visitas"]}</h1>
+      <h1 className="text-navy">{es.screens["/mis-visitas"]}</h1>
       <div className="mt-4 space-y-4">
         {error && <Notice kind="error">{error}</Notice>}
         {visits === null && <p>{es.common.loading}</p>}
@@ -84,7 +84,7 @@ export function MyVisitsPage() {
               {/* only caregivers use the voice assistant (/voz); physicians record in their own notes */}
               {user?.role === "caregiver" && (
                 <Link to={`/voz?paciente=${encodeURIComponent(v.patient_id)}`} aria-label={fill(es.visits.voiceNoteFor, { name: v.patient_name })}
-                  className="inline-flex min-h-16 items-center justify-center gap-2 rounded-card border-2 border-teal bg-white px-4 font-bold text-teal hover:bg-teal/10">
+                  className="inline-flex min-h-16 items-center justify-center gap-2 rounded-card border-2 border-navy bg-white px-4 font-bold text-navy hover:bg-navy/10">
                   <Icon as={Mic} /> {es.visits.voiceNote}</Link>)}
             </div>
           </Card>

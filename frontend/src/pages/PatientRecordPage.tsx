@@ -35,13 +35,13 @@ export function PatientRecordPage() {
   return (
     <AppShell>
       <BackLink />
-      <h1 className="mt-2 text-teal">{r.full_name} <span className="text-xl text-muted">· {r.patient_id}</span></h1>
+      <h1 className="mt-2 text-navy">{r.full_name} <span className="text-xl text-muted">· {r.patient_id}</span></h1>
       <p className="mt-1"><RiskBadge level={r.risk_level} /></p>
       {msg && <div className="mt-3"><Notice kind="ok">{msg}</Notice></div>}
 
       <div className="items-start mt-4 grid gap-4 xl:grid-cols-3">
         <Card>
-          <h2 className="text-teal">{t.general}</h2>
+          <h2 className="text-navy">{t.general}</h2>
           <dl className="mt-2 grid grid-cols-[auto_1fr] gap-x-4 gap-y-1">
             <dt className="text-muted">{t.ageLabel}</dt><dd>{fill(es.patients.age, { n: r.age })} · {t.sex[r.sex]}</dd>
             <dt className="text-muted">{es.patients.district}</dt><dd>{r.district_name}</dd>
@@ -51,7 +51,7 @@ export function PatientRecordPage() {
           </dl>
         </Card>
         <Card>
-          <h2 className="text-teal">{t.health}</h2>
+          <h2 className="text-navy">{t.health}</h2>
           {!h ? <p className="mt-2 font-bold text-muted">{r.health_notice}</p> : (<>
             <p className="mt-2">{h.conditions.length ? h.conditions.map((c: string) => t.conditionNames[c] ?? c).join(", ") : t.noConditions}</p>
             <p className="mt-1 text-sm">{fill(t.chronic, { n: h.chronic_disease_count })}{h.multimorbidity ? ` · ${t.multimorbidity}` : ""}</p>
@@ -61,12 +61,12 @@ export function PatientRecordPage() {
           </>)}
         </Card>
         <Card>
-          <h2 className="text-teal">{t.consents}</h2>
+          <h2 className="text-navy">{t.consents}</h2>
           <ul className="mt-2 space-y-1">{r.consents.map((c: any) => {
             const st = c.revoked_at ? "revoked" : !c.granted ? "missing" : c.is_valid ? "valid" : "expired";
             return <li key={c.type}><strong>{es.privacy.types[c.type]}:</strong> {es.privacy.state[st]} · {fill(es.privacy.fromTo, { from: dmy(c.signed_on), to: dmy(c.expires_on) })}</li>;
           })}</ul>
-          {r.can_request && <Link to="/privacidad" className="mt-2 inline-block font-bold text-teal underline">{t.manageConsents}</Link>}
+          {r.can_request && <Link to="/privacidad" className="mt-2 inline-block font-bold text-navy underline">{t.manageConsents}</Link>}
         </Card>
       </div>
 
@@ -74,9 +74,9 @@ export function PatientRecordPage() {
 
       <div className="items-start mt-4 grid gap-4 xl:grid-cols-[2fr_1fr]">
         <Card>
-          <h2 className="text-teal">{t.history}</h2>
+          <h2 className="text-navy">{t.history}</h2>
           {r.history.length === 0 ? <p className="mt-2">{t.noHistory}</p> : (
-            <ul className="mt-2 divide-y divide-teal/10">{r.history.map((x: any) => (
+            <ul className="mt-2 divide-y divide-navy/10">{r.history.map((x: any) => (
               <li key={x.request_id} className="flex flex-wrap items-start justify-between gap-2 py-2">
                 <span><strong>{when(x.scheduled_for)}</strong> · {x.service_name}
                   <span className="block text-sm text-muted">{x.request_id} · {t.origin[x.origin] ?? x.origin}
@@ -88,21 +88,21 @@ export function PatientRecordPage() {
         <div className="space-y-4">
           {r.can_request && (
             <Card>
-              <h2 className="text-teal">{t.request}</h2>
+              <h2 className="text-navy">{t.request}</h2>
               <div className="mt-2"><RequestForm coordinator patient={r.patient_id}
                 onCreated={(x) => { setMsg(fill(t.requestCreated, { id: x.request_id, status: es.requestStatus[x.status] ?? x.status })); load(); }} /></div>
             </Card>)}
           <Card>
-            <h2 className="text-teal">{t.voice}</h2>
+            <h2 className="text-navy">{t.voice}</h2>
             {r.voice_reports.length === 0 ? <p className="mt-2">{t.noVoice}</p> : (
               <ul className="mt-2 space-y-2">{r.voice_reports.map((v: any) => (
-                <li key={v.report_id} className="border-t border-teal/10 pt-2">
+                <li key={v.report_id} className="border-t border-navy/10 pt-2">
                   <strong>{es.voice.levels[v.triage_label]}</strong> · {when(v.created_at)} · {v.reviewed_at ? t.reviewed : t.unreviewed}
                   {v.transcript ? <p className="text-sm">«{v.transcript}»</p> : <p className="text-sm text-muted">{t.voiceHidden}</p>}
                 </li>))}</ul>)}
           </Card>
           <Card>
-            <h2 className="text-teal">{t.family}</h2>
+            <h2 className="text-navy">{t.family}</h2>
             <ul className="mt-2 space-y-1">{r.family.map((f: any) => (
               <li key={f.family_member_id}><strong>{f.name}</strong> · {t.relationship[f.relationship] ?? f.relationship}
                 {f.is_legal_representative && ` · ${t.legalRep}`}{f.can_request_services && ` · ${t.canRequest}`}
@@ -115,7 +115,7 @@ export function PatientRecordPage() {
 }
 
 function BackLink() {
-  return <Link to="/pacientes" className="inline-flex min-h-12 items-center gap-2 font-bold text-teal"><Icon as={ArrowLeft} /> {t.back}</Link>;
+  return <Link to="/pacientes" className="inline-flex min-h-12 items-center gap-2 font-bold text-navy"><Icon as={ArrowLeft} /> {t.back}</Link>;
 }
 
 function Plans({ r, onChange }: { r: any; onChange: (msg: string) => void }) {
@@ -124,12 +124,12 @@ function Plans({ r, onChange }: { r: any; onChange: (msg: string) => void }) {
   return (
     <Card className="mt-4">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <h2 className="text-teal">{t.plan}</h2>
+        <h2 className="text-navy">{t.plan}</h2>
         {r.can_edit_plan && editing === null && <Button icon={Plus} variant="secondary" onClick={() => setEditing("new")}>{t.addPlan}</Button>}
       </div>
       {r.can_edit_plan && <p className="mt-1 text-sm text-muted">{t.planNote}</p>}
       {editing === "new" && <PlanForm r={r} onDone={done} onCancel={() => setEditing(null)} />}
-      <ul className="mt-2 divide-y divide-teal/10">{r.care_plans.map((p: any) => (
+      <ul className="mt-2 divide-y divide-navy/10">{r.care_plans.map((p: any) => (
         <li key={p.care_plan_id} className={`py-2 ${p.active ? "" : "text-muted"}`}>
           <div className="flex flex-wrap items-center justify-between gap-2">
             <span><strong>{p.service_name}</strong> · {p.times_per_week === 1 ? t.perWeekOne : fill(t.perWeek, { n: p.times_per_week.toLocaleString("es-MX", { maximumFractionDigits: 2 }) })}
@@ -159,7 +159,7 @@ function PlanForm({ r, plan, onDone, onCancel }: { r: any; plan?: any; onDone: (
     } catch (err) { setError(err instanceof ApiError ? err.message : es.common.error); }
   };
   return (
-    <form onSubmit={submit} className="mt-3 grid gap-3 rounded-card border border-teal/20 p-3 md:grid-cols-4">
+    <form onSubmit={submit} className="mt-3 grid gap-3 rounded-card border border-navy/20 p-3 md:grid-cols-4">
       <label className="block md:col-span-2"><span className="font-bold">{t.service}</span>
         <select className={inputClass} value={f.service_id} onChange={(e) => setF({ ...f, service_id: e.target.value })}>
           {r.services.map((s: any) => <option key={s.service_id} value={s.service_id}>{s.name}</option>)}</select></label>

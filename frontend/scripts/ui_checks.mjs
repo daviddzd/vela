@@ -16,7 +16,7 @@ async function session(user, opts = {}) {
   const page = await ctx.newPage();
   const errors = [];
   page.on("pageerror", (e) => errors.push(String(e)));
-  await page.goto(`${BASE}/`);
+  await page.goto(`${BASE}/entrar`);
   await page.fill('input[type="email"]', `${user}@ejemplo.test`);
   await page.fill('input[autocomplete="current-password"]', "Demo2026!");
   await page.click('button[type="submit"]');

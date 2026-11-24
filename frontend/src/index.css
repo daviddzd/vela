@@ -1,35 +1,55 @@
 @import "tailwindcss";
 @import "@fontsource/atkinson-hyperlegible/400.css";
 @import "@fontsource/atkinson-hyperlegible/700.css";
-@import "@fontsource/lexend/600.css";
+@import "@fontsource/plus-jakarta-sans/700.css";
+@import "@fontsource/plus-jakarta-sans/800.css";
 
-/* Brand tokens (docs/brand.md). Same values as src/theme.ts. */
+/* Enlaza brand tokens (docs/brand.md). Colours of the logo measured with an eyedropper; every text/background pair
+   is checked for WCAG AA by scripts/check_contrast.py. The logo teal (#2AAEAE) does NOT reach 3:1 on white:
+   decoration only (logo, gradients, icon-circle backgrounds); text and meaningful icons use teal-text. */
 @theme {
-  --color-teal: #0F5C6E;
-  --color-teal-dark: #0A4352;
-  --color-coral: #E8704A;
-  --color-cream: #FAF7F2;
-  --color-ink: #1F2A30;
-  --color-muted: #5B6870;
-  --color-ok: #2E7D4F;
-  --color-warn: #B7791F;
-  --color-danger: #C0392B;
+  --color-navy: #3A5B76;        /* logo navy: titles, primary buttons, links */
+  --color-navy-dark: #2C465C;   /* primary button hover */
+  --color-teal: #2AAEAE;        /* logo teal: accents, decoration only */
+  --color-teal-text: #137273;   /* teal for text and meaningful icons (5.7:1 on white) */
+  --color-teal-soft: #E3F5F5;   /* soft circle behind icons */
+  --color-deep: #1B3349;        /* deep blue section backgrounds (white text) */
+  --color-sky: #EAF4F8;         /* very light blue: gradients behind section headers */
+  --color-sky-soft: #F4F9FB;
+  --color-ink: #1B2B38;
+  --color-muted: #4F5F6B;
+  --color-ok: #1D7447;
+  --color-ok-soft: #E7F4EC;
+  --color-warn: #8A5A00;
+  --color-warn-soft: #FBF1DC;
+  --color-danger: #B42318;
+  --color-danger-soft: #FBE9E7;
   --font-sans: "Atkinson Hyperlegible", Arial, sans-serif;
-  --radius-card: 12px;
-  /* Big figures: Atkinson Hyperlegible draws 0 with a diagonal (reads like "Ø") and has no alternate
-     (checked: no "zero" feature, 3-contour glyph). Lexend (OFL) has a plain 0; text stays in Atkinson. */
-  --font-figures: "Lexend", "Atkinson Hyperlegible", Arial, sans-serif;
+  --font-display: "Plus Jakarta Sans", "Atkinson Hyperlegible", Arial, sans-serif;
+  --radius-card: 22px;          /* cards: 20-24 px */
+  --radius-field: 14px;         /* inputs, small boxes */
+  --shadow-card: 0 1px 2px rgba(27, 51, 73, 0.06), 0 10px 30px rgba(27, 51, 73, 0.07);
+  /* Big figures: Plus Jakarta Sans has a plain 0 (Atkinson Hyperlegible draws it with a diagonal, like "Ø"). */
+  --font-figures: "Plus Jakarta Sans", "Atkinson Hyperlegible", Arial, sans-serif;
 }
 
 /* 18 px base; "modo sencillo" raises it to 24 px. Tailwind sizes are in rem, so everything scales. */
 html { font-size: 18px; line-height: 1.5; }
 html.simple { font-size: 24px; }
-body { @apply bg-cream text-ink font-sans; }
-h1 { font-size: 1.556rem; font-weight: 700; }   /* 28 px at base */
-h2 { font-size: 1.222rem; font-weight: 700; }   /* 22 px at base */
+/* in the base layer, so utilities on a heading (text-4xl, text-white) still win */
+@layer base {
+  body { @apply bg-white text-ink font-sans; }
+  h1, h2, h3 { font-family: var(--font-display); color: var(--color-navy); letter-spacing: -0.01em; }
+  h1 { font-size: 1.778rem; font-weight: 800; line-height: 1.2; }   /* 32 px at base */
+  h2 { font-size: 1.222rem; font-weight: 700; }                     /* 22 px at base */
+  h3 { font-weight: 700; }
+}
 
-/* Visible keyboard focus everywhere */
-:focus-visible { outline: 3px solid var(--color-coral); outline-offset: 2px; }
+/* Visible keyboard focus everywhere (teal-text: 5.7:1 on white) */
+:focus-visible { outline: 3px solid var(--color-teal-text); outline-offset: 2px; }
+
+/* Section header: very light blue gradient (no translucent glass: text keeps its contrast) */
+.section-header { background: linear-gradient(180deg, var(--color-sky) 0%, var(--color-sky-soft) 60%, #fff 100%); }
 
 /* Large numbers (key figures, counters): plain zero, proportional digits */
-.figure { font-family: var(--font-figures); font-weight: 600; letter-spacing: -0.01em; }
+.figure { font-family: var(--font-figures); font-weight: 800; letter-spacing: -0.02em; }

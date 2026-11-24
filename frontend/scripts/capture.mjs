@@ -19,7 +19,7 @@ for (const [who, email] of Object.entries(USERS)) {
     const ctx = await browser.newContext({ viewport, deviceScaleFactor: sizeName === "celular" ? 2 : 1, locale: "es-MX",
       timezoneId: "America/Mexico_City" });
     const page = await ctx.newPage();
-    await page.goto(`${BASE}/`);
+    await page.goto(`${BASE}/entrar`);
     await page.fill('input[type="email"]', email);
     await page.fill('input[autocomplete="current-password"]', "Demo2026!");
     await page.click('button[type="submit"]');

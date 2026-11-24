@@ -144,7 +144,7 @@ def load_caregivers(db: Session, institution_id: str, around: datetime) -> list[
 # ---- labor rules in the operation (app/services/labor.py) ------------------------------------------------
 
 LABOR_ALERT = ("{name}: su turno {start}–{end} es jornada {kind} de {hours:g} h y excede el máximo de {max:g} h "
-               "del art. 61 de la Ley Federal del Trabajo. Vela no cambia la plantilla: lo decide la institución.")
+               "del art. 61 de la Ley Federal del Trabajo. Enlaza no cambia la plantilla: lo decide la institución.")
 
 
 def labor_alerts(db: Session) -> int:

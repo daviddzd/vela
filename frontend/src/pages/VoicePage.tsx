@@ -106,8 +106,8 @@ export function VoicePage() {
   return (
     <AppShell>
       {/* always visible, sticky: even if everything else fails */}
-      <div className="sticky top-0 z-30 -mx-4 mb-4 flex flex-wrap items-center justify-between gap-3 bg-cream/95 px-4 py-3 backdrop-blur">
-        <h1 className="text-teal">{es.screens["/voz"]}</h1>
+      <div className="sticky top-0 z-30 -mx-4 mb-4 flex flex-wrap items-center justify-between gap-3 bg-sky-soft/95 px-4 py-3 backdrop-blur">
+        <h1 className="text-navy">{es.screens["/voz"]}</h1>
         <Call911 />
       </div>
 
@@ -178,14 +178,14 @@ export function VoicePage() {
             )}
             {mode === "sending" && <p aria-live="polite">{t.processing}</p>}
             {result && result.level !== "emergency" && (
-              <div className="rounded-card border border-teal/20 p-3">
+              <div className="rounded-card border border-navy/20 p-3">
                 <p className="font-bold">{t.heard}</p><p>«{result.transcript}»</p>
                 {staff && <p className="mt-1 text-muted">{t.levelForStaff}: {t.levels[result.level]}</p>}
               </div>
             )}
           </div>
         )}
-        <div className="mt-6 border-t border-teal/15 pt-4">
+        <div className="mt-6 border-t border-navy/15 pt-4">
           <Button variant="secondary" icon={Languages} disabled={!pid} onClick={callMe}>{t.callMe}</Button>
         </div>
       </Card>

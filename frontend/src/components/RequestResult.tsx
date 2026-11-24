@@ -7,7 +7,7 @@ import { StatusBadge } from "./StatusBadge";
 
 export function RequestResult({ r }: { r: ServiceRequest }) {
   return (
-    <div role="status" className="rounded-card border-2 border-teal bg-white p-3">
+    <div role="status" className="rounded-card border-2 border-navy bg-white p-3">
       <p className="flex flex-wrap items-center gap-2 font-bold">{r.request_id} <StatusBadge status={r.status} /></p>
       <p>{r.service_name} · {formatDateTime(r.scheduled_for)}</p>
       {r.caregiver_name && <p>{es.family.caregiver}: <strong>{r.caregiver_name}</strong>

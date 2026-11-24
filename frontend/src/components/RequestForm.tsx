@@ -73,7 +73,7 @@ export function RequestForm({ coordinator = false, onCreated, patient }:
             {["low", "medium", "high"].map((p) => (
               <label key={p} className="flex min-h-12 items-center gap-2">
                 <input type="radio" name="priority" value={p} checked={priority === p}
-                  onChange={() => setPriority(p)} className="size-6 accent-teal" />{es.priority[p]}
+                  onChange={() => setPriority(p)} className="size-6 accent-navy" />{es.priority[p]}
               </label>
             ))}
           </div>

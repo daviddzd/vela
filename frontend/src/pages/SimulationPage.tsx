@@ -30,14 +30,14 @@ function ResponsiveTable({ head, rows }: { head: string[]; rows: { key: string; 
   return (<>
     <div className="hidden overflow-x-auto md:block">
       <table className="w-full text-left text-sm">
-        <thead><tr className="border-b border-teal/20">{head.map((h) => <th key={h} className="py-1 pr-3 align-bottom">{h}</th>)}</tr></thead>
-        <tbody>{rows.map((r) => <tr key={r.key} className="border-b border-teal/10 align-top">
+        <thead><tr className="border-b border-navy/20">{head.map((h) => <th key={h} className="py-1 pr-3 align-bottom">{h}</th>)}</tr></thead>
+        <tbody>{rows.map((r) => <tr key={r.key} className="border-b border-navy/10 align-top">
           {r.cells.map((c, i) => <td key={i} className={`py-1 pr-3 ${i === 0 ? "font-bold" : ""}`}>{c}</td>)}</tr>)}</tbody>
       </table>
     </div>
     <ul className="space-y-3 md:hidden">
       {rows.map((r) => (
-        <li key={r.key} className="rounded-card border border-teal/20 p-3">
+        <li key={r.key} className="rounded-card border border-navy/20 p-3">
           <p className="font-bold">{r.cells[0]}</p>
           <dl className="mt-1 space-y-1">{r.cells.slice(1).map((c, i) => (
             <div key={i}><dt className="text-sm text-muted">{head[i + 1]}</dt><dd>{c}</dd></div>))}</dl>
@@ -76,7 +76,7 @@ export function SimulationPage() {
   useEffect(() => { api.simulation().then((x) => setR(x as Results)).catch(() => setR({ available: false } as Results)); }, []);
 
   if (!r) return <AppShell><p>{es.common.loading}</p></AppShell>;
-  if (!r.available) return <AppShell><h1 className="text-teal">{es.screens["/simulacion"]}</h1><Notice>{t.notRun}</Notice></AppShell>;
+  if (!r.available) return <AppShell><h1 className="text-navy">{es.screens["/simulacion"]}</h1><Notice>{t.notRun}</Notice></AppShell>;
 
   const meta = t.metrics[metric];
   const v = r.validation[0];
@@ -89,7 +89,7 @@ export function SimulationPage() {
   return (
     <AppShell bare={present}>
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h1 className="text-teal">{es.screens["/simulacion"]}</h1>
+        <h1 className="text-navy">{es.screens["/simulacion"]}</h1>
         <Button icon={present ? X : Presentation} variant={present ? "secondary" : "primary"} onClick={() => setPresent(!present)}
           aria-pressed={present}>{present ? t.presentOff : t.presentOn}</Button>
       </div>
@@ -102,7 +102,7 @@ export function SimulationPage() {
       <div className="mt-4 space-y-4">
         <ChartCard question={t.conclusionQ} source={source}>
           <ul className="space-y-2 text-lg">
-            {conclusion(r).map((line) => <li key={line} className="flex gap-2"><Icon as={CheckCircle2} className="mt-1 text-teal" /><span>{line}</span></li>)}
+            {conclusion(r).map((line) => <li key={line} className="flex gap-2"><Icon as={CheckCircle2} className="mt-1 text-navy" /><span>{line}</span></li>)}
           </ul>
         </ChartCard>
 
@@ -189,7 +189,7 @@ export function SimulationPage() {
         </div>
 
         <Card className="border-2 border-dashed border-warn/60">
-          <h2 className="text-teal"><Icon as={AlertTriangle} className="text-warn" /> {t.sensitivityQ}</h2>
+          <h2 className="text-navy"><Icon as={AlertTriangle} className="text-warn" /> {t.sensitivityQ}</h2>
           <p className="mt-2 text-muted">{t.sensitivityNote}</p>
           <div className="mt-2 grid gap-6 xl:grid-cols-2">
             {(["approval_delay", "risk_multiplier"] as const).map((knob) => {
@@ -208,7 +208,7 @@ export function SimulationPage() {
             })}
           </div>
 
-          <h3 className="mt-6 text-xl font-bold text-teal">{t.hiringQ}</h3>
+          <h3 className="mt-6 text-xl font-bold text-navy">{t.hiringQ}</h3>
           <p className="mt-1 text-muted">{t.hiringNote}</p>
           <div className="mt-2">
             <ResponsiveTable head={[t.metric, ...["current", "requested", "targeted"].map((l) => t.staffLevels[l])]}
@@ -217,7 +217,7 @@ export function SimulationPage() {
                   const x = r.sensitivity.find((y) => y.knob === "extra_staff" && y.extra_staff === l && y.policy === p && y.metric === m);
                   return x ? `${fmt(x.mean)} % [${fmt(x.ci_low)}–${fmt(x.ci_high)}]` : "—"; })] })))} />
           </div>
-          <h3 className="mt-6 text-xl font-bold text-teal">{t.nightQ}</h3>
+          <h3 className="mt-6 text-xl font-bold text-navy">{t.nightQ}</h3>
           <p className="mt-1 text-muted">{t.nightNote}</p>
           <div className="mt-2">
             <ResponsiveTable head={[t.metric, ...["current", "night_legal"].map((l) => t.nightLevels[l])]}
