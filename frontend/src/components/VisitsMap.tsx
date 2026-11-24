@@ -16,6 +16,7 @@ const STYLE: Record<string, { symbol: string; color: string }> = {
   queued: { symbol: "triangle", color: "#B7791F" }, assigned: { symbol: "circle", color: chart.series[0] },
   in_progress: { symbol: "diamond", color: chart.series[1] }, completed: { symbol: "rect", color: "#2E7D4F" },
   closed: { symbol: "rect", color: "#2E7D4F" }, unattended: { symbol: "pin", color: "#C0392B" },
+  not_closed: { symbol: "pin", color: "#B7791F" },
 };
 const BASE = { symbol: "roundRect", color: "#9AA5AB" };
 

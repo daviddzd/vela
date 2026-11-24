@@ -21,7 +21,7 @@ from sqlalchemy.orm import Session
 from app.core.audit import audit
 from app.core.db import tenant_session
 from app.core.events import publish
-from app.services import llm_report
+from app.services import alerts_followup, llm_report
 from app.services.triage_rules import LEVELS, rule_hits, rules
 
 MIN_CONFIDENCE = 0.6        # exp(avg_logprob), duration-weighted (voice/README.md)
@@ -98,11 +98,20 @@ def process(db: Session, *, user_id: str, institution_id: str, patient_id: str, 
          "r": needs_review, "m": f"whisper-{os.environ.get('WHISPER_MODEL', 'small')}+keras+{os.environ.get('OLLAMA_MODEL', 'qwen3:8b')}",
          "mode": input_mode, "cl": cls["label"] if cls else None, "cp": _json(cls["probs"]) if cls else None,
          "ns": no_speech, "tm": _json(timings)})
+    # Two ways to be an emergency (team decision 23 Nov 2026, CLAUDE.md rule 6): a RULE fired -> red 911 screen;
+    # ONLY the classifier -> amber notice with 911 + critical review alert for coordination. Same stored level.
+    source = ("rule" if hits else "classifier") if level == "emergency" else None
     audit(db, user_id=user_id, institution_id=institution_id, action="voice_note", entity="voice_report",
-          entity_id=report_id, detail={"level": level, "rule_hits": hits, "input_mode": input_mode})
-    if level == "emergency":
+          entity_id=report_id, detail={"level": level, "rule_hits": hits, "input_mode": input_mode,
+                                       **({"emergency_source": source} if source else {})})
+    if source == "classifier":
+        name = db.scalar(text("""SELECT pe.first_name || ' ' || pe.paternal_surname FROM patients pa
+                                 JOIN persons pe USING (person_id) WHERE pa.patient_id = :p"""), {"p": patient_id})
+        alerts_followup.open_review(db, institution_id=institution_id, patient_id=patient_id, patient_name=name,
+                                    report_id=report_id)
+    elif source == "rule":
         cats = rules()["categories"]
-        reason = ", ".join(cats[h]["label_es"] for h in hits) if hits else "clasificador"
+        reason = ", ".join(cats[h]["label_es"] for h in hits)
         name = db.scalar(text("""SELECT pe.first_name || ' ' || pe.paternal_surname FROM patients pa
                                  JOIN persons pe USING (person_id) WHERE pa.patient_id = :p"""), {"p": patient_id})
         alert_id = db.scalar(text("""INSERT INTO alerts (institution_id, type, level, patient_id, message)
@@ -111,7 +120,8 @@ def process(db: Session, *, user_id: str, institution_id: str, patient_id: str, 
                               "m": f"Posible emergencia en nota de voz de {name} ({reason}). Se indicó llamar al 911."})
         publish(db, "alert.created", institution_id, alert_id=alert_id, request_id=None)
     support = next((rules().get("support_lines", {})[h] for h in hits if h in rules().get("support_lines", {})), None)
-    return {"report_id": report_id, "level": level, "rule_hits": hits, "support_line": support, "needs_human_review": needs_review,
+    return {"report_id": report_id, "level": level, "emergency_source": source, "rule_hits": hits, "support_line": support,
+            "needs_human_review": needs_review,
             "classifier": cls["label"] if cls else None, "transcript": text_, "confidence": confidence,
             "ask_repeat": bool(audio is not None and needs_review and cls is not None and level != "emergency")}
 

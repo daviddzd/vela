@@ -10,7 +10,7 @@ from datetime import datetime
 
 from app.core.config import MEXICO_CITY
 from app.core.db import ALL_INSTITUTIONS, tenant_session
-from app.services import care_plans, contingency, operations, queue
+from app.services import alerts_followup, care_plans, contingency, operations, queue
 
 TICK_SECONDS = 60
 
@@ -26,8 +26,11 @@ def tick() -> None:
         unattended = queue.mark_unattended(db)
         operations.labor_alerts(db)          # shifts above the legal maximum (art. 61): alert, never auto-change
         operations.coverage_alerts(db)       # skills with nobody on shift this week (rest days / out of service)
+        escalated = alerts_followup.escalate_overdue(db)   # voice review alerts nobody answered -> Dirección
+        not_closed = alerts_followup.mark_not_closed(db)   # visits nobody finished -> "No cerrada" + alert
     print(f"worker tick {datetime.now(MEXICO_CITY):%Y-%m-%d %H:%M:%S %Z} "
-          f"contingency={len(changed)} care_plan={len(planned)} queue={retried} timeout={len(by_timeout)} unattended={unattended}", flush=True)
+          f"contingency={len(changed)} care_plan={len(planned)} queue={retried} timeout={len(by_timeout)} unattended={unattended} "
+          f"escalated={escalated} not_closed={not_closed}", flush=True)
 
 
 def main() -> None:

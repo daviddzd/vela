@@ -6,7 +6,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
 from app.core import events
-from app.routers import (approvals, auth, board, catalog, contingency, family, health, panorama, patients,
+from app.routers import (alerts, approvals, auth, board, catalog, contingency, family, health, panorama, patients,
                          requests, simulation, visits, voice, business, privacy, staff)
 from app.ws import board as ws_board
 from app.ws import ping
@@ -27,7 +27,7 @@ app.include_router(health.router)
 app.include_router(auth.router)
 app.include_router(patients.router)
 for module in (catalog, requests, approvals, visits, family, board, panorama, simulation, contingency, voice,
-               business, privacy, staff):
+               business, privacy, staff, alerts):
     app.include_router(module.router)
 app.include_router(ping.router)
 app.include_router(ws_board.router)

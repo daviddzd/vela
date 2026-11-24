@@ -44,7 +44,8 @@ export type FamilyOverview = {
 };
 export type BoardQueueItem = { request_id: string; patient_id: string; priority: string; status_reason: string | null; scheduled_for: string;
   origin: string; service_name: string; patient_name: string; minutes_waiting: number; risk: number };
-export type BoardAlert = { alert_id: string; level: string; code: string | null; message: string; created_at: string };
+export type BoardAlert = { alert_id: string; type: string; level: string; code: string | null; message: string; created_at: string;
+  escalate_at: string | null; escalated_at: string | null };
 export type Board = {
   now: string; counters: { queued: number; on_the_way: number; in_visit: number; done_today: number };
   queue: BoardQueueItem[]; alerts: BoardAlert[];
@@ -139,6 +140,10 @@ export const api = {
   arrive: (id: string) => request<{ status: string }>(`/api/visits/${id}/arrive`, { method: "POST" }),
   finish: (id: string, confirm = false) =>
     request<{ status: string }>(`/api/visits/${id}/finish${confirm ? "?confirm=true" : ""}`, { method: "POST" }),
+  reviewAlert: (id: string, outcome: "emergency" | "not_emergency") =>
+    request<unknown>(`/api/alerts/${id}/review`, { method: "POST", body: JSON.stringify({ outcome }) }),
+  escalatedAlerts: () => request<any[]>("/api/alerts/escalated"),
+  acknowledgeAlert: (id: string) => request<unknown>(`/api/alerts/${id}/acknowledge`, { method: "POST" }),
   familyOverview: () => request<FamilyOverview>("/api/family/overview"),
   confirmVisit: (id: string) => request<{ status: string }>(`/api/family/visits/${id}/confirm`, { method: "POST" }),
 };

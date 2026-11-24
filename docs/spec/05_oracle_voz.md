@@ -12,8 +12,12 @@ grabación (navegador, máx. 60 s, WebM/Opus) ──► faster-whisper (es, smal
         ──► 1. reglas (config/emergency_rules.yaml) ──hit──► EMERGENCY
         ──► 2. clasificador Keras (emergency / urgent / routine)
         ──► nivel final = max(regla, clasificador)
-EMERGENCY ──► pantalla completa "Esto puede ser una emergencia. Llama al 911 ahora." + botón tel:911
-              + alerta crítica a coordinación (WebSocket)   [no espera al LLM]
+EMERGENCY por REGLA ──► pantalla roja completa "Esto puede ser una emergencia. Llama al 911 ahora." + botón tel:911
+                        + alerta crítica a coordinación (WebSocket)   [no espera al LLM]
+EMERGENCY solo por CLASIFICADOR ──► aviso ámbar completo "Tu mensaje podría indicar algo urgente" con los signos
+                        de peligro + el mismo botón grande tel:911 + "Coordinación te contactará en los próximos minutos"
+                        + alerta CRÍTICA de revisión a coordinación (contactar a la familia; si nadie la atiende en
+                        10 min, escala a Dirección)
 todos     ──► LLM local (Ollama) genera reporte JSON ──► bandeja del médico
 ```
 
@@ -23,6 +27,25 @@ todos     ──► LLM local (Ollama) genera reporte JSON ──► bandeja del
 - Sin manejo de negaciones: "ya no puede respirar" o "ya no quiere vivir" deben seguir siendo emergencia.
   Se prefiere una falsa alarma a una emergencia perdida.
 - El clasificador puede subir el nivel, nunca bajar uno detectado por regla.
+- **Dos niveles de aviso (decisión del equipo, 23/11/2026).** El nivel guardado es `emergency` en los dos casos:
+  no se descarta nada y el reporte sigue primero en la bandeja del médico; solo cambia cómo se muestra.
+  - **Se activó una regla** → pantalla roja del 911, como siempre.
+  - **Solo el clasificador** (ninguna regla) → aviso ámbar, que no es tibio: título "Tu mensaje podría indicar algo
+    urgente", la lista de signos concretos ("Llama al 911 ahora si la persona: no puede respirar o se ahoga, tiene
+    dolor u opresión en el pecho, no responde o se desmayó, tiene la cara caída o no puede hablar, convulsiona,
+    sangra mucho o habla de quitarse la vida"), el mismo botón grande del 911 y "Coordinación te contactará en los
+    próximos minutos".
+  - Coordinación recibe una alerta **crítica** con un contador "Contactar a la familia" y dos botones:
+    "Contactada: era emergencia" (escala a Dirección y lo registra) y "Contactada: no era emergencia". Si nadie la
+    atiende en `classifier_only.escalate_after_minutes` (10 min, `config/emergency_rules.yaml`), el proceso
+    automático la escala a Dirección. Todo queda en la bitácora.
+  - **Por qué.** En el conjunto de prueba final (holdout, 150 frases, `voice/eval/results/predictions_holdout.csv`)
+    el clasificador, sin ninguna regla, marcó como emergencia **20 emergencias reales** que las reglas no
+    detectaron y **32 falsas alarmas** (de 100 frases que no eran emergencia). Con una sola pantalla roja, 39 de
+    las 88 pantallas rojas del holdout serían falsas (casi la mitad) y la gente aprendería a ignorarla; con dos
+    niveles, la roja queda en 7 falsas de 36. Quitarle al clasificador todo aviso perdería esas 20 emergencias. Con dos niveles, las 20 siguen viendo el 911 y los signos de peligro, y una
+    persona de coordinación confirma cada caso en minutos. Caso que lo motivó: "el paciente comió bien y está
+    tranquilo" (nota escrita, PAC-0112) salió como emergencia con P = 0.925 solo por el clasificador v1.
 - Confianza de transcripción < 0.6 o texto < 3 palabras → `needs_human_review = true` y se pide repetir.
 - Si el asistente falla o tarda, la interfaz siempre muestra el botón "Llamar al 911".
 

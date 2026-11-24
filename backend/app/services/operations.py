@@ -642,7 +642,9 @@ def _visit_step(db, assignment_id, from_status, to_status, column, user_id, inst
     rid = db.scalar(text(f"""
         UPDATE assignments a SET {column} = {value} FROM service_requests r
         WHERE a.assignment_id = :a AND a.status = 'active' AND a.{column} IS NULL AND r.request_id = a.request_id
-          AND r.status = :from RETURNING r.request_id"""), {"a": assignment_id, "from": expected})
+          AND (r.status = :from OR (:late AND r.status = 'not_closed')) RETURNING r.request_id"""),
+        # a visit marked "No cerrada" (alerts_followup.mark_not_closed) can still be closed with a late "Terminé"
+        {"a": assignment_id, "from": expected, "late": column == "finished_at"})
     if rid is None:
         raise InvalidState(from_status)
     if not middle:

@@ -6,7 +6,7 @@ import {
 
 export const STATUS_ICON: Record<string, LucideIcon> = {
   registered: ClipboardList, validated: ShieldCheck, queued: Clock, assigned: CircleCheck, in_progress: Home,
-  completed: CheckCircle2, closed: Lock, rejected: Ban, cancelled: XCircle, unattended: AlertTriangle,
+  completed: CheckCircle2, closed: Lock, rejected: Ban, cancelled: XCircle, unattended: AlertTriangle, not_closed: AlertTriangle,
 };
 export const COUNTER_ICON: Record<string, LucideIcon> = { queued: Clock, on_the_way: Car, in_visit: Home, done_today: CheckCircle2 };
 export const PRIORITY_ICON: Record<string, LucideIcon> = { high: AlertTriangle, medium: Minus, low: ChevronsDown };

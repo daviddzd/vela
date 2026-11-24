@@ -82,6 +82,9 @@ approval:
 
 dispatch:
   late_tolerance_minutes: 60               # ASSUMPTION: a visit may start up to 60 min after the requested time
+  # A visit still "in progress" this long after its planned end is marked "No cerrada" and coordination is alerted
+  # (someone forgot "Terminé"). Team decision, 23 Nov 2026 (REQ-08939 stayed open a whole day).
+  not_closed_after_minutes: 120
 
 staffing:
   # Working days per caregiver per week, used for the weekly capacity in /personal (shift hours x this value).

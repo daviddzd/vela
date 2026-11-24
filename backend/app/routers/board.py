@@ -54,8 +54,9 @@ def board(user: CurrentUser = Depends(require_role(COORDINATOR, OWNER)), db: Ses
     queue = [{**by_id[r.request_id], "risk": round(r.risk, 2)} for r in ordered]
 
     alerts = db.execute(text("""
-        SELECT alert_id, type, level, code, message, request_id, created_at FROM alerts
-        WHERE status = 'open' ORDER BY created_at DESC LIMIT 20""")).mappings().all()
+        SELECT alert_id, type, level, code, message, request_id, created_at, escalate_at, escalated_at FROM alerts
+        WHERE status = 'open'
+        ORDER BY (type = 'emergency_review') DESC, (level = 'critical') DESC, created_at DESC LIMIT 20""")).mappings().all()
 
     visits = db.execute(text(f"""
         SELECT r.request_id, r.patient_id, r.status, r.priority, r.scheduled_for, s.name AS service_name,

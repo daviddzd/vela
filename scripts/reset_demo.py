@@ -14,11 +14,15 @@ What it deletes (all of it is created while the app runs; none of it comes from 
   - demo scenarios: scenario_runs and everything hanging from them (simulated air quality, traffic,
     caregivers out of service, contingency events / proposals / decisions, priority changes)
   - open or past assignment proposals (assignment_proposals)
-  - live service requests (not in the seed) that are still PENDING (visit not started), with their
-    assignments, and every request created by the demo panel (origin 'demo_scenario').
-    The worker creates today's care-plan visits again on its next round, assigned automatically.
-What it never touches: the seed (it is all past history; the demo panel only changes pending visits),
-visits that already started or finished today, and audit_log (the audit trail is append-only).
+  - every live service request (not in the seed) created by a PERSON or by the demo panel, finished or not, with its
+    assignments: origins family, coordinator, voice_assistant, demo_scenario and contingency (team decision,
+    23 Nov 2026: rehearsal visits such as REQ-09008, already closed, must not stay in the agenda);
+  - care-plan visits (origin 'care_plan', created by the worker) that have NOT started yet: the worker creates them
+    again on its next round, assigned automatically, which also undoes what the demo panel did to them (someone
+    out of service, contingency changes).
+What it never touches: the seed (it is all past history), care-plan visits that already started or finished (the
+real work of the automatic process; one nobody closed is marked "No cerrada" by the worker, see
+app/services/alerts_followup.py), and audit_log (the audit trail is append-only).
 The reset itself is recorded in audit_log (action 'demo_reset').
 """
 from __future__ import annotations
@@ -35,7 +39,7 @@ COUNT_TABLES = ["voice_reports", "alerts", "family_notices", "arco_requests", "s
                 "contingency_proposals", "contingency_decisions", "priority_overrides", "traffic_conditions",
                 "caregiver_unavailability", "air_quality_scenario", "assignment_proposals"]
 
-# Live requests to remove: not in the seed, and (created by the demo panel, or visit not started yet).
+# Live requests to remove: not in the seed, and (created by a person or the demo panel, or a care-plan visit not started).
 TARGET_REQUESTS = """
 CREATE TEMP TABLE seed_requests (request_id text PRIMARY KEY);
 {seed_rows}
@@ -45,7 +49,7 @@ CREATE TEMP TABLE seed_consents (consent_id text PRIMARY KEY, granted boolean, g
 CREATE TEMP TABLE target_requests AS
   SELECT r.request_id FROM service_requests r
   WHERE r.request_id NOT IN (SELECT request_id FROM seed_requests)
-    AND (r.origin = 'demo_scenario'
+    AND (r.origin IN ('family', 'coordinator', 'voice_assistant', 'demo_scenario', 'contingency')
          OR NOT EXISTS (SELECT 1 FROM assignments a WHERE a.request_id = r.request_id AND a.arrived_at IS NOT NULL));
 """
 

@@ -6,6 +6,7 @@ import { useEffect, useState, type ReactNode } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router";
 import { useAuth } from "../auth/AuthContext";
 import { es } from "../i18n/es";
+import { EscalatedAlerts } from "./EscalatedAlerts";
 import { Icon } from "./icons";
 
 // `bare`: presentation mode, only the page content (no navigation, no footer).
@@ -71,7 +72,7 @@ export function AppShell({ children, bare = false }: { children: ReactNode; bare
           </nav>
         )}
       </header>
-      <main className="mx-auto max-w-[1880px] px-4 py-6">{children}</main>
+      <main className="mx-auto max-w-[1880px] px-4 py-6">{user.role === "owner" && <EscalatedAlerts />}{children}</main>
       <footer className="mx-auto max-w-[1880px] px-4 pb-6 text-muted">{es.app.syntheticData}</footer>
     </div>
   );
