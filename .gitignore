@@ -42,3 +42,6 @@ docs/dev/capturas/identidad/revision_final/
 docs/biblia/biblia_enlaza.pdf
 docs/biblia/out/
 docs/biblia/capturas/
+
+# Windows download metadata (copied from Windows into WSL)
+*:Zone.Identifier
