@@ -101,11 +101,11 @@ def call_me(body: CallMeIn, user: CurrentUser = Depends(require_role(*SPEAKERS))
     p = db.execute(text("""SELECT pe.first_name || ' ' || pe.paternal_surname AS name, pe.indigenous_language
                            FROM patients pa JOIN persons pe USING (person_id) WHERE pa.patient_id = :p"""),
                    {"p": body.patient_id}).one()
-    lang = LANG.get(p.indigenous_language, "lengua no registrada")
+    lang = LANG.get(p.indigenous_language, "sin registrar")
     alert_id = db.scalar(text("""INSERT INTO alerts (institution_id, type, level, patient_id, message)
                                  VALUES (:i, 'call_back', 'high', :p, :m) RETURNING alert_id"""),
                          {"i": user.institution_id, "p": body.patient_id,
-                          "m": f"Pedir que alguien llame: {p.name}. Lengua registrada: {lang}."})
+                          "m": f"Pedir que alguien llame: {p.name}. Lengua: {lang}."})
     publish(db, "alert.created", user.institution_id, alert_id=alert_id)
     audit(db, user_id=user.user_id, institution_id=user.institution_id, action="voice_call_back", entity="patient",
           entity_id=body.patient_id, detail={"language": p.indigenous_language})

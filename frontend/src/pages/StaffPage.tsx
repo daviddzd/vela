@@ -11,7 +11,7 @@ import { AlertTriangle, Ban, Icon } from "../components/icons";
 import { StatusBadge } from "../components/StatusBadge";
 import { Button, Card, inputClass, Notice } from "../components/ui";
 import { es } from "../i18n/es";
-import { formatTime } from "../lib/format";
+import { formatDate, formatTime } from "../lib/format";
 import { useBoardSocket } from "../lib/useBoardSocket";
 
 const StreetMap = lazy(() => import("../components/StreetMap").then((m) => ({ default: m.StreetMap })));
@@ -37,6 +37,12 @@ export function StaffPage() {
     label: c.caregiver_id === sel ? c.name.split(" ").slice(0, 2).join(" ") : undefined,
     tooltip: `${fill(t.base, { name: c.name })} · ${t.type[c.type]} · ${c.out_of_service ? t.outOfService : c.on_shift_now ? t.onShift : t.offShift}`,
   })), [d, sel]);
+
+  // a click on a base in the map selects that person and brings their agenda into view
+  const choose = useCallback((id: string) => {
+    setSel(id);
+    setTimeout(() => document.getElementById("agenda")?.scrollIntoView({ behavior: "smooth", block: "start" }), 0);
+  }, []);
 
   if (!d) return <AppShell><p>{es.common.loading}</p></AppShell>;
   const person = d.staff.find((c: any) => c.caregiver_id === sel);
@@ -65,11 +71,12 @@ export function StaffPage() {
         </Card>
         <div className="space-y-4">
           <Coverage version={d} />
-          {person && <Agenda person={person} onMsg={(m) => { setMsg(m); load(); }} />}
+          {person && <div id="agenda" className="scroll-mt-4"><Agenda person={person} onMsg={(m) => { setMsg(m); load(); }} /></div>}
           <Card>
             <h2 className="text-teal">{t.mapTitle}</h2>
             <div className="mt-2"><Suspense fallback={<div style={{ minHeight: 380 }} />}>
-              <StreetMap points={points} height={380} label={t.mapLabel} /></Suspense></div>
+              <StreetMap points={points} height={380} label={t.mapLabel} onSelect={choose} /></Suspense></div>
+            <p className="mt-2 text-sm text-muted">{t.mapHint}</p>
             <ul className="mt-2 flex flex-wrap gap-x-5 text-sm">
               <li><span style={{ color: chart.series[0] }}>■</span> {t.onShift}</li>
               <li><span style={{ color: "#9AA5AB" }}>■</span> {t.offShift}</li>
@@ -95,7 +102,7 @@ function Coverage({ version }: { version: unknown }) {
     const s = dateOf(g.start), e = dateOf(g.end);
     if (s === e) return h24(g.end);
     if (e === nextDate(s) && h24(g.end) === "0:00") return "24:00";
-    return `${t.weekdayName[isoWeekday(e)]} ${h24(g.end)}`;
+    return `${t.weekdayName[isoWeekday(e)]} ${formatDate(g.end)} ${h24(g.end)}`;
   };
   return (
     <Card>
@@ -104,7 +111,7 @@ function Coverage({ version }: { version: unknown }) {
       <p className="mt-2 font-bold" aria-live="polite">{c.gaps === 0 ? t.coverageNone : c.gaps === 1 ? t.coverageCountOne : fill(t.coverageCount, { n: c.gaps })}</p>
       <ul className="mt-2 divide-y divide-teal/10">{c.days.map((day: any) => (
         <li key={day.date} className="py-2">
-          <p className="font-bold capitalize">{t.weekdayName[day.weekday]} {Number(day.date.slice(8, 10))}</p>
+          <p className="font-bold first-letter:uppercase">{t.weekdayName[day.weekday]} {day.date.split("-").reverse().join("/")}</p>
           {day.gaps.length === 0 ? <p className="text-sm text-ok"><Icon as={CheckCircle2} /> {t.coverageOk}</p>
             : <ul>{day.gaps.map((g: any) => (
               <li key={g.skill + g.start} className="font-bold text-danger"><Icon as={AlertTriangle} /> {fill(t.coverageGap,

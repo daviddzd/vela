@@ -32,7 +32,7 @@ export function AppShell({ children, bare = false }: { children: ReactNode; bare
         <div className="mx-auto flex max-w-[1880px] items-center gap-3 px-4 py-2">
           <img src="/logo.svg" alt={`${es.app.name} · ${es.app.tagline}`} className="h-10 shrink-0" />
 
-          <nav aria-label={es.shell.menu} className="hidden flex-1 xl:block">
+          <nav aria-label={es.shell.menu} className="hidden min-w-0 flex-1 xl:block">
             <ul className="flex items-center gap-0.5">
               {user.screens.map((path) => (
                 <li key={path}><NavLink to={path} className={link}>{es.nav.short[path] ?? es.screens[path]}</NavLink></li>
@@ -47,8 +47,10 @@ export function AppShell({ children, bare = false }: { children: ReactNode; bare
 
           {/* Desktop / projector: logout always visible; the user's name only when there is room (>= 1536 px) */}
           <div className="hidden shrink-0 items-center gap-3 xl:ml-auto xl:flex">
-            <p className="hidden text-right leading-tight 2xl:block">
-              <span className="block font-bold">{user.display_name}</span>
+            {/* a long name ("Coordinación Red Vecinal Iztacalco") wraps in at most two lines inside a fixed width, the
+                full name on hover, so the header never overflows and "Cerrar sesión" is never cut */}
+            <p className="hidden w-52 text-right leading-tight 2xl:block" title={user.display_name}>
+              <span className="line-clamp-2 font-bold">{user.display_name}</span>
               <span className="text-sm text-muted">{es.roles[user.role]}{user.institution_id ? ` · ${user.institution_id}` : ""}</span>
             </p>
             <LogoutButton onLogout={onLogout} />

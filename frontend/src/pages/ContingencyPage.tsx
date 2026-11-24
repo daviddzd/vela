@@ -25,6 +25,7 @@ const TONE: Record<string, string> = { normal: "text-ok", watch: "text-warn", ph
 
 export function ContingencyPage() {
   const { user } = useAuth();
+  const owner = user?.role === "owner";        // Dirección sees every institution: "por institución"
   const [d, setD] = useState<Current | null>(null);
   const [picked, setPicked] = useState<Record<string, Set<number>>>({});
   const [msg, setMsg] = useState("");
@@ -95,13 +96,13 @@ export function ContingencyPage() {
         </div>
 
         <div className="space-y-4 xl:col-span-2">
-          {open.length === 0 && <Card><h2 className="text-teal">{t.proposalQ}</h2><p className="mt-2">{t.noProposal}</p></Card>}
+          {open.length === 0 && <Card><h2 className="text-teal">{owner ? t.proposalQOwner : t.proposalQ}</h2><p className="mt-2">{owner ? t.noProposalOwner : t.noProposal}</p></Card>}
           {open.map((e) => {
             const mine = e.proposals;
             const pending = mine.filter((p) => p.status === "proposed");
             const sel = picked[e.event_id] ?? new Set<number>();
             return (
-              <ChartCard key={e.event_id} question={`${t.proposalQ}${e.origin === "demo_scenario" ? ` (${t.demo})` : ""}`} source={t.source}
+              <ChartCard key={e.event_id} question={`${owner ? t.proposalQOwner : t.proposalQ}${e.origin === "demo_scenario" ? ` (${t.demo})` : ""}`} source={t.source}
                 note={user?.role === "owner" ? t.ownerView : t.nothingChanges}>
                 {user?.role === "owner" ? (
                   <ul className="space-y-1">{[...new Set(mine.map((p) => p.institution_id))].map((inst) => {

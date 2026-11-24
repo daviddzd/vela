@@ -49,14 +49,17 @@ function shapeSvg(symbol: string, color: string, size: number): string {
   return `<svg width="${s}" height="${s}" viewBox="0 0 ${s} ${s}" aria-hidden="true">${shape}</svg>`;
 }
 
-export function StreetMap({ points, districtFill = {}, height = 440, label }:
-  { points: MapPoint[]; districtFill?: Record<string, string>; height?: number; label: string }) {
+export function StreetMap({ points, districtFill = {}, height = 440, label, onSelect }:
+  { points: MapPoint[]; districtFill?: Record<string, string>; height?: number; label: string;
+    onSelect?: (id: string) => void }) {      // a click (or Enter) on a point selects it in the page
   const el = useRef<HTMLDivElement>(null);
   const map = useRef<maplibregl.Map | null>(null);
   const markers = useRef<maplibregl.Marker[]>([]);
   const [failed, setFailed] = useState(() => !webglAvailable());
   const [ready, setReady] = useState(false);
-  const [glLost, setGlLost] = useState(false);       // GPU reset / sleep on Windows: MapLibre redraws when it is restored
+  const [glLost, setGlLost] = useState(false);
+  const select = useRef(onSelect);
+  select.current = onSelect;       // GPU reset / sleep on Windows: MapLibre redraws when it is restored
 
   // create the map once; fall back if it cannot load the style or the first tiles in time
   useEffect(() => {
@@ -72,6 +75,15 @@ export function StreetMap({ points, districtFill = {}, height = 440, label }:
     // the card may still be growing when the map is created (lazy loading, grid layout): follow its size
     const resize = new ResizeObserver(() => m.resize());
     resize.observe(el.current);
+    // The OpenStreetMap credit is required by its licence and stays; only its English joining words are translated.
+    const credit = new MutationObserver(() => {
+      el.current?.querySelectorAll(".maplibregl-ctrl-attrib-inner").forEach((box) => {
+        box.childNodes.forEach((n) => {
+          if (n.nodeType === Node.TEXT_NODE && /Data from/.test(n.textContent ?? "")) n.textContent = (n.textContent ?? "").replace("Data from", es.map.dataFrom);
+        });
+      });
+    });
+    credit.observe(el.current, { childList: true, subtree: true });
     m.addControl(new maplibregl.NavigationControl({ showCompass: false }), "top-right");
     const timer = setTimeout(() => { if (!done) setFailed(true); }, LOAD_TIMEOUT_MS);
     m.on("error", (e: any) => { if (!done && /style|Failed to fetch|NetworkError|tile/i.test(String(e?.error?.message ?? e))) setFailed(true); });
@@ -94,7 +106,7 @@ export function StreetMap({ points, districtFill = {}, height = 440, label }:
       }
       m.once("idle", () => { done = true; clearTimeout(timer); setReady(true); });   // style + first tiles drawn
     });
-    return () => { clearTimeout(timer); resize.disconnect(); markers.current.forEach((mk) => mk.remove()); m.remove(); map.current = null; };
+    return () => { clearTimeout(timer); resize.disconnect(); credit.disconnect(); markers.current.forEach((mk) => mk.remove()); m.remove(); map.current = null; };
   }, [failed]);
 
   // district shading (contingency levels): a match expression on district_id
@@ -128,7 +140,7 @@ export function StreetMap({ points, districtFill = {}, height = 440, label }:
       const show = () => popup.setLngLat([p.lon, p.lat]).addTo(m);
       node.addEventListener("mouseenter", show);
       node.addEventListener("focus", show);
-      node.addEventListener("click", show);
+      node.addEventListener("click", () => { show(); select.current?.(p.id); });
       node.addEventListener("mouseleave", () => popup.remove());
       node.addEventListener("blur", () => popup.remove());
       return new maplibregl.Marker({ element: node, anchor: p.label && p.labelPosition === "left" ? "right" : "center" })
@@ -138,7 +150,7 @@ export function StreetMap({ points, districtFill = {}, height = 440, label }:
 
   if (failed) {
     return (<>
-      <CityMap points={points} districtFill={districtFill} height={height} label={label} />
+      <CityMap points={points} districtFill={districtFill} height={height} label={label} onSelect={onSelect} />
       <p className="mt-1 text-sm text-muted">{es.map.fallback}</p>
     </>);
   }
@@ -146,7 +158,7 @@ export function StreetMap({ points, districtFill = {}, height = 440, label }:
   return (<>
     <div className="relative w-full" style={{ height }}>
       <div ref={el} style={{ height }} className="w-full overflow-hidden rounded-card" role="region" aria-label={label} aria-hidden={cover} />
-      {cover && <div className="absolute inset-0 z-10 bg-white"><CityMap points={points} districtFill={districtFill} height={height} label={label} /></div>}
+      {cover && <div className="absolute inset-0 z-10 bg-white"><CityMap points={points} districtFill={districtFill} height={height} label={label} onSelect={onSelect} /></div>}
     </div>
     {cover && <p className="mt-1 text-sm text-muted" role="status">{es.map.loading}</p>}
   </>);

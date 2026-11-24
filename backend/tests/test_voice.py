@@ -105,7 +105,7 @@ def test_call_me_creates_a_request_with_the_language(tx_client, db_conn):
     r = tx_client.post("/api/voice/call-me", json={"patient_id": pid}).json()
     with session_on(db_conn, "INS-A") as s:
         msg = s.scalar(text("SELECT message FROM alerts WHERE alert_id = :a AND type = 'call_back'"), {"a": r["alert_id"]})
-    assert "Lengua registrada" in msg
+    assert "Lengua: " in msg
 
 
 def test_physician_inbox_scope_consent_and_review(tx_client, db_conn, monkeypatch):

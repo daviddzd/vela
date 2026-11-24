@@ -9,7 +9,7 @@ import { EChart, esc } from "../charts/EChart";
 import { axisCommon, baseOption, chart } from "../charts/theme";
 import { AppShell } from "../components/AppShell";
 import { ChartCard } from "../components/ChartCard";
-import { Button, Card, inputClass } from "../components/ui";
+import { Button, Card, inputClass, Notice } from "../components/ui";
 import { es } from "../i18n/es";
 
 const t = es.business;
@@ -61,14 +61,19 @@ export function BusinessPage() {
     api.business().then((x) => { setD(x); setM(x.model); setValues(defaults(x)); });
   }, []);
 
+  // The three plan shares must add up to 100 %; until they do, nothing is recalculated (a notice says why).
+  const mixSum = values ? values.plan_mix_basic + values.plan_mix_professional + values.plan_mix_institutional : 100;
+  const mixOk = Math.abs(mixSum - 100) < 0.01;
+
   // Live recalculation: wait 400 ms after the last change, then ask the API.
   useEffect(() => {
     if (!values) return;
     if (first.current) { first.current = false; return; }
+    if (!mixOk) { setBusy(false); return; }
     setBusy(true);
     const id = setTimeout(() => api.businessModel(values).then(setM).finally(() => setBusy(false)), 400);
     return () => clearTimeout(id);
-  }, [values]);
+  }, [values, mixOk]);
 
   if (!d || !m || !values) return <AppShell><p>{es.common.loading}</p></AppShell>;
   const a: Record<string, Row> = d.assumptions;
@@ -79,7 +84,6 @@ export function BusinessPage() {
     if (i === 0) return set("customers_year1", v);
     const g = [...growth]; g[i - 1] = v; set("customer_growth_year2_5", g.join(","));
   };
-  const mixTotal = values.plan_mix_basic + values.plan_mix_professional + values.plan_mix_institutional;
 
   return (
     <AppShell>
@@ -109,8 +113,9 @@ export function BusinessPage() {
           <fieldset className="mt-4 space-y-2">
             <legend className="font-bold">{t.mix} <Src row={a.plan_mix_basic} /></legend>
             {["plan_mix_basic", "plan_mix_professional", "plan_mix_institutional"].map((k) => (
-              <NumberField key={k} label={`${t.mixKeys[k]} (${num(mixTotal ? (100 * values[k]) / mixTotal : 0, 0)} %)`} value={values[k]} step={5} onChange={(v) => set(k, v)} />))}
-            <p className="text-sm text-muted">{t.mixNote}</p>
+              <NumberField key={k} label={`${t.mixKeys[k]} (%)`} value={values[k]} step={5} onChange={(v) => set(k, v)} />))}
+            {mixOk ? <p className="text-sm text-muted">{t.mixNote}</p>
+              : <Notice kind="error">{fill(t.mixBad, { n: num(mixSum, 1) })}</Notice>}
           </fieldset>
           <fieldset className="mt-4">
             <legend className="font-bold">{t.customers} <Src row={a.customers_year1} /></legend>
@@ -191,7 +196,7 @@ function FlowChart({ m }: { m: any }) {
     ],
   }), [rows, m.breakeven_month, m.breakeven_year]);
   return (
-    <ChartCard synthetic={false} question={t.flowQ} source={`assumptions.csv · ${t.derived}`}
+    <ChartCard synthetic={false} question={t.flowQ} source={`${t.assumptionsSource} · ${t.derived}`}
       table={{ columns: [t.month, t.revenue, t.costs, t.profit, t.cash],
         rows: rows.map((r) => [r.month, mxn(r.revenue), mxn(r.costs), mxn(r.profit), mxn(r.cash)]) }}>
       <ChartLegend items={[{ label: t.revenue, color: chart.series[0], kind: "line" }, { label: t.costs, color: chart.series[1], kind: "line" }]} />
@@ -213,7 +218,7 @@ function CustomersChart({ m }: { m: any }) {
       lineStyle: { width: 2, color: chart.series[0] }, itemStyle: { color: chart.series[0] } }],
   }), [rows]);
   return (
-    <ChartCard synthetic={false} question={t.customersQ} source={`assumptions.csv · ${t.derived}`}
+    <ChartCard synthetic={false} question={t.customersQ} source={`${t.assumptionsSource} · ${t.derived}`}
       table={{ columns: [t.month, t.customersLine], rows: rows.map((r) => [r.month, num(r.customers, 1)]) }}>
       <EChart option={option} height={200} label={t.customersQ} />
     </ChartCard>

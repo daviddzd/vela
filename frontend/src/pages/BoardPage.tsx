@@ -8,11 +8,11 @@ import { RequestForm } from "../components/RequestForm";
 import { RequestResult } from "../components/RequestResult";
 import { StatusBadge } from "../components/StatusBadge";
 import { Card, Notice } from "../components/ui";
-import { AlertTriangle, COUNTER_ICON, Icon } from "../components/icons";
+import { AlertTriangle, CheckCircle2, COUNTER_ICON, Icon } from "../components/icons";
 import { RefreshCw, Radio } from "lucide-react";
 import { es } from "../i18n/es";
 import { formatClock, formatLongDate, useServerClock } from "../lib/clock";
-import { formatTime, formatWhen } from "../lib/format";
+import { formatWhen } from "../lib/format";
 import { useBoardSocket } from "../lib/useBoardSocket";
 import type { ServiceRequest } from "../api/client";
 import { relayText } from "../lib/relay";
@@ -76,12 +76,18 @@ export function BoardPage() {
                 <span>
                   <strong className={q.priority === "high" ? "text-danger" : ""}>
                     {q.priority === "high" && <><Icon as={AlertTriangle} /> </>}{es.priority[q.priority]}
-                  </strong>{" · "}<Link to={`/pacientes/${q.patient_id}`} className="underline decoration-teal/40 hover:text-teal">{q.patient_name}</Link> · {q.service_name} · {formatTime(q.scheduled_for)}
+                  </strong>{" · "}<Link to={`/pacientes/${q.patient_id}`} className="underline decoration-teal/40 hover:text-teal">{q.patient_name}</Link> · {q.service_name} · {formatWhen(q.scheduled_for, board ? new Date(board.now) : undefined)}
                   <span className="block text-muted">
                     {es.board.origin[q.origin] ?? q.origin} · {q.status_reason ? es.statusReason[q.status_reason] : ""}
                   </span>
                 </span>
-                <span className="font-bold tabular-nums">{q.minutes_waiting} {es.common.minutes} {es.board.waiting}</span>
+                <span className="flex flex-wrap items-center gap-3">
+                  <span className="font-bold tabular-nums">{q.minutes_waiting} {es.common.minutes} {es.board.waiting}</span>
+                  {q.status_reason === "awaiting_approval" && (
+                    <Link to={`/aprobaciones?solicitud=${encodeURIComponent(q.request_id)}`}
+                      className="inline-flex min-h-12 items-center gap-2 rounded-card bg-teal px-4 font-bold text-white hover:bg-teal-dark">
+                      <Icon as={CheckCircle2} /> {es.board.reviewApprove}</Link>)}
+                </span>
               </li>
             ))}
           </ol>
@@ -112,7 +118,7 @@ export function BoardPage() {
           <ul className="mt-3 max-h-60 divide-y divide-teal/10 overflow-y-auto">
             {board?.visits.map((v) => (
               <li key={v.request_id} className="flex flex-wrap items-center justify-between gap-2 py-1">
-                <span>{formatTime(v.scheduled_for)} · <Link to={`/pacientes/${v.patient_id}`} className="underline decoration-teal/40 hover:text-teal">{v.patient_name}</Link> · {v.caregiver_name ?? es.family.pendingCaregiver}{v.relay_caregiver_name && ` (${relayText(v.relay_caregiver_name, v.relay_at)})`}</span>
+                <span>{formatWhen(v.scheduled_for, board ? new Date(board.now) : undefined)} · <Link to={`/pacientes/${v.patient_id}`} className="underline decoration-teal/40 hover:text-teal">{v.patient_name}</Link> · {v.caregiver_name ?? es.family.pendingCaregiver}{v.relay_caregiver_name && ` (${relayText(v.relay_caregiver_name, v.relay_at)})`}</span>
                 <StatusBadge status={v.status} />
               </li>
             ))}

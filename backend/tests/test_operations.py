@@ -245,7 +245,10 @@ def test_caregiver_arrives_finishes_and_family_confirms(tx_client, db_conn):
     assert aid in [v["assignment_id"] for v in tx_client.get("/api/visits/mine").json()]
     assert tx_client.post(f"/api/visits/{aid}/finish").status_code == 409        # must arrive first
     assert tx_client.post(f"/api/visits/{aid}/arrive").json()["status"] == "in_progress"
-    assert tx_client.post(f"/api/visits/{aid}/finish").json()["status"] == "completed"
+    early = tx_client.post(f"/api/visits/{aid}/finish")                       # 0 of 30 min: "¿Seguro?"
+    assert early.status_code == 409 and early.json()["needs_confirmation"] and early.json()["expected_min"] == 30
+    assert early.json()["detail"] == "¿Seguro? La visita dura 30 min."
+    assert tx_client.post(f"/api/visits/{aid}/finish?confirm=true").json()["status"] == "completed"
 
     login(tx_client, "fam-0001@ejemplo.test")
     overview = tx_client.get("/api/family/overview").json()
@@ -368,3 +371,50 @@ def test_proposed_candidate_is_reserved_until_the_hold_expires(tx_client, db_con
         assert ops.load_holds(s, "INS-A")[0].expires < ops.now()
     later = new_request(tx_client, "medium", tomorrow_at(10), patient=p2).json()
     assert later["status"] == "assigned" and later["caregiver_id"] == held
+
+
+def test_arrived_opens_60_min_before_the_visit(tx_client, db_conn):
+    """'Llegué' is refused more than 60 min before the scheduled time (Chrome review, 23 Nov 2026)."""
+    aid = _visit_now(db_conn)
+    with session_on(db_conn, "INS-A") as s:
+        s.execute(text("""UPDATE service_requests SET scheduled_for = now() + interval '3 hours'
+                          WHERE request_id = (SELECT request_id FROM assignments WHERE assignment_id = :a)"""), {"a": aid})
+        s.commit()
+    login(tx_client, "cui-003@ejemplo.test")
+    visit = next(v for v in tx_client.get("/api/visits/mine").json() if v["assignment_id"] == aid)
+    assert visit["arrive_from"] and visit["expected_min"] > 0
+    r = tx_client.post(f"/api/visits/{aid}/arrive")
+    assert r.status_code == 409 and r.json()["detail"].startswith("Podrás registrar tu llegada desde las")
+    with session_on(db_conn, "INS-A") as s:                                  # now it is 45 min away: allowed
+        s.execute(text("""UPDATE service_requests SET scheduled_for = now() + interval '45 minutes'
+                          WHERE request_id = (SELECT request_id FROM assignments WHERE assignment_id = :a)"""), {"a": aid})
+        s.commit()
+    assert tx_client.post(f"/api/visits/{aid}/arrive").json()["status"] == "in_progress"
+
+
+def test_in_visit_counts_only_visits_still_going(tx_client, db_conn):
+    """A visit from an earlier day that nobody finished (like REQ-08939) is not "En visita"; a 12-h night service
+    that began yesterday and has not reached its planned end is."""
+    with session_on(db_conn, "INS-A") as s:
+        free_caregiver(s, "CUI-003")
+        free_caregiver(s, "CUI-004")
+        def started(hours_ago: int, lasts_h: int, caregiver: str) -> str:
+            rid = s.scalar(text("""INSERT INTO service_requests (institution_id, patient_id, service_id, origin, priority,
+                                   scheduled_for, created_at, status) VALUES ('INS-A', :p, 'SRV-02', 'coordinator',
+                                   'medium', now() - :h * interval '1 hour', now() - :h * interval '1 hour' - interval '1 hour',
+                                   'in_progress') RETURNING request_id"""), {"p": PATIENT, "h": hours_ago})
+            s.execute(text("""INSERT INTO assignments (request_id, institution_id, caregiver_id, assigned_by, approval,
+                              assigned_at, planned_start, planned_end, arrived_at)
+                              VALUES (:r, 'INS-A', :c, 'USR-002', 'auto', now() - :h * interval '1 hour',
+                                      now() - :h * interval '1 hour', now() + (:l - :h) * interval '1 hour',
+                                      now() - :h * interval '1 hour')"""),
+                      {"r": rid, "c": caregiver, "h": hours_ago, "l": lasts_h})
+            return rid
+        s.execute(text("UPDATE service_requests SET status = 'completed' WHERE status = 'in_progress'"))  # clean slate
+        started(26, 1, "CUI-003")                 # yesterday, 1 h visit, never finished → not in visit
+        night = started(26, 30, "CUI-004")        # began yesterday, planned end still ahead → in visit
+        s.commit()
+    login(tx_client, "coordinacion.a@ejemplo.test")
+    board = tx_client.get("/api/board").json()
+    assert board["counters"]["in_visit"] == 1
+    assert [v["request_id"] for v in board["visits"] if v["status"] == "in_progress"] == [night]
