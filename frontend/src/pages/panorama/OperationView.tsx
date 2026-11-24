@@ -39,11 +39,15 @@ export function OperationView({ filters }: { filters: Filters }) {
     }
   }, [data]);
 
+  // "Con Enlaza" shows a percentage only with enough real visits (team decision 24 Nov 2026, API min_visits_for_rate)
+  const velaEnough = !!data && data.periods.vela.arrived >= data.min_visits_for_rate;
+
   // One small chart per measure (punctuality, unattended); each has the baseline and the "with Vela" line.
   const periodChart = useCallback((key: "on_time_pct" | "unattended_pct") => {
     if (!data) return null;
     const days = [...new Set(data.daily.map((d) => d.day))];
-    const value = (day: string, period: string) => data.daily.find((d) => d.day === day && d.period === period)?.[key] ?? null;
+    const value = (day: string, period: string) =>
+      period === "vela" && !velaEnough ? null : data.daily.find((d) => d.day === day && d.period === period)?.[key] ?? null;
     return {
       ...baseOption(), legend: { show: false },
       grid: { left: 8, right: 52, top: 12, bottom: 8, containLabel: true },
@@ -61,7 +65,7 @@ export function OperationView({ filters }: { filters: Filters }) {
           endLabel: { show: true, formatter: "{c} %", color: chart.ink } },
       ],
     };
-  }, [data]);
+  }, [data, velaEnough]);
   const onTimeOption = useMemo(() => periodChart("on_time_pct"), [periodChart]);
   const unattendedOption = useMemo(() => periodChart("unattended_pct"), [periodChart]);
 
@@ -87,7 +91,11 @@ export function OperationView({ filters }: { filters: Filters }) {
   const withHoursToday = staff.filter((s) => s.hours_today > 0).length;
   const worked = staff.filter((s) => s.avg_hours_per_day > 0);
   const avgHistory = worked.length ? worked.reduce((a, s) => a + s.avg_hours_per_day, 0) / worked.length : 0;
-  const { baseline, vela } = data.periods;
+  const { baseline } = data.periods;
+  // below the minimum the "Con Enlaza" figures are hidden (null) and the comparison says how many visits there are
+  const vela = velaEnough ? data.periods.vela : { ...data.periods.vela, on_time_pct: null, unattended_pct: null };
+  const velaEmpty = data.periods.vela.arrived === 0 ? t.noVelaYet
+    : data.periods.vela.arrived === 1 ? t.insufficientOne : t.insufficient.replace("{n}", String(data.periods.vela.arrived));
   const periodLegend = [{ label: t.baseline, color: BASELINE, kind: "dashed" as const }, { label: t.withVela, color: VELA, kind: "line" as const }];
   const compare = (label: string, before: number | null, after: number | null, empty: string) => (
     <li><strong>{label}:</strong> {pct(before)} {t.before} · {after == null ? <span className="text-muted">{empty}</span> : <strong>{pct(after)} {t.withVelaShort}</strong>}</li>
@@ -115,10 +123,11 @@ export function OperationView({ filters }: { filters: Filters }) {
           note={t.onTimeNote} source={t.onTimeSource}
           table={{ columns: ["Día", t.period, t.onTimeSeries, t.unattendedSeries, "Visitas"],
             rows: data.daily.map((d) => [shortDay(d.day), d.period === "baseline" ? t.baseline : t.withVela,
-              pct(d.on_time_pct), pct(d.unattended_pct), d.visits]) }}>
+              d.period === "vela" && !velaEnough ? "—" : pct(d.on_time_pct),
+              d.period === "vela" && !velaEnough ? "—" : pct(d.unattended_pct), d.visits]) }}>
           <ul className="mb-3 space-y-1">
-            {compare(t.onTimeSeries, baseline.on_time_pct, vela.on_time_pct, t.noVelaYet)}
-            {compare(t.unattendedSeries, baseline.unattended_pct, vela.unattended_pct, t.noVelaYet)}
+            {compare(t.onTimeSeries, baseline.on_time_pct, vela.on_time_pct, velaEmpty)}
+            {compare(t.unattendedSeries, baseline.unattended_pct, vela.unattended_pct, velaEmpty)}
           </ul>
           <ChartLegend items={periodLegend} />
           <h3 className="font-bold">{t.onTimeSeries}</h3>

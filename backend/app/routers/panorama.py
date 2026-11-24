@@ -30,6 +30,9 @@ from app.services import operations as ops
 router = APIRouter(prefix="/api/panorama", tags=["panorama"])
 VIEWERS = require_role(COORDINATOR, OWNER)
 ON_TIME_MINUTES = 15          # ASSUMPTION: "puntual" = arrived at most 15 min after the scheduled time
+# Team decision (24 Nov 2026, ASSUMPTION): with fewer real visits than this, the "Con Enlaza" percentages are not shown
+# ("Datos insuficientes (N visitas)"): a few rehearsal visits would read as 100 % punctual / 0 % unattended.
+MIN_VISITS_FOR_RATE = 30
 TZ = "America/Mexico_City"
 
 
@@ -114,6 +117,7 @@ def operation(user: CurrentUser = Depends(VIEWERS), db: Session = Depends(tenant
             "counters": dict(counters),
             "on_time_pct": totals["on_time_pct"], "unattended_pct": totals["unattended_pct"],
             "totals": totals, "periods": periods, "daily": series, "staff_load": load,
+            "min_visits_for_rate": MIN_VISITS_FOR_RATE,
             "queue_by_priority": [by_priority.get(p, {"priority": p, "waiting": 0, "max_wait_min": None})
                                   for p in ("high", "medium", "low")]}
 
