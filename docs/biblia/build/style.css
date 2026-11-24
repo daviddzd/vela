@@ -134,3 +134,7 @@ figure.shot.celular img { max-height: 150mm; }
 figure.shot.media img { max-height: 95mm; }
 
 th code { background: rgba(255,255,255,.18); color: #fff; }
+.nowrap { white-space: nowrap; }
+
+/* set by render.cjs when a figure must shrink to fit with its text on the page */
+figure.fit img, figure.fit svg { max-height: var(--fit-height) !important; width: auto; }

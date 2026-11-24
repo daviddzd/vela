@@ -60,7 +60,7 @@ hojas de cálculo:
 En el historial sintético con el que arranca el sistema ({{ seed.history_days }} días, {{ seed.service_requests }}
 solicitudes), el {{ seed.requests_unattended_pct }} de las solicitudes quedaron **sin atender por falta de
 personal disponible**. Ese porcentaje es un dato **sintético**, puesto a propósito: es el problema que Enlaza
-debe reducir. La simulación (SIRAG-D, Parte II) mide cuánto lo reduce cada forma de asignar.
+debe reducir. La simulación (SIRAG-D, @ref(cap-sirag)) mide cuánto lo reduce cada forma de asignar.
 
 ### Seis módulos, seis materias, un solo sistema
 
@@ -101,7 +101,7 @@ Cada decisión grande tuvo alternativas. Estas son las que más preguntan:
 |---|---|---|
 | Una plataforma [[SaaS]]: una sola instalación que usan muchas instituciones, cada una con su suscripción | Un programa que cada institución instala en su computadora | Una institución pequeña no tiene área de sistemas; con SaaS paga una mensualidad y no instala nada. Para nosotros es un solo sistema que mantener. El reto es que una institución nunca vea a otra: lo resuelve la seguridad por fila (@ref(cap-seguridad)). |
 | **Una sola aplicación** con seis módulos | Seis proyectos separados, uno por materia | Así cada módulo usa datos reales de los otros: la simulación prueba el **mismo** código de asignación que la operación; la voz crea solicitudes reales; el negocio cuenta pacientes reales del sistema. |
-| **Asignación automática** con aprobación humana en lo de prioridad alta | Que la coordinadora asigne todo a mano | Asignar a mano es lento y depende de quién esté. Pero en lo delicado decide una persona. La única excepción (urgente sin respuesta en {{ cfg.auto_apply_after }}) salió de la simulación (Parte II y Parte IV). |
+| **Asignación automática** con aprobación humana en lo de prioridad alta | Que la coordinadora asigne todo a mano | Asignar a mano es lento y depende de quién esté. Pero en lo delicado decide una persona. La única excepción (urgente sin respuesta en {{ cfg.auto_apply_after }}) salió de la simulación (@ref(cap-sirag) y Parte IV). |
 | [[Datos sintéticos]] calibrados con fuentes oficiales | Pedir datos reales a una institución | Los datos de salud son **datos personales sensibles** (LFPDPPP 2025). Para un proyecto escolar no es ético ni legal usarlos. Los datos sintéticos se pueden publicar, repetir y explicar. |
 | Todo corre **en una laptop**, con IA local | Servicios en la nube de pago (servidores, modelos de lenguaje) | Costo cero, nada sale de la computadora (privacidad) y no dependemos de una tarjeta de crédito. Para mostrarlo al público usamos un túnel gratuito de Cloudflare (@ref(cap-arquitectura)). |
 | Reloj **real** (hora de la Ciudad de México) | Un reloj simulado que avanza rápido | Así la demostración es creíble: lo que pasa en pantalla pasa de verdad, a la hora real. Lo acelerado vive solo en la simulación, fuera de línea. |
@@ -110,8 +110,9 @@ Cada decisión grande tuvo alternativas. Estas son las que más preguntan:
 
 El proyecto se llamó **Vela** hasta el 23 de noviembre de 2026 (una vela acompaña y alumbra). Ese día el equipo
 adoptó una identidad nueva: **Enlaza · cuidado coordinado**, con logotipo, colores y tipografía propios
-(`docs/brand.md`). El módulo de voz se llamaba **ORACLE-Voz**; como «Oracle» es una marca registrada, pasó a
-llamarse **Enlaza Voz**. Para no romper nada, **el código conserva los nombres internos viejos**: la base de datos
+(`docs/brand.md`). El módulo de voz, que se llamaba **ORACLE-Voz**, pasó a llamarse **Enlaza Voz** como parte de ese
+mismo cambio de identidad: todos los módulos quedaron bajo una sola marca. Además, el nombre nuevo evita confusiones con
+Oracle, que es una marca registrada de software. Para no romper nada, **el código conserva los nombres internos viejos**: la base de datos
 se llama `vela`, el rol de la API `vela_api`, el archivo `oracle.py`. Solo cambió lo que lee una persona. Si un
 profesor ve «vela» en el código, esa es la razón.
 
@@ -168,7 +169,12 @@ En palabras:
 
 ## Números clave
 
-{{ tabla seed.pop60_cdmx neg.market_care_residences_cdmx neg.market_residential_care_cdmx seed.institutions seed.patients seed.caregivers seed.persons seed.service_requests seed.requests_unattended_pct seed.users repo.pages repo.backend_tests }}
+{{ tabla seed.pop60_cdmx neg.market_care_residences_cdmx neg.market_residential_care_cdmx seed.institutions seed.patients seed.caregivers seed.persons seed.service_requests seed.requests_unattended_pct seed.users repo.pages repo.tests_summary }}
+
+!!! nota "¿Por qué hay más pruebas que funciones de prueba?"
+    Una función de prueba puede correr varias veces con datos distintos: se marca con `@pytest.mark.parametrize` y pytest la
+    cuenta una vez por cada juego de datos. Por eso pytest reporta {{ repo.pytest_collected }} pruebas aunque en el código
+    haya {{ repo.backend_tests }} funciones `def test_…`. Las dos cifras se recalculan al generar el libro.
 
 ## Limitaciones honestas
 
@@ -209,14 +215,15 @@ En palabras:
     atender; la simulación mide cuánto lo cambia cada forma de asignar.
 
 !!! pregunta "¿Por qué el código dice «vela» si el proyecto se llama Enlaza?"
-    El proyecto se llamó Vela hasta el 23 de noviembre de 2026. Al cambiar la identidad se cambió todo lo que lee
+    El proyecto se llamó Vela hasta el 23 de noviembre de 2026 (y su módulo de voz, ORACLE-Voz). Al cambiar la identidad
+    se cambió todo lo que lee
     una persona (interfaz, documentos, logo), pero no los nombres internos (base `vela`, rol `vela_api`), porque
     cambiarlos a días de la defensa podía romper la base de datos y las pruebas sin aportar nada al usuario.
 
 !!! pregunta "¿Quién paga Enlaza?"
     La institución, con una suscripción mensual según su tamaño (planes Básico, Profesional e Institucional). La
     familia no paga a Enlaza. El detalle, con el punto de equilibrio y el mercado del DENUE, está en el capítulo de
-    modelo de negocio (Parte II).
+    modelo de negocio (@ref(cap-negocio)).
 
 !!! pregunta "¿Qué pasa si se cae el internet durante la defensa?"
     Todo corre en la laptop: base de datos, servidor, voz e inteligencia artificial. Sin internet solo se pierde el

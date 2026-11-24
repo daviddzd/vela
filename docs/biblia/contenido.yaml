@@ -28,7 +28,15 @@ partes:
     titulo: "Parte II · Cómo funciona cada módulo"
     kicker: "Parte II"
     descripcion: "Operación, tiempo real, Panorama-AM, SIRAG-D, contingencia, Enlaza Voz, negocio y ética, por dentro."
-    capitulos: []
+    capitulos:
+      - parte2/06_operacion.md
+      - parte2/07_tiempo_real.md
+      - parte2/08_panorama.md
+      - parte2/09_sirag_d.md
+      - parte2/10_contingencia_demo.md
+      - parte2/11_enlaza_voz.md
+      - parte2/12_negocio.md
+      - parte2/13_etica_legal.md
 
   - id: parte-3
     titulo: "Parte III · Por materia"

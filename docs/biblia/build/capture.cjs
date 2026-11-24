@@ -109,6 +109,38 @@ async function screens(user, list, opts = {}) {
   await screens("cui-003", [["cuidador_celular", "/mis-visitas"]], { viewport: PHONE });
   await screens("coordinacion.a", [["coordinacion_tablero_celular", "/tablero", { wait: 5000, full: false }]], { viewport: PHONE });
 
+  // ---- Cards of the long pages, one image per card (main section), for Part II
+  async function cards(user, route, prefix, opts = {}) {
+    if (!want(prefix)) return;
+    const { ctx, page } = await session(user, opts);
+    await page.goto(`${BASE}${route}`); await settle(page, opts.wait ?? 3500);
+    if (opts.before) await opts.before(page);
+    const list = page.locator("main section");
+    const n = await list.count();
+    for (let i = 0; i < n; i++) {
+      const el = list.nth(i);
+      if ((await el.boundingBox())?.height < 40) continue;
+      await el.scrollIntoViewIfNeeded(); await page.waitForTimeout(400);
+      await el.screenshot({ path: path.join(OUT, `${prefix}_${String(i + 1).padStart(2, "0")}.png`) });
+    }
+    console.log("tarjetas", prefix, n);
+    await ctx.close();
+  }
+  await cards("owner", "/simulacion", "tarjeta_simulacion");
+  await cards("owner", "/negocio", "tarjeta_negocio");
+  await cards("owner", "/panorama?vista=panorama", "tarjeta_poblacion");
+  await cards("owner", "/panorama", "tarjeta_operacion");
+  await cards("coordinacion.a", "/personal", "tarjeta_personal", { wait: 5000 });
+  await cards("coordinacion.a", "/contingencia", "tarjeta_contingencia", { wait: 5000 });
+  for (const [tab, name] of [["Consentimientos", "tarjeta_consentimientos"], ["Derechos ARCO", "tarjeta_arco"]]) {
+    await cards("coordinacion.a", "/privacidad", name, { before: async (page) => {
+      await page.getByRole("button", { name: tab }).first().click().catch(() => page.getByRole("tab", { name: tab }).click());
+      await page.waitForTimeout(1500); } });
+  }
+  await cards("owner", "/privacidad", "tarjeta_bitacora", { before: async (page) => {
+    await page.getByRole("button", { name: "Bitácora" }).first().click().catch(() => page.getByRole("tab", { name: "Bitácora" }).click());
+    await page.waitForTimeout(2000); } });
+
   // ---- Interactive captures (reset_demo.py removes all of this afterwards)
   if (want("urgente")) {
     // Dirección creates an urgent high-priority request from the demo panel -> coordination must approve
@@ -158,6 +190,36 @@ async function screens(user, list, opts = {}) {
     await coord.page.goto(`${BASE}/tablero`); await settle(coord.page, 4000);
     await shot(coord.page, "voz_revision_tablero", { full: false });
     await coord.ctx.close();
+  }
+
+  if (want("contingencia")) {
+    // Dirección starts the demo contingency; the worker detects it and proposes; coordination approves; back to normal
+    const own = await session("owner");
+    await own.page.goto(`${BASE}/demo`); await settle(own.page, 1500);
+    await own.page.getByRole("button", { name: "Contingencia en el oriente" }).click();
+    const coord = await session("coordinacion.a");
+    let found = false;
+    for (let i = 0; i < 30 && !found; i++) {                 // detection takes under a minute (worker tick)
+      await coord.page.waitForTimeout(5000);
+      await coord.page.goto(`${BASE}/contingencia`); await settle(coord.page, 2500);
+      found = (await coord.page.getByRole("button", { name: "Aprobar todo" }).count()) > 0;
+    }
+    await shot(coord.page, "contingencia_propuesta", { full: false });
+    await shot(coord.page, "contingencia_propuesta_completa");
+    await coord.page.goto(`${BASE}/tablero`); await settle(coord.page, 4000);
+    await shot(coord.page, "contingencia_tablero", { full: false });
+    await coord.page.goto(`${BASE}/contingencia`); await settle(coord.page, 2500);
+    if (found) {
+      await coord.page.getByRole("button", { name: "Aprobar todo" }).first().click();
+      await coord.page.waitForTimeout(3000);
+      await shot(coord.page, "contingencia_aprobada", { full: false });
+    }
+    await own.page.goto(`${BASE}/contingencia`); await settle(own.page, 3000);
+    await shot(own.page, "contingencia_direccion", { full: false });
+    await own.page.goto(`${BASE}/demo`); await settle(own.page, 1500);
+    await own.page.getByRole("button", { name: "Volver a normal" }).click();
+    await own.page.waitForTimeout(3000);
+    await own.ctx.close(); await coord.ctx.close();
   }
 
   if (want("solicitud")) {

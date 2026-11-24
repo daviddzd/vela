@@ -49,7 +49,7 @@ def fmt(value, kind: str = "int", decimals: int = 1) -> str:
     if kind == "dec":
         return f"{value:,.{decimals}f}"
     if kind == "money":
-        return f"${value:,.0f}"
+        return f"−${-value:,.0f}" if value < 0 else f"${value:,.0f}"
     raise ValueError(kind)
 
 
@@ -118,6 +118,16 @@ def seed() -> None:
     add("seed.assign_coordinator", ap.get("coordinator", 0), "Asignaciones aprobadas por coordinación en el historial",
         "database/seed/assignments.csv, approval")
 
+    for plan in read_csv("database/seed/subscription_plans.csv"):
+        add(f"seed.plan_limit_{plan['plan_id']}", int(plan["patient_limit"]) if plan["patient_limit"] else "sin límite",
+            f"Límite de pacientes del plan {plan['name']}", "database/seed/subscription_plans.csv")
+    from datetime import datetime as _dt
+    sched = {r["request_id"]: r["scheduled_for"] for r in req}
+    arrived = [a for a in asg if a["arrived_at"]]
+    on_time = sum(1 for a in arrived
+                  if round((_dt.fromisoformat(a["arrived_at"][:19]) - _dt.fromisoformat(sched[a["request_id"]][:19])).total_seconds() / 60) <= 15)
+    add("seed.punctual_pct", 100 * on_time / len(arrived), "Historial: llegadas a más tardar 15 min después de la hora (línea base)",
+        "database/seed/assignments.csv + service_requests.csv", kind="pct")
     persons = read_csv("database/seed/persons.csv")
     n = len(persons)
     chronic = ["diabetes", "hypertension", "high_cholesterol", "heart_disease", "stroke", "kidney_disease",
@@ -135,6 +145,8 @@ def seed() -> None:
     cg = read_csv("database/seed/caregivers.csv")
     for typ, k in Counter(c["type"] for c in cg).items():
         add(f"seed.caregivers_{typ}", k, f"Personal de tipo {typ}", "database/seed/caregivers.csv, type")
+    add("seed.night_12h", sum(1 for c in cg if c["shift_start"][:5] == "20:00" and c["shift_end"][:5] == "08:00"),
+        "Personas con turno nocturno de 12 h (20:00–08:00)", "database/seed/caregivers.csv")
     pat = read_csv("database/seed/patients.csv")
     for ins, k in Counter(p["institution_id"] for p in pat).items():
         add(f"seed.patients_{ins.replace('-', '_')}", k, f"Pacientes de {ins}", "database/seed/patients.csv")
@@ -219,6 +231,36 @@ def config() -> None:
     lo, hi = sim["human_dispatcher_delay_minutes"]
     add("cfg.human_delay", f"{lo}–{hi}", "Retraso del despacho humano (supuesto)", f"{src} human_dispatcher_delay_minutes", unit="min")
 
+    hm = sim["health_markov"]
+    for k, v in hm["base_transition_per_hour"].items():
+        if isinstance(v, (int, float)) and not isinstance(v, bool):
+            add(f"cfg.markov_{k}", v, f"Probabilidad por hora {k.replace('_', ' ')} (supuesto)", f"{src} health_markov", kind="dec",
+                decimals=4 if v < 0.01 else 2)
+    for k, v in hm["risk_multipliers"].items():
+        add(f"cfg.mult_{k}", v, f"Multiplicador de riesgo: {k} (supuesto)", f"{src} health_markov.risk_multipliers", kind="dec", decimals=2)
+    add("cfg.risk_medium_from", hm["risk_levels"]["medium_from"], "Riesgo «medio» desde (supuesto)", src, kind="dec")
+    add("cfg.risk_high_from", hm["risk_levels"]["high_from"], "Riesgo «alto» desde (supuesto)", src, kind="dec")
+    for k, v in hm["pollution_effects"].items():
+        if isinstance(v, (int, float)):
+            add(f"cfg.pm_{k}", 100 * v, f"Aumento por +10 µg/m³ de PM2.5: {k}", f"{src} health_markov.pollution_effects", kind="pct",
+                decimals=2)
+    th = sim["contingency"]["thresholds"]
+    add("cfg.o3_phase1", th["o3_phase1_ppb_1h"], "Umbral de Fase I por ozono (1 h)", f"{src} contingency.thresholds", unit="ppb")
+    add("cfg.watch_pct", 100 * th["watch_fraction"], "Vigilancia: porcentaje del umbral (supuesto)", f"{src} contingency.thresholds",
+        kind="pct", decimals=0)
+    add("cfg.detect_every", sim["contingency"]["detection_interval_minutes"], "Intervalo de detección configurado",
+        f"{src} contingency", unit="min")
+    sc = sim["scenarios"]
+    add("cfg.sac_target", sc["contingency_east"]["pm25_targets_ugm3"]["SAC"], "PM2.5 objetivo en la estación SAC (escenario)",
+        f"{src} scenarios.contingency_east", unit="µg/m³")
+    add("cfg.ramp", sc["contingency_east"]["ramp_minutes"], "Rampa del escenario de contingencia", f"{src} scenarios", unit="min")
+    add("cfg.scenario_hours", sc["contingency_east"]["duration_hours"], "Duración del escenario de contingencia", f"{src} scenarios",
+        unit="h")
+    add("cfg.roadblock_factor", sc["contingency_east_roadblocks"]["extra_traffic_factor"], "Factor de tráfico con bloqueo (supuesto)",
+        f"{src} scenarios", kind="dec", decimals=2)
+    add("cfg.blockade_minutes", sim["traffic"]["blockade_extra_minutes"], "Minutos extra por viaje que cruza el bloqueo (supuesto)",
+        f"{src} traffic", unit="min")
+
     rules = read_yaml("config/emergency_rules.yaml")
     cats = rules["categories"]
     add("cfg.emergency_categories", len(cats), "Categorías de signos de alarma (reglas de Enlaza Voz)",
@@ -246,6 +288,8 @@ def simulation() -> None:
     v = read_csv("simulation/results/validation.csv")[0]
     vs = "simulation/results/validation.csv"
     add("sim.val_real_pct", float(v["pct_all"]), "Historial: solicitudes sin atender (%)", vs, kind="pct")
+    add("sim.val_real_nocancel_pct", float(v["pct_without_cancelled"]), "Historial: sin atender, sin contar cancelaciones (%)", vs,
+        kind="pct")
     add("sim.val_real_short_pct", float(v["pct_short_services"]), "Historial: sin atender, servicios cortos (%)", vs, kind="pct")
     add("sim.val_sim_short_pct", float(v["sim_short_mean"]), "Simulación: sin atender, servicios cortos (%)", vs, kind="pct")
     add("sim.val_sim_short_ci", f"{float(v['sim_short_ci_low']):.1f}–{float(v['sim_short_ci_high']):.1f} %",
@@ -261,6 +305,58 @@ def simulation() -> None:
         add(key, float(r["mean"]), f"{r['metric']} · {names.get(r['policy'], r['policy'])} · {r['scenario']}", ss, kind=kind)
         add(key + ".ci", f"{float(r['ci_low']):.1f}–{float(r['ci_high']):.1f}",
             f"IC 95 % de {r['metric']} · {names.get(r['policy'], r['policy'])} · {r['scenario']}", ss)
+
+
+def pfmt(p: float) -> str:
+    """p-value as printed in the bible."""
+    return "p < 0.001" if p < 0.001 else f"p = {p:.3f}"
+
+
+def simulation_more() -> None:
+    """Sensitivity, statistical tests, holds check, contingency window (SIRAG-D)."""
+    names = {"human_dispatcher": "despacho humano", "nearest": "más cercano", "risk_priority": "prioridad por riesgo",
+             "risk_plus_live_traffic": "Enlaza sin límite de tiempo", "vela_timeout": "Enlaza (como opera hoy)"}
+    src = "simulation/results/sensitivity.csv"
+    for r in read_csv(src):
+        level = r["approval_delay"] or r["risk_multiplier"] or r["extra_staff"]
+        level = level.replace(".0", "")
+        key = f"sens.{r['knob']}.{level}.{r['policy']}.{r['metric']}"
+        kind = "pct" if r["metric"].endswith("_pct") else "dec"
+        add(key, float(r["mean"]), f"Sensibilidad {r['knob']}={level}: {r['metric']} · {names.get(r['policy'])}", src, kind=kind)
+        add(key + ".ci", f"{float(r['ci_low']):.1f}–{float(r['ci_high']):.1f}", f"IC 95 % de {key}", src)
+
+    for fname, prefix in (("tests.csv", "test"), ("sensitivity_tests.csv", "senstest")):
+        src = f"simulation/results/{fname}"
+        for r in read_csv(src):
+            base = f"{prefix}.{r['scenario']}.{r['metric']}"
+            if prefix == "senstest":
+                base = f"{prefix}.{r['knob']}.{r['level'].replace('.0', '')}.{r['metric']}"
+            add(base + ".omnibus", f"{r['omnibus']} ({pfmt(float(r['omnibus_p']))})", f"Prueba global {base}", src)
+            add(base + ".pairwise", r["pairwise_test"], f"Prueba por pares {base}", src)
+            for pol in ("nearest", "risk_priority", "risk_plus_live_traffic", "vela_timeout"):
+                if r.get(f"{pol}_diff_mean", "") == "":
+                    continue
+                add(f"{base}.{pol}.diff", float(r[f"{pol}_diff_mean"]), f"Diferencia media vs. despacho humano: {base} · {names[pol]}",
+                    src, kind="dec", decimals=1)
+                add(f"{base}.{pol}.p", pfmt(float(r[f"{pol}_p_holm"])), f"p con Holm: {base} · {names[pol]}", src)
+
+    src = "simulation/results/holds_check.csv"
+    for r in read_csv(src):
+        kind = "pct" if r["metric"].endswith("_pct") else "dec"
+        add(f"holds.{r['metric']}.with", float(r["with_holds"]), f"{r['metric']} con reserva", src, kind=kind)
+        add(f"holds.{r['metric']}.without", float(r["without_holds"]), f"{r['metric']} sin reserva", src, kind=kind)
+        add(f"holds.{r['metric']}.p", pfmt(float(r["p_holm"])), f"p con Holm, reserva: {r['metric']}", src)
+
+    src = "simulation/results/contingency_effect.csv"
+    for r in read_csv(src):
+        for k in ("at_risk_entries", "win_at_risk_entries", "crises", "win_crises"):
+            add(f"ceff.{r['scenario']}.{k}", int(r[k]), f"{k} (30 semanas) · {r['scenario']}", src)
+
+    src = "simulation/results/window.csv"
+    for r in read_csv(src):
+        kind = "pct" if r["metric"].endswith("_pct") else "dec"
+        add(f"win.{r['scenario']}.{r['policy']}.{r['metric']}", float(r["mean"]),
+            f"Ventana de contingencia: {r['metric']} · {names.get(r['policy'])} · {r['scenario']}", src, kind=kind)
 
 
 # ----------------------------------------------------------------------------------------------------------------
@@ -282,6 +378,11 @@ def voice() -> None:
         add(f"voz.{split}.f1", d["macro_f1"], f"F1 macro, {label}", src, kind="dec", decimals=3)
         add(f"voz.{split}.fa100", d["false_alarms_per_100_notes"], f"Falsas alarmas por 100 notas, {label}", src, kind="dec")
         add(f"voz.{split}.missed", len(d.get("missed_emergencies", [])), f"Emergencias no detectadas, {label}", src)
+        cm = d["confusion_matrix"]["values"]
+        labs = ["routine", "urgent", "emergency"]
+        for i, t in enumerate(labs):
+            for j, p_ in enumerate(labs):
+                add(f"vozcm.{split}.{t}.{p_}", cm[i][j], f"Matriz de confusión {label}: real {t}, predicho {p_}", src)
 
 
 # ----------------------------------------------------------------------------------------------------------------
@@ -394,6 +495,63 @@ def slug_ascii(text: str) -> str:
     return unicodedata.normalize("NFKD", text).encode("ascii", "ignore").decode().lower().replace(" ", "_")
 
 
+def voice_breakdown() -> None:
+    """Two-level emergency notice, computed from the per-phrase predictions (voice/eval/results/predictions_*.csv)."""
+    for split, fname in (("holdout", "predictions_holdout.csv"), ("external", "predictions_external.csv"),
+                         ("internal_test", "predictions_internal_test.csv")):
+        src = f"voice/eval/results/{fname}"
+        rows = read_csv(src)
+        rule = lambda r: r["rule_hits"] not in ("", "[]")
+        emerg = [r for r in rows if r["label"] == "emergency"]
+        non = [r for r in rows if r["label"] != "emergency"]
+        red = [r for r in rows if rule(r)]
+        amber = [r for r in rows if not rule(r) and r["final"] == "emergency"]
+        items = {
+            "non_emergencies": (len(non), "Frases que no son emergencia"),
+            "emerg_by_rules": (sum(rule(r) for r in emerg), "Emergencias que detectan las reglas"),
+            "emerg_only_classifier": (sum(1 for r in emerg if not rule(r) and r["final"] == "emergency"),
+                                      "Emergencias que solo detecta el clasificador"),
+            "false_alarms": (sum(1 for r in non if r["final"] == "emergency"), "Falsas alarmas (no era emergencia)"),
+            "false_by_rules": (sum(1 for r in non if rule(r)), "Falsas alarmas que vienen de reglas"),
+            "false_by_classifier": (sum(1 for r in non if not rule(r) and r["final"] == "emergency"),
+                                    "Falsas alarmas que vienen solo del clasificador"),
+            "red": (len(red), "Pantallas rojas (se activó una regla)"),
+            "red_false": (sum(1 for r in red if r["label"] != "emergency"), "Pantallas rojas falsas"),
+            "amber": (len(amber), "Avisos ámbar (solo el clasificador)"),
+            "amber_false": (sum(1 for r in amber if r["label"] != "emergency"), "Avisos ámbar falsos"),
+            "all_emergency_screens": (len(red) + len(amber), "Pantallas de emergencia si todo fuera rojo"),
+        }
+        for k, (v, label) in items.items():
+            add(f"vozb.{split}.{k}", v, f"{label} · {split}", src)
+    src = "voice/eval/results/rules_comparison.csv"
+    for r in read_csv(src):
+        k = slug_ascii(r["conjunto"]).replace(",", "").replace("__", "_")
+        tag = "antes" if r["reglas"] == "antes" else "despues"
+        add(f"vozr.{k}.{tag}.sens", float(r["sensitivity_pct"]), f"Solo reglas, {r['conjunto']}, {r['reglas']}: sensibilidad", src, kind="pct")
+        add(f"vozr.{k}.{tag}.fa100", float(r["false_alarms_per_100"]), f"Solo reglas, {r['conjunto']}, {r['reglas']}: falsas alarmas/100", src, kind="dec")
+    v2 = OUT / "v2_holdout.json"      # written by build_biblia.sh from the unmerged branch feature/voz-clasificador-v2
+    if v2.exists():
+        d = json.loads(v2.read_text(encoding="utf-8"))
+        src2 = "rama feature/voz-clasificador-v2 (sin fusionar): voice/eval/results/v2_holdout.json"
+        for model, tag in (("v2_minilm", "v2"), ("v1_active", "v1")):
+            m = d[model]
+            add(f"vozv2.{tag}.sens", m["emergency_sensitivity_pct"], f"Holdout {tag}: sensibilidad", src2, kind="pct")
+            add(f"vozv2.{tag}.fa100", m["false_alarms_per_100_notes"], f"Holdout {tag}: falsas alarmas/100", src2, kind="dec")
+            add(f"vozv2.{tag}.f1", m["macro_f1"], f"Holdout {tag}: F1 macro", src2, kind="dec", decimals=3)
+            add(f"vozv2.{tag}.missed", len(m["missed_emergencies"]), f"Holdout {tag}: emergencias no detectadas", src2)
+            add(f"vozv2.{tag}.ms", m["latency_cpu"]["median_ms"], f"Holdout {tag}: tiempo por nota (mediana)", src2,
+                kind="dec", decimals=0, unit="ms")
+    review = (ROOT / "voice/eval/results/reports_review.md").read_text(encoding="utf-8")
+    add("voz.reports_reviewed", review.count("| ready ("), "Reportes del LLM revisados (criterio A8)", "voice/eval/results/reports_review.md")
+    add("voz.reports_clean", review.count("sin frases prohibidas"), "Reportes sin frases prohibidas (filtro automático)",
+        "voice/eval/results/reports_review.md")
+    tri = read_csv("data/voice/triage_phrases.csv")
+    for lab, n in Counter(r["label"] for r in tri).items():
+        add(f"voz.phr_{lab}", n, f"Frases internas con nivel {lab}", "data/voice/triage_phrases.csv")
+    for sp, n in Counter(r["split"] for r in tri).items():
+        add(f"voz.split_{sp}", n, f"Frases internas en el conjunto {sp}", "data/voice/triage_phrases.csv")
+
+
 def voice_timings() -> None:
     """Measured times of Whisper and the local LLM (voice/eval/timings.py, laptop CPU)."""
     rows = read_csv("voice/eval/results/timings.csv")
@@ -429,6 +587,64 @@ def business() -> None:
             decimals=decimals)
 
 
+def business_model() -> None:
+    """The same calculation as /negocio: backend/app/services/business_model.py on data/business/assumptions.csv."""
+    import importlib.util
+    os.environ["BUSINESS_DIR"] = str(ROOT / "data/business")
+    spec = importlib.util.spec_from_file_location("business_model", ROOT / "backend/app/services/business_model.py")
+    bm = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(bm)
+    src = "backend/app/services/business_model.py sobre data/business/assumptions.csv (lo mismo que /negocio)"
+    m = bm.model()
+    add("bm.arpa1", m["average_revenue_year1"], "Ingreso promedio por institución, año 1 (MXN/mes)", src, kind="money")
+    add("bm.fixed1", m["fixed_costs_year1"], "Costo fijo mensual, año 1 (MXN)", src, kind="money")
+    add("bm.breakeven_static", m["breakeven_institutions_static"], "Punto de equilibrio: costo fijo ÷ ingreso promedio", src,
+        unit="instituciones")
+    add("bm.breakeven_month", m["breakeven_month"], "Mes desde el que ya no se pierde dinero", src)
+    add("bm.breakeven_year", m["breakeven_year"], "Año del equilibrio mensual", src)
+    add("bm.payback_month", m["payback_month"] or "no ocurre", "Mes en que se recupera lo perdido (caja ≥ 0)", src)
+    add("bm.investment", m["investment"]["amount"], "Inversión necesaria (punto más bajo de la caja)", src, kind="money")
+    add("bm.investment_month", m["investment"]["month"], "Mes de la inversión máxima", src)
+    for n in m["npv"]:
+        add(f"bm.npv_{int(n['rate_pct'])}", n["npv"], f"VPN a 5 años al {n['rate_pct']:g} %", src, kind="money")
+        add(f"bm.rate_{int(n['rate_pct'])}", n["rate_pct"], "Tasa de descuento nominal", src, kind="pct", decimals=0)
+    u = m["unit"]
+    add("bm.margin", u["margin_month"], "Margen mensual por institución (ingreso − soporte y hospedaje)", src, kind="money")
+    add("bm.variable_cost", u["variable_cost_month"], "Costo variable mensual por institución", src, kind="money")
+    add("bm.lifetime", u["lifetime_months"], "Vida esperada de un cliente (1 ÷ churn)", src, kind="dec", decimals=0, unit="meses")
+    add("bm.ltv", u["ltv"], "LTV (margen × vida, sin descontar)", src, kind="money")
+    add("bm.cac", u["cac"], "CAC: costo de conseguir una institución", src, kind="money")
+    add("bm.ltv_cac", f"{u['ltv_cac']:.1f} : 1", "LTV / CAC", src)
+    add("bm.cac_payback", u["cac_payback_months"], "Meses para recuperar el CAC", src, kind="dec", unit="meses")
+    for y in m["years"]:
+        add(f"bm.y{y['year']}.customers", y["customers_end"], f"Instituciones al cierre del año {y['year']} (base)", src,
+            kind="dec", decimals=0)
+        add(f"bm.y{y['year']}.profit", y["profit"], f"Utilidad del año {y['year']} (base)", src, kind="money")
+    w = bm.what_for_npv_zero()
+    add("bm.zero_price", w["plan_professional_price"], "Precio Profesional que haría el VPN base = 0", src, kind="money")
+    add("bm.zero_year5", w["customers_year5"], "Instituciones en el año 5 que harían el VPN base = 0", src, kind="dec", decimals=0)
+    add("bm.zero_cac", w["cac"], "CAC que haría el VPN base = 0", src, kind="money")
+    sc = bm.scenarios()
+    for name, label in (("base", "base"), ("conservative", "conservador"), ("recommended", "recomendado")):
+        d = sc[name]
+        add(f"bm.sc.{name}.investment", d["investment"]["amount"], f"Escenario {label}: inversión necesaria", src, kind="money")
+        add(f"bm.sc.{name}.breakeven", d["breakeven_month"] or "no ocurre", f"Escenario {label}: mes de equilibrio", src)
+        add(f"bm.sc.{name}.payback", d["payback_month"] or "no ocurre", f"Escenario {label}: mes en que recupera lo perdido", src)
+        add(f"bm.sc.{name}.npv25", d["npv"][1]["npv"], f"Escenario {label}: VPN al {d['npv'][1]['rate_pct']:g} %", src, kind="money")
+        add(f"bm.sc.{name}.customers5", d["customers_year5"], f"Escenario {label}: instituciones en el año 5", src,
+            kind="dec", decimals=0)
+        for region, sh in d["shares"].items():
+            if sh["share_pct"] is not None:
+                add(f"bm.sc.{name}.share_{region}", sh["share_pct"], f"Escenario {label}: participación privada en {region}, año 5",
+                    src, kind="pct")
+    add("bm.sc.recommended.gov5", sc["recommended"]["government_year5"], "Recomendado: centros públicos (plan Gobierno), año 5",
+        src, kind="dec", decimals=0)
+    rw = sc["recommended_without"]
+    add("bm.rec_wo_gov", rw["government"], "Recomendado sin plan Gobierno: VPN 25 %", src, kind="money")
+    add("bm.rec_wo_cut", rw["founder_cut"], "Recomendado sin recorte a fundadores: VPN 25 %", src, kind="money")
+    add("bm.rec_wo_both", rw["both"], "Recomendado sin ninguno de los dos: VPN 25 %", src, kind="money")
+
+
 # ----------------------------------------------------------------------------------------------------------------
 # 7. Manual measurements (made once by a person; the file says when and where it is documented)
 # ----------------------------------------------------------------------------------------------------------------
@@ -438,17 +654,38 @@ def manual() -> None:
         add(f"man.{key}", d["valor"], d["descripcion"], f"medición manual, {d['fecha']} ({d['documento']})")
 
 
+def history() -> None:
+    """Results of earlier runs that explain team decisions (docs/biblia/datos/historico.yaml)."""
+    for key, d in (read_yaml("docs/biblia/datos/historico.yaml") or {}).items():
+        add(f"hist.{key}", d["valor"], d["descripcion"] + " (histórico)", f"histórico, {d['fecha']} ({d['documento']})")
+
+
 def repo() -> None:
     """Counts of the repository itself (tests, screens, routers)."""
     tests = list((ROOT / "backend/tests").glob("test_*.py"))
     n_tests = sum(p.read_text(encoding="utf-8").count("\ndef test_") + p.read_text(encoding="utf-8").count("\nasync def test_")
                   for p in tests)
+    # pytest runs more tests than there are functions: @pytest.mark.parametrize runs one function once per data set.
+    # scripts/build_biblia.sh saves `pytest --collect-only -q` (run inside the api container) to out/pytest_collect.txt.
+    collected_file = OUT / "pytest_collect.txt"
+    collected = [l.strip() for l in collected_file.read_text(encoding="utf-8").splitlines()] if collected_file.exists() else []
     for t in tests:
         txt = t.read_text(encoding="utf-8")
-        add(f"repo.tests_{t.stem[5:]}", txt.count("\ndef test_") + txt.count("\nasync def test_"),
-            f"Pruebas en {t.name}", f"backend/tests/{t.name}")
+        funcs = txt.count("\ndef test_") + txt.count("\nasync def test_")
+        runs = sum(1 for c in collected if c.startswith(f"tests/{t.name}::"))
+        add(f"repo.testfuncs_{t.stem[5:]}", funcs, f"Funciones de prueba en {t.name}", f"backend/tests/{t.name}")
+        if collected:
+            add(f"repo.tests_{t.stem[5:]}", runs, f"Pruebas que corre pytest en {t.name}",
+                "pytest --collect-only (out/pytest_collect.txt)")
+    if collected:
+        add("repo.pytest_collected", len(collected), "Pruebas del backend que corre pytest",
+            "pytest --collect-only -q en el contenedor api (out/pytest_collect.txt)")
     add("repo.backend_test_files", len(tests), "Archivos de pruebas del backend", "backend/tests/test_*.py")
-    add("repo.backend_tests", n_tests, "Pruebas del backend (funciones test_)", "backend/tests/test_*.py")
+    add("repo.backend_tests", n_tests, "Funciones de prueba del backend (def test_…)", "backend/tests/test_*.py")
+    if collected:
+        add("repo.tests_summary", f"{len(collected)} pruebas ({n_tests} funciones)",
+            "Pruebas del backend: las que corre pytest y las funciones que las definen",
+            "pytest --collect-only + backend/tests/test_*.py")
     add("repo.routers", len([p for p in (ROOT / "backend/app/routers").glob("*.py") if p.name != "__init__.py"]),
         "Routers (grupos de rutas) de la API", "backend/app/routers")
     add("repo.services", len([p for p in (ROOT / "backend/app/services").glob("*.py") if p.name != "__init__.py"]),
@@ -485,16 +722,45 @@ def code() -> None:
          "Horas antes de la visita en que el worker publica la solicitud del plan de cuidado", "h"),
         ("code.small_cell", "backend/migrations/versions/0004_baseline_and_broad_multimorbidity.py", r"HAVING count\(\*\) >= (\d+)",
          "Tamaño mínimo de un grupo en las vistas agregadas (regla de celdas pequeñas)", "personas"),
+        ("code.approval_alert", "backend/app/services/queue.py", r"APPROVAL_ALERT_AFTER = timedelta\(minutes=(\d+)\)",
+         "Minutos sin aprobar antes de alertar a coordinación (prioridad alta)", "min"),
+        ("code.queue_alert", "backend/app/services/queue.py", r"QUEUE_ALERT_AFTER = timedelta\(minutes=(\d+)\)",
+         "Minutos sin personal antes de alertar a coordinación", "min"),
+        ("code.on_time", "backend/app/routers/panorama.py", r"ON_TIME_MINUTES = (\d+)",
+         "Una llegada es «puntual» si es a lo más estos minutos tarde (supuesto)", "min"),
+        ("code.close_after_hours", "backend/app/services/contingency.py", r"CLOSE_AFTER_HOURS_BELOW = (\d+)",
+         "Lecturas horarias seguidas debajo de vigilancia para cerrar una contingencia", ""),
+        ("code.max_day", "backend/app/services/labor.py", r'"diurna": ([\d.]+)', "Jornada diurna máxima (LFT art. 61)", "h"),
+        ("code.max_mixed", "backend/app/services/labor.py", r'"mixta": ([\d.]+)', "Jornada mixta máxima (LFT art. 61)", "h"),
+        ("code.max_night", "backend/app/services/labor.py", r'"nocturna": ([\d.]+)', "Jornada nocturna máxima (LFT art. 61)", "h"),
+        ("code.mixed_night_limit", "backend/app/services/labor.py", r"MIXTA_NIGHT_LIMIT = ([\d.]+)",
+         "Horas nocturnas a partir de las que una jornada mixta cuenta como nocturna (art. 60)", "h"),
+        ("code.min_ahead", "backend/app/services/care_plans.py", r"MIN_AHEAD = timedelta\(minutes=(\d+)\)",
+         "Minutos mínimos de anticipación para publicar una visita del plan", "min"),
+        ("code.clock_resync_min", "frontend/src/lib/clock.ts", r"RESYNC_MS = (\d+) \* 60", "Cada cuántos minutos la página resincroniza el reloj", "min"),
+        ("code.clock_leeway", "backend/app/core/security.py", r"CLOCK_LEEWAY_SECONDS = (\d+)",
+         "Tolerancia de reloj al validar la sesión (por los saltos de WSL2)", "s"),
+        ("code.sim_cycle", "simulation/sirag/model.py", r"CYCLE = (\d+)", "Ciclo de despacho en la simulación", "min"),
+        ("code.oxygen_window_h", "backend/app/services/contingency.py", r"now\(\) \+ interval '(\d+) hours'",
+         "Horas hacia adelante en que se buscan oxigenoterapias para adelantar", "h"),
+        ("code.demo_urgent_min", "backend/app/services/contingency.py", r"soon = ops.now\(\) \+ timedelta\(minutes=(\d+)\)",
+         "Minutos a los que el panel demo programa la solicitud urgente", "min"),
+        ("code.class_weight_emergency", "voice/triage/classifier.py", r"CLASS_WEIGHT = \{0: [\d.]+, 1: [\d.]+, 2: ([\d.]+)\}",
+         "Peso de la clase «emergencia» al entrenar (una emergencia omitida cuesta más, supuesto)", ""),
+        ("code.class_weight_urgent", "voice/triage/classifier.py", r"CLASS_WEIGHT = \{0: [\d.]+, 1: ([\d.]+),",
+         "Peso de la clase «urgente» al entrenar (supuesto)", ""),
+        ("code.panorama_days", "backend/app/routers/panorama.py", r"days: int = (\d+)", "Días que muestra Panorama por omisión", "días"),
         ("code.worker_tick", "backend/app/worker.py", r"TICK_SECONDS = (\d+)", "Cada cuántos segundos da una vuelta el worker", "s"),
     ]
     for key, rel, pattern, label, unit in items:
-        add(key, grab(rel, pattern), label, rel, unit=unit)
+        v = grab(rel, pattern)
+        add(key, v, label, rel, unit=unit, kind="int" if v.is_integer() else "dec")
     add("code.ws_retry_s", grab("frontend/src/lib/useBoardSocket.ts", r"RETRY_MS = (\d+)") / 1000,
         "Reintento de conexión del tablero", "frontend/src/lib/useBoardSocket.ts (RETRY_MS / 1000)", unit="s")
 
 
 def main() -> None:
-    for step in (seed, calibration, generator, config, simulation, voice, voice_timings, business, manual, repo, code, database):
+    for step in (seed, calibration, generator, config, simulation, simulation_more, voice, voice_breakdown, voice_timings, business, business_model, manual, history, repo, code, database):
         step()
     OUT.mkdir(parents=True, exist_ok=True)
     (OUT / "numeros.json").write_text(json.dumps(NUMBERS, ensure_ascii=False, indent=1, default=str), encoding="utf-8")

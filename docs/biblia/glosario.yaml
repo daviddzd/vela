@@ -5,10 +5,10 @@
 # ---------------------------------------------------------------- nombres del proyecto
 - termino: Enlaza
   definicion: "Nombre del proyecto y de la empresa ficticia «Enlaza Cuidado Coordinado», adoptado el 23 de noviembre de 2026 junto con su logotipo y colores (`docs/brand.md`). El código conserva los nombres internos anteriores (`vela`, `vela_api`)."
-  antes: "Vela (hasta el 23 nov 2026); el generador de datos original habla de «Cuidado Inteligente MX»"
+  antes: "Cuidado Inteligente MX (Avance 2 de SIE, noviembre de 2026) y Vela (hasta el 23 nov 2026)"
 - termino: Enlaza Voz
   definicion: "Módulo de Cómputo Cognitivo: convierte una nota de voz en texto, revisa si hay señales de emergencia con reglas y con un clasificador, y prepara un reporte para el médico. Nunca diagnostica."
-  antes: "ORACLE-Voz (se cambió porque «Oracle» es una marca registrada; el código conserva `oracle.py`)"
+  antes: "ORACLE-Voz (cambió con la nueva identidad del 23 nov 2026; además evita confusión con la marca Oracle; el código conserva `oracle.py`)"
   tambien: ["ORACLE-Voz"]
 - termino: Panorama-AM
   definicion: "Módulo de Visualización: tableros e indicadores para coordinación y Dirección (operación, población, aire, tráfico). «AM» por adultos mayores."
@@ -105,3 +105,34 @@
   definicion: "Marca de una cookie que impide que el código JavaScript de la página la lea. Protege la sesión aunque alguien lograra inyectar código malicioso."
 - termino: bcrypt
   definicion: "Forma de guardar contraseñas: en lugar de la contraseña, se guarda un resumen lento de calcular y con «sal» aleatoria, para que adivinarlas sea muy costoso aunque alguien robe la tabla."
+
+# ---------------------------------------------------------------- Parte II
+- termino: simulación de eventos discretos
+  definicion: "Modelo en el que el tiempo salta de un evento al siguiente (llega una solicitud, termina una visita, un paciente entra en crisis) en lugar de avanzar segundo a segundo. SIRAG-D usa SimPy."
+  tambien: ["eventos discretos", "SimPy"]
+- termino: cadena de Markov
+  definicion: "Modelo de estados en el que la probabilidad de pasar al siguiente estado depende solo del estado actual. En SIRAG-D: estable → en riesgo → crisis, hora por hora."
+- termino: números aleatorios comunes
+  definicion: "Técnica de simulación: todas las alternativas usan los mismos sorteos en cada réplica, para que la diferencia entre ellas se deba a la alternativa y no al azar. Vuelve las comparaciones pareadas."
+- termino: Friedman
+  definicion: "Prueba estadística que compara tres o más tratamientos medidos sobre los mismos casos (muestras pareadas) sin suponer normalidad. Es la versión pareada de Kruskal-Wallis."
+- termino: Wilcoxon
+  definicion: "Prueba de rangos con signo: compara dos tratamientos medidos sobre los mismos casos sin suponer normalidad. Se usa para cada política contra el despacho humano."
+- termino: Holm
+  definicion: "Corrección para comparaciones múltiples: ajusta los valores p cuando se hacen varias pruebas a la vez, para no «encontrar» diferencias por casualidad."
+- termino: métricas de clasificación
+  definicion: "Medidas de qué tan bien acierta un clasificador: sensibilidad (de los casos reales, cuántos detecta), precisión, F1 (equilibrio entre ambas) y falsas alarmas."
+  tambien: ["sensibilidad", "F1"]
+- termino: matriz de confusión
+  definicion: "Tabla que cruza la clase real (filas) con la que dijo el modelo (columnas). La diagonal son los aciertos; fuera de ella, los errores y de qué tipo son."
+- termino: VPN
+  definicion: "Valor presente neto: suma de los flujos de dinero futuros traídos a pesos de hoy con una tasa de descuento. Si es positivo, el proyecto crea valor a esa tasa."
+  tambien: ["valor presente neto"]
+- termino: LTV
+  definicion: "«Lifetime value»: lo que deja un cliente durante todo el tiempo que se queda (margen mensual × meses de vida)."
+- termino: CAC
+  definicion: "Costo de adquisición de un cliente: lo que cuesta conseguir una institución nueva (ventas, visitas, demostraciones)."
+- termino: LFPDPPP
+  definicion: "Ley Federal de Protección de Datos Personales en Posesión de los Particulares, publicada en el DOF el 20 de marzo de 2025. Regula cómo las empresas tratan datos personales; los de salud son sensibles."
+- termino: ARCO
+  definicion: "Derechos de Acceso, Rectificación, Cancelación y Oposición sobre los propios datos personales. En Enlaza se ejercen en `/privacidad`."

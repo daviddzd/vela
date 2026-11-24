@@ -10,3 +10,13 @@ reconexion_listen_s:
   descripcion: "Tiempo para que la API vuelva a escuchar eventos tras reiniciar PostgreSQL"
   fecha: "21 nov 2026"
   documento: "docs/dev/decisiones_paso_4.md, sección 3"
+deteccion_contingencia_demo:
+  valor: "8–44 s"
+  descripcion: "Tiempo de detección de la contingencia de demostración"
+  fecha: "21 nov 2026"
+  documento: "docs/dev/decisiones_contingencia.md, sección 4"
+whisper_wer_sintetico:
+  valor: "0.14"
+  descripcion: "Tasa de error por palabra de Whisper con voz sintética (prueba del procedimiento de sesgo)"
+  fecha: "21 nov 2026"
+  documento: "docs/dev/decisiones_oracle_voz.md, sección 5"

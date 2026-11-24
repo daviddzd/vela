@@ -113,7 +113,12 @@ def preprocess(ch: Chapter, chapters_by_id: dict[str, Chapter]) -> tuple[str, li
     mermaids: list[str] = []
 
     def keep_mermaid(m):
-        mermaids.append(m.group(1))
+        # numbers inside a diagram are plain text (no HTML)
+        src = re.sub(r"\{\{\s*([\w.\-]+)\s*\}\}",
+                     lambda k: (USED_NUMBERS.setdefault(k.group(1), []).append(where) or NUMBERS[k.group(1)]["text"])
+                     if k.group(1) in NUMBERS else (ERRORS.append(f"{where}: número desconocido {k.group(1)}") or "?"),
+                     m.group(1))
+        mermaids.append(src)
         return f"\n\nMERMAIDBLOCK{len(mermaids) - 1}\n\n"
     text = re.sub(r"```mermaid\n(.*?)```", keep_mermaid, text, flags=re.S)
 
@@ -160,14 +165,30 @@ def preprocess(ch: Chapter, chapters_by_id: dict[str, Chapter]) -> tuple[str, li
     return text, mermaids
 
 
+def caption_html(alt: str) -> str:
+    """Caption text: escape it, then turn `code` into <code> and **bold** into <strong>."""
+    t = html.escape(alt, quote=False)
+    t = re.sub(r"`([^`]+)`", r"<code>\1</code>", t)
+    return re.sub(r"\*\*([^*]+)\*\*", r"<strong>\1</strong>", t)
+
+
+FIG_COUNTER = [0]
+
+
+def fig_id() -> str:
+    FIG_COUNTER[0] += 1
+    return str(FIG_COUNTER[0])
+
+
 def figure(m) -> str:
     alt, src, cls = m.group(1), m.group(2), (m.group(4) or "")
+    plain = re.sub(r"[`*]", "", alt)
     path = BIBLIA / src
     if not path.exists():
         WARNINGS.append(f"falta la imagen {src}")
         return (f'<figure class="shot {cls} missing-shot"><div>Falta la captura <code>{html.escape(src)}</code></div>'
-                f"<figcaption>{alt}</figcaption></figure>")
-    return f'<figure class="shot {cls}"><img src="../{src}" alt="{html.escape(alt)}"><figcaption>{alt}</figcaption></figure>'
+                f"<figcaption>{caption_html(alt)}</figcaption></figure>")
+    return f'<figure class="shot {cls}" data-fig="{fig_id()}"><img src="../{src}" alt="{html.escape(plain)}"><figcaption>{caption_html(alt)}</figcaption></figure>'
 
 
 MD_EXT = ["tables", "attr_list", "admonition", "footnotes", "md_in_html", "sane_lists", "def_list", "fenced_code"]
@@ -179,7 +200,7 @@ def render(ch: Chapter, chapters_by_id: dict[str, Chapter]) -> None:
     text = re.sub(r"^!\[([^\]]*)\]\(([^)]+)\)(\{\.([a-z]+)\})?\s*$", lambda m: "\n" + figure(m) + "\n", text, flags=re.M)
     body = markdown.markdown(text, extensions=MD_EXT, output_format="html5")
     for i, src in enumerate(mermaids):
-        block = f'<figure class="diagram"><pre class="mermaid">{html.escape(src)}</pre></figure>'
+        block = f'<figure class="diagram" data-fig="{fig_id()}"><pre class="mermaid">{html.escape(src)}</pre></figure>'
         body = body.replace(f"<p>MERMAIDBLOCK{i}</p>", block)
     # ids for h2 sections (cap-id--slug) so they can be referenced and appear in the PDF outline
     body = re.sub(r"<h2>(.*?)</h2>",
@@ -255,7 +276,7 @@ def cover_html() -> str:
   <h1 class="cover-title">La biblia de <span>Enlaza</span></h1>
   <p class="cover-sub">Todo el proyecto explicado: qué hace, cómo funciona y por qué se decidió así</p>
   <div class="cover-meta">
-    <p>{html.escape(team_value("escuela"))} · {html.escape(team_value("carrera"))} · {html.escape(team_value("periodo"))}</p>
+    <p>{html.escape(team_value("escuela"))} · {html.escape(team_value("carrera"))} · <span class="nowrap">{html.escape(team_value("periodo"))}</span></p>
     <p>Defensa: {html.escape(d.get("fecha") or "____")} · {html.escape(d.get("hora") or "____")} · {html.escape(d.get("lugar") or "____")}</p>
     <p class="cover-team-h">Equipo</p><ul class="cover-team">{team}</ul>
   </div>

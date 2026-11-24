@@ -111,7 +111,7 @@ al día). El {{ seed.requests_unattended_pct }} quedó sin atender ({{ seed.requ
     Si se mide el historial con la hora **planeada**, hay {{ gen.planned_overlaps }} pares de visitas del mismo cuidador que se cruzan; con la
     hora **real** de llegada y salida, ninguno. Es historial con retrasos y visitas que se recorrieron: realista. Por
     eso la regla «nunca hay traslapes» la garantiza la base de datos para toda asignación **nueva** (con una
-    restricción `EXCLUDE`, Parte II), y `verify_db.py` comprueba 0 traslapes con los horarios reales.
+    restricción `EXCLUDE`, @ref(cap-operacion)), y `verify_db.py` comprueba 0 traslapes con los horarios reales.
 
 ### Paso 4. Aire y tráfico
 
@@ -235,4 +235,4 @@ contraseñas de las cuentas de demostración verifiquen. Debe terminar con «Tod
 !!! pregunta "¿Y las frases de voz también son sintéticas?"
     Sí: {{ ref.triage_phrases }} frases generadas para entrenar y probar, más {{ ref.external_phrases }} externas y
     {{ ref.holdout_phrases }} reservadas (holdout) que nunca se usaron para entrenar. Las frases que grabe el equipo
-    servirán como evaluación final (pendiente). Se explica en la Parte II.
+    servirán como evaluación final (pendiente). Se explica en @ref(cap-voz).

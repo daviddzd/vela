@@ -25,6 +25,12 @@ if [[ "${1:-}" == "--capturas" ]] || [[ -z "$(ls -A docs/biblia/capturas 2>/dev/
   python3 scripts/reset_demo.py
 fi
 
+echo "== Pruebas que recolecta pytest (para contar pruebas y funciones)"
+mkdir -p docs/biblia/out
+docker compose exec -T api pytest --collect-only -q 2>/dev/null | grep '::' > docs/biblia/out/pytest_collect.txt || true
+# Pending branch of the voice classifier v2 (not merged): its one-time holdout result, cited as "pendiente"
+git show feature/voz-clasificador-v2:voice/eval/results/v2_holdout.json > docs/biblia/out/v2_holdout.json 2>/dev/null \
+  || rm -f docs/biblia/out/v2_holdout.json
 echo "== Números (repositorio y base de datos)"
 "${RUN[@]}" python3 docs/biblia/build/collect_numbers.py
 echo "== Markdown → HTML"

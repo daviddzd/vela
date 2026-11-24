@@ -202,7 +202,10 @@ Cada paciente tiene tres tipos de consentimiento, cada uno con fecha de firma y 
 
 ## Números clave
 
-{{ tabla db.rls_patients_none db.rls_patients_insa db.rls_patients_all db.rls_vpatients_none db.rls_persons_none db.tables_with_rls db.tables_total code.jwt_hours code.login_attempts code.ws_recheck seed.consents neg.arco_response_days repo.tests_tenant_isolation repo.tests_privacy repo.tests_auth repo.tests_consents }}
+{{ tabla db.rls_patients_none db.rls_patients_insa db.rls_patients_all db.rls_vpatients_none db.rls_persons_none db.tables_with_rls db.tables_total code.jwt_hours code.login_attempts code.ws_recheck seed.consents neg.arco_response_days repo.tests_tenant_isolation repo.testfuncs_tenant_isolation repo.tests_privacy repo.testfuncs_privacy repo.tests_auth repo.testfuncs_auth repo.tests_consents repo.testfuncs_consents }}
+
+Las «pruebas que corre pytest» pueden ser más que las «funciones de prueba»: una función marcada con
+`@pytest.mark.parametrize` corre una vez por cada juego de datos.
 
 ## Limitaciones honestas
 

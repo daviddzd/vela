@@ -108,7 +108,7 @@ para el médico. Lo que ve la persona depende de lo que encontró:
     clasificador se eligió para no perder emergencias aunque dé falsas alarmas: en el conjunto de prueba que nunca se
     usó para entrenar (holdout) detectó el {{ voz.holdout.sens }} de las emergencias, con {{ voz.holdout.fa100 }}
     falsas alarmas por cada 100 notas. Por eso existe el aviso ámbar (menos alarmante que el rojo) y una persona de
-    coordinación revisa cada caso. La evaluación completa y lo que se decidió están en la Parte II.
+    coordinación revisa cada caso. La evaluación completa y lo que se decidió están en @ref(cap-voz).
 
 ### Personal de cuidado y enfermería: mis visitas
 
@@ -120,7 +120,7 @@ Cuenta de ejemplo: `cui-003@ejemplo.test` (Alejandro González, enfermería, INS
   la API vuelve a revisar que el consentimiento de atención a domicilio siga vigente.
 - **Nota de voz**: el mismo asistente de voz, ya con el paciente elegido.
 - Si una visita dura más que un turno legal, la cubren dos personas en **relevo**; cada una ve su parte («Te
-  releva…» / «Relevas a…»). Se explica en la Parte II.
+  releva…» / «Relevas a…»). Se explica en @ref(cap-operacion).
 
 ![La misma pantalla en el celular, que es como se usa de verdad.](capturas/cuidador_celular.png){.celular}
 
