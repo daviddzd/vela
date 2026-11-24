@@ -5,6 +5,7 @@ export type Operation = {
   counters: { queued: number; on_the_way: number; in_visit: number; done_today: number };
   on_time_pct: number | null; unattended_pct: number | null;
   periods: Record<"baseline" | "vela", { on_time_pct: number | null; unattended_pct: number | null; arrived: number; decided: number }>;
+  min_visits_for_rate: number;   // fewer "Con Enlaza" visits than this -> "Datos insuficientes (N visitas)"
   daily: { day: string; period: "baseline" | "vela"; on_time_pct: number | null; unattended_pct: number | null; visits: number }[];
   staff_load: { caregiver_id: string; name: string; type: string; shift_hours: number; hours_today: number;
     avg_hours_per_day: number }[];

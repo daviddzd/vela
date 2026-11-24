@@ -341,6 +341,9 @@ export const es = {
     before: "antes",
     period: "Periodo",
     noVelaYet: "con Enlaza: aún sin datos (se llena con la operación)",
+    // fewer real visits than min_visits_for_rate (team decision 24 Nov 2026): no percentage for "Con Enlaza"
+    insufficient: "con Enlaza: datos insuficientes ({n} visitas)",
+    insufficientOne: "con Enlaza: datos insuficientes (1 visita)",
     unattendedSeries: "Sin atender",
     unattendedKey: "sin atender",
     onTimeNote: "Línea base = historial sintético de 30 días antes de usar Enlaza (despacho manual). Con Enlaza = solicitudes creadas por el sistema desde que opera. Puntual = llegó a más tardar 15 min después de la hora programada (supuesto). Sin atender = solicitudes con resultado conocido que nadie atendió.",
