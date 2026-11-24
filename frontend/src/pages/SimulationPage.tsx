@@ -80,8 +80,8 @@ export function SimulationPage() {
 
   const meta = t.metrics[metric];
   const v = r.validation[0];
-  const legend = [{ label: "Vela (las dos variantes)", color: chart.series[0], kind: "line" as const },
-    { label: "Otras políticas", color: chart.muted, kind: "line" as const }];
+  const legend = [{ label: t.legendEnlaza, color: chart.series[0], kind: "line" as const },
+    { label: t.legendOthers, color: chart.muted, kind: "line" as const }];
   const sensTest = (level: string, m: string) => r.sensitivity_tests.find((x) => x.knob === "approval_delay" && x.level === level && x.metric === m);
   const cfg = { urgent: String(r.info.approval?.urgent_within_minutes ?? "—"), after: String(r.info.approval?.auto_apply_after_minutes ?? "—"),
     hold: String(r.info.approval?.hold_minutes ?? "—") };
@@ -125,7 +125,7 @@ export function SimulationPage() {
               return x ? `${fmt(x.mean)} [${fmt(x.ci_low)}–${fmt(x.ci_high)}]` : "—"; })]) }}>
           <label className="block max-w-md"><span className="font-bold">{t.metric}</span>
             <select className={selectClass} value={metric} onChange={(e) => setMetric(e.target.value)}>
-              {MAIN.map((k) => <option key={k} value={k}>{t.metrics[k].label} ({t.metrics[k].unit})</option>)}
+              {MAIN.map((k) => <option key={k} value={k}>{t.metrics[k].short} ({t.metrics[k].unit})</option>)}
             </select>
           </label>
           <div className="mt-3"><ChartLegend items={legend} /></div>

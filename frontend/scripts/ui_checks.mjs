@@ -123,10 +123,17 @@ for (const user of ["owner", "coordinacion.a", "cui-001", "cui-003", "fam-0001"]
   const { ctx, page, errors } = await session(user);
   const me = await page.evaluate(() => fetch("/api/auth/me").then((r) => r.json()));
   const bad = [];
+  // the old brand must not come back from the API either (labels of simulation, panorama, messages…)
+  page.on("response", async (r) => {
+    if (!r.url().includes("/api/") || !(r.headers()["content-type"] ?? "").includes("json")) return;
+    const body = await r.text().catch(() => "");
+    const m = body.match(/.{0,40}\bVela\b.{0,40}/);
+    if (m) bad.push(`API ${new URL(r.url()).pathname}: «${m[0]}»`);
+  });
   for (const path of me.screens) {
     await page.goto(`${BASE}${path}`); await page.waitForLoadState("networkidle", { timeout: 8000 }).catch(() => {}); await page.waitForTimeout(1500);
     const txt = await page.locator("body").innerText();
-    for (const [what, re] of [["jerga", /config\/simulation\.yaml|\bsemilla\b|\bworker\b|assumptions\.csv/i], ["a.m./p.m.", /\b[ap]\.\s?m\./i],
+    for (const [what, re] of [["marca anterior", /\bVela\b/], ["jerga", /config\/simulation\.yaml|\bsemilla\b|\bworker\b|assumptions\.csv/i], ["a.m./p.m.", /\b[ap]\.\s?m\./i],
       ["fecha no dd/mm/aaaa", /\b\d{1,2} (de )?(ene|feb|mar|abr|may|jun|jul|ago|sep|oct|nov|dic)\b|\d{4}-\d{2}-\d{2}/i],
       ["controles del mapa en inglés", /Data from|Zoom in|Zoom out|Toggle attribution/]]) {
       const m = txt.match(re); if (m) bad.push(`${path}: ${what} («${m[0]}»)`);

@@ -99,10 +99,13 @@ export function LandingPage() {
                 <p className="mt-3 figure text-4xl text-navy">{p.price}</p><p className="text-muted">MXN {t.perMonth}</p>
                 <p className="mt-2">{p.detail}</p>
               </li>))}</ul>
-            <div className="mt-5 flex flex-wrap items-center gap-x-6 gap-y-2 rounded-card border border-dashed border-navy/30 bg-sky-soft p-5">
-              <h3 className="text-lg">{t.gov.name}</h3>
-              <p><span className="figure text-2xl text-navy">{t.gov.price}</span> <span className="text-muted">MXN {t.perMonth}</span></p>
-              <p className="min-w-0 flex-1">{t.gov.detail}</p>
+            {/* phone: name and price on top, the description below; wider screens: one row */}
+            <div className="mt-5 rounded-card border border-dashed border-navy/30 bg-sky-soft p-5 sm:flex sm:items-center sm:gap-6">
+              <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1 sm:shrink-0">
+                <h3 className="text-lg">{t.gov.name}</h3>
+                <p><span className="figure text-2xl text-navy">{t.gov.price}</span> <span className="text-muted">MXN {t.perMonth}</span></p>
+              </div>
+              <p className="mt-2 sm:mt-0 sm:min-w-0 sm:flex-1">{t.gov.detail}</p>
             </div>
             <p className="mt-4 text-muted">{t.plansNote}</p>
           </div>

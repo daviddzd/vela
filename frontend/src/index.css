@@ -75,4 +75,7 @@ details[open] > summary::after { transform: translateY(0.15em) rotate(-135deg); 
 .section-header { background: linear-gradient(180deg, var(--color-sky) 0%, var(--color-sky-soft) 60%, #fff 100%); }
 
 /* Large numbers (key figures, counters): plain zero, proportional digits */
-.figure { font-family: var(--font-figures); font-weight: 800; letter-spacing: -0.02em; }
+.figure { font-family: var(--font-figures); font-weight: 800; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+/* Tables and the clock: tabular digits (Plus Jakarta Sans has "tnum"; its default digits are proportional,
+   "1" is about half as wide as "0"), so columns line up and the clock does not change width every second. */
+table, .tabular-nums { font-variant-numeric: tabular-nums; }

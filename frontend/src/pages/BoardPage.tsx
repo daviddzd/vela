@@ -66,9 +66,10 @@ export function BoardPage() {
       </ul>
 
       {/* two independent columns: no gaps when the queue is long and the alerts short (or the other way) */}
+      {/* phone: alerts right after the figures (order, below lg only); projector: the two columns as before */}
       <div className="mt-4 grid items-start gap-4 lg:grid-cols-3">
-        <div className="space-y-4 lg:col-span-2">
-        <Card>
+        <div className="contents lg:col-span-2 lg:block lg:space-y-4">
+        <Card className="max-lg:order-2">
           <h2>{es.board.queueTitle}</h2>
           {board && board.queue.length === 0 && <AllClear board={board} />}
           <ol className="mt-2 divide-y divide-navy/10">
@@ -93,7 +94,7 @@ export function BoardPage() {
             ))}
           </ol>
         </Card>
-        <Card>
+        <Card className="max-lg:order-3">
           <h2>{es.board.mapTitle}</h2>
           <div className="mt-2">
             <Suspense fallback={<p>{es.common.loading}</p>}>
@@ -112,8 +113,8 @@ export function BoardPage() {
           <p className="mt-2 text-muted">{es.board.syntheticNote}</p>
         </Card>
         </div>
-        <div className="space-y-4">
-        <Card>
+        <div className="contents lg:block lg:space-y-4">
+        <Card className="max-lg:order-1">
           <h2>{es.board.alertsTitle}</h2>
           {board && board.alerts.length === 0 && <p className="mt-2">{es.board.alertsEmpty}</p>}
           <ul className="mt-2 space-y-2">
@@ -138,7 +139,7 @@ export function BoardPage() {
                   </li>)}
           </ul>
         </Card>
-        <Card>
+        <Card className="max-lg:order-4">
           <h2>{es.board.newRequest}</h2>
           <div className="mt-3 space-y-3">
             <RequestForm coordinator onCreated={(r) => { setCreated(r); refresh(); }} />
