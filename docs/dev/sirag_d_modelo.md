@@ -79,7 +79,7 @@ crisis se resuelve cuando se atiende). Por eso las comparaciones son **pareadas*
 | Crisis sin personal | sin atender a las 4 h (urgencias) | **supuesto** |
 | Tolerancia de retraso de visitas del plan | 60 min | **supuesto** (acordado) |
 | Retraso del despacho humano | U(5, 20) min antes de cada decisión | YAML (**supuesto**) |
-| Aprobación de coordinación (Vela, prioridad alta) | U(1, 5) min | **supuesto** (ver sensibilidad) |
+| Aprobación de coordinación (Enlaza, prioridad alta) | U(1, 5) min | **supuesto** (ver sensibilidad) |
 | Duración real de las visitas | igual a la nominal | semilla (desviación observada = 0) |
 | Réplicas, horizonte, semilla, confianza | 30 × 7 días, 2026, 95 % | YAML |
 
@@ -91,7 +91,7 @@ días dentro de cada turno y habilidad) y el despachador nunca asigna un turno q
 jornada sale de las horas (art. 60) y los turnos diurnos y mixtos no pasan del máximo del art. 61 (el vespertino
 14:00–22:00 es mixto y queda en 14:00–21:30). Los nocturnos de 12 h (20:00–08:00) se dejan como están (decisión
 de la institución) y se miden en la sensibilidad «Cumplir jornada nocturna» (sección 10). La utilización cuenta
-solo los días que cada persona trabaja. La semilla no se toca: es la línea base «antes de Vela», con personal
+solo los días que cada persona trabaja. La semilla no se toca: es la línea base «antes de Enlaza», con personal
 asignado los 7 días.
 
 **Relevos (desde el 22 nov 2026).** Un servicio más largo que cualquier turno legal (más de 8 h: SRV-04 y SRV-07,
@@ -135,10 +135,10 @@ Resultados en `simulation/results/tests.csv` y en `/simulacion`.
 
 ## 5. Lo que dicen los resultados (corrida del 22 nov 2026, con descanso semanal y jornada legal: 450 corridas principales + 1,050 de sensibilidad + 30 de validación en 300 s con 15 procesos)
 
-Cifras de **Vela con aprobación con límite de tiempo y reserva** (`vela_timeout`), la política con la que
+Cifras de **Enlaza con aprobación con límite de tiempo y reserva** (`vela_timeout`), la política con la que
 opera hoy el worker, frente al despacho humano. Media [IC 95 %] de 30 réplicas; pruebas pareadas con Holm.
 
-| Métrica | Escenario | Vela (como opera hoy) | Despacho humano | Resultado |
+| Métrica | Escenario | Enlaza (como opera hoy) | Despacho humano | Resultado |
 |---|---|---|---|---|
 | Espera de prioridad alta, p90 | normal | **20.1 min** [17.7–22.4] | 23.6 [21.2–26.0] | mejor, p < 0.001 |
 | Espera de prioridad alta, p90 | contingencia + bloqueo | 24.1 [22.2–26.1] | 27.2 [25.2–29.2] | mejor, p = 0.0003 |
@@ -153,7 +153,7 @@ opera hoy el worker, frente al despacho humano. Media [IC 95 %] de 30 réplicas;
 **Qué cambió frente a la corrida del 21 nov (plantilla de 7 días):** con el descanso de ley hay 1/7 menos
 turnos, así que todo empeora para todas las políticas: sin atender 14.7 % → 19.1 %, espera p90 de prioridad
 alta 13.3 → 20.1 min (humano 16.4 → 23.6), respuesta a crisis p90 67.0 → 76.0 min, crisis en < 60 min
-63.4 % → 56.4 %, utilización 26.2 % → 28.1 %. **La ventaja de Vela se mantiene** en espera de prioridad alta y
+63.4 % → 56.4 %, utilización 26.2 % → 28.1 %. **La ventaja de Enlaza se mantiene** en espera de prioridad alta y
 respuesta a crisis; las horas extra con bloqueo **ya no son significativamente menores** (antes p < 0.001).
 
 - Las crisis de noche en instituciones de día no tienen personal de turno: ninguna política lo arregla, por
@@ -169,7 +169,7 @@ respuesta a crisis; las horas extra con bloqueo **ya no son significativamente m
 Escenario normal, 30 réplicas (`simulation/results/sensitivity.csv`, pruebas en `sensitivity_tests.csv`).
 Espera p90 de prioridad alta, en minutos:
 
-| Supuesto | Nivel | Vela con límite y reserva (hoy) | Vela sin límite (con reserva) | Despacho humano |
+| Supuesto | Nivel | Enlaza con límite y reserva (hoy) | Enlaza sin límite (con reserva) | Despacho humano |
 |---|---|---|---|---|
 | Retraso de aprobación | 0 (inmediata) | 19.8 | 19.8 | 23.6 |
 | | 1–5 min | 20.1 | 20.2 | 23.6 |
@@ -190,15 +190,15 @@ crisis la ventaja frente al despacho humano crece. La sección 8 cuenta cómo se
 
 ## 8. Hallazgo de la simulación que cambió el producto
 
-**En una frase:** se detectó con la plantilla de 7 días (sin día de descanso); con la plantilla legal Vela sin
+**En una frase:** se detectó con la plantilla de 7 días (sin día de descanso); con la plantilla legal Enlaza sin
 límite de tiempo ya no queda peor que el despacho humano, pero el límite de tiempo sigue siendo la mejor opción.
 
 **Qué encontró la sensibilidad (corrida del 21 nov, plantilla de 7 días).** Con aprobación lenta (5–15 min),
-Vela quedaba **peor** que el despacho humano: espera p90 de prioridad alta +3.0 min (Wilcoxon-Holm p = 0.006).
+Enlaza quedaba **peor** que el despacho humano: espera p90 de prioridad alta +3.0 min (Wilcoxon-Holm p = 0.006).
 
 **Decisiones del equipo (21 nov 2026).** Dos cambios, iguales en la operación y en la simulación:
 1. **Aprobación con límite de tiempo, solo para lo urgente.** Si una solicitud alta con visita en menos de
-   60 min lleva 3 min sin aprobación, Vela aplica el candidato propuesto (`approval='timeout'`, "aprobada
+   60 min lleva 3 min sin aprobación, Enlaza aplica el candidato propuesto (`approval='timeout'`, "aprobada
    por tiempo"), avisa a coordinación (alerta `approved_by_timeout`) y lo registra en la bitácora;
    coordinación puede cambiarlo. Se limitó a lo urgente porque la regla 3 de `CLAUDE.md` y la spec 11 piden
    que una persona apruebe la prioridad alta.
@@ -213,29 +213,29 @@ Valores en `config/simulation.yaml` (`approval.auto_apply_after_minutes`, `appro
 **Resultado** (sensibilidad, escenario normal, 30 réplicas, retraso de aprobación 5–15 min, frente al
 despacho humano; corrida del 21 nov con plantilla de 7 días, histórico de cómo se tomó la decisión):
 
-| Métrica | Vela sin límite ni reserva (antes) | Vela con límite, sin reserva | **Vela con límite y reserva (hoy)** |
+| Métrica | Enlaza sin límite ni reserva (antes) | Enlaza con límite, sin reserva | **Enlaza con límite y reserva (hoy)** |
 |---|---|---|---|
 | Espera de prioridad alta, p90 | +3.0 min, peor (p = 0.006) | +1.9 min, sin diferencia (p = 0.078) | **−3.0 min, mejor (p = 0.0002)**: 13.3 frente a 16.4 |
 | Respuesta a crisis, p90 | −1.4 min, sin diferencia | −5.4 min, mejor (p < 0.001) | **−7.8 min, mejor (p = 0.0001)** |
 
-Con los dos cambios, una coordinación lenta ya no deja a Vela en desventaja: la espera de prioridad alta con
+Con los dos cambios, una coordinación lenta ya no deja a Enlaza en desventaja: la espera de prioridad alta con
 5–15 min de retraso (13.3 min) queda igual que con aprobación de 1–5 min (13.3 min).
 
-**Con el descanso de ley (corrida del 22 nov):** Vela **sin** límite de tiempo (con reserva) ya no queda peor
+**Con el descanso de ley (corrida del 22 nov):** Enlaza **sin** límite de tiempo (con reserva) ya no queda peor
 con aprobación de 5–15 min: −1.9 min de espera p90 frente al humano (p = 0.010) y respuesta a crisis −3.3 min
 sin diferencia significativa (p = 0.39). **Con** el límite de tiempo la ventaja es mayor y significativa en las
 dos: −3.2 min (p < 0.001) y −5.4 min (p = 0.010), y la espera con 5–15 min (20.4) casi no se aleja de la de
-1–5 min (20.1). El límite de tiempo sigue justificado, pero el hallazgo original («Vela peor que el humano»)
+1–5 min (20.1). El límite de tiempo sigue justificado, pero el hallazgo original («Enlaza peor que el humano»)
 dependía de la plantilla de 7 días.
 
-**La reserva no empeora a las demás** (escenario normal, Vela como opera hoy, 30 réplicas pareadas con y sin
+**La reserva no empeora a las demás** (escenario normal, Enlaza como opera hoy, 30 réplicas pareadas con y sin
 reserva, `simulation/experiments/holds_check.py` → `results/holds_check.csv`, corrida del 22 nov): sin atender
 19.1 % con y sin reserva, espera p90 de prioridad media 23.8 → 23.8 min y baja 25.1 → 25.2 min, sin ninguna
 diferencia significativa (Wilcoxon-Holm p = 1.0).
 
 ## 9. ¿Y si contratamos? (sensibilidad)
 
-Escenario normal, 30 réplicas, política Vela con límite de tiempo:
+Escenario normal, 30 réplicas, política Enlaza con límite de tiempo:
 
 | Personal | Sin atender | Crisis en < 60 min | Crisis nocturnas en < 60 min |
 |---|---|---|---|
@@ -259,12 +259,12 @@ dos personas, la primera de 20:00 a 03:00 y la segunda de 03:00 a 08:00):
 
 | Política | Sin atender | Crisis en < 60 min | Crisis nocturnas en < 60 min | Relevos por semana |
 |---|---|---|---|---|
-| Vela (como opera hoy), turnos de 12 h | 19.07 % [18.55–19.58] | 56.4 % | 43.9 % [26.6–61.3] | 0 |
-| Vela (como opera hoy), dos turnos de 7 h | 19.15 % [18.64–19.66] | 56.9 % | 45.0 % [27.4–62.6] | 2.7 |
+| Enlaza (como opera hoy), turnos de 12 h | 19.07 % [18.55–19.58] | 56.4 % | 43.9 % [26.6–61.3] | 0 |
+| Enlaza (como opera hoy), dos turnos de 7 h | 19.15 % [18.64–19.66] | 56.9 % | 45.0 % [27.4–62.6] | 2.7 |
 | Despacho humano, turnos de 12 h | 19.08 % | 53.9 % | 43.9 % | 0 |
 | Despacho humano, dos turnos de 7 h | 19.16 % | 54.4 % | 45.0 % | 2.7 |
 
-Comparación pareada (mismas 30 réplicas, Vela como opera hoy, Wilcoxon): «sin atender» +0.08 puntos (p = 0.001;
+Comparación pareada (mismas 30 réplicas, Enlaza como opera hoy, Wilcoxon): «sin atender» +0.08 puntos (p = 0.001;
 unas 0.5 solicitudes por semana de ~645), crisis nocturnas en < 60 min +1.1 puntos (p = 0.69; solo 23 réplicas
 tienen crisis de noche y en 1 cambia el resultado), crisis en < 60 min +0.5 puntos (p = 0.73).
 
@@ -275,4 +275,4 @@ porque los servicios de 12 h de noche ya no cabían en un turno de 7 h.
 apreciable: el «sin atender» queda prácticamente igual (+0.08 puntos, detectable porque las réplicas son
 pareadas, pero de media solicitud por semana). Sigue **sin mejorarla**: las crisis nocturnas atendidas a tiempo no
 cambian. Cuesta las mismas 4 plazas. Es un costo de cumplimiento legal, no una mejora del servicio; lo decide la
-institución (Vela solo lo marca y avisa).
+institución (Enlaza solo lo marca y avisa).

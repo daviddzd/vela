@@ -12,9 +12,9 @@ export type StationLevel = { station_id: string; name: string; district_id: stri
   phase: string; o3: number; pm25_24h: number };
 export const LEVEL_ICON: Record<string, LucideIcon> = { normal: CheckCircle2, watch: AlertTriangle, phase1: Ban };
 const PHASES = ["normal", "watch", "phase1"];
-const POINT = { normal: { symbol: "circle", color: chart.muted }, watch: { symbol: "triangle", color: "#B7791F" },
-  phase1: { symbol: "diamond", color: "#C0392B" } } as Record<string, { symbol: string; color: string }>;
-const FILL: Record<string, string> = { watch: "rgba(183,121,31,0.28)", phase1: "rgba(192,57,43,0.30)" };
+const POINT = { normal: { symbol: "circle", color: chart.muted }, watch: { symbol: "triangle", color: "#8A5A00" },
+  phase1: { symbol: "diamond", color: "#B42318" } } as Record<string, { symbol: string; color: string }>;
+const FILL: Record<string, string> = { watch: "rgba(138,90,0,0.28)", phase1: "rgba(180,35,24,0.30)" };
 const TEXT: Record<string, string> = { normal: "text-ok", watch: "text-warn", phase1: "text-danger" };
 
 export function StationsMap({ stations }: { stations: StationLevel[] }) {

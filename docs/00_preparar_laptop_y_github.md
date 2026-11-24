@@ -148,7 +148,7 @@ git add .
 git status                      # revisa: NO debe aparecer .env
 git commit -m "Add starter kit: specs, synthetic data, SQL and config"
 gh repo create vela --public --source=. --remote=origin --push \
-  --description "Vela · cuidado coordinado — prototipo académico UNRC (datos sintéticos)"
+  --description "Enlaza · cuidado coordinado — prototipo académico UNRC (datos sintéticos)"
 ```
 Agrega a tus compañeros: GitHub → repositorio → Settings → Collaborators → Add people.
 Cada compañero: `gh auth login` y luego `gh repo clone <tu-usuario>/vela ~/proyectos/vela`.

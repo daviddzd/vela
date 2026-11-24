@@ -7,7 +7,7 @@ import { AppShell } from "../components/AppShell";
 import { RequestForm } from "../components/RequestForm";
 import { RequestResult } from "../components/RequestResult";
 import { StatusBadge } from "../components/StatusBadge";
-import { Button, Card, Notice } from "../components/ui";
+import { Button, Card, IconCircle, Notice, PageHeader } from "../components/ui";
 import { AlertTriangle, CheckCircle2, COUNTER_ICON, Icon } from "../components/icons";
 import { RefreshCw, Radio } from "lucide-react";
 import { es } from "../i18n/es";
@@ -38,45 +38,47 @@ export function BoardPage() {
 
   return (
     <AppShell>
-      <div className="flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <h1 className="text-teal">{es.screens["/tablero"]}</h1>
-          <p className="text-muted first-letter:uppercase">{formatLongDate(now)}</p>
-        </div>
-        <div className="text-right">
-          <p className="figure text-4xl tabular-nums" aria-live="off">{formatClock(now)}</p>
+      <PageHeader title={es.pageTitles.board}
+        actions={<div className="text-right">
+          <p className="figure text-4xl tabular-nums text-navy" aria-live="off">{formatClock(now)}</p>
           {!synced && <p className="text-muted">{es.board.clockUnsynced}</p>}
           <p className="font-bold" aria-live="polite">
-            {socket === "live" && <span className="text-ok"><Icon as={Radio} /> {es.board.live}</span>}
+            {socket === "live" && <span className="inline-flex items-center gap-1 rounded-full bg-ok-soft px-3 py-0.5 text-ok"><Icon as={Radio} /> {es.board.live}</span>}
             {socket === "connecting" && <span className="text-muted">{es.board.connecting}</span>}
             {socket === "reconnecting" && <span className="text-warn"><Icon as={RefreshCw} /> {es.board.reconnecting}</span>}
           </p>
-        </div>
-      </div>
+        </div>}>
+        <p className="first-letter:uppercase">{formatLongDate(now)}</p>
+      </PageHeader>
 
       {socket === "reconnecting" && <div className="mt-3"><Notice kind="error">{es.board.reconnecting}</Notice></div>}
       {socket === "denied" && <div className="mt-3"><Notice kind="error">{es.board.denied}</Notice></div>}
 
-      <ul className="mt-4 grid grid-cols-2 gap-3 md:grid-cols-4">
+      {/* figures strip: one white card, a big number per state, icon in a soft circle */}
+      <ul className="grid grid-cols-2 gap-y-4 rounded-card border border-navy/10 bg-white p-5 shadow-[var(--shadow-card)] md:grid-cols-4 md:divide-x md:divide-navy/10">
         {COUNTERS.map((k) => (
-          <li key={k}><Card className="text-center">
-            <p className="figure text-4xl text-teal">{board?.counters[k] ?? "—"}</p>
-            <p className="font-bold"><Icon as={COUNTER_ICON[k]} /> {es.board.counters[k]}</p>
-          </Card></li>
+          <li key={k} className="flex flex-col items-center gap-2 px-2 text-center lg:flex-row lg:gap-4 lg:px-3 lg:text-left">
+            <IconCircle icon={COUNTER_ICON[k]} />
+            <span><span className="figure block text-4xl leading-none text-navy">{board?.counters[k] ?? "—"}</span>
+              <span className="font-bold">{es.board.counters[k]}</span></span>
+          </li>
         ))}
       </ul>
 
-      <div className="items-start mt-4 grid gap-4 lg:grid-cols-3">
-        <Card className="lg:col-span-2">
+      {/* two independent columns: no gaps when the queue is long and the alerts short (or the other way) */}
+      {/* phone: alerts right after the figures (order, below lg only); projector: the two columns as before */}
+      <div className="mt-4 grid items-start gap-4 lg:grid-cols-3">
+        <div className="contents lg:col-span-2 lg:block lg:space-y-4">
+        <Card className="max-lg:order-2">
           <h2>{es.board.queueTitle}</h2>
           {board && board.queue.length === 0 && <AllClear board={board} />}
-          <ol className="mt-2 divide-y divide-teal/10">
+          <ol className="mt-2 divide-y divide-navy/10">
             {board?.queue.map((q) => (
               <li key={q.request_id} className="flex flex-wrap items-center justify-between gap-2 py-2">
                 <span>
                   <strong className={q.priority === "high" ? "text-danger" : ""}>
                     {q.priority === "high" && <><Icon as={AlertTriangle} /> </>}{es.priority[q.priority]}
-                  </strong>{" · "}<Link to={`/pacientes/${q.patient_id}`} className="underline decoration-teal/40 hover:text-teal">{q.patient_name}</Link> · {q.service_name} · {formatWhen(q.scheduled_for, board ? new Date(board.now) : undefined)}
+                  </strong>{" · "}<Link to={`/pacientes/${q.patient_id}`} className="underline decoration-navy/40 hover:text-navy">{q.patient_name}</Link> · {q.service_name} · {formatWhen(q.scheduled_for, board ? new Date(board.now) : undefined)}
                   <span className="block text-muted">
                     {es.board.origin[q.origin] ?? q.origin} · {q.status_reason ? es.statusReason[q.status_reason] : ""}
                   </span>
@@ -85,42 +87,14 @@ export function BoardPage() {
                   <span className="font-bold tabular-nums">{q.minutes_waiting} {es.common.minutes} {es.board.waiting}</span>
                   {q.status_reason === "awaiting_approval" && (
                     <Link to={`/aprobaciones?solicitud=${encodeURIComponent(q.request_id)}`}
-                      className="inline-flex min-h-12 items-center gap-2 rounded-card bg-teal px-4 font-bold text-white hover:bg-teal-dark">
+                      className="inline-flex min-h-12 items-center gap-2 rounded-full bg-navy px-5 font-bold text-white hover:bg-navy-dark">
                       <Icon as={CheckCircle2} /> {es.board.reviewApprove}</Link>)}
                 </span>
               </li>
             ))}
           </ol>
         </Card>
-        <Card>
-          <h2>{es.board.alertsTitle}</h2>
-          {board && board.alerts.length === 0 && <p className="mt-2">{es.board.alertsEmpty}</p>}
-          <ul className="mt-2 space-y-2">
-            {board && groupAlerts(board.alerts).map((g) => g.critical
-              ? (g.items[0].type === "emergency_review"
-                ? <ReviewAlert key={g.key} a={g.items[0]} now={now} onDone={refresh} />
-                : <li key={g.key} className="rounded-card border-4 border-danger bg-danger/5 p-2 font-bold" role="alert">
-                    <Icon as={AlertTriangle} /> {g.items[0].message}
-                    <span className="block font-normal text-muted">{formatWhen(g.items[0].created_at, new Date(board.now))}</span></li>)
-              : g.items.length === 1
-                ? <li key={g.key} className="rounded-card border-2 border-danger p-2">
-                    <Icon as={AlertTriangle} /> {g.items[0].message}
-                    <span className="block text-muted">{formatWhen(g.items[0].created_at, new Date(board.now))}</span></li>
-                : <li key={g.key} className="rounded-card border-2 border-danger p-2">
-                    <p className="font-bold"><Icon as={AlertTriangle} /> {(es.board.alertGroups[g.items[0].type] ?? es.board.alertGroups.other).replace("{n}", String(g.items.length))}</p>
-                    <details className="mt-1">
-                      <summary className="min-h-12 cursor-pointer font-bold text-teal flex items-center">{es.board.alertGroupShow.replace("{n}", String(g.items.length))}</summary>
-                      <ul className="mt-1 space-y-2">{g.items.map((a) => (
-                        <li key={a.alert_id} className="border-t border-danger/20 pt-2">{a.message}
-                          <span className="block text-muted">{formatWhen(a.created_at, new Date(board.now))}</span></li>))}</ul>
-                    </details>
-                  </li>)}
-          </ul>
-        </Card>
-      </div>
-
-      <div className="items-start mt-4 grid gap-4 lg:grid-cols-3">
-        <Card className="lg:col-span-2">
+        <Card className="max-lg:order-3">
           <h2>{es.board.mapTitle}</h2>
           <div className="mt-2">
             <Suspense fallback={<p>{es.common.loading}</p>}>
@@ -128,23 +102,51 @@ export function BoardPage() {
             </Suspense>
           </div>
           {board && board.visits.length === 0 && <p className="mt-2">{es.board.visitsEmpty}</p>}
-          <ul className="mt-3 max-h-60 divide-y divide-teal/10 overflow-y-auto">
+          <ul className="mt-3 max-h-60 divide-y divide-navy/10 overflow-y-auto">
             {board?.visits.map((v) => (
               <li key={v.request_id} className="flex flex-wrap items-center justify-between gap-2 py-1">
-                <span>{formatWhen(v.scheduled_for, board ? new Date(board.now) : undefined)} · <Link to={`/pacientes/${v.patient_id}`} className="underline decoration-teal/40 hover:text-teal">{v.patient_name}</Link> · {v.caregiver_name ?? es.family.pendingCaregiver}{v.relay_caregiver_name && ` (${relayText(v.relay_caregiver_name, v.relay_at)})`}</span>
+                <span>{formatWhen(v.scheduled_for, board ? new Date(board.now) : undefined)} · <Link to={`/pacientes/${v.patient_id}`} className="underline decoration-navy/40 hover:text-navy">{v.patient_name}</Link> · {v.caregiver_name ?? es.family.pendingCaregiver}{v.relay_caregiver_name && ` (${relayText(v.relay_caregiver_name, v.relay_at)})`}</span>
                 <StatusBadge status={v.status} />
               </li>
             ))}
           </ul>
           <p className="mt-2 text-muted">{es.board.syntheticNote}</p>
         </Card>
-        <Card>
+        </div>
+        <div className="contents lg:block lg:space-y-4">
+        <Card className="max-lg:order-1">
+          <h2>{es.board.alertsTitle}</h2>
+          {board && board.alerts.length === 0 && <p className="mt-2">{es.board.alertsEmpty}</p>}
+          <ul className="mt-2 space-y-2">
+            {board && groupAlerts(board.alerts).map((g) => g.critical
+              ? (g.items[0].type === "emergency_review"
+                ? <ReviewAlert key={g.key} a={g.items[0]} now={now} onDone={refresh} />
+                : <li key={g.key} className="rounded-field border-4 border-danger bg-danger-soft p-3 font-bold" role="alert">
+                    <Icon as={AlertTriangle} /> {g.items[0].message}
+                    <span className="block font-normal text-muted">{formatWhen(g.items[0].created_at, new Date(board.now))}</span></li>)
+              : g.items.length === 1
+                ? <li key={g.key} className="rounded-field border-2 border-danger/60 bg-white p-3">
+                    <Icon as={AlertTriangle} /> {g.items[0].message}
+                    <span className="block text-muted">{formatWhen(g.items[0].created_at, new Date(board.now))}</span></li>
+                : <li key={g.key} className="rounded-field border-2 border-danger/60 bg-white p-3">
+                    <p className="font-bold"><Icon as={AlertTriangle} /> {(es.board.alertGroups[g.items[0].type] ?? es.board.alertGroups.other).replace("{n}", String(g.items.length))}</p>
+                    <details className="mt-1">
+                      <summary className="min-h-12 cursor-pointer font-bold text-navy flex items-center">{es.board.alertGroupShow.replace("{n}", String(g.items.length))}</summary>
+                      <ul className="mt-1 space-y-2">{g.items.map((a) => (
+                        <li key={a.alert_id} className="border-t border-danger/20 pt-2">{a.message}
+                          <span className="block text-muted">{formatWhen(a.created_at, new Date(board.now))}</span></li>))}</ul>
+                    </details>
+                  </li>)}
+          </ul>
+        </Card>
+        <Card className="max-lg:order-4">
           <h2>{es.board.newRequest}</h2>
           <div className="mt-3 space-y-3">
             <RequestForm coordinator onCreated={(r) => { setCreated(r); refresh(); }} />
             {created && <RequestResult r={created} />}
           </div>
         </Card>
+        </div>
       </div>
     </AppShell>
   );
@@ -164,7 +166,7 @@ function ReviewAlert({ a, now, onDone }: { a: BoardAlert; now: Date; onDone: () 
     finally { setBusy(false); }
   };
   return (
-    <li className="rounded-card border-4 border-danger bg-danger/5 p-3" role="alert">
+    <li className="rounded-field border-4 border-danger bg-danger-soft p-3" role="alert">
       <p className="font-bold text-danger"><Icon as={AlertTriangle} /> {es.board.reviewTitle}</p>
       <p className="mt-1">{a.message}</p>
       <p className="mt-2 text-lg font-bold" aria-live="off">{a.escalated_at || left === 0
@@ -197,10 +199,10 @@ function AllClear({ board }: { board: Board }) {
     <p className="mt-2 text-xl font-bold text-ok">{es.board.allClear} <Icon as={CheckCircle2} /></p>
     <h3 className="mt-3 font-bold">{es.board.upcomingTitle}</h3>
     {board.upcoming.length === 0 ? <p className="mt-1">{es.board.upcomingNone}</p> : (
-      <ul className="mt-1 divide-y divide-teal/10">{shown.map((v, i) => (
+      <ul className="mt-1 divide-y divide-navy/10">{shown.map((v, i) => (
         <li key={v.request_id ?? `${v.patient_id}-${i}`} className="py-1.5">
           <strong className="tabular-nums">{formatWhen(v.scheduled_for, now)}</strong>{" · "}
-          <Link to={`/pacientes/${v.patient_id}`} className="underline decoration-teal/40 hover:text-teal">{v.patient_name}</Link>
+          <Link to={`/pacientes/${v.patient_id}`} className="underline decoration-navy/40 hover:text-navy">{v.patient_name}</Link>
           {" · "}{v.service_name}{" · "}
           {v.caregiver_name ? <strong>{v.caregiver_name}</strong>
             : <span className="text-muted">{v.status === "planned" ? es.family.plannedNote : es.family.pendingCaregiver}</span>}

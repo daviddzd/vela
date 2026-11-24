@@ -2,7 +2,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { api, ApiError, type Approval, type Option } from "../api/client";
 import { AppShell } from "../components/AppShell";
-import { Button, Card, Notice } from "../components/ui";
+import { Button, Card, Notice, PageHeader } from "../components/ui";
 import { AlertTriangle, CheckCircle2, Icon, Star } from "../components/icons";
 import { es } from "../i18n/es";
 import { formatDateTime, formatTime } from "../lib/format";
@@ -48,14 +48,14 @@ export function ApprovalsPage() {
 
   return (
     <AppShell>
-      <h1 className="text-teal">{es.screens["/aprobaciones"]}</h1>
+      <PageHeader title={es.pageTitles["/aprobaciones"]} />
       <div className="mt-4 space-y-4">
         {message && <Notice kind={message.kind}>{message.text}</Notice>}
         {items === null && <p>{es.common.loading}</p>}
         {items?.length === 0 && <Card>{es.approvals.empty}</Card>}
         {items?.map((item) => (
           <div key={item.request_id} id={`aprobacion-${item.request_id}`}
-            className={`scroll-mt-4 rounded-card ${item.request_id === wanted ? "ring-4 ring-teal" : ""}`}><Card>
+            className={`scroll-mt-4 rounded-card ${item.request_id === wanted ? "ring-4 ring-navy" : ""}`}><Card>
             <div className="flex flex-wrap items-baseline justify-between gap-2">
               <h2 tabIndex={-1}>{item.patient_name}</h2>
               <span className="font-bold text-danger"><Icon as={AlertTriangle} /> {es.priority.high}</span>
@@ -67,7 +67,7 @@ export function ApprovalsPage() {
             ) : (
               <ul className="mt-3 grid gap-3 md:grid-cols-3">
                 {item.options.map((o) => (
-                  <li key={o.caregiver_id} className={`rounded-card border-2 p-3 ${o.rank === 1 ? "border-teal" : "border-muted/40"}`}>
+                  <li key={o.caregiver_id} className={`rounded-card border-2 p-3 ${o.rank === 1 ? "border-navy" : "border-muted/40"}`}>
                     <p className="font-bold">{o.rank === 1 ? <><Icon as={Star} /> {es.approvals.proposed}</> : es.approvals.alternative}</p>
                     <p>{o.caregiver_name}</p>
                     {o.relay_caregiver_name && <p>{relayText(o.relay_caregiver_name, o.relay_at)}</p>}

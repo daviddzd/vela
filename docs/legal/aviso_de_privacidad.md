@@ -1,8 +1,8 @@
-# Aviso de privacidad integral · Vela
+# Aviso de privacidad integral · Enlaza
 
 > Plantilla académica para un proyecto escolar con una empresa ficticia. No es asesoría legal. Se basa en la Ley Federal de Protección de Datos Personales en Posesión de los Particulares publicada en el DOF el 20 de marzo de 2025.
 
-**Responsable.** Vela Cuidado Coordinado (empresa ficticia), con domicilio en la Ciudad de México, es responsable del tratamiento de tus datos personales.
+**Responsable.** Enlaza Cuidado Coordinado (empresa ficticia), con domicilio en la Ciudad de México, es responsable del tratamiento de tus datos personales.
 
 **Qué datos tratamos.**
 

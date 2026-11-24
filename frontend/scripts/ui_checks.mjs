@@ -16,7 +16,7 @@ async function session(user, opts = {}) {
   const page = await ctx.newPage();
   const errors = [];
   page.on("pageerror", (e) => errors.push(String(e)));
-  await page.goto(`${BASE}/`);
+  await page.goto(`${BASE}/entrar`);
   await page.fill('input[type="email"]', `${user}@ejemplo.test`);
   await page.fill('input[autocomplete="current-password"]', "Demo2026!");
   await page.click('button[type="submit"]');
@@ -44,7 +44,7 @@ const chartHeights = (page) => page.evaluate(() => [...document.querySelectorAll
   const { ctx, page } = await session("fam-0001");
   await page.goto(`${BASE}/familia`); await page.waitForTimeout(1500);
   const sent = posts(page, "/api/requests");
-  const date = page.getByLabel("Fecha y hora");
+  const date = page.getByPlaceholder("dd/mm/aaaa").first();   // the request form's date (label "Fecha")
   await date.click(); await page.keyboard.type("25/12/2026");
   check("escribir sobre una fecha la reemplaza", (await date.inputValue()) === "25/12/2026", await date.inputValue());
   await date.fill("31/02/2026"); await page.getByRole("button", { name: "Solicitar servicio" }).click(); await page.waitForTimeout(800);
@@ -123,10 +123,17 @@ for (const user of ["owner", "coordinacion.a", "cui-001", "cui-003", "fam-0001"]
   const { ctx, page, errors } = await session(user);
   const me = await page.evaluate(() => fetch("/api/auth/me").then((r) => r.json()));
   const bad = [];
+  // the old brand must not come back from the API either (labels of simulation, panorama, messages…)
+  page.on("response", async (r) => {
+    if (!r.url().includes("/api/") || !(r.headers()["content-type"] ?? "").includes("json")) return;
+    const body = await r.text().catch(() => "");
+    const m = body.match(/.{0,40}\bVela\b.{0,40}/);
+    if (m) bad.push(`API ${new URL(r.url()).pathname}: «${m[0]}»`);
+  });
   for (const path of me.screens) {
     await page.goto(`${BASE}${path}`); await page.waitForLoadState("networkidle", { timeout: 8000 }).catch(() => {}); await page.waitForTimeout(1500);
     const txt = await page.locator("body").innerText();
-    for (const [what, re] of [["jerga", /config\/simulation\.yaml|\bsemilla\b|\bworker\b|assumptions\.csv/i], ["a.m./p.m.", /\b[ap]\.\s?m\./i],
+    for (const [what, re] of [["marca anterior", /\bVela\b/], ["jerga", /config\/simulation\.yaml|\bsemilla\b|\bworker\b|assumptions\.csv/i], ["a.m./p.m.", /\b[ap]\.\s?m\./i],
       ["fecha no dd/mm/aaaa", /\b\d{1,2} (de )?(ene|feb|mar|abr|may|jun|jul|ago|sep|oct|nov|dic)\b|\d{4}-\d{2}-\d{2}/i],
       ["controles del mapa en inglés", /Data from|Zoom in|Zoom out|Toggle attribution/]]) {
       const m = txt.match(re); if (m) bad.push(`${path}: ${what} («${m[0]}»)`);

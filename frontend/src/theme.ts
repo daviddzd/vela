@@ -1,18 +1,21 @@
-// Brand tokens from docs/brand.md. Keep in sync with the @theme block in index.css
-// (CSS uses them for Tailwind classes; this file is for code, e.g. ECharts and MapLibre later).
+// Enlaza brand tokens from docs/brand.md. Keep in sync with the @theme block in index.css
+// (CSS uses them for Tailwind classes; this file is for code: ECharts, MapLibre, inline SVG illustrations).
 export const theme = {
   colors: {
-    teal: "#0F5C6E",   // primary: headers, buttons
-    coral: "#E8704A",  // accent, logo flame (not for text: low contrast on cream)
-    cream: "#FAF7F2",  // background
-    ink: "#1F2A30",    // text
-    muted: "#5B6870",  // secondary text
-    ok: "#2E7D4F",     // always with text
-    warn: "#B7791F",
-    danger: "#C0392B",
+    navy: "#3A5B76",      // logo navy: titles, primary buttons
+    teal: "#2AAEAE",      // logo teal: decoration only (2.7:1 on white, never text)
+    tealText: "#137273",  // teal for text and meaningful icons
+    deep: "#1B3349",      // deep blue sections
+    sky: "#EAF4F8",       // light blue gradients
+    ink: "#1B2B38",       // text
+    muted: "#4F5F6B",     // secondary text
+    ok: "#1D7447",        // always with text and icon
+    warn: "#8A5A00",
+    danger: "#B42318",
   },
-  fontFamily: '"Atkinson Hyperlegible", Arial, sans-serif',
+  fontFamily: '"Enlaza Digits", "Atkinson Hyperlegible", Arial, sans-serif',
+  displayFamily: '"Plus Jakarta Sans", "Atkinson Hyperlegible", Arial, sans-serif',
   baseFontPx: 18,
   simpleModeFontPx: 24,
-  radiusPx: 12,
+  radiusPx: 22,
 } as const;

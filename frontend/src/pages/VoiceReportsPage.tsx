@@ -5,13 +5,13 @@ import { useCallback, useEffect, useState } from "react";
 import { api } from "../api/client";
 import { AppShell } from "../components/AppShell";
 import { Icon } from "../components/icons";
-import { Button, Card, Notice } from "../components/ui";
+import { Button, Card, Notice, PageHeader } from "../components/ui";
 import { es } from "../i18n/es";
 import { formatDateTime } from "../lib/format";
 
 const t = es.reports;
 const LEVEL = { emergency: { icon: Ban, cls: "border-danger text-danger" }, urgent: { icon: AlertTriangle, cls: "border-warn text-ink" },
-  routine: { icon: Minus, cls: "border-teal text-teal" } } as const;
+  routine: { icon: Minus, cls: "border-navy text-navy" } } as const;
 
 function List({ label, items }: { label: string; items?: string[] }) {
   if (!items?.length) return null;
@@ -29,8 +29,9 @@ export function VoiceReportsPage() {
 
   return (
     <AppShell>
-      <h1 className="text-teal">{es.screens["/reportes-voz"]}</h1>
-      <p className="mt-1 text-muted">{t.notDiagnosis}</p>
+      <PageHeader title={es.pageTitles["/reportes-voz"]}>
+        <p className="">{t.notDiagnosis}</p>
+      </PageHeader>
       <div className="mt-3 flex flex-wrap items-center gap-2" role="group">
         <Button variant={onlyUnreviewed ? "primary" : "secondary"} aria-pressed={onlyUnreviewed} onClick={() => setOnlyUnreviewed(true)}>
           {t.filterUnreviewed}</Button>
@@ -69,7 +70,7 @@ export function VoiceReportsPage() {
                     <div><dt className="font-bold">{t.limits}</dt><dd className="text-muted">{rep.limitaciones}</dd></div>
                   </>)}
                 </dl>)}
-              <div className="mt-4 border-t border-teal/15 pt-3">
+              <div className="mt-4 border-t border-navy/15 pt-3">
                 {r.reviewed_at ? <p className="font-bold text-ok"><Icon as={CheckCircle2} /> {t.reviewed} · {formatDateTime(r.reviewed_at)}</p>
                   : <Button icon={ClipboardCheck} onClick={() => review(r.report_id)}>{t.review}</Button>}
               </div>

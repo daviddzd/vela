@@ -8,7 +8,7 @@ import { api } from "../api/client";
 import { useAuth } from "../auth/AuthContext";
 import { AppShell } from "../components/AppShell";
 import { Icon } from "../components/icons";
-import { Button, Card, inputClass } from "../components/ui";
+import { Button, Card, PageHeader, inputClass } from "../components/ui";
 import { es } from "../i18n/es";
 
 const t = es.patients;
@@ -48,8 +48,9 @@ export function PatientsPage() {
 
   return (
     <AppShell>
-      <h1 className="text-teal">{es.screens["/pacientes"]}</h1>
-      <p className="mt-1">{t.intro} {user?.role === "physician" && t.introPhysician}</p>
+      <PageHeader title={es.pageTitles["/pacientes"]}>
+        <p className="max-w-4xl">{t.intro} {user?.role === "physician" && t.introPhysician}</p>
+      </PageHeader>
       <Card className="mt-4">
         <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
           <label className="block"><span className="font-bold">{t.search}</span>
@@ -67,15 +68,15 @@ export function PatientsPage() {
         <ul className="mt-2 grid gap-2 lg:grid-cols-2">
           {rows.slice(0, limit).map((p) => (
             <li key={p.patient_id}>
-              <Link to={`/pacientes/${p.patient_id}`} className="flex min-h-12 items-center justify-between gap-3 rounded-card border border-teal/20 bg-white p-3 hover:border-teal">
+              <Link to={`/pacientes/${p.patient_id}`} className="flex min-h-12 items-center justify-between gap-3 rounded-card border border-navy/10 bg-white shadow-[var(--shadow-card)] p-3 hover:border-navy">
                 <span>
-                  <span className="block font-bold text-teal">{p.full_name} <span className="font-normal text-muted">· {p.patient_id}</span></span>
+                  <span className="block font-bold text-navy">{p.full_name} <span className="font-normal text-muted">· {p.patient_id}</span></span>
                   <span className="block text-sm">{fill(t.age, { n: p.age })} · {p.district_name} · {t.priority} {es.priority[p.base_priority].toLowerCase()}
                     {p.dependency_level && ` · ${t.dependency} ${t.dependencyLevels[p.dependency_level].toLowerCase()}`}
                     {p.pollution_sensitive && ` · ${t.sensitive.toLowerCase()}`}</span>
                   <span className="block text-sm"><RiskBadge level={p.risk_level} /></span>
                 </span>
-                <span className="text-teal"><Icon as={ChevronRight} /><span className="sr-only">{t.open}</span></span>
+                <span className="text-navy"><Icon as={ChevronRight} /><span className="sr-only">{t.open}</span></span>
               </Link>
             </li>))}
         </ul>

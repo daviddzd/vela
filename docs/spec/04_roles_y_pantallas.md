@@ -3,14 +3,14 @@
 ## Roles
 | Rol | Ve | Puede |
 |---|---|---|
-| Dirección Vela (`owner`) | Todas las instituciones (agregado) | Ver negocio, contingencia global, panel de demostración |
+| Dirección Enlaza (`owner`) | Todas las instituciones (agregado) | Ver negocio, contingencia global, panel de demostración |
 | Coordinación (`coordinator`) | Su institución | Aprobar asignaciones de prioridad alta, reasignar, decidir contingencias, ver tableros |
-| Médico (`physician`) | Sus pacientes | Revisar reportes de ORACLE-Voz, ajustar planes de cuidado |
+| Médico (`physician`) | Sus pacientes | Revisar reportes de Enlaza Voz, ajustar planes de cuidado |
 | Cuidador/enfermería (`caregiver`) | Sus visitas del día | Marcar llegada y término, enviar nota de voz |
 | Familiar (`family`) | Su paciente | Solicitar servicio, confirmar visita, usar asistente de voz |
 
 ## Flujo principal: solicitud → visita
-1. Una solicitud nace del plan de cuidado (worker), de un familiar, de coordinación o de ORACLE-Voz.
+1. Una solicitud nace del plan de cuidado (worker), de un familiar, de coordinación o de Enlaza Voz.
 2. Validación: paciente activo, consentimiento vigente, servicio activo, sin duplicado en ±2 h.
 3. El despachador calcula candidatos (habilidad, turno, sin traslape, distancia × tráfico de la hora)
    y elige con la política activa (por defecto `risk_plus_live_traffic`).

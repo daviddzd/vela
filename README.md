@@ -1,6 +1,6 @@
-<p align="center"><img src="assets/brand/logo.svg" width="320" alt="Vela · cuidado coordinado"></p>
+<p align="center"><img src="assets/brand/enlaza-logo.svg" width="360" alt="Enlaza · cuidado coordinado"></p>
 
-# Vela · cuidado coordinado
+# Enlaza · cuidado coordinado
 
 Prototipo académico de una plataforma web (SaaS) para que clínicas, residencias, centros de día y redes
 de cuidado a domicilio de la Ciudad de México coordinen la atención de personas adultas mayores:
@@ -8,7 +8,7 @@ solicitudes de servicio, asignación automática de personal, seguimiento en tie
 decisión, simulación de escenarios y un asistente de voz que detecta emergencias.
 
 > **Proyecto escolar.** Licenciatura en Ciencia de Datos para Negocios, UNRC, 6.º semestre (2026-2).
-> "Vela" es una empresa ficticia. **Todos los datos son sintéticos**, calibrados con fuentes públicas
+> "Enlaza" es una empresa ficticia. **Todos los datos son sintéticos**, calibrados con fuentes públicas
 > (INEGI, ENSANUT, ENASEM, CONAPO, SIMAT, TomTom). No contiene datos de personas reales.
 
 ## Módulos
@@ -17,7 +17,7 @@ decisión, simulación de escenarios y un asistente de voz que detecta emergenci
 | Operación (TPS/CRM/ERP) | Sistemas de Información Empresarial | Solicitudes, pacientes, personal, asignación y aprobación |
 | Panorama-AM (MIS/DSS) | Visualización | Tableros, mapa de riesgo, indicadores |
 | SIRAG-D | Modelado y Simulación | Simulación de despacho con tráfico y contingencia ambiental |
-| ORACLE-Voz | Cómputo Cognitivo | Voz → texto → triaje → reporte para el médico / pantalla 911 |
+| Enlaza Voz | Cómputo Cognitivo | Voz → texto → triaje → reporte para el médico / pantalla 911 |
 | Modelo de negocio | Emprendimiento | Planes de suscripción, costos, proyección |
 | Ética y privacidad | Práctica Profesional | Consentimientos, aviso de privacidad, auditoría |
 

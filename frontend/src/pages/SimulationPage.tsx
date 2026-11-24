@@ -11,7 +11,7 @@ import { AppShell } from "../components/AppShell";
 import { ChartCard } from "../components/ChartCard";
 import { AlertTriangle, CheckCircle2, Icon } from "../components/icons";
 import { XCircle } from "lucide-react";
-import { Button, Card, Notice } from "../components/ui";
+import { Button, Card, Notice, PageHeader } from "../components/ui";
 import { es } from "../i18n/es";
 import { ciRows, conclusion, fill, fmt, HUMAN, pick, POLICIES, SCENARIOS, VELA, VELA_TIMEOUT, type Results } from "./simulation/data";
 
@@ -22,7 +22,7 @@ const source = <>{t.source} <a href={MODEL_DOC_URL} target="_blank" rel="norefer
 const MAIN = ["high_wait_p90_min", "crisis_under_60_pct", "crisis_response_p90_min", "unattended_pct", "high_wait_mean_min",
   "crisis_response_mean_min", "travel_km", "utilization_pct", "overtime_hours"];
 const COMPARED = [VELA_TIMEOUT, VELA];
-const selectClass = "mt-1 block min-h-12 w-full rounded-card border-2 border-muted/60 bg-white px-3";
+const selectClass = "mt-1 block min-h-12 w-full rounded-field border-2 border-muted/60 bg-white px-3";
 const fmtP = (p: number | null | undefined) => (p == null ? "—" : p < 0.001 ? "p < 0.001" : `p = ${p.toFixed(3)}`);
 
 /** A table on wide screens; one card per row (label + value pairs) on a phone. */
@@ -30,14 +30,14 @@ function ResponsiveTable({ head, rows }: { head: string[]; rows: { key: string; 
   return (<>
     <div className="hidden overflow-x-auto md:block">
       <table className="w-full text-left text-sm">
-        <thead><tr className="border-b border-teal/20">{head.map((h) => <th key={h} className="py-1 pr-3 align-bottom">{h}</th>)}</tr></thead>
-        <tbody>{rows.map((r) => <tr key={r.key} className="border-b border-teal/10 align-top">
+        <thead><tr className="border-b border-navy/20">{head.map((h) => <th key={h} className="py-1 pr-3 align-bottom">{h}</th>)}</tr></thead>
+        <tbody>{rows.map((r) => <tr key={r.key} className="border-b border-navy/10 align-top">
           {r.cells.map((c, i) => <td key={i} className={`py-1 pr-3 ${i === 0 ? "font-bold" : ""}`}>{c}</td>)}</tr>)}</tbody>
       </table>
     </div>
     <ul className="space-y-3 md:hidden">
       {rows.map((r) => (
-        <li key={r.key} className="rounded-card border border-teal/20 p-3">
+        <li key={r.key} className="rounded-field border border-navy/15 p-3">
           <p className="font-bold">{r.cells[0]}</p>
           <dl className="mt-1 space-y-1">{r.cells.slice(1).map((c, i) => (
             <div key={i}><dt className="text-sm text-muted">{head[i + 1]}</dt><dd>{c}</dd></div>))}</dl>
@@ -76,24 +76,23 @@ export function SimulationPage() {
   useEffect(() => { api.simulation().then((x) => setR(x as Results)).catch(() => setR({ available: false } as Results)); }, []);
 
   if (!r) return <AppShell><p>{es.common.loading}</p></AppShell>;
-  if (!r.available) return <AppShell><h1 className="text-teal">{es.screens["/simulacion"]}</h1><Notice>{t.notRun}</Notice></AppShell>;
+  if (!r.available) return <AppShell><PageHeader title={es.pageTitles["/simulacion"]} /><Notice>{t.notRun}</Notice></AppShell>;
 
   const meta = t.metrics[metric];
   const v = r.validation[0];
-  const legend = [{ label: "Vela (las dos variantes)", color: chart.series[0], kind: "line" as const },
-    { label: "Otras políticas", color: chart.muted, kind: "line" as const }];
+  const legend = [{ label: t.legendEnlaza, color: chart.series[0], kind: "line" as const },
+    { label: t.legendOthers, color: chart.muted, kind: "line" as const }];
   const sensTest = (level: string, m: string) => r.sensitivity_tests.find((x) => x.knob === "approval_delay" && x.level === level && x.metric === m);
   const cfg = { urgent: String(r.info.approval?.urgent_within_minutes ?? "—"), after: String(r.info.approval?.auto_apply_after_minutes ?? "—"),
     hold: String(r.info.approval?.hold_minutes ?? "—") };
 
   return (
     <AppShell bare={present}>
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <h1 className="text-teal">{es.screens["/simulacion"]}</h1>
-        <Button icon={present ? X : Presentation} variant={present ? "secondary" : "primary"} onClick={() => setPresent(!present)}
-          aria-pressed={present}>{present ? t.presentOff : t.presentOn}</Button>
-      </div>
-      {!present && <p className="mt-1 text-muted">{t.presentHint}</p>}
+      <PageHeader title={es.pageTitles["/simulacion"]}
+        actions={<Button icon={present ? X : Presentation} variant={present ? "secondary" : "primary"} onClick={() => setPresent(!present)}
+          aria-pressed={present}>{present ? t.presentOff : t.presentOn}</Button>}>
+        {!present && <p>{t.presentHint}</p>}
+      </PageHeader>
       <p className="mt-1 max-w-4xl">{t.intro}</p>
       <p className="mt-1 max-w-4xl text-muted">{t.laborNote}</p>
       <p className="mt-1 text-muted">{fill(t.runInfo, { reps: String(r.info.replications), seed: String(r.info.seed),
@@ -102,7 +101,7 @@ export function SimulationPage() {
       <div className="mt-4 space-y-4">
         <ChartCard question={t.conclusionQ} source={source}>
           <ul className="space-y-2 text-lg">
-            {conclusion(r).map((line) => <li key={line} className="flex gap-2"><Icon as={CheckCircle2} className="mt-1 text-teal" /><span>{line}</span></li>)}
+            {conclusion(r).map((line) => <li key={line} className="flex gap-2"><Icon as={CheckCircle2} className="mt-1 text-navy" /><span>{line}</span></li>)}
           </ul>
         </ChartCard>
 
@@ -126,7 +125,7 @@ export function SimulationPage() {
               return x ? `${fmt(x.mean)} [${fmt(x.ci_low)}–${fmt(x.ci_high)}]` : "—"; })]) }}>
           <label className="block max-w-md"><span className="font-bold">{t.metric}</span>
             <select className={selectClass} value={metric} onChange={(e) => setMetric(e.target.value)}>
-              {MAIN.map((k) => <option key={k} value={k}>{t.metrics[k].label} ({t.metrics[k].unit})</option>)}
+              {MAIN.map((k) => <option key={k} value={k}>{t.metrics[k].short} ({t.metrics[k].unit})</option>)}
             </select>
           </label>
           <div className="mt-3"><ChartLegend items={legend} /></div>
@@ -189,7 +188,7 @@ export function SimulationPage() {
         </div>
 
         <Card className="border-2 border-dashed border-warn/60">
-          <h2 className="text-teal"><Icon as={AlertTriangle} className="text-warn" /> {t.sensitivityQ}</h2>
+          <h2 className="text-navy"><Icon as={AlertTriangle} className="text-warn" /> {t.sensitivityQ}</h2>
           <p className="mt-2 text-muted">{t.sensitivityNote}</p>
           <div className="mt-2 grid gap-6 xl:grid-cols-2">
             {(["approval_delay", "risk_multiplier"] as const).map((knob) => {
@@ -208,7 +207,7 @@ export function SimulationPage() {
             })}
           </div>
 
-          <h3 className="mt-6 text-xl font-bold text-teal">{t.hiringQ}</h3>
+          <h3 className="mt-6 text-xl font-bold text-navy">{t.hiringQ}</h3>
           <p className="mt-1 text-muted">{t.hiringNote}</p>
           <div className="mt-2">
             <ResponsiveTable head={[t.metric, ...["current", "requested", "targeted"].map((l) => t.staffLevels[l])]}
@@ -217,7 +216,7 @@ export function SimulationPage() {
                   const x = r.sensitivity.find((y) => y.knob === "extra_staff" && y.extra_staff === l && y.policy === p && y.metric === m);
                   return x ? `${fmt(x.mean)} % [${fmt(x.ci_low)}–${fmt(x.ci_high)}]` : "—"; })] })))} />
           </div>
-          <h3 className="mt-6 text-xl font-bold text-teal">{t.nightQ}</h3>
+          <h3 className="mt-6 text-xl font-bold text-navy">{t.nightQ}</h3>
           <p className="mt-1 text-muted">{t.nightNote}</p>
           <div className="mt-2">
             <ResponsiveTable head={[t.metric, ...["current", "night_legal"].map((l) => t.nightLevels[l])]}

@@ -6,7 +6,7 @@ import { useAuth } from "../auth/AuthContext";
 import { AppShell } from "../components/AppShell";
 import { ChartCard } from "../components/ChartCard";
 import { AlertTriangle, CheckCircle2, Icon } from "../components/icons";
-import { Button, Card, Notice } from "../components/ui";
+import { Button, Card, Notice, PageHeader } from "../components/ui";
 import { es } from "../i18n/es";
 import { formatDateTime } from "../lib/format";
 import { useBoardSocket } from "../lib/useBoardSocket";
@@ -55,12 +55,12 @@ export function ContingencyPage() {
   const line = (e: Event) => t.eventLine.replace("{phase}", t.levels[e.phase]).replace("{pollutant}", t.pollutant[e.pollutant])
     .replace("{districts}", e.district_names.join(", ")).replace("{since}", formatDateTime(e.started_at));
   const badge = (e: Event) => (
-    <span className={`mr-2 rounded-card px-2 ${e.origin === "demo_scenario" ? "bg-warn/15" : "bg-danger/10"}`}>
+    <span className={`mr-2 rounded-full px-2 ${e.origin === "demo_scenario" ? "bg-warn/15" : "bg-danger/10"}`}>
       {e.origin === "demo_scenario" ? t.demo : t.real}</span>);
 
   return (
     <AppShell>
-      <h1 className="text-teal">{es.screens["/contingencia"]}</h1>
+      <PageHeader title={es.pageTitles["/contingencia"]} />
       {d.scenario && <div className="mt-2"><Notice>{t.demoRunning.replace("{scenario}", es.demo.scenarios[d.scenario.scenario] ?? d.scenario.scenario)}</Notice></div>}
       {msg && <div className="mt-2"><Notice kind="ok">{msg}</Notice></div>}
 
@@ -74,10 +74,10 @@ export function ContingencyPage() {
             </ul>
             {ended.length > 0 && (
               <details className="mt-3">
-                <summary className="flex min-h-12 cursor-pointer items-center font-bold text-teal">
+                <summary className="flex min-h-12 cursor-pointer items-center font-bold text-navy">
                   {t.historyTitle.replace("{n}", String(ended.length))}</summary>
                 <ul className="space-y-2 text-muted">
-                  {ended.map((e) => <li key={e.event_id} className="rounded-card border border-muted/30 p-2">{badge(e)}{line(e)}
+                  {ended.map((e) => <li key={e.event_id} className="rounded-field border border-muted/30 p-2">{badge(e)}{line(e)}
                     <span className="block">{t.ended.replace("{at}", formatDateTime(e.ended_at!))}</span></li>)}
                 </ul>
               </details>)}
@@ -96,7 +96,7 @@ export function ContingencyPage() {
         </div>
 
         <div className="space-y-4 xl:col-span-2">
-          {open.length === 0 && <Card><h2 className="text-teal">{owner ? t.proposalQOwner : t.proposalQ}</h2><p className="mt-2">{owner ? t.noProposalOwner : t.noProposal}</p></Card>}
+          {open.length === 0 && <Card><h2 className="text-navy">{owner ? t.proposalQOwner : t.proposalQ}</h2><p className="mt-2">{owner ? t.noProposalOwner : t.noProposal}</p></Card>}
           {open.map((e) => {
             const mine = e.proposals;
             const pending = mine.filter((p) => p.status === "proposed");
@@ -122,12 +122,12 @@ export function ContingencyPage() {
                         <fieldset key={k} className="mt-3">
                           <legend className="font-bold">{t.kinds[k]} ({items.length})</legend>
                           <label className="flex min-h-12 items-center gap-3">
-                            <input type="checkbox" className="size-6 shrink-0 accent-teal" disabled={open.length === 0}
+                            <input type="checkbox" className="size-6 shrink-0 accent-navy" disabled={open.length === 0}
                               checked={open.length > 0 && open.every((id) => sel.has(id))} onChange={() => toggle(e.event_id, open)} />
                             <span>{t.notifyAll.replace("{n}", String(items.length))}
-                              {open.length === 0 && <span className="ml-1 font-bold text-teal"><Icon as={CheckCircle2} /> {t.proposalStatus[items[0].status]}</span>}</span>
+                              {open.length === 0 && <span className="ml-1 font-bold text-navy"><Icon as={CheckCircle2} /> {t.proposalStatus[items[0].status]}</span>}</span>
                           </label>
-                          <details><summary className="flex min-h-12 cursor-pointer items-center font-bold text-teal">{t.showList}</summary>
+                          <details><summary className="flex min-h-12 cursor-pointer items-center font-bold text-navy">{t.showList}</summary>
                             <ul className="ml-9 list-disc space-y-1">{items.map((p) => <li key={p.proposal_id}>{p.reason}</li>)}</ul>
                           </details>
                         </fieldset>);
@@ -139,17 +139,17 @@ export function ContingencyPage() {
                           {items.map((p) => (
                             <li key={p.proposal_id}>
                               <label className="flex min-h-12 items-start gap-3">
-                                <input type="checkbox" className="mt-1 size-6 shrink-0 accent-teal" disabled={p.status !== "proposed"}
+                                <input type="checkbox" className="mt-1 size-6 shrink-0 accent-navy" disabled={p.status !== "proposed"}
                                   checked={sel.has(p.proposal_id)} onChange={() => toggle(e.event_id, [p.proposal_id])} />
                                 <span>{p.reason}
-                                  {p.status !== "proposed" && <span className="ml-1 font-bold text-teal"><Icon as={CheckCircle2} /> {t.proposalStatus[p.status]}</span>}</span>
+                                  {p.status !== "proposed" && <span className="ml-1 font-bold text-navy"><Icon as={CheckCircle2} /> {t.proposalStatus[p.status]}</span>}</span>
                               </label>
                             </li>))}
                         </ul>
                       </fieldset>);
                   })}
                   {d.can_decide && pending.length > 0 && (   /* in the normal flow, after the list: never covers it */
-                    <div className="mt-5 flex flex-wrap gap-2 border-t border-teal/15 pt-4">
+                    <div className="mt-5 flex flex-wrap gap-2 border-t border-navy/15 pt-4">
                       <Button icon={CheckCircle2} onClick={() => decide(e, "all")}>{t.approveAll}</Button>
                       <Button variant="secondary" icon={CheckCircle2} disabled={!sel.size} onClick={() => decide(e, "selected")}>{t.approveSelected}</Button>
                       <Button variant="secondary" icon={AlertTriangle} onClick={() => decide(e, "none")}>{t.rejectAll}</Button>

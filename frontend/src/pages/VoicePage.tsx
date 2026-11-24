@@ -8,7 +8,7 @@ import { useEffect, useRef, useState } from "react";
 import { api } from "../api/client";
 import { useAuth } from "../auth/AuthContext";
 import { AppShell } from "../components/AppShell";
-import { Button, Card, Notice, inputClass } from "../components/ui";
+import { Button, Card, Highlight, Notice, inputClass } from "../components/ui";
 import { AlertTriangle, Icon } from "../components/icons";
 import { es } from "../i18n/es";
 
@@ -20,7 +20,7 @@ type Result = { level: string; emergency_source?: "rule" | "classifier" | null; 
 
 function Call911({ big = false }: { big?: boolean }) {
   return (
-    <a href="tel:911" className={`inline-flex items-center justify-center gap-3 rounded-card bg-danger font-bold text-white
+    <a href="tel:911" className={`inline-flex items-center justify-center gap-3 rounded-full bg-danger font-bold text-white
       ${big ? "min-h-20 px-8 text-3xl" : "min-h-12 px-5 text-lg"}`}>
       <Icon as={PhoneCall} /> {t.call911}
     </a>
@@ -106,8 +106,8 @@ export function VoicePage() {
   return (
     <AppShell>
       {/* always visible, sticky: even if everything else fails */}
-      <div className="sticky top-0 z-30 -mx-4 mb-4 flex flex-wrap items-center justify-between gap-3 bg-cream/95 px-4 py-3 backdrop-blur">
-        <h1 className="text-teal">{es.screens["/voz"]}</h1>
+      <div className="section-header sticky top-0 z-30 -mx-4 -mt-6 mb-6 flex flex-wrap items-center justify-between gap-3 px-4 py-4 shadow-[0_2px_12px_rgba(27,51,73,0.06)]">
+        <h1 className="text-3xl sm:text-4xl"><Highlight text={es.pageTitles["/voz"]} /></h1>
         <Call911 />
       </div>
 
@@ -119,10 +119,10 @@ export function VoicePage() {
             <p className="font-bold">{t.amberCallIf}</p>
             <ul className="mt-2 list-disc space-y-1 pl-8">{t.amberSigns.map((s) => <li key={s}>{s}</li>)}</ul>
           </div>
-          <a href="tel:911" className="inline-flex min-h-24 items-center gap-4 rounded-card bg-danger px-10 text-4xl font-bold text-white">
+          <a href="tel:911" className="inline-flex min-h-24 items-center gap-4 rounded-full bg-danger px-10 text-4xl font-bold text-white">
             <Icon as={PhoneCall} /> {t.call911}</a>
           <p className="text-2xl font-bold">{t.amberCoordination}</p>
-          <button type="button" onClick={() => setEmergency(false)} className="inline-flex min-h-12 items-center gap-2 rounded-card border-2 border-ink px-4 font-bold">
+          <button type="button" onClick={() => setEmergency(false)} className="inline-flex min-h-12 items-center gap-2 rounded-full border-2 border-ink px-4 font-bold">
             <Icon as={X} /> {t.emergencyClose}</button>
         </div>
       )}
@@ -132,17 +132,17 @@ export function VoicePage() {
           className="fixed inset-0 z-50 flex flex-col items-center justify-center gap-6 bg-danger p-6 text-center text-white">
           <p id="em-title" className="text-4xl font-bold">{t.emergencyTitle}</p>
           <p className="text-3xl font-bold">{t.emergencyCall}</p>
-          <a href="tel:911" className="inline-flex min-h-24 items-center gap-4 rounded-card bg-white px-10 text-4xl font-bold text-danger">
+          <a href="tel:911" className="inline-flex min-h-24 items-center gap-4 rounded-full bg-white px-10 text-4xl font-bold text-danger">
             <Icon as={PhoneCall} /> {t.call911}</a>
           {result?.support_line && (   // self-harm: Línea de la Vida too (number from config, official source)
             <div className="flex flex-col items-center gap-3">
               <p className="text-2xl font-bold">{t.supportLine.replace("{name}", result.support_line.name)}</p>
-              <a href={`tel:${result.support_line.tel}`} className="inline-flex min-h-16 flex-wrap items-center justify-center gap-x-3 rounded-card border-4 border-white px-6 py-2 text-2xl font-bold sm:text-3xl">
+              <a href={`tel:${result.support_line.tel}`} className="inline-flex min-h-16 flex-wrap items-center justify-center gap-x-3 rounded-full border-4 border-white px-6 py-2 text-2xl font-bold sm:text-3xl">
                 <Icon as={PhoneCall} /> {t.supportCall.split("{phone}")[0]}
                 <span className="whitespace-nowrap">{result.support_line.phone}</span></a>
             </div>)}
           <p className="text-xl">{t.emergencyNotified}</p>
-          <button type="button" onClick={() => setEmergency(false)} className="inline-flex min-h-12 items-center gap-2 rounded-card border-2 border-white px-4 font-bold">
+          <button type="button" onClick={() => setEmergency(false)} className="inline-flex min-h-12 items-center gap-2 rounded-full border-2 border-white px-4 font-bold">
             <Icon as={X} /> {t.emergencyClose}</button>
         </div>
       )}
@@ -178,14 +178,14 @@ export function VoicePage() {
             )}
             {mode === "sending" && <p aria-live="polite">{t.processing}</p>}
             {result && result.level !== "emergency" && (
-              <div className="rounded-card border border-teal/20 p-3">
+              <div className="rounded-field border border-navy/15 p-3">
                 <p className="font-bold">{t.heard}</p><p>«{result.transcript}»</p>
                 {staff && <p className="mt-1 text-muted">{t.levelForStaff}: {t.levels[result.level]}</p>}
               </div>
             )}
           </div>
         )}
-        <div className="mt-6 border-t border-teal/15 pt-4">
+        <div className="mt-6 border-t border-navy/15 pt-4">
           <Button variant="secondary" icon={Languages} disabled={!pid} onClick={callMe}>{t.callMe}</Button>
         </div>
       </Card>

@@ -1,5 +1,5 @@
 user_id,role,institution_id,caregiver_id,family_member_id,display_name,email,password_hash,active
-USR-001,owner,,,,Dirección Vela,owner@ejemplo.test,$2a$10$9a988E7ejwdKGMipcye1juKATbDerxGS1aVIlcHGqQSJP1Wgiqmy.,true
+USR-001,owner,,,,Dirección Enlaza,owner@ejemplo.test,$2a$10$9a988E7ejwdKGMipcye1juKATbDerxGS1aVIlcHGqQSJP1Wgiqmy.,true
 USR-002,coordinator,INS-A,,,Coordinación Clínica Oriente,coordinacion.a@ejemplo.test,$2a$10$CFaTZgEeTG0PKtpKdiZfu.Mt.mmAOYjScoszOpBYwMYnfLwy.lYt6,true
 USR-003,physician,INS-A,CUI-001,,Laura Medina Díaz,cui-001@ejemplo.test,$2a$10$Gz5Er7ILNi.1fcqrSY5B9u9wAhN/Rj4onr.MRbMKuZN45iwjTYKfS,true
 USR-004,physician,INS-A,CUI-002,,Paola Vargas Salazar,cui-002@ejemplo.test,$2a$10$JHdsO796Zq4/.mdUqQ6skuRz584FlCQcdeGr55MI88YIwbS.8ra.6,true

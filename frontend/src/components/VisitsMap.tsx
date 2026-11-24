@@ -13,10 +13,10 @@ export type MapVisit = { request_id: string; status: string; lat: number; lon: n
 export type MapStaff = { caregiver_id: string; name: string; lat: number; lon: number };
 
 const STYLE: Record<string, { symbol: string; color: string }> = {
-  queued: { symbol: "triangle", color: "#B7791F" }, assigned: { symbol: "circle", color: chart.series[0] },
-  in_progress: { symbol: "diamond", color: chart.series[1] }, completed: { symbol: "rect", color: "#2E7D4F" },
-  closed: { symbol: "rect", color: "#2E7D4F" }, unattended: { symbol: "pin", color: "#C0392B" },
-  not_closed: { symbol: "pin", color: "#B7791F" },
+  queued: { symbol: "triangle", color: "#8A5A00" }, assigned: { symbol: "circle", color: chart.series[0] },
+  in_progress: { symbol: "diamond", color: chart.series[1] }, completed: { symbol: "rect", color: "#1D7447" },
+  closed: { symbol: "rect", color: "#1D7447" }, unattended: { symbol: "pin", color: "#B42318" },
+  not_closed: { symbol: "pin", color: "#8A5A00" },
 };
 const BASE = { symbol: "roundRect", color: "#9AA5AB" };
 

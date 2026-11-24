@@ -17,7 +17,7 @@ Parámetros en `config/simulation.yaml`.
 - **Despacho:** 4 políticas
   1. `nearest` – el más cercano disponible;
   2. `risk_priority` – primero los pacientes de mayor riesgo;
-  3. `risk_plus_live_traffic` – riesgo + tiempo de viaje con tráfico de la hora (política de Vela);
+  3. `risk_plus_live_traffic` – riesgo + tiempo de viaje con tráfico de la hora (política de Enlaza);
   4. `human_dispatcher` – como hoy: por orden de llegada, con 5–20 min de retraso para decidir.
 
 ## Escenarios

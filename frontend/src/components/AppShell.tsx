@@ -21,17 +21,17 @@ export function AppShell({ children, bare = false }: { children: ReactNode; bare
 
   const onLogout = async () => {
     await logout();
-    navigate("/", { replace: true });
+    navigate("/entrar", { replace: true });
   };
   const link = ({ isActive }: { isActive: boolean }) =>
-    `inline-flex min-h-12 items-center whitespace-nowrap rounded-card px-2 font-bold ${
-      isActive ? "bg-teal text-white" : "text-teal hover:bg-teal/10"}`;
+    `inline-flex min-h-12 items-center whitespace-nowrap rounded-full px-2 font-bold 2xl:px-3 ${
+      isActive ? "bg-navy text-white" : "text-navy hover:bg-sky"}`;
 
   return (
     <div className="min-h-screen">
-      <header className="border-b border-teal/20 bg-white">
+      <header className="border-b border-navy/10 bg-white shadow-[0_2px_12px_rgba(27,51,73,0.06)]">
         <div className="mx-auto flex max-w-[1880px] items-center gap-3 px-4 py-2">
-          <img src="/logo.svg" alt={`${es.app.name} · ${es.app.tagline}`} className="h-10 shrink-0" />
+          <img src="/logo.svg" alt={`${es.app.name} · ${es.app.tagline}`} className="h-10 shrink-0 xl:h-9 2xl:h-10" />
 
           <nav aria-label={es.shell.menu} className="hidden min-w-0 flex-1 xl:block">
             <ul className="flex items-center gap-0.5">
@@ -42,7 +42,7 @@ export function AppShell({ children, bare = false }: { children: ReactNode; bare
           </nav>
 
           <button type="button" onClick={() => setOpen((o) => !o)} aria-expanded={open} aria-controls="main-menu"
-            className="ml-auto inline-flex min-h-12 items-center gap-2 rounded-card border-2 border-teal px-3 font-bold text-teal xl:hidden">
+            className="ml-auto inline-flex min-h-12 items-center gap-2 rounded-full border-2 border-navy px-4 font-bold text-navy xl:hidden">
             <Icon as={open ? X : Menu} />{open ? es.nav.closeShort : es.nav.menu}
           </button>
 
@@ -59,7 +59,7 @@ export function AppShell({ children, bare = false }: { children: ReactNode; bare
         </div>
 
         {open && (
-          <nav id="main-menu" aria-label={es.shell.menu} className="border-t border-teal/15 px-4 pb-3 xl:hidden">
+          <nav id="main-menu" aria-label={es.shell.menu} className="border-t border-navy/15 px-4 pb-3 xl:hidden">
             <p className="py-2"><span className="font-bold">{user.display_name}</span>
               <span className="text-muted"> · {es.roles[user.role]}{user.institution_id ? ` · ${user.institution_id}` : ""}</span></p>
             <ul className="grid gap-1 sm:grid-cols-2">
@@ -68,7 +68,7 @@ export function AppShell({ children, bare = false }: { children: ReactNode; bare
                   {es.screens[path]}</NavLink></li>
               ))}
             </ul>
-            <div className="mt-2 border-t border-teal/15 pt-3"><LogoutButton onLogout={onLogout} /></div>
+            <div className="mt-2 border-t border-navy/15 pt-3"><LogoutButton onLogout={onLogout} /></div>
           </nav>
         )}
       </header>
@@ -81,7 +81,7 @@ export function AppShell({ children, bare = false }: { children: ReactNode; bare
 function LogoutButton({ onLogout }: { onLogout: () => void }) {
   return (
     <button type="button" onClick={onLogout}
-      className="inline-flex min-h-12 items-center gap-2 whitespace-nowrap rounded-card border-2 border-teal px-3 font-bold text-teal hover:bg-teal hover:text-white">
+      className="inline-flex min-h-12 items-center gap-2 whitespace-nowrap rounded-full border-2 border-navy px-4 font-bold text-navy hover:bg-navy hover:text-white">
       <Icon as={LogOut} />{es.shell.logout}
     </button>
   );

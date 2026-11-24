@@ -123,7 +123,7 @@ export function PanoramaView({ filters }: { filters: Filters }) {
     yAxis: { ...axisCommon, type: "value", min: 0, max: Math.ceil((limit * 1.1) / 20) * 20 },
     series: [{ type: "line", showSymbol: false, lineStyle: { width: 2 }, data: air.series.map((p) => [p.t, p[key]]),
       // period of an ACTIVE demo scenario, labelled so nobody confuses it with real readings
-      markArea: scenarioSpan(air.series) ? { silent: true, itemStyle: { color: "rgba(183,121,31,0.12)" },
+      markArea: scenarioSpan(air.series) ? { silent: true, itemStyle: { color: "rgba(138,90,0,0.12)" },
         label: { show: true, position: "insideTop", color: chart.ink, fontFamily: chart.font, formatter: t.demoScenario },
         data: [[{ xAxis: scenarioSpan(air.series)![0] }, { xAxis: scenarioSpan(air.series)![1] }]] } : undefined,
       markLine: { silent: true, symbol: "none", lineStyle: { color: chart.threshold, width: 2, type: "solid" },
@@ -166,7 +166,7 @@ export function PanoramaView({ filters }: { filters: Filters }) {
         source={indicator === "multimorbidity_broad_pct" ? `${t.riskSource}; ${t.broadRefSource}` : t.riskSource}
         note={<>{t.highest}: <strong className="text-ink">{ranked[0].district_name}</strong> ({pct(ranked[0][indicator])})
           {indicator === "multimorbidity_broad_pct" && pop.indicator_reference.multimorbidity_broad_pct && (
-            <span className="mt-2 block rounded-card border-2 border-teal/30 p-2 text-ink">
+            <span className="mt-2 block rounded-card border-2 border-navy/30 p-2 text-ink">
               <strong>{t.broadCompare}: </strong>{pct(pop.city.multimorbidity_broad_pct)} {t.inVela} · {" "}
               <strong>{pct(pop.indicator_reference.multimorbidity_broad_pct.reference_pct)}</strong> ENSANUT 2018-19.{" "}
               <span className="text-muted">{t.broadCaveat}</span>
@@ -177,7 +177,7 @@ export function PanoramaView({ filters }: { filters: Filters }) {
           <legend className="sr-only">{t.riskQ}</legend>
           {INDICATORS.map((k) => (
             <label key={k} className="flex min-h-12 items-center gap-2">
-              <input type="radio" name="indicator" checked={indicator === k} onChange={() => setIndicator(k)} className="size-6 accent-teal" />
+              <input type="radio" name="indicator" checked={indicator === k} onChange={() => setIndicator(k)} className="size-6 accent-navy" />
               {t.indicators[k]}
             </label>
           ))}
@@ -265,14 +265,14 @@ function SimulationCard() {
       keyValue={available ? fmt(pick(r!.summary, "normal", OPERATING, "high_wait_p90_min")?.mean) : undefined}
       keyLabel={available ? es.sim.panoramaKey : undefined}>
       {!available ? (
-        <div className="flex min-h-40 items-center justify-center rounded-card border-2 border-dashed border-teal/30 p-6 text-center text-muted">
+        <div className="flex min-h-40 items-center justify-center rounded-card border-2 border-dashed border-navy/30 p-6 text-center text-muted">
           <p><Icon as={FlaskConical} /> {t.simPending}</p>
         </div>
       ) : (<>
         <p className="font-bold">{es.sim.metrics.high_wait_p90_min.label} · {es.sim.scenarios.normal}</p>
         <CIChart rows={ciRows(r!.summary, "normal", "high_wait_p90_min")} unit="min" title={es.sim.metrics.high_wait_p90_min.label} />
         <p className="mt-2">{conclusion(r!)[0]}</p>
-        <Link to="/simulacion" className="mt-2 inline-flex min-h-12 items-center font-bold text-teal underline">{es.sim.panoramaLink}</Link>
+        <Link to="/simulacion" className="mt-2 inline-flex min-h-12 items-center font-bold text-navy underline">{es.sim.panoramaLink}</Link>
       </>)}
     </ChartCard>
   );

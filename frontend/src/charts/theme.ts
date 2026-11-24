@@ -1,18 +1,23 @@
-// Chart palette (validated with the dataviz validator against the white card surface, 21 Nov 2026):
-//   categorical  #00879C (chart teal) · #E8704A (brand coral) · #6250D6 (violet)  → all checks pass,
-//                worst CVD ΔE 12.6, normal-vision ΔE 19.3 (also with --pairs all)
-//   sequential   5 teal steps, light → dark (ordinal checks pass; light end ≥ 2:1 on white)
-// The brand teal #0F5C6E stays for UI chrome: as a chart series it fails the chroma floor (reads gray).
+// Chart palette, derived from the Enlaza logo (23 Nov 2026), validated with the dataviz validator against white:
+//   categorical  #0094A6 (deep teal) · #3159B8 (blue, from the logo navy) · #B23E89 (magenta, the third hue)
+//                lightness band, chroma floor, contrast >= 3:1 on white: PASS; worst adjacent CVD ΔE 8.2 (protan),
+//                normal-vision ΔE 17.6. Non-adjacent teal↔magenta is 5.3 (deutan): every chart has a legend and/or
+//                direct labels (secondary encoding).
+//                Against the status colours (ok #1D7447, warn #8A5A00, danger #B42318): normal ΔE >= 15.0 for every
+//                series; CVD >= 9.0 except tritan (blue↔ok 4.2, magenta↔danger 7.4): status always comes with an
+//                icon and a word, never colour alone.
+//   sequential   5 teal steps light → dark: monotone lightness, gaps >= 0.06, light end 2.05:1, one hue.
+// The logo teal #2AAEAE itself is 2.7:1 on white: decoration only, never a data mark.
 // Text never wears a series color: labels and values use ink / muted.
 export const chart = {
-  series: ["#00879C", "#E8704A", "#6250D6"],
-  ramp: ["#86BFCB", "#5DA6B6", "#3A8CA0", "#1E7187", "#0F5C6E"],
-  ink: "#1F2A30",
-  muted: "#5B6870",
-  grid: "#E3E7E9",          // hairline gridlines, one step off the surface
+  series: ["#0094A6", "#3159B8", "#B23E89"],
+  ramp: ["#6FBFC8", "#3FA5B1", "#1B8A99", "#0D6D7C", "#0A4F5C"],
+  ink: "#1B2B38",
+  muted: "#4F5F6B",
+  grid: "#E3E9ED",          // hairline gridlines, one step off the surface
   surface: "#FFFFFF",
-  threshold: "#C0392B",     // contingency threshold line (status "danger", always with a text label)
-  font: '"Atkinson Hyperlegible", Arial, sans-serif',
+  threshold: "#B42318",     // contingency threshold line (status "danger", always with a text label)
+  font: '"Enlaza Digits", "Atkinson Hyperlegible", Arial, sans-serif',   // digits with a plain zero (index.css)
 };
 
 /** Shared ECharts defaults: recessive axes, solid hairline grid, brand font. */

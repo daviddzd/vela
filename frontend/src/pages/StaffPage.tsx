@@ -9,7 +9,7 @@ import { chart } from "../charts/theme";
 import { AppShell } from "../components/AppShell";
 import { AlertTriangle, Ban, Icon } from "../components/icons";
 import { StatusBadge } from "../components/StatusBadge";
-import { Button, Card, inputClass, Notice } from "../components/ui";
+import { Button, Card, Notice, PageHeader, inputClass } from "../components/ui";
 import { es } from "../i18n/es";
 import { formatDate, formatTime } from "../lib/format";
 import { useBoardSocket } from "../lib/useBoardSocket";
@@ -33,7 +33,7 @@ export function StaffPage() {
 
   const points: MapPoint[] = useMemo(() => (d?.staff ?? []).map((c: any) => ({
     id: c.caregiver_id, lat: c.lat, lon: c.lon, symbol: c.out_of_service ? "triangle" : "roundRect",
-    color: c.out_of_service ? "#C0392B" : c.on_shift_now ? chart.series[0] : "#9AA5AB", size: 11,
+    color: c.out_of_service ? "#B42318" : c.on_shift_now ? chart.series[0] : "#9AA5AB", size: 11,
     label: c.caregiver_id === sel ? c.name.split(" ").slice(0, 2).join(" ") : undefined,
     tooltip: `${fill(t.base, { name: c.name })} · ${t.type[c.type]} · ${c.out_of_service ? t.outOfService : c.on_shift_now ? t.onShift : t.offShift}`,
   })), [d, sel]);
@@ -48,17 +48,18 @@ export function StaffPage() {
   const person = d.staff.find((c: any) => c.caregiver_id === sel);
   return (
     <AppShell>
-      <h1 className="text-teal">{es.screens["/personal"]}</h1>
-      <p className="mt-1">{t.intro}</p>
+      <PageHeader title={es.pageTitles["/personal"]}>
+        <p className="max-w-4xl">{t.intro}</p>
+      </PageHeader>
       {msg && <div className="mt-3"><Notice kind={msg.kind}>{msg.text}</Notice></div>}
       <div className="items-start mt-4 grid gap-4 xl:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)]">
         <Card>
-          <ul className="divide-y divide-teal/10">{d.staff.map((c: any) => (
+          <ul className="divide-y divide-navy/10">{d.staff.map((c: any) => (
             <li key={c.caregiver_id}>
               <button type="button" onClick={() => setSel(c.caregiver_id)} aria-pressed={sel === c.caregiver_id}
-                className={`w-full rounded-card p-2 text-left ${sel === c.caregiver_id ? "bg-teal/10" : "hover:bg-teal/5"}`}>
+                className={`w-full rounded-field p-2 text-left ${sel === c.caregiver_id ? "bg-navy/10" : "hover:bg-navy/5"}`}>
                 <span className="flex flex-wrap items-center justify-between gap-2">
-                  <strong className="text-teal">{c.name}</strong>
+                  <strong className="text-navy">{c.name}</strong>
                   <StateWord c={c} />
                 </span>
                 <span className="block text-sm">{t.type[c.type]} · {c.skills.map((s: string) => t.skills[s]).join(", ")} · {c.shift_start}–{c.shift_end} ({t.legalType[c.legal_type]})
@@ -73,14 +74,14 @@ export function StaffPage() {
           <Coverage version={d} />
           {person && <div id="agenda" className="scroll-mt-4"><Agenda person={person} onMsg={(m) => { setMsg(m); load(); }} /></div>}
           <Card>
-            <h2 className="text-teal">{t.mapTitle}</h2>
+            <h2 className="text-navy">{t.mapTitle}</h2>
             <div className="mt-2"><Suspense fallback={<div style={{ minHeight: 380 }} />}>
               <StreetMap points={points} height={380} label={t.mapLabel} onSelect={choose} /></Suspense></div>
             <p className="mt-2 text-sm text-muted">{t.mapHint}</p>
             <ul className="mt-2 flex flex-wrap gap-x-5 text-sm">
               <li><span style={{ color: chart.series[0] }}>■</span> {t.onShift}</li>
               <li><span style={{ color: "#9AA5AB" }}>■</span> {t.offShift}</li>
-              <li><span style={{ color: "#C0392B" }}>▲</span> {t.outOfService}</li>
+              <li><span style={{ color: "#B42318" }}>▲</span> {t.outOfService}</li>
             </ul>
           </Card>
         </div>
@@ -106,10 +107,10 @@ function Coverage({ version }: { version: unknown }) {
   };
   return (
     <Card>
-      <h2 className="text-teal">{t.coverageTitle}</h2>
+      <h2 className="text-navy">{t.coverageTitle}</h2>
       <p className="mt-1 text-sm">{t.coverageIntro}</p>
       <p className="mt-2 font-bold" aria-live="polite">{c.gaps === 0 ? t.coverageNone : c.gaps === 1 ? t.coverageCountOne : fill(t.coverageCount, { n: c.gaps })}</p>
-      <ul className="mt-2 divide-y divide-teal/10">{c.days.map((day: any) => (
+      <ul className="mt-2 divide-y divide-navy/10">{c.days.map((day: any) => (
         <li key={day.date} className="py-2">
           <p className="font-bold first-letter:uppercase">{t.weekdayName[day.weekday]} {day.date.split("-").reverse().join("/")}</p>
           {day.gaps.length === 0 ? <p className="text-sm text-ok"><Icon as={CheckCircle2} /> {t.coverageOk}</p>
@@ -134,8 +135,8 @@ function LoadBar({ c }: { c: any }) {
     <span className="mt-1 block text-sm">
       {t.weekLoad}: {fill(t.weekLoadValue, { h: c.week_hours.toLocaleString("es-MX"), cap: c.week_capacity_hours, pct: (c.week_load_pct ?? 0).toLocaleString("es-MX") })}
       {" · "}{c.visits_today === 1 ? t.visitsTodayOne : fill(t.visitsToday, { n: c.visits_today })}
-      <span aria-hidden="true" className="mt-1 block h-2 w-full overflow-hidden rounded bg-teal/10">
-        <span className="block h-2 rounded bg-teal" style={{ width: `${pct}%` }} /></span>
+      <span aria-hidden="true" className="mt-1 block h-2 w-full overflow-hidden rounded bg-navy/10">
+        <span className="block h-2 rounded bg-navy" style={{ width: `${pct}%` }} /></span>
     </span>
   );
 }
@@ -160,13 +161,13 @@ function Agenda({ person, onMsg }: { person: any; onMsg: (m: { kind: "ok" | "err
   return (
     <Card>
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <h2 className="text-teal">{fill(t.agendaOf, { name: person.name })}</h2>
+        <h2 className="text-navy">{fill(t.agendaOf, { name: person.name })}</h2>
         {person.out_of_service
           ? <Button icon={RotateCcw} onClick={back}>{t.markBack}</Button>
           : !asking && <Button icon={PowerOff} variant="secondary" onClick={() => setAsking(true)}>{t.markOut}</Button>}
       </div>
       {asking && (
-        <form onSubmit={markOut} className="mt-3 space-y-2 rounded-card border border-teal/20 p-3">
+        <form onSubmit={markOut} className="mt-3 space-y-2 rounded-field border border-navy/15 p-3">
           <p className="text-sm">{t.outHelp}</p>
           <label className="block"><span className="font-bold">{t.reason}</span>
             <input className={inputClass} required minLength={3} maxLength={200} value={reason} onChange={(e) => setReason(e.target.value)} /></label>
@@ -206,9 +207,9 @@ function Timeline({ day }: { day: any }) {
   return (<>
     <p className="mt-1 text-sm text-muted">{fill(t.shiftWindow, { from: day.shift_start, to: day.shift_end })}</p>
     {day.visits.length === 0 ? <p className="mt-2">{t.noVisits}</p> : (<>
-      <div className="relative mt-3 h-16 rounded bg-cream" aria-hidden="true">
+      <div className="relative mt-3 h-16 rounded bg-sky-soft" aria-hidden="true">
         {hours.map((m, i) => (
-          <span key={m} className="absolute top-0 h-full border-l border-teal/15 text-[11px] text-muted" style={{ left: pos(m) }}>
+          <span key={m} className="absolute top-0 h-full border-l border-navy/15 text-[11px] text-muted" style={{ left: pos(m) }}>
             {/* the last hour is written to the LEFT of its line so it never leaves the card */}
             <span className={i === hours.length - 1 ? "absolute right-full mr-0.5" : "ml-0.5"}>{String(Math.floor(m / 60) % 24).padStart(2, "0")}</span></span>))}
         {day.visits.map((v: any) => {
@@ -217,15 +218,15 @@ function Timeline({ day }: { day: any }) {
           const end = v.planned_end ? minutesOfDay(v.planned_end) : arrive;
           return (<span key={v.assignment_id}>
             {start !== null && arrive !== null && arrive > start && (
-              <span className="absolute top-5 h-6 rounded-l border border-teal/40 bg-[repeating-linear-gradient(45deg,#ffffff,#ffffff_3px,#cfe3e7_3px,#cfe3e7_6px)]"
+              <span className="absolute top-5 h-6 rounded-l border border-navy/40 bg-[repeating-linear-gradient(45deg,#ffffff,#ffffff_3px,#cfe3e7_3px,#cfe3e7_6px)]"
                 style={{ left: pos(start), width: `calc(${pos(arrive)} - ${pos(start)})` }} />)}
             {arrive !== null && end !== null && (
-              <span className="absolute top-5 h-6 rounded-r bg-teal" style={{ left: pos(arrive), width: `max(4px, calc(${pos(end)} - ${pos(arrive)}))` }} />)}
+              <span className="absolute top-5 h-6 rounded-r bg-navy" style={{ left: pos(arrive), width: `max(4px, calc(${pos(end)} - ${pos(arrive)}))` }} />)}
           </span>);
         })}
       </div>
       <ul className="mt-2 flex gap-4 text-sm"><li><Icon as={Car} /> {t.tripLegend}</li><li><Icon as={Home} /> {t.visitLegend}</li></ul>
-      <ol className="mt-2 divide-y divide-teal/10">{day.visits.map((v: any) => (
+      <ol className="mt-2 divide-y divide-navy/10">{day.visits.map((v: any) => (
         <li key={v.assignment_id} className="flex flex-wrap items-center justify-between gap-2 py-1.5">
           <span>{v.planned_start && <>{t.trip} {hm(v.planned_start)}–{hm(v.arrive_at)} · </>}
             <strong>{t.visit} {v.arrive_at ? hm(v.arrive_at) : "—"}–{v.planned_end ? hm(v.planned_end) : "—"}</strong> · {v.patient_name} · {v.service_name}</span>

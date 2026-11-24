@@ -9,7 +9,7 @@ const TONE: Record<string, string> = {
 
 export function StatusBadge({ status }: { status: string }) {
   return (
-    <span className={`inline-flex items-center gap-1 rounded-card border-2 px-2 font-bold ${TONE[status] ?? "border-teal text-teal"}`}>
+    <span className={`inline-flex items-center gap-1 rounded-card border-2 px-2 font-bold ${TONE[status] ?? "border-navy text-navy"}`}>
       <Icon as={STATUS_ICON[status] ?? CircleDot} />
       {es.requestStatus[status] ?? status}
     </span>
