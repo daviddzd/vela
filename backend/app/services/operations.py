@@ -200,7 +200,7 @@ def coverage_gaps(db: Session, institution_id: str, first_day=None) -> list[dict
 
 
 def coverage_message(gap: dict) -> str:
-    """'Martes 1 8:00–10:00: sin enfermería en turno …' (a gap across midnight names the day it ends)."""
+    """'Martes 01/12/2026 8:00–10:00: sin enfermería en turno …' (a gap across midnight names the day it ends)."""
     s, e = gap["start"].astimezone(MEXICO_CITY), gap["end"].astimezone(MEXICO_CITY)
     hm = lambda t: f"{t.hour}:{t.minute:02d}"                                     # noqa: E731
     if e.date() == s.date():
@@ -208,8 +208,8 @@ def coverage_message(gap: dict) -> str:
     elif e.date() == s.date() + timedelta(days=1) and e.hour == 0 and e.minute == 0:
         end = "24:00"
     else:
-        end = f"{labor.WEEKDAYS_ES[e.isoweekday()]} {hm(e)}"
-    return COVERAGE_ALERT.format(day=f"{labor.WEEKDAYS_ES[s.isoweekday()].capitalize()} {s.day}", start=hm(s),
+        end = f"{labor.WEEKDAYS_ES[e.isoweekday()]} {e:%d/%m/%Y} {hm(e)}"
+    return COVERAGE_ALERT.format(day=f"{labor.WEEKDAYS_ES[s.isoweekday()].capitalize()} {s:%d/%m/%Y}", start=hm(s),
                                  end=end, skill=SKILL_ES.get(gap["skill"], gap["skill"]))
 
 
@@ -574,6 +574,34 @@ def reassign(db: Session, *, user_id: str, institution_id: str, assignment_id: s
 
 
 # ---- visits -------------------------------------------------------------------------------------
+
+# Team decision (Chrome review, 23 Nov 2026): "Llegué" opens 60 min before the person's own start (the scheduled time,
+# or the hand-over time for a relay), and "Terminé" before half of their part of the visit asks "¿Seguro?".
+ARRIVE_EARLY_MINUTES = 60
+FINISH_CONFIRM_SHARE = 0.5
+LEG_TIMES_SQL = """
+    SELECT CASE WHEN a.leg = 2 THEN f.planned_end ELSE r.scheduled_for END AS due, a.arrived_at,
+           coalesce(round(extract(epoch FROM a.planned_end - (a.planned_start + a.travel_min * interval '1 minute')) / 60),
+                    s.duration_min)::int AS expected_min
+    FROM assignments a JOIN service_requests r USING (request_id) JOIN services s USING (service_id)
+    LEFT JOIN assignments f ON f.request_id = a.request_id AND f.status = 'active' AND f.leg = 1 AND a.leg = 2
+    WHERE a.assignment_id = :a"""
+
+
+def arrival_opens_at(db: Session, assignment_id: str) -> datetime | None:
+    """From when this person may press "Llegué"; None if the assignment does not exist."""
+    row = db.execute(text(LEG_TIMES_SQL), {"a": assignment_id}).one_or_none()
+    return row.due - timedelta(minutes=ARRIVE_EARLY_MINUTES) if row and row.due else None
+
+
+def early_finish(db: Session, assignment_id: str) -> int | None:
+    """Minutes this part of the visit should last, when "Terminé" comes before half of them (ask to confirm)."""
+    row = db.execute(text(LEG_TIMES_SQL), {"a": assignment_id}).one_or_none()
+    if not row or row.arrived_at is None or not row.expected_min:
+        return None
+    on_site = (now() - row.arrived_at).total_seconds() / 60
+    return row.expected_min if on_site < FINISH_CONFIRM_SHARE * row.expected_min else None
+
 
 def mark_arrived(db: Session, *, user_id: str, institution_id: str, assignment_id: str) -> None:
     _visit_step(db, assignment_id, "assigned", "in_progress", "arrived_at", user_id, institution_id, "visit_arrived")

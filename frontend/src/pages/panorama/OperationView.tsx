@@ -149,7 +149,7 @@ export function OperationView({ filters }: { filters: Filters }) {
         </ChartCard>
       </div>
 
-      <ChartCard question={t.queueQ} keyValue={queued} keyLabel={t.queueKeyLabel} source={t.queueSource}>
+      <ChartCard question={t.queueQ} keyValue={queued} keyLabel={queued === 1 ? t.queueKeyLabelOne : t.queueKeyLabel} source={t.queueSource}>
         <ul className="grid gap-3 sm:grid-cols-3">
           {data.queue_by_priority.map((q) => (
             <li key={q.priority} className="rounded-card border-2 border-teal/20 p-3">

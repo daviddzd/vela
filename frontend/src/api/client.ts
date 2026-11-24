@@ -30,6 +30,7 @@ export type Visit = {
   travel_min: number; service_name: string; patient_name: string; district_name: string; priority: string; patient_id: string;
   relay_role: "first" | "relay" | null; relay_partner_name: string | null; relay_at: string | null;
   step: "arrive" | "finish" | "wait" | "done";
+  arrived_at: string | null; arrive_from: string | null; expected_min: number | null;
 };
 export type FamilyVisit = {
   request_id: string; status: string; status_reason: string | null; scheduled_for: string; service_name: string;
@@ -136,7 +137,8 @@ export const api = {
     request<ServiceRequest>(`/api/approvals/${requestId}`, { method: "POST", body: JSON.stringify({ caregiver_id: caregiverId }) }),
   myVisits: () => request<Visit[]>("/api/visits/mine"),
   arrive: (id: string) => request<{ status: string }>(`/api/visits/${id}/arrive`, { method: "POST" }),
-  finish: (id: string) => request<{ status: string }>(`/api/visits/${id}/finish`, { method: "POST" }),
+  finish: (id: string, confirm = false) =>
+    request<{ status: string }>(`/api/visits/${id}/finish${confirm ? "?confirm=true" : ""}`, { method: "POST" }),
   familyOverview: () => request<FamilyOverview>("/api/family/overview"),
   confirmVisit: (id: string) => request<{ status: string }>(`/api/family/visits/${id}/confirm`, { method: "POST" }),
 };

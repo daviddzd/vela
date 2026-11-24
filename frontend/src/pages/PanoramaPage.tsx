@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { api } from "../api/client";
 import { useAuth } from "../auth/AuthContext";
 import { AppShell } from "../components/AppShell";
-import { inputClass } from "../components/ui";
+import { inputClass, Notice } from "../components/ui";
 import { DateField } from "../components/DateField";
 import { es } from "../i18n/es";
 import { OperationView } from "./panorama/OperationView";
@@ -26,6 +26,14 @@ export function PanoramaPage() {
     if (isOwner) api.panorama<{ institution_id: string; name: string }[]>("institutions").then(setInstitutions);
   }, [isOwner]);
   const set = (k: keyof Filters, v: string) => setFilters((f) => ({ ...f, [k]: v || undefined }));
+  // Dates are applied only when both are valid and "Desde" is not after "Hasta"; until then the charts keep the
+  // previous range and a notice says why.
+  const [dates, setDates] = useState({ from: "", to: "", fromOk: true, toOk: true });
+  const reversed = !!dates.from && !!dates.to && dates.from > dates.to;
+  useEffect(() => {
+    if (!dates.fromOk || !dates.toOk || reversed) return;
+    setFilters((f) => ({ ...f, from: dates.from || undefined, to: dates.to || undefined }));
+  }, [dates, reversed]);
 
   return (
     <AppShell>
@@ -47,8 +55,9 @@ export function PanoramaPage() {
             {districts.map((d) => <option key={d.district_id} value={d.district_id}>{d.district_name}</option>)}
           </select>
         </label>
-        <DateField label={t.from} value={filters.from} onChange={(v) => set("from", v)} />
-        <DateField label={t.to} value={filters.to} onChange={(v) => set("to", v)} />
+        <DateField label={t.from} value={dates.from} onChange={(v, ok) => setDates((d) => ({ ...d, from: v, fromOk: ok }))}
+          error={reversed ? t.datesReversed : undefined} />
+        <DateField label={t.to} value={dates.to} onChange={(v, ok) => setDates((d) => ({ ...d, to: v, toOk: ok }))} />
         {isOwner && (
           <label className="min-w-48 flex-1 sm:flex-none"><span className="font-bold">{t.institution}</span>
             <select className={inputClass} value={filters.institution ?? ""} onChange={(e) => set("institution", e.target.value)}>
@@ -58,6 +67,8 @@ export function PanoramaPage() {
           </label>
         )}
       </form>
+      <p className="mt-2 max-w-4xl text-sm text-muted">{t.datesScope}</p>
+      {reversed && <div className="mt-2 max-w-4xl"><Notice kind="error">{t.datesReversedNotice}</Notice></div>}
 
       <div className="mt-4">
         {tab === "operation" ? <OperationView filters={filters} /> : <PanoramaView filters={filters} />}

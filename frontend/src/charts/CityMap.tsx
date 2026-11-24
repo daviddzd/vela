@@ -20,8 +20,8 @@ function loadBoundaries(): Promise<Boundaries> {
   return boundaries;
 }
 
-export function CityMap({ points, districtFill = {}, height = 440, label }:
-  { points: MapPoint[]; districtFill?: Record<string, string>; height?: number; label: string }) {
+export function CityMap({ points, districtFill = {}, height = 440, label, onSelect }:
+  { points: MapPoint[]; districtFill?: Record<string, string>; height?: number; label: string; onSelect?: (id: string) => void }) {
   const [geo, setGeo] = useState<Boundaries | null>(null);
   useEffect(() => { loadBoundaries().then(setGeo).catch(() => setGeo({ available: false })); }, []);
 
@@ -52,5 +52,6 @@ export function CityMap({ points, districtFill = {}, height = 440, label }:
       series: [{ ...scatter, coordinateSystem: "geo" }] };
   }, [geo, points, districtFill]);
 
-  return option ? <EChart option={option} height={height} label={label} /> : <div style={{ minHeight: height }} />;
+  return option ? <EChart option={option} height={height} label={label}
+    onClick={onSelect && ((p) => p.seriesType === "scatter" && p.data?.name && onSelect(p.data.name))} /> : <div style={{ minHeight: height }} />;
 }

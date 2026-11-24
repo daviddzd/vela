@@ -31,8 +31,12 @@ export function RequestForm({ coordinator = false, onCreated, patient }:
     api.services().then((s) => { setServices(s); setServiceId(s[0]?.service_id ?? ""); }).catch(() => undefined);
   }, []);
 
+  // a date or time that already passed is stopped here, before anything is sent (no "No procede" request)
+  const past = !!day && when < localInputValue(0);
+
   const submit = async (e: FormEvent) => {
     e.preventDefault();
+    if (past) return;
     setBusy(true);
     setError("");
     try {
@@ -56,7 +60,7 @@ export function RequestForm({ coordinator = false, onCreated, patient }:
         options={services.map((s) => ({ value: s.service_id, title: s.name, detail: duration(s.duration_min) }))} />
       <fieldset className="flex flex-wrap items-start gap-3">
         <legend className="sr-only">{es.family.when}</legend>
-        <DateField label={es.family.when} value={day} onChange={setDay} required />
+        <DateField label={es.family.when} value={day} onChange={setDay} required error={past ? es.family.pastDate : undefined} />
         <label className="block"><span className="font-bold">{es.dates.time}</span>
           <select value={time} onChange={(e) => setTime(e.target.value)} className={`${inputClass} w-32`}>
             {TIMES.map((t) => <option key={t} value={t}>{t}</option>)}
@@ -76,7 +80,7 @@ export function RequestForm({ coordinator = false, onCreated, patient }:
         </fieldset>
       )}
       {error && <p role="alert" className="font-bold text-danger"><Icon as={AlertTriangle} /> {error}</p>}
-      <Button type="submit" icon={Plus} disabled={busy || !serviceId || !day} className="w-full">{es.family.submit}</Button>
+      <Button type="submit" icon={Plus} disabled={busy || !serviceId} className="w-full">{es.family.submit}</Button>
     </form>
   );
 }

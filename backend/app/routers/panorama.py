@@ -23,6 +23,7 @@ from sqlalchemy.orm import Session
 
 from app.core.deps import CurrentUser, require_role, tenant_db
 from app.core.roles import COORDINATOR, OWNER
+from app.routers.board import ON_BOARD          # same "En visita" rule as the live board
 from app.services import dispatcher as dsp
 from app.services import operations as ops
 
@@ -101,7 +102,7 @@ def operation(user: CurrentUser = Depends(VIEWERS), db: Session = Depends(tenant
     counters = db.execute(text(f"""
         SELECT count(*) FILTER (WHERE r.status = 'queued')                                AS queued,
                count(*) FILTER (WHERE r.status = 'assigned' AND a.planned_start <= now()) AS on_the_way,
-               count(*) FILTER (WHERE r.status = 'in_progress')                           AS in_visit,
+               count(*) FILTER (WHERE r.status = 'in_progress' AND {ON_BOARD})      AS in_visit,
                count(*) FILTER (WHERE r.status IN ('completed','closed')
                                 AND (a.finished_at AT TIME ZONE '{TZ}')::date = (now() AT TIME ZONE '{TZ}')::date) AS done_today
         FROM service_requests r

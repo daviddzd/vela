@@ -38,5 +38,7 @@ export function formatClock(d: Date): string {
 }
 
 export function formatLongDate(d: Date): string {
-  return new Intl.DateTimeFormat("es-MX", { timeZone: TZ, weekday: "long", day: "numeric", month: "long" }).format(d);
+  // "lunes 23/11/2026" (dates are always dd/mm/aaaa)
+  const weekday = new Intl.DateTimeFormat("es-MX", { timeZone: TZ, weekday: "long" }).format(d);
+  return `${weekday} ${new Intl.DateTimeFormat("es-MX", { timeZone: TZ, day: "2-digit", month: "2-digit", year: "numeric" }).format(d)}`;
 }

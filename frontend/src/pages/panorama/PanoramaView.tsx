@@ -119,7 +119,7 @@ export function PanoramaView({ filters }: { filters: Filters }) {
     tooltip: { ...baseOption().tooltip as object, trigger: "axis", axisPointer: { type: "line", lineStyle: { color: chart.muted } },
       formatter: (ps: any[]) => `<strong>${num(ps[0]?.value?.[1], 1)}</strong><br/>${esc(dayHour(ps[0]?.value?.[0]))}` },
     xAxis: { ...axisCommon, type: "time", splitLine: { show: false }, axisLabel: { ...axisCommon.axisLabel, hideOverlap: true,
-      formatter: (v: number) => new Intl.DateTimeFormat("es-MX", { timeZone: "America/Mexico_City", day: "numeric", month: "short" }).format(new Date(v)) } },
+      formatter: (v: number) => new Intl.DateTimeFormat("es-MX", { timeZone: "America/Mexico_City", day: "2-digit", month: "2-digit", year: "numeric" }).format(new Date(v)) } },
     yAxis: { ...axisCommon, type: "value", min: 0, max: Math.ceil((limit * 1.1) / 20) * 20 },
     series: [{ type: "line", showSymbol: false, lineStyle: { width: 2 }, data: air.series.map((p) => [p.t, p[key]]),
       // period of an ACTIVE demo scenario, labelled so nobody confuses it with real readings

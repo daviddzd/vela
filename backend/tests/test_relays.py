@@ -126,7 +126,7 @@ def test_a_rest_day_opens_a_gap_until_the_next_shift_starts():
     gaps = coverage.week_gaps(people, MONDAY)          # Monday 30 Nov ... Sunday 6 Dec 2026
     tue = [g for g in gaps if g["start"].date() == MONDAY + timedelta(days=1)]
     assert [(g["skill"], g["start"].time(), g["end"].time()) for g in tue] == [("nursing", time(8), time(10))]
-    assert "Martes 1 8:00–10:00: sin enfermería" in ops.coverage_message(tue[0])
+    assert "Martes 01/12/2026 8:00–10:00: sin enfermería" in ops.coverage_message(tue[0])
     thu = [g for g in gaps if g["start"].date() == MONDAY + timedelta(days=3)]
     assert [(g["start"].time(), g["end"].time()) for g in thu] == [(time(16), time(18))]
 

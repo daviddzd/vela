@@ -13,6 +13,12 @@ from app.services import operations as ops
 
 router = APIRouter(prefix="/api", tags=["board"])
 TODAY = "(now() AT TIME ZONE 'America/Mexico_City')::date"
+# A visit "in progress" belongs to today's board when it was scheduled today OR its service has not reached its
+# planned end yet (a 12-h night service that began yesterday). A visit from an earlier day that nobody marked as
+# finished (e.g. REQ-08939: arrived 22 Nov 15:09, never finished) is NOT "En visita" now.
+SERVICE_END = "(SELECT max(x.planned_end) FROM assignments x WHERE x.request_id = r.request_id AND x.status = 'active')"
+ON_BOARD = f"""((r.scheduled_for AT TIME ZONE 'America/Mexico_City')::date = {TODAY}
+               OR (r.status = 'in_progress' AND {SERVICE_END} > now()))"""
 
 
 @router.get("/time")
@@ -27,7 +33,7 @@ def board(user: CurrentUser = Depends(require_role(COORDINATOR, OWNER)), db: Ses
     counters = db.execute(text(f"""
         SELECT count(*) FILTER (WHERE r.status = 'queued')                                    AS queued,
                count(*) FILTER (WHERE r.status = 'assigned' AND a.planned_start <= now())     AS on_the_way,
-               count(*) FILTER (WHERE r.status = 'in_progress')                               AS in_visit,
+               count(*) FILTER (WHERE r.status = 'in_progress' AND {ON_BOARD})                AS in_visit,
                count(*) FILTER (WHERE r.status IN ('completed','closed')
                                 AND (a.finished_at AT TIME ZONE 'America/Mexico_City')::date = {TODAY}) AS done_today
         FROM service_requests r
@@ -63,7 +69,7 @@ def board(user: CurrentUser = Depends(require_role(COORDINATOR, OWNER)), db: Ses
         LEFT JOIN caregivers c ON c.caregiver_id = a.caregiver_id
         LEFT JOIN assignments b ON b.request_id = r.request_id AND b.status = 'active' AND b.leg = 2     -- relay
         LEFT JOIN caregivers rc ON rc.caregiver_id = b.caregiver_id
-        WHERE (r.scheduled_for AT TIME ZONE 'America/Mexico_City')::date = {TODAY}
+        WHERE {ON_BOARD}
           AND r.status NOT IN ('rejected','cancelled')
         ORDER BY r.scheduled_for""")).mappings().all()
 

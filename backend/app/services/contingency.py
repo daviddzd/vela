@@ -197,7 +197,7 @@ def generate_proposals(db: Session, event_id: str) -> int:
                 {"p": p["patient_id"], "s": OXYGEN_SERVICE}).all():
             rows.append({"i": p["institution_id"], "k": "advance_oxygen", "p": p["patient_id"], "r": v.request_id, "a": None,
                          "reason": f"Oxigenoterapia de {p['name']} programada para el "
-                                   f"{v.scheduled_for.astimezone(dsp.MEXICO_CITY):%d/%m %H:%M}; se propone adelantarla a lo antes posible.",
+                                   f"{v.scheduled_for.astimezone(dsp.MEXICO_CITY):%d/%m/%Y %H:%M}; se propone adelantarla a lo antes posible.",
                          "payload": {"scheduled_for": v.scheduled_for.isoformat()}})
         for f in db.execute(text("""SELECT first_name || ' ' || paternal_surname AS fam FROM family_members
                                     WHERE patient_id = :p ORDER BY family_member_id LIMIT 1"""), {"p": p["patient_id"]}).all():

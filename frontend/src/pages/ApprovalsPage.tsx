@@ -1,5 +1,5 @@
 // /aprobaciones — high-priority requests: proposed caregiver + 2 alternatives; coordination approves.
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { api, ApiError, type Approval, type Option } from "../api/client";
 import { AppShell } from "../components/AppShell";
 import { Button, Card, Notice } from "../components/ui";
@@ -12,6 +12,15 @@ export function ApprovalsPage() {
   const [items, setItems] = useState<Approval[] | null>(null);
   const [message, setMessage] = useState<{ kind: "ok" | "error" | "info"; text: string } | null>(null);
   const [busy, setBusy] = useState("");
+  // opened from the board's "Revisar y aprobar": /aprobaciones?solicitud=REQ-… brings that proposal into view
+  const wanted = new URLSearchParams(location.search).get("solicitud");
+  const shown = useRef(false);
+  useEffect(() => {
+    if (!wanted || shown.current || !items) return;
+    const card = document.getElementById(`aprobacion-${wanted}`);
+    if (card) { card.scrollIntoView({ block: "start" }); card.querySelector("h2")?.focus(); shown.current = true; }
+    else if (!items.some((i) => i.request_id === wanted)) setMessage({ kind: "info", text: es.approvals.alreadyDecided });
+  }, [items, wanted]);
 
   const load = useCallback(() => {
     api.approvals().then(setItems).catch(() => setMessage({ kind: "error", text: es.common.error }));
@@ -45,9 +54,10 @@ export function ApprovalsPage() {
         {items === null && <p>{es.common.loading}</p>}
         {items?.length === 0 && <Card>{es.approvals.empty}</Card>}
         {items?.map((item) => (
-          <Card key={item.request_id}>
+          <div key={item.request_id} id={`aprobacion-${item.request_id}`}
+            className={`scroll-mt-4 rounded-card ${item.request_id === wanted ? "ring-4 ring-teal" : ""}`}><Card>
             <div className="flex flex-wrap items-baseline justify-between gap-2">
-              <h2>{item.patient_name}</h2>
+              <h2 tabIndex={-1}>{item.patient_name}</h2>
               <span className="font-bold text-danger"><Icon as={AlertTriangle} /> {es.priority.high}</span>
             </div>
             <p>{item.service_name} · {es.approvals.scheduledFor}: <strong>{formatDateTime(item.scheduled_for)}</strong></p>
@@ -70,7 +80,7 @@ export function ApprovalsPage() {
                 ))}
               </ul>
             )}
-          </Card>
+          </Card></div>
         ))}
       </div>
     </AppShell>

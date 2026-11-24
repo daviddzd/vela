@@ -1,10 +1,12 @@
 """Visits of the logged-in caregiver (or physician): today's agenda, "Llegué" and "Terminé"."""
 from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.responses import JSONResponse
 from sqlalchemy import text
 from sqlalchemy.orm import Session
 
 from app.core.deps import CurrentUser, require_role, tenant_db
 from app.core.guards import ensure_own_assignment
+from app.core.config import MEXICO_CITY
 from app.core.roles import CAREGIVER, PHYSICIAN
 from app.services import operations as ops
 
@@ -24,6 +26,10 @@ def my_visits(user: CurrentUser = Depends(require_role(*STAFF)), db: Session = D
                CASE WHEN o.assignment_id IS NULL THEN NULL WHEN a.leg = 1 THEN 'first' ELSE 'relay' END AS relay_role,
                oc.first_name || ' ' || oc.paternal_surname AS relay_partner_name,
                CASE WHEN o.assignment_id IS NULL THEN NULL WHEN a.leg = 1 THEN a.planned_end ELSE o.planned_end END AS relay_at,
+               CASE WHEN a.leg = 2 THEN o.planned_end ELSE r.scheduled_for END
+                   - :early * interval '1 minute' AS arrive_from,         -- "Llegué" opens 60 min before
+               coalesce(round(extract(epoch FROM a.planned_end - (a.planned_start + a.travel_min * interval '1 minute')) / 60),
+                        s.duration_min)::int AS expected_min,            -- how long THIS person's part lasts
                CASE WHEN a.finished_at IS NOT NULL OR r.status IN ('completed','closed') THEN 'done'
                     WHEN a.arrived_at IS NOT NULL THEN 'finish'
                     WHEN a.leg = 2 AND r.status <> 'in_progress' THEN 'wait'      -- the first person has not arrived
@@ -37,7 +43,8 @@ def my_visits(user: CurrentUser = Depends(require_role(*STAFF)), db: Session = D
         WHERE a.caregiver_id = :c AND a.status = 'active'
           AND ((r.scheduled_for AT TIME ZONE 'America/Mexico_City')::date = (now() AT TIME ZONE 'America/Mexico_City')::date
                OR (a.planned_start AT TIME ZONE 'America/Mexico_City')::date = (now() AT TIME ZONE 'America/Mexico_City')::date)
-        ORDER BY coalesce(a.planned_start, r.scheduled_for)"""), {"c": user.caregiver_id}).mappings().all()
+        ORDER BY coalesce(a.planned_start, r.scheduled_for)"""),
+        {"c": user.caregiver_id, "early": ops.ARRIVE_EARLY_MINUTES}).mappings().all()
     return [dict(r) for r in rows]
 
 
@@ -60,10 +67,21 @@ def _step(action, assignment_id: str, user: CurrentUser, db: Session) -> dict:
 @router.post("/{assignment_id}/arrive")
 def arrive(assignment_id: str, user: CurrentUser = Depends(require_role(*STAFF)),
            db: Session = Depends(tenant_db)) -> dict:
+    ensure_own_assignment(db, user, assignment_id)
+    opens = ops.arrival_opens_at(db, assignment_id)
+    if opens and ops.now() < opens:
+        raise HTTPException(status.HTTP_409_CONFLICT, f"Podrás registrar tu llegada desde las "
+                            f"{opens.astimezone(MEXICO_CITY):%H:%M} ({ops.ARRIVE_EARLY_MINUTES} min antes de la visita).")
     return _step(ops.mark_arrived, assignment_id, user, db)
 
 
-@router.post("/{assignment_id}/finish")
-def finish(assignment_id: str, user: CurrentUser = Depends(require_role(*STAFF)),
-           db: Session = Depends(tenant_db)) -> dict:
+@router.post("/{assignment_id}/finish", response_model=None)
+def finish(assignment_id: str, confirm: bool = False, user: CurrentUser = Depends(require_role(*STAFF)),
+           db: Session = Depends(tenant_db)) -> dict | JSONResponse:
+    """Before half of the visit the screen asks "¿Seguro? La visita dura 30 min."; it sends confirm=true."""
+    ensure_own_assignment(db, user, assignment_id)
+    expected = ops.early_finish(db, assignment_id)
+    if expected and not confirm:
+        return JSONResponse(status_code=status.HTTP_409_CONFLICT, content={
+            "detail": f"¿Seguro? La visita dura {expected} min.", "needs_confirmation": True, "expected_min": expected})
     return _step(ops.mark_finished, assignment_id, user, db)
