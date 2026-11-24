@@ -5,6 +5,13 @@
 emergency_number: "911"
 user_message: "Esto puede ser una emergencia. Llama al 911 ahora."
 institution_alert_level: critical
+# Two levels (team decision, 23 Nov 2026; reasoning and holdout numbers in docs/spec/05_oracle_voz.md):
+#   a RULE fired          -> full red "Llama al 911 ahora" screen, as always;
+#   ONLY the classifier   -> amber notice with the concrete danger signs and the same big 911 button, plus a CRITICAL
+#                            alert to coordination, who must contact the family and record what it was.
+# The level stored is "emergency" in both cases: nothing is discarded, only the way it is shown changes.
+classifier_only:
+  escalate_after_minutes: 10      # nobody answered the alert in this time -> it escalates to Dirección
 # Shown on the emergency screen together with 911 when the self_harm rule matched.
 # Verified 2026-11-21 on the official CONASAMA page (Secretaría de Salud): free, 24 h, 365 days.
 # https://www.gob.mx/conasama/articulos/linea-de-la-vida-800-911-2000

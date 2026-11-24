@@ -34,7 +34,15 @@ All data are **synthetic**. The team only knows Python: keep code simple, commen
    valid consent of the matching type (`v_consents.is_valid`). Check it in the API, not only the UI.
 6. **Emergency policy (ORACLE-Voz).** Rules in `config/emergency_rules.yaml` run first. A rule hit is
    always `emergency`; the ML classifier may raise a level but **never lower a rule match**.
-   On `emergency` show the full-screen "Llama al 911 ahora" screen immediately (before the LLM).
+   Two ways to show an `emergency` (team decision 23 Nov 2026), both immediately (before the LLM):
+   - **a rule fired** → the full-screen red "Llama al 911 ahora" screen;
+   - **only the classifier** → the full-screen amber notice "Tu mensaje podría indicar algo urgente" with the
+     concrete danger signs, the same big 911 button and "Coordinación te contactará en los próximos minutos", plus a
+     **critical** review alert for coordination ("Contactada: era / no era emergencia"); unanswered after
+     `classifier_only.escalate_after_minutes` (10) it escalates to Dirección. Everything is audited.
+   The stored level is `emergency` in both cases: nothing is discarded, only how it is shown changes.
+   Why: on the holdout the classifier alone flagged 20 real emergencies the rules missed and 32 false alarms
+   (of 100 non-emergencies); see `docs/spec/05_oracle_voz.md`.
    The LLM writes a report for the physician; it **never diagnoses** and never tells the patient
    that something is not an emergency.
 7. **Realtime transport: WebSockets**, not Server-Sent Events (Cloudflare quick tunnels do not
@@ -54,6 +62,8 @@ Since the relays + week coverage change (branch `feature/relevos`), **no new fea
 Only: bug fixes, text changes (UI copy, docs, demo script) and whatever comes out of the rehearsals.
 If a request looks like a new feature, say so and ask the team before starting. Pending exception already
 agreed: `feature/voz-clasificador-v2` (final evaluation with the team's phrases, pre-registered adoption rule).
+Approved by the team on 23 Nov 2026 (Chrome review): the two-level voice emergency (rule 6) and visits marked
+"No cerrada" by the worker (`app/services/alerts_followup.py`).
 
 ## Stack
 | Layer | Choice |

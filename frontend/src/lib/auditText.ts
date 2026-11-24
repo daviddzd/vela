@@ -28,6 +28,8 @@ function value(key: string, v: any): string | undefined {
     case "phase": return es.contingency.levels[v] ?? v;
     case "right": return lower(t.rights[v]) ?? v;
     case "script": return String(v).split("/").pop();
+    case "emergency_source": return v === "rule" ? t.sourceRule : t.sourceClassifier;
+    case "was_escalated": return v ? t.yes : t.no;
     default:
       if (!(key in t.fields)) return undefined;              // unknown field: only in the technical detail
       return Array.isArray(v) ? v.join(", ") : typeof v === "object" ? undefined : String(v);

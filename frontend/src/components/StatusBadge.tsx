@@ -3,7 +3,7 @@ import { es } from "../i18n/es";
 import { CircleDot, Icon, STATUS_ICON } from "./icons";
 
 const TONE: Record<string, string> = {
-  rejected: "border-danger text-danger", unattended: "border-danger text-danger",
+  rejected: "border-danger text-danger", unattended: "border-danger text-danger", not_closed: "border-warn text-warn",
   queued: "border-warn text-ink", completed: "border-ok text-ok", closed: "border-ok text-ok",
 };
 

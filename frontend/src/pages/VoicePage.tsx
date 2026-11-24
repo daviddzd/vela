@@ -9,14 +9,14 @@ import { api } from "../api/client";
 import { useAuth } from "../auth/AuthContext";
 import { AppShell } from "../components/AppShell";
 import { Button, Card, Notice, inputClass } from "../components/ui";
-import { Icon } from "../components/icons";
+import { AlertTriangle, Icon } from "../components/icons";
 import { es } from "../i18n/es";
 
 const t = es.voice;
 const MAX_SECONDS = 60;
 type Patient = { patient_id: string; name: string; voice_consent: boolean; language: string | null };
 type SupportLine = { name: string; phone: string; tel: string };
-type Result = { level: string; transcript: string; ask_repeat: boolean; needs_human_review: boolean; support_line?: SupportLine | null };
+type Result = { level: string; emergency_source?: "rule" | "classifier" | null; transcript: string; ask_repeat: boolean; needs_human_review: boolean; support_line?: SupportLine | null };
 
 function Call911({ big = false }: { big?: boolean }) {
   return (
@@ -36,7 +36,8 @@ export function VoicePage() {
   const [text, setText] = useState("");
   const [notice, setNotice] = useState<{ kind: "info" | "error" | "ok"; text: string } | null>(null);
   const [result, setResult] = useState<Result | null>(null);
-  const [emergency, setEmergency] = useState(false);
+  // emergency screen: "red" = a rule fired (as always); "amber" = ONLY the classifier said so (CLAUDE.md rule 6)
+  const [emergency, setEmergency] = useState<false | "red" | "amber">(false);
   const rec = useRef<MediaRecorder | null>(null);
   const chunks = useRef<Blob[]>([]);
   const timer = useRef<ReturnType<typeof setInterval> | undefined>(undefined);
@@ -55,7 +56,7 @@ export function VoicePage() {
   const handle = (r: Result) => {
     setResult(r);
     setMode("idle");
-    if (r.level === "emergency") setEmergency(true);        // at once, before any report
+    if (r.level === "emergency") setEmergency(r.emergency_source === "classifier" ? "amber" : "red");   // at once, before any report
     else setNotice({ kind: r.ask_repeat ? "info" : "ok", text: r.ask_repeat ? t.repeat : t.sent });
   };
   const fail = (status: number, msg: string) => {
@@ -110,7 +111,23 @@ export function VoicePage() {
         <Call911 />
       </div>
 
-      {emergency && (
+      {emergency === "amber" && (
+        <div role="alertdialog" aria-modal="true" aria-labelledby="amber-title" aria-describedby="amber-signs"
+          className="fixed inset-0 z-50 flex flex-col items-center justify-center gap-5 overflow-y-auto border-[12px] border-warn bg-[#FFF4DC] p-6 text-center text-ink">
+          <p id="amber-title" className="flex items-center gap-3 text-4xl font-bold"><Icon as={AlertTriangle} /> {t.amberTitle}</p>
+          <div id="amber-signs" className="max-w-2xl text-left text-2xl">
+            <p className="font-bold">{t.amberCallIf}</p>
+            <ul className="mt-2 list-disc space-y-1 pl-8">{t.amberSigns.map((s) => <li key={s}>{s}</li>)}</ul>
+          </div>
+          <a href="tel:911" className="inline-flex min-h-24 items-center gap-4 rounded-card bg-danger px-10 text-4xl font-bold text-white">
+            <Icon as={PhoneCall} /> {t.call911}</a>
+          <p className="text-2xl font-bold">{t.amberCoordination}</p>
+          <button type="button" onClick={() => setEmergency(false)} className="inline-flex min-h-12 items-center gap-2 rounded-card border-2 border-ink px-4 font-bold">
+            <Icon as={X} /> {t.emergencyClose}</button>
+        </div>
+      )}
+
+      {emergency === "red" && (
         <div role="alertdialog" aria-modal="true" aria-labelledby="em-title"
           className="fixed inset-0 z-50 flex flex-col items-center justify-center gap-6 bg-danger p-6 text-center text-white">
           <p id="em-title" className="text-4xl font-bold">{t.emergencyTitle}</p>
