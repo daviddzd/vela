@@ -37,3 +37,8 @@ Thumbs.db
 docs/dev/capturas/identidad/fase2/*__*__*.png
 docs/dev/capturas/revision/*__*__*.png
 docs/dev/capturas/identidad/revision_final/
+
+# La biblia de Enlaza: generated PDF, intermediate HTML and screenshots (regenerate with scripts/build_biblia.sh)
+docs/biblia/biblia_enlaza.pdf
+docs/biblia/out/
+docs/biblia/capturas/

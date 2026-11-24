@@ -1,0 +1,57 @@
+# Orden de La biblia de Enlaza. Un capítulo que todavía no existe se salta (aparece como aviso al compilar).
+# tipo: capitulo (numerado 1, 2, 3…), especial (sin número) o anexo (A, B, C…).
+partes:
+  - id: guia
+    titulo: "Guía rápida"
+    kicker: "Para empezar"
+    descripcion: "El proyecto en pocas páginas, los números que hay que saberse y las preguntas más probables."
+    tipo: especial
+    capitulos:
+      - guia/00_como_usar.md
+      - guia/01_proyecto_en_3_paginas.md
+      - guia/02_numeros.md
+      - guia/03_20_preguntas.md
+      - guia/04_rutas_de_lectura.md
+
+  - id: parte-1
+    titulo: "Parte I · El proyecto"
+    kicker: "Parte I"
+    descripcion: "Qué es Enlaza, qué ve cada persona, cómo está construido, de dónde salen los datos y cómo se protege la información."
+    capitulos:
+      - parte1/01_que_es_enlaza.md
+      - parte1/02_recorrido_por_rol.md
+      - parte1/03_arquitectura.md
+      - parte1/04_datos_sinteticos.md
+      - parte1/05_seguridad.md
+
+  - id: parte-2
+    titulo: "Parte II · Cómo funciona cada módulo"
+    kicker: "Parte II"
+    descripcion: "Operación, tiempo real, Panorama-AM, SIRAG-D, contingencia, Enlaza Voz, negocio y ética, por dentro."
+    capitulos: []
+
+  - id: parte-3
+    titulo: "Parte III · Por materia"
+    kicker: "Parte III"
+    descripcion: "Un capítulo por materia: los conceptos desde cero, dónde se ven en Enlaza y cómo defenderlos."
+    capitulos: []
+
+  - id: parte-4
+    titulo: "Parte IV · Historia y decisiones"
+    kicker: "Parte IV"
+    descripcion: "Qué encontramos, cómo lo descubrimos y qué decidimos, en orden."
+    capitulos: []
+
+  - id: parte-5
+    titulo: "Parte V · Operación práctica"
+    kicker: "Parte V"
+    descripcion: "Preparar la laptop, arrancar, presentar y resolver problemas el día de la defensa."
+    capitulos: []
+
+  - id: anexos
+    titulo: "Anexos"
+    kicker: "Consulta"
+    descripcion: "Glosario, usuarios de prueba, comandos, mapa del repositorio y fuentes."
+    tipo: anexo
+    generado: glosario
+    capitulos: []
