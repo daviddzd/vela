@@ -33,7 +33,7 @@ export function StaffPage() {
 
   const points: MapPoint[] = useMemo(() => (d?.staff ?? []).map((c: any) => ({
     id: c.caregiver_id, lat: c.lat, lon: c.lon, symbol: c.out_of_service ? "triangle" : "roundRect",
-    color: c.out_of_service ? "#B42318" : c.on_shift_now ? chart.series[0] : "#9AA5AB", size: 11,
+    color: c.out_of_service ? "#B42318" : c.on_shift_now ? chart.series[0] : "#768189", size: 11,
     label: c.caregiver_id === sel ? c.name.split(" ").slice(0, 2).join(" ") : undefined,
     tooltip: `${fill(t.base, { name: c.name })} · ${t.type[c.type]} · ${c.out_of_service ? t.outOfService : c.on_shift_now ? t.onShift : t.offShift}`,
   })), [d, sel]);
@@ -80,7 +80,7 @@ export function StaffPage() {
             <p className="mt-2 text-sm text-muted">{t.mapHint}</p>
             <ul className="mt-2 flex flex-wrap gap-x-5 text-sm">
               <li><span style={{ color: chart.series[0] }}>■</span> {t.onShift}</li>
-              <li><span style={{ color: "#9AA5AB" }}>■</span> {t.offShift}</li>
+              <li><span style={{ color: "#768189" }}>■</span> {t.offShift}</li>
               <li><span style={{ color: "#B42318" }}>▲</span> {t.outOfService}</li>
             </ul>
           </Card>

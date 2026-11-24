@@ -1,4 +1,4 @@
-# CLAUDE.md — Vela · cuidado coordinado
+# CLAUDE.md — Enlaza · cuidado coordinado (internal name: vela)
 
 Instructions for Claude Code working in this repository. The full specification is in Spanish in
 `docs/spec/` (read `docs/spec/00_indice.md` first). When this file and a spec disagree, this file wins.
@@ -106,6 +106,9 @@ Ollama and cloudflared run outside Docker.
 9. Demo panel, Cloudflare check, rehearsal script.
 
 ## Conventions
+- **Always a pull request, never a direct commit to `main`** (team decision, 23 Nov 2026). Every change goes on its
+  own branch, is pushed, gets a PR, and is merged only after the tests pass (backend, simulation, `ui_checks.mjs`,
+  `check_contrast.py`, `verify_db.py` as they apply), with `gh pr merge N --squash --delete-branch`; then update `main`.
 - Small modules, type hints, docstrings in English, one router per resource.
 - Tests with pytest; each acceptance criterion in `docs/spec/10_plan_demo_y_criterios.md` has a test
   or a manual check listed.

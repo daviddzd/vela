@@ -36,3 +36,4 @@ Thumbs.db
 # Full-page captures of every screen per role (≈45 MB each set; kept locally, the PRs carry the main ones)
 docs/dev/capturas/identidad/fase2/*__*__*.png
 docs/dev/capturas/revision/*__*__*.png
+docs/dev/capturas/identidad/revision_final/
