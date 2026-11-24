@@ -43,6 +43,7 @@ partes:
     kicker: "Parte III"
     descripcion: "Un capítulo por materia: los conceptos desde cero, dónde se ven en Enlaza y cómo defenderlos."
     capitulos:
+      - parte3/13_problema_prototipico.md
       - parte3/14_sie.md
       - parte3/15_simulacion.md
       - parte3/16_computo_cognitivo.md

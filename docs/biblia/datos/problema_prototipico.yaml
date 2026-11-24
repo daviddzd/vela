@@ -1,0 +1,75 @@
+# Cifras tomadas de los documentos del curso (docs/privado/, no se suben a Git). collect_numbers.py las carga como
+# doc.<clave>. "PP" = Problema Prototípico e Incidentes Críticos, LCDN 2026-2 (Universidad Nacional "Rosario
+# Castellanos", 01-09-2026). Cada una dice la sección y la página.
+peso_total:
+  valor: "30 %"
+  descripcion: "Peso de la Evidencia Integradora en la calificación final de cada asignatura"
+  documento: "PP, «Criterio de Evaluación y Rúbrica de la Evidencia Integradora», p. 3"
+peso_portafolio:
+  valor: "20 %"
+  descripcion: "Portafolio tecnológico escrito (documento y repositorio de código)"
+  documento: "PP, «Criterio de Evaluación y Rúbrica…», p. 3"
+peso_exposicion:
+  valor: "10 %"
+  descripcion: "Exposición oral y defensa del proyecto"
+  documento: "PP, «Criterio de Evaluación y Rúbrica…», p. 3"
+rub_argumentacion:
+  valor: "20 %"
+  descripcion: "Rúbrica: argumentación científica y fundamentación"
+  documento: "PP, «Rúbrica Analítica…», p. 4"
+rub_contenido:
+  valor: "30 %"
+  descripcion: "Rúbrica: contenido técnico e integración de las 6 UCA"
+  documento: "PP, «Rúbrica Analítica…», p. 4"
+rub_originalidad:
+  valor: "20 %"
+  descripcion: "Rúbrica: originalidad, innovación y enfoques"
+  documento: "PP, «Rúbrica Analítica…», p. 4"
+rub_escrita:
+  valor: "10 %"
+  descripcion: "Rúbrica: expresión escrita, estructura y presentación (APA 7)"
+  documento: "PP, «Rúbrica Analítica…», p. 4-5"
+rub_oral:
+  valor: "20 %"
+  descripcion: "Rúbrica: exposición oral, defensa del proyecto y prototipo"
+  documento: "PP, «Rúbrica Analítica…», p. 5"
+ideas_originales:
+  valor: "más de tres"
+  descripcion: "Ideas originales que pide el nivel «Excelente» de originalidad"
+  documento: "PP, «Rúbrica Analítica…», p. 4"
+pico_crisis:
+  valor: "300 %"
+  descripcion: "Pico de crisis respiratorias en el incidente crítico general"
+  documento: "PP, «Incidente crítico», p. 6"
+voz_precision_antes:
+  valor: "92 %"
+  descripcion: "Precisión de ORACLE-Voz en el piloto del incidente"
+  documento: "PP, «Incidente crítico de la UCA: Cómputo Cognitivo», p. 10"
+voz_precision_despues:
+  valor: "54 %"
+  descripcion: "Precisión de ORACLE-Voz en Oaxaca, Yucatán y Sierra de Puebla en el incidente"
+  documento: "PP, «Incidente crítico de la UCA: Cómputo Cognitivo», p. 10"
+plazo_decision:
+  valor: "72 horas"
+  descripcion: "Plazo que da la dirección para decidir en el incidente"
+  documento: "PP, «Incidente crítico de la UCA: Cómputo Cognitivo», p. 10; «Resultado de esta actuación», p. 7"
+vis_alertas:
+  valor: "400 %"
+  descripcion: "Aumento de alertas respiratorias en un clúster de Iztapalapa que el semáforo promedio ocultó"
+  documento: "PP, «Incidente crítico de la UCA: Visualización de Datos», p. 12"
+sim_reduccion_piloto:
+  valor: "35 %"
+  descripcion: "Reducción de tiempos de espera del simulador del incidente en condiciones normales"
+  documento: "PP, «Incidente crítico de la UCA: Modelo y Simulación», p. 13"
+sim_respuesta:
+  valor: "más de 4 horas"
+  descripcion: "Tiempos de respuesta de emergencia cuando el simulador del incidente colapsa"
+  documento: "PP, «Incidente crítico de la UCA: Modelo y Simulación», p. 13"
+emp_fracaso:
+  valor: "90 %"
+  descripcion: "Iniciativas de software de cuidado que fracasan en sus primeros dos años (según el incidente)"
+  documento: "PP, «Incidente crítico de la UCA: Emprendimiento…», p. 14"
+emp_anios:
+  valor: "5 años"
+  descripcion: "Horizonte de las proyecciones financieras que pide el plan de negocios formal"
+  documento: "PP, «Componentes Clave del Plan de Negocios Formal», p. 15"

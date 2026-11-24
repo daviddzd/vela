@@ -138,3 +138,4 @@ th code { background: rgba(255,255,255,.18); color: #fff; }
 
 /* set by render.cjs when a figure must shrink to fit with its text on the page */
 figure.fit img, figure.fit svg { max-height: var(--fit-height) !important; width: auto; }
+th .num { color: #fff; }

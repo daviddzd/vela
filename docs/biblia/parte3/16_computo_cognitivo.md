@@ -11,10 +11,16 @@
 
 ## Qué evalúa el profesor
 
-Normalmente: el **problema cognitivo** (qué «entiende» el sistema), el **flujo** de procesamiento, los **datos** de
-entrenamiento y cómo se dividieron, el **modelo** y por qué ese, la **evaluación** con métricas adecuadas (no solo
-exactitud), el manejo de **errores**, **sesgos** y **ética** de la IA, y una **demostración** en vivo. (Confirmen con el
-programa del profesor.)
+| Pide | Documento y sección | Dónde se responde |
+|---|---|---|
+| Entregable: «Asistente Cognitivo por Voz y Clasificador de Riesgo (NLP/TensorFlow)» | PP, «Evidencia integradora», p. 2 | conceptos (abajo); @ref(cap-voz) |
+| Clasificación de riesgo mediante voz; traducir señales del habla en alertas operativas medibles | PP, «Desarrollo del Problema Prototípico», p. 9 | reglas + clasificador → alertas en el tablero (abajo) |
+| Detectar signos tempranos de deterioro cognitivo, ansiedad y solicitudes de auxilio | PP, «Incidente crítico de la UCA: Cómputo Cognitivo», p. 10 | «Respuesta al incidente crítico»: Enlaza detecta **solicitudes de auxilio y urgencia**, no deterioro cognitivo ni ansiedad |
+| Representatividad sociolingüística del corpus; sesgo con hablantes con contacto lingüístico indígena | PP, p. 10; «Problemas suscitados», p. 7 | «Respuesta al incidente crítico» (abajo) |
+| Decidir en {{ doc.plazo_decision }}: suspender, lanzar con advertencia o rediseñar | PP, p. 10; «Dilemas que plantea», p. 8 | «Respuesta al incidente crítico» |
+| Modelo local sin enviar datos a internet; reportes ordenados con **nivel de urgencia y de confianza**; **revisión de sesgos** | Plan SIE, secciones 2 y 3 | IA local (@ref(cap-arquitectura)); confianza (abajo); sesgos (abajo y @ref(cap-voz)) |
+| Modelo cognitivo en TensorFlow integrado al resto | PP, «Rúbrica Analítica», p. 4 | clasificador Keras/TensorFlow; alertas al tablero |
+| Rúbrica propia de la materia | **no lo dicen los documentos: confirmar con el profesor** | — |
 
 ## Los conceptos, desde cero
 
@@ -166,6 +172,37 @@ transparencia, privacidad, seguridad y rendición de cuentas.
 WER por grupo listo y pendiente con voces reales; modelos locales; dos niveles de aviso con revisión humana
 (@ref(cap-etica)).
 
+## Respuesta al incidente crítico de Cómputo Cognitivo
+
+**El incidente** (PP, p. 10, «El filtro del silencio»): ORACLE-Voz pasa de {{ doc.voz_precision_antes }} de precisión en el
+piloto de la CDMX a {{ doc.voz_precision_despues }} en Oaxaca, Yucatán y la Sierra de Puebla. Confunde rasgos del español en
+contacto con lenguas originarias con «desorientación» y no detecta ansiedad expresada con modismos regionales. La dirección
+exige decidir en {{ doc.plazo_decision }}.
+
+**Qué hace Enlaza y qué no:**
+
+| Punto del incidente | Enlaza |
+|---|---|
+| Qué detecta | **Urgencia y solicitudes de auxilio** (rutina, urgente, emergencia). **No** detecta deterioro cognitivo ni ansiedad: se descartó porque etiquetar «deterioro» a partir del habla requiere datos clínicos reales y validados, y el error que describe el incidente (confundir un rasgo lingüístico con un síntoma) es justo el riesgo. |
+| Corpus no representativo | Las frases son sintéticas en español de México, con casos difíciles y errores de dedo; **no** incluyen español en contacto con lenguas originarias. Se **declara** como limitación. |
+| Medir el sesgo | Procedimiento de error por palabra (WER) por grupo listo (`voice/eval/bias_wer.py`); probado con voz sintética ({{ man.whisper_wer_sintetico }}); **pendiente** con voces reales y con consentimiento. |
+| Falsos positivos que saturan | Dos niveles: lo que solo detecta el clasificador sale en **ámbar** y lo revisa una persona; la roja queda para las reglas ({{ vozb.holdout.red_false }} falsas de {{ vozb.holdout.red }} en el holdout). |
+| Crisis reales no detectadas | Se prefiere avisar de más: sensibilidad {{ voz.holdout.sens }} en el holdout; botón del 911 siempre visible; nunca se dice «no es una emergencia». |
+| Quien no habla español | «No hablo español / Pedir que alguien me llame»: crea una solicitud a coordinación con la lengua registrada. |
+
+**Postura ante el dilema** (suspender, lanzar con advertencia o rediseñar): **no desplegar** el asistente fuera de la
+población donde se evaluó sin medir antes su error por grupo lingüístico. Mientras tanto, en las zonas nuevas el asistente
+funcionaría **solo con las reglas y con la alternativa humana** (pedir que llamen), con la advertencia visible. Y rediseñar con
+frases reales de esas comunidades, recogidas con consentimiento y evaluadas a ciegas, como ya se hace con el holdout.
+
+### Nivel de urgencia y de confianza (lo que pide el plan general)
+
+- **Urgencia:** cada reporte lleva su nivel (emergencia, urgente, rutina) y las reglas que se activaron.
+- **Confianza de la transcripción:** Whisper da una confianza; si es baja o el texto es muy corto, se pide repetir y se marca
+  para revisión humana. El médico la ve en la bandeja («Confianza de la transcripción»).
+- **Confianza del clasificador:** las probabilidades de cada nivel **se guardan** con cada reporte (`classifier_probs`), pero
+  **no se muestran** en pantalla. Es un pendiente que el equipo puede decidir mostrar (sería un cambio de interfaz).
+
 ## Por qué lo hicimos así
 
 - **Reglas + clasificador** y no solo uno: las reglas son explicables y seguras; el clasificador ve lo que las reglas no.
@@ -251,10 +288,12 @@ WER por grupo listo y pendiente con voces reales; modelos locales; dos niveles d
     las falsas alarmas a {{ vozv2.v2.fa100 }} pero su sensibilidad cayó a {{ vozv2.v2.sens }}: dejaba pasar más emergencias. Si
     cambiáramos la regla después de ver el resultado, el holdout ya no serviría como prueba.
 
-!!! pregunta "9. ¿Qué pasa si la persona habla náhuatl o tiene un acento fuerte?"
-    Whisper no reconoce bien lenguas indígenas; lo declaramos. La pantalla ofrece «No hablo español / Pedir que alguien me
-    llame», que crea una solicitud a coordinación con la lengua. Medir el error por acento y edad con voces reales está
-    pendiente.
+!!! pregunta "9. En el incidente la precisión se desploma con hablantes con influencia de lenguas originarias. ¿Qué harían?"
+    Primero, no presumir una precisión que no medimos en esa población: nuestro corpus no la incluye. No desplegaríamos el
+    asistente ahí sin medir su error por grupo (el procedimiento ya está). Mientras, funcionaría con las reglas, con el botón
+    para pedir que alguien llame y con la advertencia visible. Después, rediseño con frases reales de esas comunidades,
+    recogidas con consentimiento y evaluadas a ciegas. Además, Enlaza no intenta detectar deterioro cognitivo a partir del habla,
+    que es lo que produce los falsos positivos del incidente.
 
 !!! pregunta "10. ¿Por qué la IA corre en la laptop y no en la nube?"
     Privacidad (la voz de un paciente es un dato sensible y no sale de la computadora), costo cero y control. El costo es la

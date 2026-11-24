@@ -175,6 +175,7 @@ def caption_html(alt: str) -> str:
 
 
 FIG_COUNTER = [0]
+TABLE_IDS = iter(range(1, 10**6))
 
 
 def fig_id() -> str:
@@ -207,7 +208,8 @@ def render(ch: Chapter, chapters_by_id: dict[str, Chapter]) -> None:
     # ids for h2 sections (cap-id--slug) so they can be referenced and appear in the PDF outline
     body = re.sub(r"<h2>(.*?)</h2>",
                   lambda m: f'<h2 id="{ch.id}--{slug(re.sub("<[^>]+>", "", m.group(1)))}">{m.group(1)}</h2>', body)
-    # admonition titles: "pregunta" boxes get a fixed style
+    # every table gets an id, so render.cjs can move a table whose header would be alone at the bottom of a page
+    body = re.sub(r"<table(?![^>]*data-tbl)", lambda m: f'<table data-tbl="{ch.id}-{next(TABLE_IDS)}"', body)
     ch.html = body
 
 

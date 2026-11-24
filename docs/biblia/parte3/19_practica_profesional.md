@@ -11,9 +11,17 @@
 
 ## Qué evalúa el profesor
 
-Normalmente: la **identificación de dilemas éticos**, el **marco legal** aplicable, cómo el producto **protege a las
-personas** (datos, consentimiento), la **responsabilidad profesional** (quién responde), la **honestidad** en resultados y
-autoría, y el **impacto social**. (Confirmen con el programa del profesor.)
+| Pide | Documento y sección | Dónde se responde |
+|---|---|---|
+| Entregable: «Diagnóstico de Campo, Protocolo de Ética y Práctica Profesional» (en clínicas geriátricas) | PP, «Evidencia integradora», p. 2; «Incidente crítico», p. 6 | «Diagnóstico de campo» y «Protocolo de ética» (abajo) |
+| Protocolo de consentimiento informado y manejo ético de datos de poblaciones vulnerables | PP, «Desarrollo del Problema Prototípico», p. 9 | «Protocolo de ética» (abajo); @ref(cap-etica) |
+| Consentimiento de personas con demencia firmado por conveniencia; presión para omitirlo; detener y rediseñar el protocolo de inserción y gobernanza de datos | PP, «Incidente crítico de la UCA: Introducción a la Práctica Profesional», p. 16 | «Respuesta al incidente crítico» (abajo) |
+| Resistencia del personal de salud a reportes «fríos»; ecosistema comprensible para distintos usuarios | PP, p. 16; p. 9 | «Respuesta al incidente crítico» |
+| Enfoque humanista: dignidad, autonomía, no infantilizar, ética de los datos, prevenir sesgos | PP, «Planteamiento de la Problemática», p. 3 | conceptos (abajo); @ref(cap-m-pp-doc) |
+| Consentimiento informado, privacidad, responsabilidades, supervisión humana; **validar el problema con personas reales del sector sin usar datos de pacientes** (evidencia de campo) | Plan SIE, secciones 2 y 3 | conceptos (abajo); «Diagnóstico de campo» |
+| Habilidades blandas (pensamiento crítico, resolución de problemas, negociación, empatía, trabajo en equipo, manejo de conflictos, entre otras) | PP, «Identificación de las Habilidades Blandas», p. 5 | se demuestran en la defensa; **confirmar con el profesor** cómo se evalúan |
+| Bibliografía recomendada: AMIPCI (2021), Hernández-Sampieri y Mendoza (2018), OMS (2021) | PP, p. 16 | **confirmar con el profesor** si se espera citarla en el protocolo |
+| Rúbrica propia de la materia | **no lo dicen los documentos: confirmar con el profesor** | — |
 
 ## Los conceptos, desde cero
 
@@ -111,6 +119,61 @@ fueron del equipo. La Parte IV («Cómo se construyó») lo explica completo y p
 calibradas con fuentes oficiales; toda pantalla dice «Prototipo académico · datos sintéticos» para que nadie las confunda
 con personas reales.
 
+## Diagnóstico de campo
+
+!!! cuidado "Estado: no documentado en el repositorio"
+    El PP pide un diagnóstico de campo y el Plan SIE propone «validar el problema con personas reales del sector (sin usar datos
+    de pacientes)». En el repositorio **no hay** entrevistas, guías ni resultados. **Confirmar con el equipo** si se hizo; si no,
+    es el hueco más importante del portafolio y conviene hacerlo antes de la defensa, aunque sea pequeño.
+
+Propuesta de diseño (para hacerlo o para documentar lo que ya se hizo):
+
+| Elemento | Propuesta |
+|---|---|
+| Objetivo | validar que la coordinación de visitas es un problema real y qué información necesita cada actor |
+| Método | entrevistas semiestructuradas (ruta cualitativa, Hernández-Sampieri y Mendoza, 2018) |
+| Participantes | coordinación de una residencia o centro de día, personal de cuidado o enfermería, un geriatra, familiares cuidadores |
+| Consentimiento | consentimiento informado de los **entrevistados**; sin datos de pacientes; sin grabar si no lo autorizan |
+| Guía | ¿cómo se piden y asignan hoy las visitas?, ¿qué se pierde?, ¿qué pasa en una contingencia?, ¿qué les preocuparía de un sistema así?, ¿cuánto pagarían? |
+| Uso | ajustar la propuesta de valor, el precio y las pantallas; citar resultados en el portafolio |
+
+## Protocolo de ética (consentimiento y gobernanza de datos)
+
+El protocolo que aplica Enlaza, paso a paso (las partes en cursiva son de la institución, no del software):
+
+1. *Valorar si la persona puede decidir.*
+2. Explicar en lenguaje claro qué datos se usan y para qué; un consentimiento **por tipo** (datos de salud, atención a
+   domicilio, asistente de voz), revocable (`docs/legal/formato_consentimiento.md`).
+3. Firma la persona; si no puede, su **representante legal**, que debe ser un familiar registrado de **esa** persona, y se
+   registra el **asentimiento** (sí, no, no pudo expresarlo).
+4. Se registra en `/privacidad` con fecha de firma y vencimiento; queda en la bitácora.
+5. **Sin consentimiento vigente, el sistema no procesa**: no hay visita, voz ni datos de salud, y las decisiones automáticas no usan
+   sus datos de salud.
+6. Revocar surte efecto al instante.
+7. Derechos ARCO con folio y plazo de ley; bitácora que no se puede borrar.
+8. *Si hay presión para saltarse el consentimiento, se detiene la intervención y se escala* (ver abajo).
+
+!!! cuidado "Una diferencia entre el formato y el sistema"
+    El formato de consentimiento dice que si la persona **no estuvo de acuerdo**, no se usa el asistente de voz. El sistema
+    **registra** el asentimiento, pero hoy **no bloquea** la voz cuando es «no»: la validez del consentimiento solo revisa que esté
+    otorgado y vigente (`v_consents.is_valid`). Es un pendiente que el equipo debe decidir (corregir el sistema o el formato).
+
+## Respuesta al incidente crítico de Práctica Profesional
+
+**El incidente** (PP, p. 16, «El consentimiento silenciado»): durante el diagnóstico de campo, los estudiantes descubren que se
+procesan historiales y voces de personas con demencia avanzada con permisos que los familiares firman por conveniencia, sin la
+presencia ni la comprensión de los pacientes. La dirección de la clínica presiona para omitir el protocolo porque atrasa los
+indicadores de los financiadores. Además, el personal de salud desconfía de reportes que «reducen a los pacientes a cifras».
+
+- **Postura del equipo:** detener el procesamiento de esos datos y rediseñar el protocolo de inserción, aunque cueste tiempo y la
+  relación con la institución. Un consentimiento firmado sin informar a la persona no es válido éticamente, aunque exista el
+  papel.
+- **Lo que hace el sistema:** no deja procesar sin consentimiento (bloqueo en la API) y obliga a registrar **quién** firmó y el
+  **asentimiento**; todo queda auditado. Lo que no puede hacer es saber si la firma fue informada: eso es responsabilidad
+  profesional de las personas (y la diferencia del recuadro anterior es justo un punto a mejorar).
+- **Ante la desconfianza del personal de salud:** Enlaza no diagnostica ni sustituye el criterio clínico; el médico ve la
+  transcripción y frases textuales, no solo un número; el modo sencillo y los textos cortos buscan que cada usuario lo entienda.
+
 ## Por qué lo hicimos así
 
 - **Tres consentimientos** y no uno: la persona puede aceptar visitas y negarse al asistente de voz.
@@ -137,6 +200,8 @@ con personas reales.
 
 ## Limitaciones honestas
 
+- **Diagnóstico de campo** no documentado en el repositorio (confirmar con el equipo).
+- El **asentimiento «no»** se registra pero no bloquea el asistente de voz, como sí dice el formato.
 - Plantillas legales **sin revisión de un abogado**.
 - **Sin comité de ética** ni evaluación de impacto formal.
 - El **flujo de una persona que no asiente** depende de la institución.
@@ -201,7 +266,8 @@ con personas reales.
     gran parte del código lo escribió un asistente de programación (Claude Code) siguiendo esas reglas, con pruebas y un PR por
     cambio. Podemos explicar y defender cada parte, que es lo que muestra este libro.
 
-!!! pregunta "10. ¿Qué impacto social tendría Enlaza en una institución real?"
-    Potencialmente menos visitas perdidas y respuesta más rápida a lo urgente, familias informadas y personal con jornadas
-    legales. Riesgos: dependencia de la tecnología, falsas alarmas y brecha digital de familias sin celular. Antes de usarlo con
-    personas reales haría falta un piloto con consentimiento y evaluación.
+!!! pregunta "10. En el incidente, la clínica presiona para omitir el consentimiento de pacientes con demencia. ¿Qué harían?"
+    Detener el procesamiento de esos datos y rediseñar el protocolo, aunque retrase los indicadores. Un permiso firmado por
+    conveniencia, sin informar a la persona, no es un consentimiento válido. En Enlaza el sistema no procesa sin consentimiento
+    vigente, registra quién firmó y el asentimiento de la persona, y todo queda en la bitácora. Lo que el software no puede
+    garantizar es que la firma haya sido informada: eso es responsabilidad profesional nuestra y de la institución.

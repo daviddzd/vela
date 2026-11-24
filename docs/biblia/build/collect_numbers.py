@@ -639,6 +639,34 @@ def business_model() -> None:
                     src, kind="pct")
     add("bm.sc.recommended.gov5", sc["recommended"]["government_year5"], "Recomendado: centros públicos (plan Gobierno), año 5",
         src, kind="dec", decimals=0)
+    # TIR (tasa interna de retorno): the annual rate at which the 5-year NPV is exactly 0 (same npv() as /negocio)
+    def irr(rows):
+        lo, hi = -90.0, 500.0
+        f = lambda r: bm.npv(rows, r)
+        if f(lo) * f(hi) > 0:
+            return None
+        for _ in range(100):
+            mid = (lo + hi) / 2
+            if (f(mid) > 0) == (f(lo) > 0):
+                lo = mid
+            else:
+                hi = mid
+        return (lo + hi) / 2
+    v = bm.inputs()
+    f_ = v["conservative_customer_factor"] / 100
+    totals = [v["customers_year1"], *bm._targets(v["customer_growth_year2_5"])]
+    cons = bm.inputs({"customers_year1": totals[0] * f_,
+                      "customer_growth_year2_5": ",".join(str(round(x * f_, 4)) for x in totals[1:])})
+    for name, label, rows in (("base", "base", bm.simulate(v)), ("conservative", "conservador", bm.simulate(cons)),
+                              ("recommended", "recomendado", bm.simulate_recommended(v))):
+        r = irr(rows)
+        add(f"bm.sc.{name}.tir", r if r is not None else "no existe (el flujo nunca se vuelve positivo)",
+            f"Escenario {label}: TIR anual a 5 años", src + "; TIR = tasa con VPN 0", kind="pct")
+    plans = {r["plan_id"]: r for r in read_csv("database/seed/subscription_plans.csv")}
+    for pid, key in (("basic", "plan_basic_price"), ("professional", "plan_professional_price")):
+        price = float(v[key]); limit = float(plans[pid]["patient_limit"])
+        add(f"bm.per_patient_{pid}", price / limit, f"Costo mensual por paciente con el plan {plans[pid]['name']} lleno",
+            "precio del plan (assumptions.csv) ÷ límite de pacientes (subscription_plans.csv)", kind="money")
     rw = sc["recommended_without"]
     add("bm.rec_wo_gov", rw["government"], "Recomendado sin plan Gobierno: VPN 25 %", src, kind="money")
     add("bm.rec_wo_cut", rw["founder_cut"], "Recomendado sin recorte a fundadores: VPN 25 %", src, kind="money")
@@ -658,6 +686,12 @@ def history() -> None:
     """Results of earlier runs that explain team decisions (docs/biblia/datos/historico.yaml)."""
     for key, d in (read_yaml("docs/biblia/datos/historico.yaml") or {}).items():
         add(f"hist.{key}", d["valor"], d["descripcion"] + " (histórico)", f"histórico, {d['fecha']} ({d['documento']})")
+
+
+def course_documents() -> None:
+    """Figures quoted from the course documents (docs/biblia/datos/problema_prototipico.yaml)."""
+    for key, d in (read_yaml("docs/biblia/datos/problema_prototipico.yaml") or {}).items():
+        add(f"doc.{key}", d["valor"], d["descripcion"], f"documento del curso: {d['documento']}")
 
 
 def repo() -> None:
@@ -762,7 +796,7 @@ def code() -> None:
 
 
 def main() -> None:
-    for step in (seed, calibration, generator, config, simulation, simulation_more, voice, voice_breakdown, voice_timings, business, business_model, manual, history, repo, code, database):
+    for step in (seed, calibration, generator, config, simulation, simulation_more, voice, voice_breakdown, voice_timings, business, business_model, manual, history, course_documents, repo, code, database):
         step()
     OUT.mkdir(parents=True, exist_ok=True)
     (OUT / "numeros.json").write_text(json.dumps(NUMBERS, ensure_ascii=False, indent=1, default=str), encoding="utf-8")

@@ -55,9 +55,20 @@ async function layout(page, url, mods) {
   // adjustments decided by earlier passes: shrink a figure, or let the next block go before it
   await page.evaluate((mods) => {
     for (const [id, m] of Object.entries(mods)) {
-      const fig = document.querySelector(`figure[data-fig="${id}"]`);
-      if (!fig) continue;
-      if (m.maxHeight) fig.style.setProperty("--fit-height", `${Math.floor(m.maxHeight)}px`), fig.classList.add("fit");
+      const fig = id.startsWith("t:") ? null : document.querySelector(`figure[data-fig="${id}"]`);
+      if (!fig && !id.startsWith("t:")) continue;
+      if (fig && m.maxHeight) fig.style.setProperty("--fit-height", `${Math.floor(m.maxHeight)}px`), fig.classList.add("fit");
+      if (m.tableBreak) {
+        const t = document.querySelector(`table[data-tbl="${id.slice(2)}"]`);
+        // move the short sentence or heading that introduces the table together with it
+        let target = t, prev = t?.previousElementSibling;
+        while (prev && /^(P|H2|H3|H4)$/.test(prev.tagName) && prev.textContent.length < 220 && target !== prev) {
+          target = prev; if (!/^H/.test(prev.tagName)) prev = prev.previousElementSibling; else break;
+          if (prev && !/^H[2-4]$/.test(prev.tagName)) break;
+        }
+        if (target) target.style.breakBefore = "page";
+        continue;
+      }
       for (let k = 0; k < (m.defer || 0); k++) {
         const next = fig.nextElementSibling;
         if (next && !/^H[1-4]$/.test(next.tagName)) next.after(fig);
@@ -125,9 +136,17 @@ async function layout(page, url, mods) {
       const need = fr.height - free + 14;                         // what must disappear for it to fit
       out.push({ id: fig.dataset.fig, h, newHeight: h - need, free, page: i + 1 });
     }
-    return out;
+    // tables whose header row is the last thing on a page (no body row with it): move the whole table to the next page
+    const orphans = [];
+    for (const pg of pages) {
+      for (const t of area(pg).querySelectorAll("table[data-tbl]")) {
+        const rows = [...t.querySelectorAll("tbody tr")].filter((r) => r.getBoundingClientRect().height > 0);
+        if (t.querySelector("thead") && rows.length === 0) orphans.push("t:" + t.getAttribute("data-tbl"));
+      }
+    }
+    return { out, orphans };
   });
-  return { total, gaps };
+  return { total, gaps: gaps.out, orphans: gaps.orphans };
 }
 
 (async () => {
@@ -146,8 +165,10 @@ async function layout(page, url, mods) {
   for (let pass = 1; pass <= 6; pass++) {
     result = await layout(page, url, mods);
     const todo = result.gaps.filter((g) => !(mods[g.id]?.done));
-    console.log(`pasada ${pass}: ${result.total} páginas, ${todo.length} huecos por ajustar`);
-    if (!todo.length) break;
+    const orphans = result.orphans.filter((id) => !mods[id]);
+    console.log(`pasada ${pass}: ${result.total} páginas, ${todo.length} huecos por ajustar, ${orphans.length} encabezados de tabla solos`);
+    if (!todo.length && !orphans.length) break;
+    for (const id of orphans) mods[id] = { tableBreak: true, done: true };
     for (const g of todo) {
       const m = (mods[g.id] ||= {});
       if (g.h > 0 && g.newHeight >= 0.55 * g.h && !m.maxHeight) m.maxHeight = g.newHeight;

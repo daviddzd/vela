@@ -11,9 +11,18 @@
 
 ## Qué evalúa el profesor
 
-Normalmente: que cada visualización responda una **pregunta**, la elección del **tipo de gráfica**, el uso del **color**,
-la **honestidad** de ejes y escalas, la **accesibilidad**, los **tableros** (organización, jerarquía) y la capacidad de
-**contar una historia** con los datos. (Confirmen con el programa del profesor.)
+| Pide | Documento y sección | Dónde se responde |
+|---|---|---|
+| Entregable: «Dashboard de Monitoreo Territorial y Temporal (Shiny/R o Python)» | PP, «Evidencia integradora», p. 2 | Panorama-AM, tablero y contingencia (@ref(cap-panorama)); **confirmar con el profesor** que React + API en Python cumple |
+| Visualización territorial y temporal | PP, «Desarrollo del Problema Prototípico», p. 9 | mapas, coropleta y series por hora y por día (abajo) |
+| No diluir crisis localizadas en promedios (crítica a los tableros, Cairo, 2019) | PP, p. 9; «Incidente crítico de la UCA: Visualización de Datos», p. 12 | «Respuesta al incidente crítico» (abajo) |
+| Escalas calibradas para resaltar anomalías súbitas, no solo promedios históricos | PP, p. 12; «Problemas suscitados», p. 7 | umbrales absolutos de contingencia por estación (abajo) |
+| Equilibrio entre legibilidad para no técnicos y granularidad, sin sobrecarga | PP, p. 12 | jerarquía de la tarjeta y «Ver como tabla» (abajo) |
+| ¿Qué principios de narrativa de datos son innegociables? | PP, p. 12; «Dilemas que plantea», p. 8 | «Respuesta al incidente crítico» |
+| Evitar la ilusión de control de un diseño «elegante» | PP, «Problemas suscitados», éticos, p. 8 | «datos insuficientes», fuente y «Datos sintéticos» en cada tarjeta |
+| Tableros casi en tiempo real: uno por institución (su operación y su negocio) y otro para los dueños; zonas en crisis visibles | Plan SIE, secciones 2 y 3 | tablero en vivo y Panorama por institución; Dirección con todas; el negocio solo lo ve Dirección (abajo) |
+| Bibliografía recomendada: Cairo (2019), Few (2013), Nussbaumer Knaflic (2015), Sievert (2020) | PP, p. 12 | principios aplicados en los conceptos (abajo) |
+| Rúbrica propia de la materia | **no lo dicen los documentos: confirmar con el profesor** | — |
 
 ## Los conceptos, desde cero
 
@@ -131,6 +140,34 @@ tablero, el personal y la contingencia; calles de OpenFreeMap / OpenStreetMap; s
 **En Enlaza.** La demostración sigue esa historia: problema (Panorama, población y riesgo) → operación en vivo → contingencia
 → simulación que compara políticas → decisión que cambió el producto.
 
+## Respuesta al incidente crítico de Visualización
+
+**El incidente** (PP, p. 12, «El espejismo del promedio»): durante una contingencia, el semáforo **promedio** de Iztapalapa se
+quedó en ámbar casi seis horas mientras un clúster de colonias tenía un aumento de {{ doc.vis_alertas }} en alertas
+respiratorias graves. La escala de color estaba calibrada con promedios históricos anuales y no resaltaba anomalías súbitas.
+«El tablero no mintió con los datos», pero su diseño invisibilizó a los más vulnerables.
+
+**Cómo lo evita Enlaza, y dónde no:**
+
+| Riesgo del incidente | En Enlaza |
+|---|---|
+| Promedio por alcaldía | La contingencia se evalúa **por estación**: basta **una** estación en Fase I para activar el evento y sombrear su alcaldía; en el mapa, cada estación tiene su forma y su palabra (rombo «Fase I», triángulo «Vigilancia»). |
+| Escala calibrada con el histórico | Los niveles usan **umbrales absolutos** del programa de contingencias (O₃ {{ cfg.o3_phase1 }}, PM2.5 {{ cfg.pm25_phase1 }}) y vigilancia al {{ cfg.watch_pct }}, no promedios del año. |
+| Lo agregado oculta a la persona | El tablero de coordinación muestra **cada visita y cada solicitud en espera** («¿Quién espera más?»), no un indicador promedio; las alertas llegan una por una. |
+| Porcentajes con pocos datos | «Datos insuficientes (N visitas)» con menos de {{ code.min_visits_rate }}. |
+| Sobrecarga al mostrar todo | Jerarquía: pregunta → número → gráfica → fuente → «Ver como tabla»; el detalle está a un clic, no todo en la primera vista. |
+| **Lo que no resuelve** | La coropleta de población de Panorama sí es **por alcaldía** (promedio de la alcaldía); no hay vista por colonia ni detección automática de clústeres. |
+
+**Principios de narrativa de datos, según el equipo:**
+
+- **Innegociables:** no esconder lo localizado dentro de un promedio; decir de dónde sale cada número; no mostrar un porcentaje
+  sin datos suficientes; nada comunicado solo con color; comparar contra una referencia.
+- **Negociables:** la simplicidad visual, la estética y la cantidad de gráficas en la primera vista.
+
+**Tableros por institución y para los dueños** (lo que pide el plan general): coordinación ve el tablero en vivo y Panorama de
+**su** institución; Dirección (los dueños de la plataforma) ve todas, la simulación y el negocio. El tablero de **negocio de cada
+institución** no existe: el negocio solo lo ve Dirección. Es un pendiente frente al plan general.
+
 ## Por qué lo hicimos así
 
 | Decisión | Alternativa descartada | Razón |
@@ -219,6 +256,8 @@ tablero, el personal y la contingencia; calles de OpenFreeMap / OpenStreetMap; s
     Cada gráfica tiene «Ver como tabla» y una etiqueta de texto; el mapa repite sus puntos en una lista. La información nunca
     está solo en la imagen.
 
-!!! pregunta "10. ¿Qué historia cuenta el tablero?"
-    Contexto (dónde vive la población con más riesgo), operación (qué pasa ahora y si estamos cumpliendo), evidencia (la
-    simulación compara políticas con intervalos) y decisión (lo que cambió el producto). Es el orden de la demostración.
+!!! pregunta "10. En el incidente, el semáforo promedio de Iztapalapa ocultó un clúster en crisis. ¿Su tablero haría lo mismo?"
+    En la contingencia, no: se evalúa por estación con umbrales absolutos, y basta una estación en Fase I para activar el evento,
+    con cada estación marcada en el mapa. En la operación, el tablero muestra cada visita y cada espera, no promedios. Donde sí
+    podría pasar es en la coropleta de población de Panorama, que agrega por alcaldía: lo decimos como limitación. El principio
+    que defendemos es que la simplicidad es negociable y esconder lo localizado no.

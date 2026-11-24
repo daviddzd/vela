@@ -11,10 +11,16 @@
 
 ## Qué evalúa el profesor
 
-Normalmente: la **pregunta** que responde el modelo, el **diagrama** del modelo, los **supuestos** y de dónde salen, la
-**verificación** (el código hace lo que dice) y la **validación** (el modelo se parece a la realidad), el **diseño del
-experimento** (réplicas, semillas), el **análisis de resultados** (intervalos de confianza, pruebas de hipótesis), el
-**análisis de sensibilidad** y las **conclusiones** con sus límites. (Confirmen la rúbrica con el programa del profesor.)
+| Pide | Documento y sección | Dónde se responde |
+|---|---|---|
+| Entregable: «Simulador de Optimización de Servicios de Cuidado (Agentes/Markov)» | PP, «Evidencia integradora», p. 2 | conceptos (abajo); @ref(cap-sirag) |
+| Enfoque híbrido: eventos discretos (SimPy) + modelado basado en agentes | PP, «Incidente crítico de la UCA: Modelo y Simulación», p. 13 | «Simulación de eventos discretos» y «Agentes» (abajo) |
+| Optimizar distancias y costos de traslado y equilibrar la carga del personal | PP, p. 13 | km recorridos, horas extra y utilización como métricas; desempate por carga (abajo y @ref(cap-operacion)) |
+| Que la simulación no se rompa ante perturbaciones extremas (contingencia, bloqueos, demanda que se dispara) y que priorice el riesgo clínico | PP, p. 13; «Problemas suscitados», p. 7 | «Respuesta al incidente crítico» (abajo) |
+| El dilema: ceder el control a despachadores humanos o recalibrar el modelo en caliente | PP, p. 13; «Dilemas que plantea», p. 8 | «Respuesta al incidente crítico» |
+| Simular la red (instituciones, pacientes, cuidadores, servicios) y probar reglas de asignación en un día normal y en una contingencia; entregar propuestas de asignación con tiempos de respuesta | Plan SIE, secciones 2 y 3 | @ref(cap-sirag) |
+| Rigor metodológico y estadístico (argumentación científica) | PP, «Rúbrica Analítica», p. 4 | validación, IC, Friedman/Wilcoxon/Holm, sensibilidad (abajo) |
+| Rúbrica propia de la materia | **no lo dicen los documentos: confirmar con el profesor** | — |
 
 ## Los conceptos, desde cero
 
@@ -169,6 +175,37 @@ del humano.
 **Qué es.** Condiciones del mundo que se prueban (no decisiones). **En Enlaza:** normal, contingencia en el oriente y
 contingencia + bloqueo vial.
 
+## Respuesta al incidente crítico de Modelado y Simulación
+
+**El incidente** (PP, p. 13): un simulador calibrado para minimizar kilómetros con demanda «normal» colapsa en una
+contingencia con bloqueos y demanda que se dispara un {{ doc.pico_crisis }}. Sigue mandando al personal por la ruta
+«más corta» histórica, ignora el tráfico y atiende primero los chequeos cercanos que a los pacientes graves. Las
+respuestas superan {{ doc.sim_respuesta }}. El dilema: pasar el control a despachadores humanos (lento) o hacer un *hotfix*
+con variables no validadas (inestable).
+
+**Por qué SIRAG-D no cae en esas fallas, y dónde todavía podría:**
+
+| Falla del incidente | SIRAG-D / Enlaza |
+|---|---|
+| Ordena por cercanía | ordena la cola por **prioridad → riesgo → espera**; una crisis entra como prioridad alta |
+| Ruta corta histórica sin tráfico | elige por **tiempo de viaje con la velocidad de esa hora**; el escenario con bloqueo multiplica el tráfico ×{{ cfg.roadblock_factor }} y suma {{ cfg.blockade_minutes }} por viaje que cruza Iztapalapa |
+| Sin recalibración ante perturbaciones | los escenarios de contingencia y bloqueo se prueban **antes**, con {{ cfg.replications }} réplicas; en la operación, la contingencia se detecta sola y **propone** ajustes que una persona aprueba |
+| Demanda que se dispara | sensibilidad con el riesgo de crisis ×2 y ×3: la espera de lo urgente sube, pero Enlaza mantiene su ventaja ({{ sens.risk_multiplier.3.vela_timeout.high_wait_p90_min }} contra {{ sens.risk_multiplier.3.human_dispatcher.high_wait_p90_min }} min de p90 con ×3) |
+
+**El experimento que reproduce el incidente:** la política `nearest` (más cercano, por orden de llegada) es justo el
+simulador del incidente. En el escenario de contingencia + bloqueo, su espera p90 de prioridad alta es
+{{ sim.contingency_east_roadblocks.nearest.high_wait_p90_min }} min, contra {{ sim.contingency_east_roadblocks.vela_timeout.high_wait_p90_min }}
+de Enlaza ({{ test.contingency_east_roadblocks.high_wait_p90_min.vela_timeout.p }} contra el despacho humano).
+
+**Ante el dilema, la postura del equipo:** ni manual total ni *hotfix* a ciegas. La asignación automática usa reglas que
+**ya se validaron en simulación**, coordinación aprueba lo delicado y, si no responde a tiempo en lo urgente, se aplica la
+propuesta con aviso (el límite de tiempo, que salió de esta misma simulación). No usamos aleatorización sesgada
+(*biased randomization*): no la necesitamos y no está validada.
+
+**Lo que no cubre:** un aumento de demanda de {{ doc.pico_crisis }} no se simuló exactamente (el ×3 del riesgo es lo más
+cercano); el tráfico es un promedio por hora, no tráfico en vivo; el costo en pesos de los traslados no se reporta, solo los
+km ({{ sim.normal.vela_timeout.travel_km }} por semana).
+
 ## Por qué lo hicimos así
 
 - **SimPy** porque es Python (el lenguaje del equipo) y es una biblioteca estándar de eventos discretos.
@@ -265,7 +302,9 @@ contingencia + bloqueo vial.
     más (esto cambió el producto) y que contratar donde está el cuello de botella baja el «sin atender» a
     {{ sens.extra_staff.targeted.vela_timeout.unattended_pct }}.
 
-!!! pregunta "10. Si la diferencia entre Enlaza y «prioridad por riesgo» es mínima, ¿para qué sirve el tráfico?"
-    Tienen razón en que la mayor parte de la mejora viene de priorizar por riesgo. El tráfico aporta poco en promedio con
-    este modelo (línea recta × factor y velocidad por hora). Lo decimos abiertamente; con rutas reales y tráfico en vivo
-    podría pesar más, pero eso no lo probamos.
+!!! pregunta "10. En el incidente, el simulador manda por la ruta más corta y atiende primero lo cercano. ¿El suyo haría lo mismo?"
+    No, porque ordena por prioridad y riesgo y elige por tiempo de viaje con el tráfico de la hora. Y lo podemos mostrar: la
+    política «más cercano» es justo la del incidente, y en contingencia con bloqueo su espera p90 de lo urgente es
+    {{ sim.contingency_east_roadblocks.nearest.high_wait_p90_min }} min contra {{ sim.contingency_east_roadblocks.vela_timeout.high_wait_p90_min }}
+    de Enlaza. Siendo honestos, la mayor parte de la mejora viene de priorizar, no del tráfico, que en nuestro modelo es un
+    promedio por hora.

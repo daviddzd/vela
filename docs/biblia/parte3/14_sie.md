@@ -12,11 +12,20 @@
 
 ## Qué evalúa el profesor
 
-En el Avance 2 la materia pidió: la **transacción central** y su proceso completo, el **mapa de sistemas de
-información** (qué tipo de sistema hace qué), un **diccionario de datos**, la **matriz de permisos**, **bocetos** de
-pantallas, **escenarios** normal y excepcional, la **arquitectura** y cómo se **separa** a las instituciones. La defensa
-final revisa que eso exista y funcione, y que puedan explicar las decisiones. (Confirmen la rúbrica final con el
-programa del profesor.)
+Lo que dicen los documentos (citados en @ref(cap-m-pp-doc)):
+
+| Pide | Documento y sección | Dónde se responde |
+|---|---|---|
+| Entregable: «Arquitectura del Sistema de Información Institucional (CRM/ERP/Nube)» | PP, «Evidencia integradora», p. 2 | conceptos TPS/CRM/ERP/MIS/DSS (abajo); arquitectura @ref(cap-arquitectura); nube: «Arquitectura en la nube» (abajo) |
+| Resolver la fragmentación: articular procesos, actores, tecnologías y flujos de información | PP, «Incidente crítico de la UCA: SIE», p. 11 | «Respuesta al incidente crítico» (abajo) |
+| Que una alerta de alto riesgo reasigne personal de inmediato | PP, p. 11 | «Respuesta al incidente crítico» |
+| Registros duplicados o identificadores distintos para una misma persona | PP, p. 11; «Problemas suscitados», p. 7 | «Calidad de datos» (abajo) |
+| Qué información requiere cada área, cuál se comparte, quién accede y con qué finalidad | PP, p. 11 | «Información por área» (abajo) |
+| Apoyar decisiones operativas, tácticas y estratégicas | PP, p. 11 | «Información por área» |
+| Base central, qué datos produce y usa cada área, usuarios y permisos, separación entre instituciones, **calidad de datos** y **plan de respaldo** | Plan SIE, sección 2 | «Información por área», «Calidad de datos», «Plan de respaldo» (abajo); seguridad @ref(cap-seguridad) |
+| Mismo glosario y diccionario de datos; demostración de un día normal y una contingencia que pase por las seis materias | Plan SIE, sección 3 | glosario (anexo), diccionario (abajo), guion (Parte V) |
+| Transacción central, mapa de sistemas, diccionario, matriz de permisos, bocetos, escenarios | Avance 2 (lo que entregó el equipo) | este capítulo y @ref(cap-operacion) |
+| Pesos y criterios de calificación propios de SIE | **no lo dicen los documentos: confirmar con el profesor** | — |
 
 ## Los conceptos, desde cero
 
@@ -133,6 +142,74 @@ con lecturas de expedientes, asignaciones, aprobaciones, contingencias e intento
 estados de la solicitud; escenario normal (solicitud rutinaria asignada sola) y excepcionales (duplicada → rechazada con
 motivo; nadie libre → cola, reintento y alerta; urgente sin aprobar → aplicada por tiempo).
 
+## Respuesta al incidente crítico de SIE
+
+**El incidente** (PP, p. 11): cada área digitalizó por su cuenta; los componentes funcionan por separado, pero la
+información no fluye. Si un paciente se clasifica de alto riesgo y la alerta no llega sola al área que reasigna personal,
+el tiempo se pierde. Además hay identificadores duplicados. La dirección no quiere seguir sumando sistemas ni sustituirlos de
+golpe.
+
+**La respuesta de Enlaza: un solo sistema con una sola base, en lugar de integrar sistemas sueltos.**
+
+```mermaid
+flowchart TB
+  V["Voz: nota con riesgo<br/>(Cómputo Cognitivo)"] --> A["Alerta en la base"]
+  C["Contingencia detectada<br/>(aire + pacientes sensibles)"] --> PR["Propuesta: subir prioridad"]
+  O["Persona fuera de servicio"] --> RD["Redespacho automático"]
+  A --> T["Tablero en vivo de coordinación (WebSocket)"]
+  PR -- "coordinación aprueba" --> RD
+  RD --> D["Despachador: prioridad y riesgo primero"]
+  D --> AS["Nueva asignación<br/>o propuesta a Aprobaciones"]
+  AS --> T
+```
+
+- **La alerta llega sola**: una nota de voz de emergencia crea una alerta crítica que el tablero recibe al instante; una
+  contingencia propone subir la prioridad de los pacientes sensibles; «fuera de servicio» redespacha las visitas de esa persona
+  sin que nadie las copie de un sistema a otro (@ref(cap-operacion), @ref(cap-contingencia)).
+- **Sin sustituir de golpe**: en una institución real, la propuesta sería un **piloto** por etapas: primero la agenda y el
+  tablero, luego la voz y los tableros de decisión (ver la ruta de implementación en @ref(cap-m-emp)).
+
+### Información por área: qué produce, qué usa, quién accede y para qué
+
+| Área | Produce | Usa | Accede | Finalidad | Decisión |
+|---|---|---|---|---|---|
+| Familia | solicitudes, notas de voz, confirmaciones | próximas visitas de su paciente | solo su paciente | pedir y seguir la atención | operativa |
+| Personal | llegada, término, notas | su agenda, el domicilio | solo sus visitas | prestar el servicio | operativa |
+| Medicina | ajustes del plan de cuidado | reportes de voz, fichas de sus pacientes (con consentimiento) | sus pacientes | atención clínica | operativa/táctica |
+| Coordinación | aprobaciones, reasignaciones, consentimientos, decisiones de contingencia | toda su institución | su institución | operar y responder | operativa/táctica |
+| Dirección | — | todas las instituciones (agregado), negocio, simulación, bitácora | todo, con `*` | dirigir la plataforma | estratégica |
+| Worker (proceso) | visitas del plan, alertas, «sin atender», contingencias | todo, con `*` | — | operación automática | operativa |
+
+### Calidad de datos
+
+- **Un solo identificador por entidad**: cada persona tiene un `person_id`, cada paciente un `patient_id` que apunta a ella;
+  no hay copias por área, así que no hay identificadores distintos para la misma persona.
+- **Reglas en la base**: claves únicas, referencias válidas, una asignación activa por solicitud, restricción `EXCLUDE` contra
+  traslapes, bitácora de solo agregar.
+- **Validación en la entrada**: paciente activo, consentimiento, servicio activo, fecha válida, duplicados en
+  {{ code.duplicate_window_h }} rechazados con motivo.
+- **Comprobación**: `scripts/verify_db.py` revisa conteos exactos de la semilla, 0 traslapes reales, aislamiento y
+  contraseñas.
+
+### Plan de respaldo
+
+!!! cuidado "Lo que hay y lo que no"
+    **Hoy no hay respaldos automáticos de la base de datos.** Lo que sí hay: la semilla y las migraciones están en Git, así que la
+    base se puede **reconstruir desde cero** en minutos (Parte V). Lo que se perdería si se borrara el volumen de Docker es la
+    **operación en vivo** (visitas, notas, bitácora de los ensayos).
+
+Propuesta (para una institución real, no implementada): respaldo diario con `pg_dump` cifrado, copia fuera de la laptop o
+del servidor, retención de 30 días, prueba mensual de restauración, y respaldo antes de cada migración. Para la defensa basta
+un respaldo manual antes de empezar (comando en la Parte V).
+
+### Arquitectura en la nube
+
+El prototipo corre en una laptop y se publica con un túnel (@ref(cap-arquitectura)). El modelo de negocio ya presupuesta la
+nube desde el año {{ neg.hosting_start_year }}: un servidor de {{ neg.hosting_server_usd }} USD al mes y una base PostgreSQL
+administrada de {{ neg.hosting_database_usd }} USD al mes por cada {{ neg.institutions_per_server }} instituciones
+(DigitalOcean). Como todo está en Docker Compose, el mismo conjunto de servicios se puede llevar a un servidor: lo que cambia
+es el túnel por un dominio propio y la base por una administrada con respaldos.
+
 ## Por qué lo hicimos así
 
 | Decisión | Alternativa descartada | Razón |
@@ -230,7 +307,9 @@ motivo; nadie libre → cola, reintento y alerta; urgente sin aprobar → aplica
     Puntualidad (¿hay que reforzar turnos o rutas?), «sin atender» (¿falta personal?), carga del personal (¿repartir
     mejor?), cola y espera máxima (¿escalar ya?). Cada tarjeta empieza con su pregunta.
 
-!!! pregunta "10. ¿Qué queda en la bitácora y quién la puede borrar?"
-    Lecturas de fichas, asignaciones (automáticas, aprobadas, por tiempo), contingencias, consentimientos, inicios de
-    sesión e intentos bloqueados. Nadie desde la aplicación: el usuario de la API no tiene permiso de modificarla ni
-    borrarla.
+!!! pregunta "10. En el incidente, la información fragmentada retrasa la reasignación. ¿Cómo lo evita Enlaza y no es solo «otro sistema más»?"
+    Enlaza no suma un sistema a los que ya hay: reúne en una base la solicitud, el paciente, el consentimiento, el personal y
+    las alertas. Por eso una nota de voz de emergencia, una contingencia o alguien fuera de servicio disparan la reasignación sin
+    que nadie copie datos. En una institución real se adoptaría por etapas (piloto), para no detener el servicio, y cada área
+    seguiría viendo solo lo suyo gracias a los roles y la seguridad por fila. Además, todo queda en la bitácora, que nadie puede
+    borrar desde la aplicación.

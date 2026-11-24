@@ -11,9 +11,21 @@
 
 ## Qué evalúa el profesor
 
-Normalmente: el **problema** y el **cliente**, la **propuesta de valor**, el **modelo de negocio** (cómo se gana dinero), el
-**tamaño del mercado**, la **competencia**, las **proyecciones financieras** (equilibrio, flujo, VPN), las **métricas** de
-negocio (LTV, CAC, churn) y la **viabilidad**. (Confirmen con el programa del profesor.)
+| Pide | Documento y sección | Dónde se responde |
+|---|---|---|
+| Entregable: «Plan de Negocios Viable y Canvas de la Startup» | PP, «Evidencia integradora», p. 2 | Canvas (abajo); @ref(cap-negocio) |
+| 1. Estudio de mercado: segmentación geográfica por zonas vulnerables, estimación de demanda, competidores tradicionales y tecnológicos | PP, «Componentes Clave del Plan de Negocios Formal», p. 15 | «Plan de negocios formal», estudio 1 (abajo) |
+| 2. Estudio técnico-operativo: arquitectura en la nube, flujos de datos en tiempo real, simulador de rutas | PP, p. 15 | estudio 2 (abajo) |
+| 3. Estudio administrativo y legal: organigrama, código de ética para datos de salud, marco legal de protección de datos | PP, p. 15 | estudio 3 (abajo) |
+| 4. Evaluación financiera: ingresos y egresos a {{ doc.emp_anios }}, **VAN y TIR**, análisis de riesgos financieros | PP, p. 15 | estudio 4 (abajo) |
+| 5. Estrategia de financiamiento: pitch para inversionistas ángel o capital semilla; *silver economy* en Latinoamérica | PP, p. 15 | estudio 5 (abajo) |
+| Propuesta de valor sostenible, análisis financiero realista, costos asequibles y atraer capital semilla (por qué fracasan el {{ doc.emp_fracaso }} de estas iniciativas) | PP, «Incidente crítico de la UCA: Emprendimiento», p. 14 | «Respuesta al incidente crítico» (abajo) |
+| Incorporar al plan las limitaciones técnicas y éticas de los otros cinco componentes, no como notas al pie | PP, «Resultado de esta actuación», p. 7 | riesgos del estudio 4 (abajo) |
+| Sostener la promesa de escalamiento nacional o reformular hacia una expansión regional más segura | PP, «Incidente crítico», p. 6; «Dilemas», p. 8 | «Respuesta al incidente crítico» |
+| Ruta de implementación realista: piloto, mantenimiento, capacitación y costos | PP, «Desarrollo del Problema Prototípico», p. 9 | «Ruta de implementación» (abajo) |
+| Rentabilidad financiera y retorno social de inversión | PP, «Planteamiento», enfoque de emprendimiento, p. 3 | estudio 4 (VAN, TIR) y «Retorno social» (abajo) |
+| El plan se alimenta de los resultados de la simulación y del tablero | PP, «Rúbrica Analítica», p. 4; Plan SIE, sección 3 | datos de uso en `/negocio`; costo de cumplir la LFT de SIRAG-D (abajo) |
+| Rúbrica propia de la materia | **no lo dicen los documentos: confirmar con el profesor** | — |
 
 ## Los conceptos, desde cero
 
@@ -90,6 +102,17 @@ valor presente de esos 110 es 100.
 **En Enlaza.** Tasa base {{ bm.rate_25 }} (tasa libre de riesgo + prima de empresa nueva). VPN: {{ bm.npv_15 }} al
 {{ bm.rate_15 }}, **{{ bm.npv_25 }}** al {{ bm.rate_25 }}, {{ bm.npv_35 }} al {{ bm.rate_35 }}.
 
+### TIR (tasa interna de retorno)
+
+**Qué es.** La tasa de descuento con la que el VAN (VPN) de un proyecto vale exactamente cero. Si la TIR es mayor que la tasa que
+exigen los inversionistas, el proyecto crea valor.
+
+**Ejemplo.** Si prestas 100 pesos y te devuelven 120 en un año, la TIR es 20 %: si tu dinero te rinde más en otro lado, no te
+conviene.
+
+**En Enlaza.** Base {{ bm.sc.base.tir }} (menor que la tasa exigida de {{ bm.rate_25 }}: VAN negativo); recomendado
+{{ bm.sc.recommended.tir }}.
+
 ### Churn (cancelación)
 
 **Qué es.** El porcentaje de clientes que se va cada mes. **En Enlaza:** {{ neg.monthly_churn }} % al mes (supuesto): vida
@@ -126,6 +149,116 @@ resultado.
 ({{ bm.sc.recommended.npv25 }}). ¿Qué haría el VPN base = 0? Precio Profesional {{ bm.zero_price }}, o {{ bm.zero_year5 }}
 instituciones en el año 5, o CAC {{ bm.zero_cac }}.
 
+## El plan de negocios formal, estudio por estudio
+
+### 1. Estudio de mercado
+
+- **Segmentación geográfica:** CDMX primero (la población de 60+ más grande y la contingencia ambiental del problema),
+  después Estado de México conurbado, Jalisco y Nuevo León (orden de expansión, supuesto). Dentro de la CDMX, Panorama-AM
+  muestra por alcaldía dónde vive la población con más riesgo (multimorbilidad, dependencia, sensibilidad a la contaminación),
+  que es donde conviene empezar.
+- **Estimación de demanda:** {{ seed.pop60_cdmx }} personas de 60+ en la CDMX (Censo 2020); establecimientos que serían clientes
+  según el DENUE: {{ neg.denue_residences_private_cdmx }} residencias, {{ neg.denue_day_centers_private_cdmx }} centros de día y
+  {{ neg.denue_home_nursing_cdmx }} servicios de enfermería a domicilio privados en la CDMX, más los públicos para el plan Gobierno.
+- **Competidores tradicionales:** la coordinación con llamadas, WhatsApp y hojas de cálculo (gratis, pero sin asignación,
+  trazabilidad ni datos). **Tecnológicos:** software de consultorio y agenda médica (HuliPractice, Doctoralia), que cobra por
+  médico y no coordina personal a domicilio; software de residencias en otros países.
+
+### 2. Estudio técnico-operativo
+
+Arquitectura actual y en la nube (@ref(cap-arquitectura), @ref(cap-m-sie)), flujos en tiempo real por WebSocket
+(@ref(cap-tiempo-real)) y el simulador SIRAG-D, que usa el mismo despachador que la operación (@ref(cap-sirag)). **Sensores:** el
+PP menciona flujos de sensores; Enlaza no usa sensores (usa lecturas de aire, tráfico por hora, la app y la voz).
+
+### 3. Estudio administrativo y legal
+
+**Organigrama inicial** (el número de fundadores y sus áreas son supuesto del equipo, `assumptions.csv`):
+
+```mermaid
+flowchart TB
+  D["Dirección y ventas"] --- T["Tecnología"]
+  D --- IA["Datos e IA"]
+  D --- O["Operación y ética<br/>(privacidad, consentimientos, cumplimiento)"]
+  O -. "al crecer" .-> S["Soporte<br/>(1 por cada {{ neg.institutions_per_support }} instituciones)"]
+```
+
+**Código de ética para datos de salud** y **marco legal**: consentimiento por tipo, minimización, privacidad desde el diseño,
+IA supervisada, LFPDPPP 2025, ARCO, LFT (@ref(cap-etica), @ref(cap-m-pp)). La bibliografía del PP recomienda el código de ética
+de AMIPCI (2021) y las directrices de la OMS (2021): **confirmar con el profesor** si se espera adoptarlos por escrito.
+
+### 4. Evaluación financiera
+
+Proyecciones mensuales a {{ doc.emp_anios }} con el mismo modelo de `/negocio` (@ref(cap-negocio)):
+
+| Escenario | VAN (VPN) al {{ bm.rate_25 }} | **TIR** | Equilibrio (mes) | Inversión necesaria |
+|---|---|---|---|---|
+| Base | {{ bm.sc.base.npv25 }} | {{ bm.sc.base.tir }} | {{ bm.sc.base.breakeven }} | {{ bm.sc.base.investment }} |
+| Conservador | {{ bm.sc.conservative.npv25 }} | {{ bm.sc.conservative.tir }} | {{ bm.sc.conservative.breakeven }} | {{ bm.sc.conservative.investment }} |
+| Recomendado | {{ bm.sc.recommended.npv25 }} | {{ bm.sc.recommended.tir }} | {{ bm.sc.recommended.breakeven }} | {{ bm.sc.recommended.investment }} |
+
+La **TIR** es la tasa de descuento anual con la que el VAN de los cinco años vale cero. La del escenario base queda **debajo**
+de la tasa exigida ({{ bm.rate_25 }}), por eso su VAN es negativo; la del recomendado la supera con holgura.
+
+**Riesgos financieros, incluidos los que revelaron los otros componentes:**
+
+| Riesgo | Origen | Efecto en el plan | Mitigación |
+|---|---|---|---|
+| Mercado privado pequeño | DENUE | no caben {{ bm.y5.customers }} clientes en CDMX y Edomex | tope de participación, más entidades, plan Gobierno |
+| Churn mayor al supuesto | supuesto | baja el LTV y retrasa el equilibrio | piloto con medición real |
+| CAC mayor fuera de la CDMX | supuesto | más inversión necesaria | expansión regional gradual |
+| Falsas alarmas de voz ({{ voz.holdout.fa100 }} por 100 notas) | Cómputo Cognitivo | carga para coordinación y riesgo de que el cliente desactive la voz | dos niveles, revisión humana; vender la voz como módulo en evaluación |
+| Sesgo con lenguas originarias | Cómputo Cognitivo | no se puede vender la voz en el sur sin evaluar | expansión regional, evaluación por grupo antes de cada región |
+| Cumplir la jornada nocturna cuesta plazas | Simulación ({{ sens.extra_staff.night_legal.vela_timeout.staff }} personas en lugar de {{ sens.extra_staff.current.vela_timeout.staff }}) | costo para el cliente, no para Enlaza | Enlaza lo informa; el cliente decide |
+| «Sin atender» limitado por el personal del cliente | Simulación | la promesa no puede ser «cero visitas perdidas» | vender priorización de lo urgente, que sí mejora |
+| Datos sensibles | Práctica Profesional | multas y pérdida de confianza | seguridad por fila, consentimientos, bitácora |
+
+### 5. Estrategia de financiamiento: guion de pitch
+
+1. **Problema:** {{ seed.pop60_cdmx }} personas de 60+ en la CDMX; instituciones que coordinan visitas por WhatsApp.
+2. **Solución:** Enlaza, demostración en vivo.
+3. **Evidencia:** la simulación muestra menos espera para lo urgente ({{ sim.normal.vela_timeout.high_wait_p90_min }} contra
+   {{ sim.normal.human_dispatcher.high_wait_p90_min }} min de p90).
+4. **Mercado:** DENUE por segmento; expansión regional.
+5. **Modelo:** suscripción; LTV/CAC {{ bm.ltv_cac }}.
+6. **Lo que pedimos:** la inversión necesaria del escenario recomendado, {{ bm.sc.recommended.investment }}, para llegar al equilibrio
+   en el mes {{ bm.sc.recommended.breakeven }}.
+7. **Riesgos y cómo los atendemos** (la tabla anterior): mostrar los riesgos da credibilidad ante inversionistas.
+
+**Silver economy en Latinoamérica:** el modelo solo cubre México; la expansión latinoamericana **no se modeló** y se presenta
+como visión, no como proyección.
+
+## Ruta de implementación
+
+Pide el PP (p. 9): piloto, mantenimiento, capacitación y costos. Propuesta del equipo (las etapas son supuesto, sin fechas):
+
+| Etapa | Qué se hace | Costo que ya está en el modelo |
+|---|---|---|
+| Piloto | una institución de la CDMX, solo agenda, asignación y tablero; consentimientos firmados; medir puntualidad y «sin atender» reales | CAC de {{ bm.cac }} por institución |
+| Capacitación | coordinación, personal y familias (modo sencillo, voz) | dentro del soporte |
+| Ampliación | voz y Panorama; después contingencia | — |
+| Mantenimiento | soporte (1 por cada {{ neg.institutions_per_support }} instituciones), hospedaje desde el año {{ neg.hosting_start_year }}, respaldos | costos variables del modelo ({{ bm.variable_cost }} por institución al mes) |
+
+## Respuesta al incidente crítico de Emprendimiento
+
+**El incidente** (PP, p. 14): el {{ doc.emp_fracaso }} de las iniciativas de este tipo fracasa en dos años por propuestas de valor
+débiles, finanzas poco realistas, precios inasequibles o falta de capital semilla. En el incidente general (p. 6), la dirección
+debe decidir si sostiene la promesa de escalamiento nacional.
+
+- **Propuesta de valor sostenible:** se vende a instituciones que ya tienen el problema y el presupuesto; la familia no paga a
+  Enlaza.
+- **Análisis financiero realista:** VAN, TIR, tres escenarios y el VAN base negativo dicho abiertamente.
+- **Costos asequibles:** con el plan lleno, Enlaza cuesta {{ bm.per_patient_basic }} (Básico) o {{ bm.per_patient_professional }}
+  (Profesional) al mes por paciente, que paga la institución.
+- **Escalamiento nacional:** **no se promete**. El escenario recomendado crece por regiones, con tope de participación, y la
+  voz no se lleva a regiones donde no se haya evaluado.
+
+### Retorno social
+
+El PP pide demostrar retorno social de inversión. **No se calculó un SROI** (retorno social en pesos). Lo que sí se mide:
+menos espera para lo urgente (simulación), jornada legal del personal, familias informadas y horas de coordinación ahorradas
+(`/negocio`, supuesto de {{ neg.minutes_per_manual_assignment }} min por asignación). **Confirmar con el profesor** si se espera un
+SROI formal.
+
 ## Por qué lo hicimos así
 
 - **Suscripción y no comisión** ({{ neg.commission_alternative }} % evaluada): ingreso predecible y sin conflicto con instituciones
@@ -153,7 +286,8 @@ instituciones en el año 5, o CAC {{ bm.zero_cac }}.
 - Sin **entrevistas a clientes** ni prueba de disposición a pagar.
 - Precios, mezcla, churn, CAC y crecimiento son **supuestos**.
 - El **plan Gobierno** no tiene un precio de referencia público.
-- No se calculó la **TIR** (tasa interna de retorno); el análisis usa VPN con tres tasas.
+- No se calculó un **retorno social en pesos** (SROI).
+- La expansión latinoamericana no se modeló.
 - Pesos nominales, antes de impuestos y sin IVA.
 
 ## Qué decir en 2 minutos
@@ -213,6 +347,8 @@ instituciones en el año 5, o CAC {{ bm.zero_cac }}.
     respetando turnos y ley, tiene tablero en vivo, avisa a familias, detecta emergencias por voz y separa los datos por
     institución.
 
-!!! pregunta "10. ¿Qué supuesto es el más débil?"
-    El precio del plan Gobierno (no encontramos referencia pública) y la disposición a pagar de las instituciones privadas.
-    Los dos se validarían con entrevistas y un piloto.
+!!! pregunta "10. ¿Sostendrían la promesa de escalamiento nacional ante los inversionistas?"
+    No. El plan base no cabe en el mercado privado y el asistente de voz no está evaluado con hablantes de lenguas originarias.
+    Proponemos crecer por regiones con tope de participación (escenario recomendado, TIR {{ bm.sc.recommended.tir }}) y llevar la
+    voz a una región solo después de evaluarla ahí. Presentar los riesgos completos da más credibilidad que una promesa que no se
+    puede cumplir. El supuesto más débil es el precio del plan Gobierno, sin referencia pública.
