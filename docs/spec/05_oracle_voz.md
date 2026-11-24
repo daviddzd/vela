@@ -1,4 +1,6 @@
-# 05 · ORACLE-Voz (Cómputo Cognitivo)
+# 05 · Enlaza Voz (Cómputo Cognitivo)
+
+> Antes se llamaba **ORACLE-Voz**; se renombró a **Enlaza Voz** (23/11/2026) porque ORACLE es una marca registrada. Las carpetas y el código conservan el nombre interno (`voice/`, `oracle.py`).
 
 Asistente de voz para familiares y cuidadores: escucha una nota, detecta si es una emergencia y prepara
 un reporte estructurado para el médico. **No diagnostica.**

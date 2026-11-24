@@ -1,4 +1,4 @@
--- Vela · database schema (PostgreSQL 16)
+-- Enlaza (internal name: vela) · database schema (PostgreSQL 16)
 -- Run order: 001_schema.sql -> 002_load_seed.sql -> 003_views.sql -> 004_row_level_security.sql -> 005_postgis.sql (optional)
 
 BEGIN;

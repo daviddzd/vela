@@ -11,7 +11,7 @@ Supuestos y fuentes en `data/business/assumptions.csv`. La página `/negocio` y 
 | Institucional | sin límite | 12,000 |
 
 Referencia de mercado: software de consultorio como HuliPractice cuesta de 490 a 2,540 MXN/mes por
-profesional; Vela cobra por institución e incluye coordinación de personal. Alternativa evaluada y descartada
+profesional; Enlaza cobra por institución e incluye coordinación de personal. Alternativa evaluada y descartada
 como principal: comisión de 5 % por servicio (ingreso variable y conflicto con instituciones de asistencia privada).
 
 ## Mercado

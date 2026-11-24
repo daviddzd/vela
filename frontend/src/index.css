@@ -4,6 +4,18 @@
 @import "@fontsource/plus-jakarta-sans/700.css";
 @import "@fontsource/plus-jakarta-sans/800.css";
 
+/* One look for every number: the DIGITS come from Plus Jakarta Sans (plain zero) and the letters from Atkinson
+   Hyperlegible, whose zero is crossed ("Ø"). A digits-only face (unicode-range) goes first in the font stack, so
+   dates, times, ids and big figures all use the same 0. */
+@font-face {
+  font-family: "Enlaza Digits"; font-style: normal; font-weight: 400; font-display: swap; unicode-range: U+0030-0039;
+  src: url("../node_modules/@fontsource/plus-jakarta-sans/files/plus-jakarta-sans-latin-500-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Enlaza Digits"; font-style: normal; font-weight: 700; font-display: swap; unicode-range: U+0030-0039;
+  src: url("../node_modules/@fontsource/plus-jakarta-sans/files/plus-jakarta-sans-latin-700-normal.woff2") format("woff2");
+}
+
 /* Enlaza brand tokens (docs/brand.md). Colours of the logo measured with an eyedropper; every text/background pair
    is checked for WCAG AA by scripts/check_contrast.py. The logo teal (#2AAEAE) does NOT reach 3:1 on white:
    decoration only (logo, gradients, icon-circle backgrounds); text and meaningful icons use teal-text. */
@@ -24,7 +36,7 @@
   --color-warn-soft: #FBF1DC;
   --color-danger: #B42318;
   --color-danger-soft: #FBE9E7;
-  --font-sans: "Atkinson Hyperlegible", Arial, sans-serif;
+  --font-sans: "Enlaza Digits", "Atkinson Hyperlegible", Arial, sans-serif;
   --font-display: "Plus Jakarta Sans", "Atkinson Hyperlegible", Arial, sans-serif;
   --radius-card: 22px;          /* cards: 20-24 px */
   --radius-field: 14px;         /* inputs, small boxes */
@@ -47,6 +59,17 @@ html.simple { font-size: 24px; }
 
 /* Visible keyboard focus everywhere (teal-text: 5.7:1 on white) */
 :focus-visible { outline: 3px solid var(--color-teal-text); outline-offset: 2px; }
+
+/* Every <details> shows that it opens: a chevron after the summary text, turned up when open
+   (the default triangle disappears when a summary is display:flex, so a closed box looked empty). */
+summary { list-style: none; cursor: pointer; }
+summary::-webkit-details-marker { display: none; }
+summary::after {
+  content: ""; display: inline-block; flex-shrink: 0; width: 0.55em; height: 0.55em; margin-left: 0.6em;
+  border-right: 0.16em solid currentColor; border-bottom: 0.16em solid currentColor;
+  transform: translateY(-0.2em) rotate(45deg); transition: transform 0.15s;
+}
+details[open] > summary::after { transform: translateY(0.15em) rotate(-135deg); }
 
 /* Section header: very light blue gradient (no translucent glass: text keeps its contrast) */
 .section-header { background: linear-gradient(180deg, var(--color-sky) 0%, var(--color-sky-soft) 60%, #fff 100%); }

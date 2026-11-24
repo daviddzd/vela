@@ -6,7 +6,7 @@ import { useAuth } from "../auth/AuthContext";
 import { AppShell } from "../components/AppShell";
 import { ChartCard } from "../components/ChartCard";
 import { AlertTriangle, CheckCircle2, Icon } from "../components/icons";
-import { Button, Card, Notice } from "../components/ui";
+import { Button, Card, Notice, PageHeader } from "../components/ui";
 import { es } from "../i18n/es";
 import { formatDateTime } from "../lib/format";
 import { useBoardSocket } from "../lib/useBoardSocket";
@@ -55,12 +55,12 @@ export function ContingencyPage() {
   const line = (e: Event) => t.eventLine.replace("{phase}", t.levels[e.phase]).replace("{pollutant}", t.pollutant[e.pollutant])
     .replace("{districts}", e.district_names.join(", ")).replace("{since}", formatDateTime(e.started_at));
   const badge = (e: Event) => (
-    <span className={`mr-2 rounded-card px-2 ${e.origin === "demo_scenario" ? "bg-warn/15" : "bg-danger/10"}`}>
+    <span className={`mr-2 rounded-full px-2 ${e.origin === "demo_scenario" ? "bg-warn/15" : "bg-danger/10"}`}>
       {e.origin === "demo_scenario" ? t.demo : t.real}</span>);
 
   return (
     <AppShell>
-      <h1 className="text-navy">{es.screens["/contingencia"]}</h1>
+      <PageHeader title={es.pageTitles["/contingencia"]} />
       {d.scenario && <div className="mt-2"><Notice>{t.demoRunning.replace("{scenario}", es.demo.scenarios[d.scenario.scenario] ?? d.scenario.scenario)}</Notice></div>}
       {msg && <div className="mt-2"><Notice kind="ok">{msg}</Notice></div>}
 
@@ -77,7 +77,7 @@ export function ContingencyPage() {
                 <summary className="flex min-h-12 cursor-pointer items-center font-bold text-navy">
                   {t.historyTitle.replace("{n}", String(ended.length))}</summary>
                 <ul className="space-y-2 text-muted">
-                  {ended.map((e) => <li key={e.event_id} className="rounded-card border border-muted/30 p-2">{badge(e)}{line(e)}
+                  {ended.map((e) => <li key={e.event_id} className="rounded-field border border-muted/30 p-2">{badge(e)}{line(e)}
                     <span className="block">{t.ended.replace("{at}", formatDateTime(e.ended_at!))}</span></li>)}
                 </ul>
               </details>)}

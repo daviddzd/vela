@@ -9,7 +9,7 @@ export function ChartCard({ question, keyValue, keyLabel, children, source, tabl
   synthetic?: boolean;   // false for numbers that come from real sources / assumptions (e.g. /negocio)
 }) {
   return (
-    <section className={`flex flex-1 flex-col rounded-card border border-navy/20 bg-white p-4 sm:p-5 ${className}`}>
+    <section className={`flex flex-1 flex-col rounded-card border border-navy/10 bg-white p-5 shadow-[var(--shadow-card)] sm:p-6 ${className}`}>
       <h2 className="text-navy">{question}</h2>
       {keyValue !== undefined && (
         <p className="mt-1"><span className="figure text-4xl">{keyValue}</span>

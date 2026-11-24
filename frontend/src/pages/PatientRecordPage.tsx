@@ -35,7 +35,7 @@ export function PatientRecordPage() {
   return (
     <AppShell>
       <BackLink />
-      <h1 className="mt-2 text-navy">{r.full_name} <span className="text-xl text-muted">· {r.patient_id}</span></h1>
+      <h1 className="mt-2 text-3xl sm:text-4xl">{r.full_name} <span className="text-xl font-bold text-teal-text">· {r.patient_id}</span></h1>
       <p className="mt-1"><RiskBadge level={r.risk_level} /></p>
       {msg && <div className="mt-3"><Notice kind="ok">{msg}</Notice></div>}
 
@@ -159,7 +159,7 @@ function PlanForm({ r, plan, onDone, onCancel }: { r: any; plan?: any; onDone: (
     } catch (err) { setError(err instanceof ApiError ? err.message : es.common.error); }
   };
   return (
-    <form onSubmit={submit} className="mt-3 grid gap-3 rounded-card border border-navy/20 p-3 md:grid-cols-4">
+    <form onSubmit={submit} className="mt-3 grid gap-3 rounded-field border border-navy/15 p-3 md:grid-cols-4">
       <label className="block md:col-span-2"><span className="font-bold">{t.service}</span>
         <select className={inputClass} value={f.service_id} onChange={(e) => setF({ ...f, service_id: e.target.value })}>
           {r.services.map((s: any) => <option key={s.service_id} value={s.service_id}>{s.name}</option>)}</select></label>

@@ -5,7 +5,7 @@ import { useCallback, useEffect, useState } from "react";
 import { api } from "../api/client";
 import { AppShell } from "../components/AppShell";
 import { Icon } from "../components/icons";
-import { Button, Card, Notice } from "../components/ui";
+import { Button, Card, Notice, PageHeader } from "../components/ui";
 import { es } from "../i18n/es";
 import { formatDateTime } from "../lib/format";
 
@@ -29,8 +29,9 @@ export function VoiceReportsPage() {
 
   return (
     <AppShell>
-      <h1 className="text-navy">{es.screens["/reportes-voz"]}</h1>
-      <p className="mt-1 text-muted">{t.notDiagnosis}</p>
+      <PageHeader title={es.pageTitles["/reportes-voz"]}>
+        <p className="">{t.notDiagnosis}</p>
+      </PageHeader>
       <div className="mt-3 flex flex-wrap items-center gap-2" role="group">
         <Button variant={onlyUnreviewed ? "primary" : "secondary"} aria-pressed={onlyUnreviewed} onClick={() => setOnlyUnreviewed(true)}>
           {t.filterUnreviewed}</Button>

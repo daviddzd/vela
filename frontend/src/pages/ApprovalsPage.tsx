@@ -2,7 +2,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { api, ApiError, type Approval, type Option } from "../api/client";
 import { AppShell } from "../components/AppShell";
-import { Button, Card, Notice } from "../components/ui";
+import { Button, Card, Notice, PageHeader } from "../components/ui";
 import { AlertTriangle, CheckCircle2, Icon, Star } from "../components/icons";
 import { es } from "../i18n/es";
 import { formatDateTime, formatTime } from "../lib/format";
@@ -48,7 +48,7 @@ export function ApprovalsPage() {
 
   return (
     <AppShell>
-      <h1 className="text-navy">{es.screens["/aprobaciones"]}</h1>
+      <PageHeader title={es.pageTitles["/aprobaciones"]} />
       <div className="mt-4 space-y-4">
         {message && <Notice kind={message.kind}>{message.text}</Notice>}
         {items === null && <p>{es.common.loading}</p>}

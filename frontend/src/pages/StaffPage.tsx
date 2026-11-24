@@ -9,7 +9,7 @@ import { chart } from "../charts/theme";
 import { AppShell } from "../components/AppShell";
 import { AlertTriangle, Ban, Icon } from "../components/icons";
 import { StatusBadge } from "../components/StatusBadge";
-import { Button, Card, inputClass, Notice } from "../components/ui";
+import { Button, Card, Notice, PageHeader, inputClass } from "../components/ui";
 import { es } from "../i18n/es";
 import { formatDate, formatTime } from "../lib/format";
 import { useBoardSocket } from "../lib/useBoardSocket";
@@ -33,7 +33,7 @@ export function StaffPage() {
 
   const points: MapPoint[] = useMemo(() => (d?.staff ?? []).map((c: any) => ({
     id: c.caregiver_id, lat: c.lat, lon: c.lon, symbol: c.out_of_service ? "triangle" : "roundRect",
-    color: c.out_of_service ? "#C0392B" : c.on_shift_now ? chart.series[0] : "#9AA5AB", size: 11,
+    color: c.out_of_service ? "#B42318" : c.on_shift_now ? chart.series[0] : "#9AA5AB", size: 11,
     label: c.caregiver_id === sel ? c.name.split(" ").slice(0, 2).join(" ") : undefined,
     tooltip: `${fill(t.base, { name: c.name })} · ${t.type[c.type]} · ${c.out_of_service ? t.outOfService : c.on_shift_now ? t.onShift : t.offShift}`,
   })), [d, sel]);
@@ -48,15 +48,16 @@ export function StaffPage() {
   const person = d.staff.find((c: any) => c.caregiver_id === sel);
   return (
     <AppShell>
-      <h1 className="text-navy">{es.screens["/personal"]}</h1>
-      <p className="mt-1">{t.intro}</p>
+      <PageHeader title={es.pageTitles["/personal"]}>
+        <p className="max-w-4xl">{t.intro}</p>
+      </PageHeader>
       {msg && <div className="mt-3"><Notice kind={msg.kind}>{msg.text}</Notice></div>}
       <div className="items-start mt-4 grid gap-4 xl:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)]">
         <Card>
           <ul className="divide-y divide-navy/10">{d.staff.map((c: any) => (
             <li key={c.caregiver_id}>
               <button type="button" onClick={() => setSel(c.caregiver_id)} aria-pressed={sel === c.caregiver_id}
-                className={`w-full rounded-card p-2 text-left ${sel === c.caregiver_id ? "bg-navy/10" : "hover:bg-navy/5"}`}>
+                className={`w-full rounded-field p-2 text-left ${sel === c.caregiver_id ? "bg-navy/10" : "hover:bg-navy/5"}`}>
                 <span className="flex flex-wrap items-center justify-between gap-2">
                   <strong className="text-navy">{c.name}</strong>
                   <StateWord c={c} />
@@ -80,7 +81,7 @@ export function StaffPage() {
             <ul className="mt-2 flex flex-wrap gap-x-5 text-sm">
               <li><span style={{ color: chart.series[0] }}>■</span> {t.onShift}</li>
               <li><span style={{ color: "#9AA5AB" }}>■</span> {t.offShift}</li>
-              <li><span style={{ color: "#C0392B" }}>▲</span> {t.outOfService}</li>
+              <li><span style={{ color: "#B42318" }}>▲</span> {t.outOfService}</li>
             </ul>
           </Card>
         </div>
@@ -166,7 +167,7 @@ function Agenda({ person, onMsg }: { person: any; onMsg: (m: { kind: "ok" | "err
           : !asking && <Button icon={PowerOff} variant="secondary" onClick={() => setAsking(true)}>{t.markOut}</Button>}
       </div>
       {asking && (
-        <form onSubmit={markOut} className="mt-3 space-y-2 rounded-card border border-navy/20 p-3">
+        <form onSubmit={markOut} className="mt-3 space-y-2 rounded-field border border-navy/15 p-3">
           <p className="text-sm">{t.outHelp}</p>
           <label className="block"><span className="font-bold">{t.reason}</span>
             <input className={inputClass} required minLength={3} maxLength={200} value={reason} onChange={(e) => setReason(e.target.value)} /></label>

@@ -10,7 +10,7 @@ import { AppShell } from "../components/AppShell";
 import { ChartCard } from "../components/ChartCard";
 import { DateField } from "../components/DateField";
 import { AlertTriangle, Ban, CheckCircle2, Icon } from "../components/icons";
-import { Button, Card, inputClass, Notice } from "../components/ui";
+import { Button, Card, Notice, PageHeader, inputClass } from "../components/ui";
 import { es } from "../i18n/es";
 import { auditDetail, auditEntity } from "../lib/auditText";
 import { formatShortDateTime } from "../lib/format";
@@ -33,7 +33,7 @@ export function PrivacyPage() {
 
   return (
     <AppShell>
-      <h1 className="text-navy">{es.screens["/privacidad"]}</h1>
+      <PageHeader title={es.pageTitles["/privacidad"]} />
       <div role="tablist" aria-label={es.screens["/privacidad"]} className="mt-3 flex flex-wrap gap-2">
         {tabs.map((k) => (
           <Button key={k} role="tab" aria-selected={tab === k} variant={tab === k ? "primary" : "secondary"} onClick={() => setTab(k)}>

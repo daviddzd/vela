@@ -54,10 +54,10 @@ export function LoginPage() {
   return (
     <main className="section-header min-h-screen lg:grid lg:grid-cols-[1fr_1.1fr]">
       {/* brand panel: deep blue, white logo, what you can do (hidden text never carries the form) */}
-      <aside className="bg-deep px-6 py-8 text-white lg:flex lg:flex-col lg:justify-between lg:px-14 lg:py-14">
+      <aside className="bg-deep px-4 py-3 text-white lg:flex lg:flex-col lg:justify-between lg:px-14 lg:py-14">
         <div className="flex items-center justify-between gap-4">
-          <img src="/logo-white.svg" alt={`${es.app.name} · ${es.app.tagline}`} className="h-12" />
-          <Link to="/" className="inline-flex min-h-12 items-center gap-2 rounded-full px-4 font-bold text-sky hover:bg-white/10">
+          <img src="/logo-white.svg" alt={`${es.app.name} · ${es.app.tagline}`} className="h-10 lg:h-12" />
+          <Link to="/" aria-label={es.login.backLabel} className="inline-flex min-h-12 shrink-0 items-center gap-2 whitespace-nowrap rounded-full px-4 font-bold text-sky hover:bg-white/10">
             <Icon as={ArrowLeft} /> {es.login.back}</Link>
         </div>
         <div className="hidden lg:block">

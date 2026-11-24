@@ -102,7 +102,7 @@ export function StreetMap({ points, districtFill = {}, height = 440, label, onSe
         m.addSource("districts", { type: "geojson", data: geo });
         m.addLayer({ id: "district-fill", type: "fill", source: "districts", paint: { "fill-color": "#000000", "fill-opacity": 0 } });
         m.addLayer({ id: "district-line", type: "line", source: "districts",
-          paint: { "line-color": "#0F5C6E", "line-width": 1.5, "line-opacity": 0.8 } });
+          paint: { "line-color": "#3A5B76", "line-width": 1.5, "line-opacity": 0.8 } });
       }
       m.once("idle", () => { done = true; clearTimeout(timer); setReady(true); });   // style + first tiles drawn
     });

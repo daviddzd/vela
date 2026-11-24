@@ -1,4 +1,4 @@
-# Formato de consentimiento informado · Vela
+# Formato de consentimiento informado · Enlaza
 
 > Plantilla académica. Los campos marcados con [ ] se capturan en la pantalla "Consentimientos" y se guardan en la tabla `consents`.
 
@@ -9,7 +9,7 @@
 - [ ] La persona atendida
 - [ ] Su representante legal: [nombre], parentesco: [parentesco]
 
-**Autorizo a la institución y a Vela a:**
+**Autorizo a la institución y a Enlaza a:**
 
 | Tipo (`type`) | Qué autorizo | Sí | No |
 |---|---|---|---|

@@ -9,7 +9,7 @@ import { EChart, esc } from "../charts/EChart";
 import { axisCommon, baseOption, chart } from "../charts/theme";
 import { AppShell } from "../components/AppShell";
 import { ChartCard } from "../components/ChartCard";
-import { Button, Card, inputClass, Notice } from "../components/ui";
+import { Button, Card, Notice, PageHeader, inputClass } from "../components/ui";
 import { es } from "../i18n/es";
 
 const t = es.business;
@@ -31,7 +31,7 @@ function Src({ row }: { row?: Row }) {
 
 function Kpi({ label, value, src }: { label: string; value: ReactNode; src: ReactNode }) {
   return (
-    <div className="rounded-card border border-navy/20 bg-white p-4">
+    <div className="rounded-card border border-navy/10 bg-white shadow-[var(--shadow-card)] p-4">
       <p className="text-muted">{label}</p>
       <p className="figure text-3xl">{value}</p>
       <p className="mt-1">{src}</p>
@@ -87,8 +87,9 @@ export function BusinessPage() {
 
   return (
     <AppShell>
-      <h1 className="text-navy">{es.screens["/negocio"]}</h1>
-      <p className="mt-1 max-w-4xl">{t.intro}</p>
+      <PageHeader title={es.pageTitles["/negocio"]}>
+        <p className="max-w-4xl">{t.intro}</p>
+      </PageHeader>
       <p className="mt-1 text-muted">{t.nominal}</p>
 
       <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-5" aria-live="polite">
@@ -332,7 +333,7 @@ function Investment({ m }: { m: any }) {
 function WhatIf({ m }: { m: any }) {
   const w = m.what_if;
   const row = (label: string, value: number | null, now: number, fmt: (x: number) => string) => (
-    <li className="rounded-card border border-navy/20 bg-white p-4">
+    <li className="rounded-card border border-navy/10 bg-white shadow-[var(--shadow-card)] p-4">
       <p className="text-muted">{label}</p>
       <p className="figure text-2xl">{value == null ? t.whatIfNone : fmt(value)}</p>
       <p className="text-sm">{fill(t.whatIfNow, { v: fmt(now) })}</p>

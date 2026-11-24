@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { api } from "../api/client";
 import { useAuth } from "../auth/AuthContext";
 import { AppShell } from "../components/AppShell";
-import { inputClass, Notice } from "../components/ui";
+import { Notice, PageHeader, inputClass } from "../components/ui";
 import { DateField } from "../components/DateField";
 import { es } from "../i18n/es";
 import { OperationView } from "./panorama/OperationView";
@@ -37,12 +37,13 @@ export function PanoramaPage() {
 
   return (
     <AppShell>
-      <h1 className="text-navy">{es.screens["/panorama"]}</h1>
-      <p className="mt-1 max-w-4xl text-muted">{t.laborNote}</p>
+      <PageHeader title={es.pageTitles["/panorama"]}>
+        <p className="max-w-4xl">{t.laborNote}</p>
+      </PageHeader>
       <div role="tablist" aria-label={es.screens["/panorama"]} className="mt-3 flex gap-2">
         {(["operation", "panorama"] as const).map((k) => (
           <button key={k} role="tab" aria-selected={tab === k} onClick={() => setTab(k)}
-            className={`min-h-12 rounded-card px-4 font-bold ${tab === k ? "bg-navy text-white" : "border-2 border-navy bg-white text-navy"}`}>
+            className={`min-h-12 rounded-full px-5 font-bold ${tab === k ? "bg-navy text-white" : "border-2 border-navy bg-white text-navy"}`}>
             {t.tabs[k]}
           </button>
         ))}

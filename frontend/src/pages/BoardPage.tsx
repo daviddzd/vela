@@ -65,8 +65,10 @@ export function BoardPage() {
         ))}
       </ul>
 
-      <div className="items-start mt-4 grid gap-4 lg:grid-cols-3">
-        <Card className="lg:col-span-2">
+      {/* two independent columns: no gaps when the queue is long and the alerts short (or the other way) */}
+      <div className="mt-4 grid items-start gap-4 lg:grid-cols-3">
+        <div className="space-y-4 lg:col-span-2">
+        <Card>
           <h2>{es.board.queueTitle}</h2>
           {board && board.queue.length === 0 && <AllClear board={board} />}
           <ol className="mt-2 divide-y divide-navy/10">
@@ -92,6 +94,26 @@ export function BoardPage() {
           </ol>
         </Card>
         <Card>
+          <h2>{es.board.mapTitle}</h2>
+          <div className="mt-2">
+            <Suspense fallback={<p>{es.common.loading}</p>}>
+              <VisitsMap visits={board?.visits ?? []} staff={board?.staff ?? []} />
+            </Suspense>
+          </div>
+          {board && board.visits.length === 0 && <p className="mt-2">{es.board.visitsEmpty}</p>}
+          <ul className="mt-3 max-h-60 divide-y divide-navy/10 overflow-y-auto">
+            {board?.visits.map((v) => (
+              <li key={v.request_id} className="flex flex-wrap items-center justify-between gap-2 py-1">
+                <span>{formatWhen(v.scheduled_for, board ? new Date(board.now) : undefined)} · <Link to={`/pacientes/${v.patient_id}`} className="underline decoration-navy/40 hover:text-navy">{v.patient_name}</Link> · {v.caregiver_name ?? es.family.pendingCaregiver}{v.relay_caregiver_name && ` (${relayText(v.relay_caregiver_name, v.relay_at)})`}</span>
+                <StatusBadge status={v.status} />
+              </li>
+            ))}
+          </ul>
+          <p className="mt-2 text-muted">{es.board.syntheticNote}</p>
+        </Card>
+        </div>
+        <div className="space-y-4">
+        <Card>
           <h2>{es.board.alertsTitle}</h2>
           {board && board.alerts.length === 0 && <p className="mt-2">{es.board.alertsEmpty}</p>}
           <ul className="mt-2 space-y-2">
@@ -116,27 +138,6 @@ export function BoardPage() {
                   </li>)}
           </ul>
         </Card>
-      </div>
-
-      <div className="items-start mt-4 grid gap-4 lg:grid-cols-3">
-        <Card className="lg:col-span-2">
-          <h2>{es.board.mapTitle}</h2>
-          <div className="mt-2">
-            <Suspense fallback={<p>{es.common.loading}</p>}>
-              <VisitsMap visits={board?.visits ?? []} staff={board?.staff ?? []} />
-            </Suspense>
-          </div>
-          {board && board.visits.length === 0 && <p className="mt-2">{es.board.visitsEmpty}</p>}
-          <ul className="mt-3 max-h-60 divide-y divide-navy/10 overflow-y-auto">
-            {board?.visits.map((v) => (
-              <li key={v.request_id} className="flex flex-wrap items-center justify-between gap-2 py-1">
-                <span>{formatWhen(v.scheduled_for, board ? new Date(board.now) : undefined)} · <Link to={`/pacientes/${v.patient_id}`} className="underline decoration-navy/40 hover:text-navy">{v.patient_name}</Link> · {v.caregiver_name ?? es.family.pendingCaregiver}{v.relay_caregiver_name && ` (${relayText(v.relay_caregiver_name, v.relay_at)})`}</span>
-                <StatusBadge status={v.status} />
-              </li>
-            ))}
-          </ul>
-          <p className="mt-2 text-muted">{es.board.syntheticNote}</p>
-        </Card>
         <Card>
           <h2>{es.board.newRequest}</h2>
           <div className="mt-3 space-y-3">
@@ -144,6 +145,7 @@ export function BoardPage() {
             {created && <RequestResult r={created} />}
           </div>
         </Card>
+        </div>
       </div>
     </AppShell>
   );

@@ -44,7 +44,7 @@ const chartHeights = (page) => page.evaluate(() => [...document.querySelectorAll
   const { ctx, page } = await session("fam-0001");
   await page.goto(`${BASE}/familia`); await page.waitForTimeout(1500);
   const sent = posts(page, "/api/requests");
-  const date = page.getByLabel("Fecha y hora");
+  const date = page.getByPlaceholder("dd/mm/aaaa").first();   // the request form's date (label "Fecha")
   await date.click(); await page.keyboard.type("25/12/2026");
   check("escribir sobre una fecha la reemplaza", (await date.inputValue()) === "25/12/2026", await date.inputValue());
   await date.fill("31/02/2026"); await page.getByRole("button", { name: "Solicitar servicio" }).click(); await page.waitForTimeout(800);

@@ -18,7 +18,7 @@
 | Aislamiento | Seguridad a nivel de fila por institución, falla cerrada |
 | Trazabilidad | `audit_log` de lecturas, cambios, aprobaciones e intentos bloqueados |
 | Derechos ARCO | Pantalla `/privacidad` con instrucciones y formulario de solicitud |
-| IA responsable | ORACLE-Voz no diagnostica; las decisiones de asignación alta y contingencia las aprueba una persona. Única excepción: una solicitud alta **urgente** sin respuesta en 3 min se aplica "por tiempo", con aviso a coordinación, registro en bitácora y posibilidad de cambiarla (ver riesgo 3) |
+| IA responsable | Enlaza Voz no diagnostica; las decisiones de asignación alta y contingencia las aprueba una persona. Única excepción: una solicitud alta **urgente** sin respuesta en 3 min se aplica "por tiempo", con aviso a coordinación, registro en bitácora y posibilidad de cambiarla (ver riesgo 3) |
 | Datos sintéticos | Ningún dato real; las grabaciones de prueba son propias con consentimiento o de licencia abierta |
 
 Plantillas en `docs/legal/aviso_de_privacidad.md` y `docs/legal/formato_consentimiento.md`.

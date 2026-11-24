@@ -60,7 +60,7 @@ export function RequestForm({ coordinator = false, onCreated, patient }:
         options={services.map((s) => ({ value: s.service_id, title: s.name, detail: duration(s.duration_min) }))} />
       <fieldset className="flex flex-wrap items-start gap-3">
         <legend className="sr-only">{es.family.when}</legend>
-        <DateField label={es.family.when} value={day} onChange={setDay} required error={past ? es.family.pastDate : undefined} />
+        <DateField label={es.family.date} value={day} onChange={setDay} required error={past ? es.family.pastDate : undefined} />
         <label className="block"><span className="font-bold">{es.dates.time}</span>
           <select value={time} onChange={(e) => setTime(e.target.value)} className={`${inputClass} w-32`}>
             {TIMES.map((t) => <option key={t} value={t}>{t}</option>)}

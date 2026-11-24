@@ -11,7 +11,7 @@ import { AppShell } from "../components/AppShell";
 import { ChartCard } from "../components/ChartCard";
 import { AlertTriangle, CheckCircle2, Icon } from "../components/icons";
 import { XCircle } from "lucide-react";
-import { Button, Card, Notice } from "../components/ui";
+import { Button, Card, Notice, PageHeader } from "../components/ui";
 import { es } from "../i18n/es";
 import { ciRows, conclusion, fill, fmt, HUMAN, pick, POLICIES, SCENARIOS, VELA, VELA_TIMEOUT, type Results } from "./simulation/data";
 
@@ -22,7 +22,7 @@ const source = <>{t.source} <a href={MODEL_DOC_URL} target="_blank" rel="norefer
 const MAIN = ["high_wait_p90_min", "crisis_under_60_pct", "crisis_response_p90_min", "unattended_pct", "high_wait_mean_min",
   "crisis_response_mean_min", "travel_km", "utilization_pct", "overtime_hours"];
 const COMPARED = [VELA_TIMEOUT, VELA];
-const selectClass = "mt-1 block min-h-12 w-full rounded-card border-2 border-muted/60 bg-white px-3";
+const selectClass = "mt-1 block min-h-12 w-full rounded-field border-2 border-muted/60 bg-white px-3";
 const fmtP = (p: number | null | undefined) => (p == null ? "—" : p < 0.001 ? "p < 0.001" : `p = ${p.toFixed(3)}`);
 
 /** A table on wide screens; one card per row (label + value pairs) on a phone. */
@@ -37,7 +37,7 @@ function ResponsiveTable({ head, rows }: { head: string[]; rows: { key: string; 
     </div>
     <ul className="space-y-3 md:hidden">
       {rows.map((r) => (
-        <li key={r.key} className="rounded-card border border-navy/20 p-3">
+        <li key={r.key} className="rounded-field border border-navy/15 p-3">
           <p className="font-bold">{r.cells[0]}</p>
           <dl className="mt-1 space-y-1">{r.cells.slice(1).map((c, i) => (
             <div key={i}><dt className="text-sm text-muted">{head[i + 1]}</dt><dd>{c}</dd></div>))}</dl>
@@ -76,7 +76,7 @@ export function SimulationPage() {
   useEffect(() => { api.simulation().then((x) => setR(x as Results)).catch(() => setR({ available: false } as Results)); }, []);
 
   if (!r) return <AppShell><p>{es.common.loading}</p></AppShell>;
-  if (!r.available) return <AppShell><h1 className="text-navy">{es.screens["/simulacion"]}</h1><Notice>{t.notRun}</Notice></AppShell>;
+  if (!r.available) return <AppShell><PageHeader title={es.pageTitles["/simulacion"]} /><Notice>{t.notRun}</Notice></AppShell>;
 
   const meta = t.metrics[metric];
   const v = r.validation[0];
@@ -88,12 +88,11 @@ export function SimulationPage() {
 
   return (
     <AppShell bare={present}>
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <h1 className="text-navy">{es.screens["/simulacion"]}</h1>
-        <Button icon={present ? X : Presentation} variant={present ? "secondary" : "primary"} onClick={() => setPresent(!present)}
-          aria-pressed={present}>{present ? t.presentOff : t.presentOn}</Button>
-      </div>
-      {!present && <p className="mt-1 text-muted">{t.presentHint}</p>}
+      <PageHeader title={es.pageTitles["/simulacion"]}
+        actions={<Button icon={present ? X : Presentation} variant={present ? "secondary" : "primary"} onClick={() => setPresent(!present)}
+          aria-pressed={present}>{present ? t.presentOff : t.presentOn}</Button>}>
+        {!present && <p>{t.presentHint}</p>}
+      </PageHeader>
       <p className="mt-1 max-w-4xl">{t.intro}</p>
       <p className="mt-1 max-w-4xl text-muted">{t.laborNote}</p>
       <p className="mt-1 text-muted">{fill(t.runInfo, { reps: String(r.info.replications), seed: String(r.info.seed),

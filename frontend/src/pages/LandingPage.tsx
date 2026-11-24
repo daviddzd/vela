@@ -92,13 +92,18 @@ export function LandingPage() {
         <section id="plans" aria-labelledby="plans-title" className="scroll-mt-20">
           <div className="mx-auto max-w-[66rem] px-4 py-16">
             <h2 id="plans-title" className="text-3xl"><Highlight text={t.plansTitle} /></h2>
-            <ul className="mt-8 grid items-start gap-5 sm:grid-cols-2 lg:grid-cols-4">{t.plans.map((p) => (
+            <ul className="mt-8 grid items-start gap-5 sm:grid-cols-3">{t.plans.map((p) => (
               <li key={p.name} className={`rounded-card bg-white p-6 shadow-[var(--shadow-card)] ${p.featured ? "border-2 border-navy" : "border border-navy/10"}`}>
                 <h3 className="text-xl">{p.name}</h3>
                 {p.featured && <p className="mt-1 text-sm font-bold text-teal-text">{t.featured}</p>}
                 <p className="mt-3 figure text-4xl text-navy">{p.price}</p><p className="text-muted">MXN {t.perMonth}</p>
                 <p className="mt-2">{p.detail}</p>
               </li>))}</ul>
+            <div className="mt-5 flex flex-wrap items-center gap-x-6 gap-y-2 rounded-card border border-dashed border-navy/30 bg-sky-soft p-5">
+              <h3 className="text-lg">{t.gov.name}</h3>
+              <p><span className="figure text-2xl text-navy">{t.gov.price}</span> <span className="text-muted">MXN {t.perMonth}</span></p>
+              <p className="min-w-0 flex-1">{t.gov.detail}</p>
+            </div>
             <p className="mt-4 text-muted">{t.plansNote}</p>
           </div>
         </section>

@@ -10,7 +10,7 @@
 | 5 | mar 25 nov | Panorama-AM: tableros y mapa |
 | 6 | mié 26 nov | SIRAG-D: modelo, 30 réplicas, página de resultados |
 | 7 | jue 27 nov | Contingencia en vivo: detección → propuesta → aprobación; panel `/demo` |
-| 8 | vie 28 nov | ORACLE-Voz: Whisper, reglas, clasificador, reporte con Ollama, pantalla 911; evaluación |
+| 8 | vie 28 nov | Enlaza Voz: Whisper, reglas, clasificador, reporte con Ollama, pantalla 911; evaluación |
 | 9 | sáb 29 nov | Negocio, privacidad, consentimientos; pulir accesibilidad y textos |
 | 10 | dom 30 nov | Ensayo completo ×3 con cronómetro; arreglar fallas; respaldo en video |
 | 11 | lun 1 dic | Encender todo 1 h antes, abrir túnel, QR con el enlace, defensa |
@@ -20,10 +20,10 @@ Regla: si un día se atrasa, se recorta **detalle visual**, no funciones; las fu
 ## Guion de la demo (10 min)
 | Min | Quién | Qué se muestra |
 |---|---|---|
-| 0–1 | Emprendimiento | Problema y Vela en una frase; el público abre el enlace del QR |
+| 0–1 | Emprendimiento | Problema y Enlaza en una frase; el público abre el enlace del QR |
 | 1–3 | SIE | Familiar pide servicio → asignación automática → coordinación aprueba una de prioridad alta → aparece en el tablero en vivo |
 | 3–5 | Visualización | Panorama-AM: mapa de riesgo, aire, tráfico |
-| 5–7 | Simulación | Panel `/demo`: contingencia en el oriente → el sistema propone → coordinación aprueba; resultados de SIRAG-D (política de Vela vs. despacho humano) |
+| 5–7 | Simulación | Panel `/demo`: contingencia en el oriente → el sistema propone → coordinación aprueba; resultados de SIRAG-D (política de Enlaza vs. despacho humano) |
 | 7–9 | Cómputo Cognitivo | Nota de voz rutinaria → reporte para el médico; frase de emergencia → pantalla 911 |
 | 9–10 | Práctica Profesional + Emprendimiento | Consentimiento y bitácora; punto de equilibrio y cierre |
 

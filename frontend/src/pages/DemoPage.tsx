@@ -5,7 +5,7 @@ import { useCallback, useEffect, useState } from "react";
 import { api } from "../api/client";
 import { AppShell } from "../components/AppShell";
 import { CheckCircle2, Icon } from "../components/icons";
-import { Button, Card, ChoiceList, Notice } from "../components/ui";
+import { Button, Card, ChoiceList, Notice, PageHeader } from "../components/ui";
 import { es } from "../i18n/es";
 
 const t = es.demo;
@@ -32,8 +32,9 @@ export function DemoPage() {
 
   return (
     <AppShell>
-      <h1 className="text-navy">{es.screens["/demo"]}</h1>
-      <p className="mt-1 max-w-4xl">{t.intro}</p>
+      <PageHeader title={es.pageTitles["/demo"]}>
+        <p className="max-w-4xl">{t.intro}</p>
+      </PageHeader>
       {msg && <div className="mt-3"><Notice kind="ok">{msg}</Notice></div>}
       <div className="items-start mt-4 grid gap-4 xl:grid-cols-2">
         <Card>
@@ -64,7 +65,7 @@ export function DemoPage() {
               <p className="text-muted">{t.caregiverHelp}</p>
               <ul className="mt-2 space-y-2">
                 {s?.staff.filter((c) => c.institution_id === inst).slice(0, 5).map((c) => (
-                  <li key={c.caregiver_id} className="flex flex-wrap items-center justify-between gap-2 rounded-card border border-navy/20 p-2">
+                  <li key={c.caregiver_id} className="flex flex-wrap items-center justify-between gap-2 rounded-field border border-navy/20 p-2">
                     <span>{c.name} · {t.pendingVisits.replace("{n}", String(c.pending))}{c.on_shift ? ` · ${t.onShift.replace("{n}", "").trim()}` : ""}</span>
                     {c.unavailable ? <span className="font-bold text-warn"><Icon as={UserX} /> {t.unavailable}</span>
                       : <Button variant="secondary" icon={UserX} disabled={busy} onClick={() => run(() => api.demoCaregiverOut(c.caregiver_id))}>{t.caregiverOut}</Button>}

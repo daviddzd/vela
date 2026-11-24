@@ -1,4 +1,4 @@
-# Especificación técnica · Vela · cuidado coordinado
+# Especificación técnica · Enlaza · cuidado coordinado
 
 Versión 2.0 · 20 nov 2026 · Reemplaza el documento de especificación anterior (identificadores en español).
 
@@ -8,7 +8,7 @@ Versión 2.0 · 20 nov 2026 · Reemplaza el documento de especificación anterio
 | 02 | [Arquitectura e infraestructura](02_arquitectura.md) | SIE |
 | 03 | [Base de datos](03_base_de_datos.md) | SIE |
 | 04 | [Roles, flujos y pantallas](04_roles_y_pantallas.md) | SIE + Visualización |
-| 05 | [ORACLE-Voz](05_oracle_voz.md) | Cómputo Cognitivo |
+| 05 | [Enlaza Voz](05_oracle_voz.md) | Cómputo Cognitivo |
 | 06 | [SIRAG-D y contingencia](06_sirag_d_y_contingencia.md) | Modelado y Simulación |
 | 07 | [Panorama-AM](07_panorama_am.md) | Visualización |
 | 08 | [Modelo de negocio](08_negocio.md) | Emprendimiento |

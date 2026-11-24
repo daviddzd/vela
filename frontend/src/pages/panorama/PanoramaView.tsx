@@ -123,7 +123,7 @@ export function PanoramaView({ filters }: { filters: Filters }) {
     yAxis: { ...axisCommon, type: "value", min: 0, max: Math.ceil((limit * 1.1) / 20) * 20 },
     series: [{ type: "line", showSymbol: false, lineStyle: { width: 2 }, data: air.series.map((p) => [p.t, p[key]]),
       // period of an ACTIVE demo scenario, labelled so nobody confuses it with real readings
-      markArea: scenarioSpan(air.series) ? { silent: true, itemStyle: { color: "rgba(183,121,31,0.12)" },
+      markArea: scenarioSpan(air.series) ? { silent: true, itemStyle: { color: "rgba(138,90,0,0.12)" },
         label: { show: true, position: "insideTop", color: chart.ink, fontFamily: chart.font, formatter: t.demoScenario },
         data: [[{ xAxis: scenarioSpan(air.series)![0] }, { xAxis: scenarioSpan(air.series)![1] }]] } : undefined,
       markLine: { silent: true, symbol: "none", lineStyle: { color: chart.threshold, width: 2, type: "solid" },

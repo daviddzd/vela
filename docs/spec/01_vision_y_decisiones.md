@@ -6,11 +6,11 @@ En la CDMX viven cerca de 1.49 millones de personas de 60 años o más. Las inst
 WhatsApp y hojas de cálculo: se pierden solicitudes, no se sabe quién está disponible y no hay datos para decidir.
 
 ## Propuesta
-**Vela** es una plataforma SaaS: cada institución contrata un plan mensual y obtiene en una sola web
+**Enlaza** es una plataforma SaaS: cada institución contrata un plan mensual y obtiene en una sola web
 la operación diaria, tableros, simulación de escenarios y un asistente de voz.
 
 ## Identidad (provisional; se puede cambiar)
-- Nombre: **Vela · cuidado coordinado** (empresa ficticia "Vela Cuidado Coordinado").
+- Nombre: **Enlaza · cuidado coordinado** (empresa ficticia "Enlaza Cuidado Coordinado").
 - Idea: una vela acompaña y alumbra; el sistema "hace visible" lo que pasa con cada persona.
 - Detalles visuales en [`docs/brand.md`](../brand.md).
 

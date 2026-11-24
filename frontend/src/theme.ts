@@ -13,7 +13,7 @@ export const theme = {
     warn: "#8A5A00",
     danger: "#B42318",
   },
-  fontFamily: '"Atkinson Hyperlegible", Arial, sans-serif',
+  fontFamily: '"Enlaza Digits", "Atkinson Hyperlegible", Arial, sans-serif',
   displayFamily: '"Plus Jakarta Sans", "Atkinson Hyperlegible", Arial, sans-serif',
   baseFontPx: 18,
   simpleModeFontPx: 24,

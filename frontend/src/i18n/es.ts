@@ -9,7 +9,19 @@ export const es = {
   pageTitles: {
     board: "Tablero *en vivo*",
     family: "Mi familiar: *{name}*",
-  },
+    "/aprobaciones": "Aprobaciones *pendientes*",
+    "/pacientes": "Pacientes *a cargo*",
+    "/personal": "Personal *y turnos*",
+    "/mis-visitas": "Mis visitas *de hoy*",
+    "/voz": "Asistente *de voz*",
+    "/reportes-voz": "Reportes *de voz*",
+    "/panorama": "Panorama-*AM*",
+    "/simulacion": "Simulación *SIRAG-D*",
+    "/contingencia": "Contingencia *ambiental*",
+    "/negocio": "Modelo *de negocio*",
+    "/privacidad": "Privacidad *y datos*",
+    "/demo": "Panel *de demostración*",
+  } as Record<string, string>,
   // Public presentation page "/" (pages/LandingPage.tsx). Every figure has its source (CLAUDE.md rule 11).
   landing: {
     nav: { how: "Cómo funciona", modules: "Módulos", plans: "Planes", privacy: "Privacidad" } as Record<string, string>,
@@ -43,7 +55,7 @@ export const es = {
       { key: "operation", title: "Operación", text: "Solicitudes, asignación automática, aprobaciones, agenda del personal y tablero en vivo." },
       { key: "panorama", title: "Panorama", text: "Gráficas de puntualidad, carga del personal, población, enfermedades, aire y tráfico de la ciudad." },
       { key: "sirag", title: "SIRAG-D", text: "Simulación de una semana de operación para comparar políticas de asignación antes de cambiarlas." },
-      { key: "voice", title: "ORACLE-Voz", text: "Asistente de voz para familias y cuidadores: detecta posibles emergencias y prepara un reporte para el médico." },
+      { key: "voice", title: "Enlaza Voz", text: "Asistente de voz para familias y cuidadores: detecta posibles emergencias y prepara un reporte para el médico." },
       { key: "contingency", title: "Contingencia", text: "Detecta la contingencia ambiental y propone ajustes de visitas para los pacientes más sensibles." },
     ],
     plansTitle: "Planes por *institución*",
@@ -53,8 +65,9 @@ export const es = {
       { name: "Básico", price: "$2,500", detail: "hasta 50 pacientes" },
       { name: "Profesional", price: "$6,000", detail: "hasta 150 pacientes", featured: true },
       { name: "Institucional", price: "$12,000", detail: "más de 150 pacientes o varias sedes" },
-      { name: "Gobierno", price: "$4,000", detail: "por centro de día público (DIF o alcaldía)" },
     ],
+    // not part of the ascending sequence: a public day centre pays per centre (business model, plan Gobierno)
+    gov: { name: "Gobierno", price: "$4,000", detail: "por centro de día público (DIF o alcaldía), precio aparte de la secuencia por tamaño" },
     featured: "45 % de las instituciones en el modelo (supuesto)",
     privacyTitle: "Privacidad y *ética*",
     privacy: [
@@ -73,7 +86,8 @@ export const es = {
   login: {
     title: "Inicia *sesión*",
     subtitle: "Coordinación del cuidado de personas mayores",
-    back: "Volver al inicio",
+    back: "Inicio",
+    backLabel: "Volver a la página de inicio",
     panelTitle: "Cada visita, con la persona adecuada y a tiempo.",
     panelPoints: ["Asignación según turno, tráfico y riesgo", "La familia ve quién llega", "Alertas cuando algo no va bien"],
     email: "Correo electrónico",
@@ -215,7 +229,7 @@ export const es = {
     with: "relevo: {name} a las {time}",
   },
   family: {
-    voiceAssistant: "Asistente de voz: contar cómo está",
+    voiceAssistant: "Contar cómo está (voz)",
     nextVisit: "Próxima visita",
     upcomingTitle: "Próximas visitas",
     headerNote: "Sus visitas de la semana, quién llega y cómo pedir un servicio.",
@@ -229,6 +243,7 @@ export const es = {
     requestTitle: "Solicitar servicio",
     service: "Servicio",
     when: "Fecha y hora",
+    date: "Fecha",
     pastDate: "Esa fecha y hora ya pasaron: elige una futura.",
     submit: "Solicitar servicio",
     sent: "Solicitud enviada.",

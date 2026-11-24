@@ -170,7 +170,7 @@ users = pd.DataFrame({
     "user_id": usr.usuario_id, "role": usr.rol.map(ROLE), "institution_id": usr.institucion_id.replace("", None),
     "caregiver_id": [r.referencia_id if r.referencia_id.startswith("CUI") else None for r in usr.itertuples()],
     "family_member_id": [r.referencia_id if r.referencia_id.startswith("FAM") else None for r in usr.itertuples()],
-    "display_name": usr.nombre.str.replace("Dueño Cuidado Inteligente MX", "Dirección Vela", regex=False),
+    "display_name": usr.nombre.str.replace("Dueño Cuidado Inteligente MX", "Dirección Enlaza", regex=False),
     "email": usr.correo.str.replace("dueno@", "owner@", regex=False),
 })
 if USERS_WITH_HASH:

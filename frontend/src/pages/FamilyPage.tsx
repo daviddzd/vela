@@ -48,6 +48,7 @@ export function FamilyPage() {
         {data?.notices.map((n) => (
           <div key={n.created_at} className="lg:col-span-2"><Notice kind="info">{n.message}</Notice></div>))}
 
+        <div className="space-y-4">
         <Card>
           <h2 className="flex items-center gap-3"><IconCircle icon={CalendarClock} /> {es.family.upcomingTitle}</h2>
           <p className="text-sm text-muted">{es.family.upcomingNote}</p>
@@ -72,6 +73,20 @@ export function FamilyPage() {
           ))}
         </Card>
 
+        {data && data.last_visits.length > 0 && (
+          <Card>
+            <h2 className="flex items-center gap-3"><IconCircle icon={History} /> {es.family.lastVisits}</h2>
+            <ul className="mt-2 divide-y divide-navy/10">
+              {data.last_visits.map((r) => (
+                <li key={r.request_id} className="flex flex-wrap items-center justify-between gap-2 py-2">
+                  <span>{formatDateTime(r.scheduled_for)} · {r.service_name}</span>
+                  <StatusBadge status={r.status} />
+                </li>
+              ))}
+            </ul>
+          </Card>
+        )}
+        </div>
         <Card>
           <h2 className="flex items-center gap-3"><IconCircle icon={Plus} /> {es.family.requestTitle}</h2>
           <div className="mt-3 space-y-3">
@@ -84,19 +99,6 @@ export function FamilyPage() {
           </div>
         </Card>
 
-        {data && data.last_visits.length > 0 && (
-          <Card className="lg:col-span-2">
-            <h2 className="flex items-center gap-3"><IconCircle icon={History} /> {es.family.lastVisits}</h2>
-            <ul className="mt-2 divide-y divide-navy/10">
-              {data.last_visits.map((r) => (
-                <li key={r.request_id} className="flex flex-wrap items-center justify-between gap-2 py-2">
-                  <span>{formatDateTime(r.scheduled_for)} · {r.service_name}</span>
-                  <StatusBadge status={r.status} />
-                </li>
-              ))}
-            </ul>
-          </Card>
-        )}
       </div>
     </AppShell>
   );
