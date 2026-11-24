@@ -66,3 +66,28 @@ caso_pac0112:
   descripcion: "Probabilidad de «emergencia» que dio el clasificador v1 a «el paciente comió bien y está tranquilo»"
   fecha: "23 nov 2026"
   documento: "docs/spec/05_oracle_voz.md"
+pruebas_pr8:
+  valor: "132"
+  descripcion: "Pruebas del backend al fusionar el negocio y la privacidad"
+  fecha: "22 nov 2026"
+  documento: "docs/dev/decisiones_paso_8.md («Pruebas en otra base de datos»)"
+pruebas_pr13:
+  valor: "164"
+  descripcion: "Pruebas del backend en el PR #13 (revisión visual)"
+  fecha: "23 nov 2026"
+  documento: "descripción del PR #13 en GitHub"
+pruebas_pr15:
+  valor: "172"
+  descripcion: "Pruebas del backend en el PR #15 (voz en dos niveles)"
+  fecha: "23 nov 2026"
+  documento: "descripción del PR #15 en GitHub"
+pruebas_pr16:
+  valor: "175"
+  descripcion: "Pruebas del backend en el PR #16 (diseño)"
+  fecha: "23 nov 2026"
+  documento: "descripción del PR #16 en GitHub"
+graficas_crecian:
+  valor: "262 → 584 px en 10 s"
+  descripcion: "Cuánto crecía sola una gráfica con Windows al 125 % antes de corregirla"
+  fecha: "23 nov 2026"
+  documento: "descripción del PR #14 en GitHub"

@@ -215,7 +215,7 @@ y el QR.
 - **El LLM es lento** en una laptop (decenas de segundos por reporte). Para muchas notas a la vez haría falta una GPU
   dedicada o un servicio en la nube con contrato de privacidad.
 - **WSL2 tiene su propio reloj**, que a veces se atrasa cuando Windows suspende la máquina. Eso causó un error
-  intermitente de sesión que ya se corrigió (Parte IV).
+  intermitente de sesión que ya se corrigió (@ref(cap-bitacora)).
 - **El tiempo de un evento por el túnel se midió a mano una vez**, no de forma continua.
 
 ## Preguntas que te pueden hacer

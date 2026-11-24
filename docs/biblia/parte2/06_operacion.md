@@ -30,7 +30,7 @@ servicio de 12 horas se cubre con dos personas en relevo si una sola no puede.
 |---|---|---|
 | **Asignación automática** con [[despachador]] | Que la coordinadora asigne todo a mano (así era en el Avance 2) | A mano es lento y depende de quién esté de turno. La simulación mostró que el despacho humano espera más. Lo rutinario no necesita a una persona. |
 | **Aprobación humana para prioridad alta** | Automatizar todo | Regla 3 del proyecto y principio de IA responsable: lo delicado lo decide una persona y queda su nombre. |
-| **Límite de tiempo solo para lo urgente** ({{ cfg.auto_apply_after }}, visita en menos de {{ cfg.urgent_within }}) | Esperar siempre a la coordinadora | SIRAG-D mostró que una aprobación lenta empeoraba la respuesta a lo urgente. Lo programado con tiempo sigue esperando a una persona (Parte IV). |
+| **Límite de tiempo solo para lo urgente** ({{ cfg.auto_apply_after }}, visita en menos de {{ cfg.urgent_within }}) | Esperar siempre a la coordinadora | SIRAG-D mostró que una aprobación lenta empeoraba la respuesta a lo urgente. Lo programado con tiempo sigue esperando a una persona (@ref(cap-bitacora)). |
 | **Reserva del candidato** ({{ cfg.hold_minutes }}) | Dejar libre a la persona propuesta | Sin reserva, una solicitud rutinaria podía ganarle la persona a una urgente mientras la coordinadora decidía. |
 | Elegir por **tiempo de viaje con el tráfico de la hora** | Elegir por distancia | En la CDMX 5 km a las 18 h tardan mucho más que a las 11 h. La política de Enlaza usa el perfil de TomTom hora por hora. |
 | **Restricción `EXCLUDE` en la base** | Revisar traslapes solo en el código | Si dos solicitudes se asignan en el mismo instante, el código de las dos ve a la persona libre. La base de datos rechaza la segunda. |
@@ -173,7 +173,7 @@ El worker convierte los planes de cuidado en solicitudes reales (`services/care_
 
 - **«Llegué»** y **«Terminé»** registran `clock_timestamp()` (la hora exacta del servidor) y vuelven a revisar el
   consentimiento de atención a domicilio.
-- Si el reloj retrocede un instante (pasa en WSL2, ver Parte IV), la hora de término nunca queda antes de la de llegada.
+- Si el reloj retrocede un instante (pasa en WSL2, ver @ref(cap-bitacora)), la hora de término nunca queda antes de la de llegada.
 - La familia confirma la visita desde su pantalla.
 - **«No cerrada»**: si una visita sigue «en curso» {{ cfg.not_closed_after }} después de su fin planeado, el worker la
   marca `not_closed`, alerta a coordinación («confirma con la persona si se realizó») y lo registra
@@ -315,4 +315,4 @@ Reasignar conserva la fila anterior como `reassigned` (historial) y crea una nue
     En el Avance 2 la coordinadora asignaba todo y el sistema solo sugería; los duplicados se medían en 24 h y se unían
     sin preguntar. Hoy la asignación es automática con aprobación humana en lo de prioridad alta, los duplicados se
     rechazan con motivo en una ventana de {{ code.duplicate_window_h }} y se agregaron relevos, jornada legal y cobertura.
-    La tabla completa está en la Parte IV.
+    La tabla completa está en @ref(cap-avance2).

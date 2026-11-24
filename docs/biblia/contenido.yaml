@@ -55,7 +55,11 @@ partes:
     titulo: "Parte IV · Historia y decisiones"
     kicker: "Parte IV"
     descripcion: "Qué encontramos, cómo lo descubrimos y qué decidimos, en orden."
-    capitulos: []
+    capitulos:
+      - parte4/20_bitacora.md
+      - parte4/21_avance2.md
+      - parte4/22_como_se_construyo.md
+      - parte4/23_decisiones_descartadas.md
 
   - id: parte-5
     titulo: "Parte V · Operación práctica"

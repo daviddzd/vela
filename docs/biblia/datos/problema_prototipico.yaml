@@ -73,3 +73,15 @@ emp_anios:
   valor: "5 años"
   descripcion: "Horizonte de las proyecciones financieras que pide el plan de negocios formal"
   documento: "PP, «Componentes Clave del Plan de Negocios Formal», p. 15"
+avance2_duplicado:
+  valor: "24 h"
+  descripcion: "Ventana de duplicados que proponía el Avance 2"
+  documento: "Avance 2 (documento del equipo), sección 4 «Mini diccionario de datos» y sección 10"
+avance2_escalar:
+  valor: "60 min"
+  descripcion: "Tiempo en cola tras el cual el Avance 2 proponía escalar"
+  documento: "Avance 2 (documento del equipo), sección 7 «Escenarios»"
+avance2_instituciones:
+  valor: "2"
+  descripcion: "Instituciones ficticias del Avance 2"
+  documento: "Avance 2 (documento del equipo), sección 4 «Separación entre instituciones»"

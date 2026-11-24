@@ -233,7 +233,7 @@ El equipo decidió dos cambios, iguales en la operación y en la simulación:
 Con la plantilla legal (corrida vigente), Enlaza sin límite ya no queda peor, pero el límite de tiempo sigue siendo la
 mejor opción: con aprobación de 5–15 min, la espera p90 de Enlaza (hoy) es {{ sens.approval_delay.5-15.vela_timeout.high_wait_p90_min }}
 contra {{ sens.approval_delay.5-15.human_dispatcher.high_wait_p90_min }} del humano
-({{ senstest.approval_delay.5-15.high_wait_p90_min.vela_timeout.p }}). Lo contamos completo en la Parte IV.
+({{ senstest.approval_delay.5-15.high_wait_p90_min.vela_timeout.p }}). Lo contamos completo en @ref(cap-bitacora).
 
 ![El hallazgo explicado en la propia pantalla de simulación, con las pruebas de la corrida vigente.](capturas/tarjeta_simulacion_02.png)
 

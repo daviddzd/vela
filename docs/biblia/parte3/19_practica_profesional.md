@@ -111,7 +111,7 @@ trabajo.
 
 **En Enlaza.** Gran parte del código se escribió con un asistente de programación (Claude Code), dirigido y revisado por el
 equipo, con reglas escritas (`CLAUDE.md`), un PR por cambio, pruebas y revisiones en el navegador. Las decisiones de producto
-fueron del equipo. La Parte IV («Cómo se construyó») lo explica completo y propone cómo contestarlo.
+fueron del equipo. @ref(cap-construccion) lo explica completo y propone cómo contestarlo.
 
 ### Datos sintéticos como decisión ética
 
@@ -262,7 +262,7 @@ indicadores de los financiadores. Además, el personal de salud desconfía de re
     audios o imágenes sin licencia. Todo está en `docs/creditos.md`. Dejamos de usar «Oracle» por ser marca registrada.
 
 !!! pregunta "9. ¿Ustedes programaron esto?"
-    Respuesta honesta en la Parte IV. En corto: el equipo definió el proyecto, las reglas, las decisiones y revisó cada cambio;
+    Respuesta honesta en @ref(cap-construccion). En corto: el equipo definió el proyecto, las reglas, las decisiones y revisó cada cambio;
     gran parte del código lo escribió un asistente de programación (Claude Code) siguiendo esas reglas, con pruebas y un PR por
     cambio. Podemos explicar y defender cada parte, que es lo que muestra este libro.
 

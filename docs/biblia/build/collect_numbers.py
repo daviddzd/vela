@@ -688,6 +688,21 @@ def history() -> None:
         add(f"hist.{key}", d["valor"], d["descripcion"] + " (histórico)", f"histórico, {d['fecha']} ({d['documento']})")
 
 
+def git_history() -> None:
+    """Commits and merged pull requests on main (out/git_main.txt, written by build_biblia.sh with git log)."""
+    import re
+    f = OUT / "git_main.txt"
+    if not f.exists():
+        return
+    lines = [l for l in f.read_text(encoding="utf-8").splitlines() if l.strip()]
+    prs = [l for l in lines if re.search(r"\(#\d+\)$", l)]
+    add("git.commits_main", len(lines), "Commits en la rama main", "git log main (out/git_main.txt)")
+    add("git.prs_main", len(prs), "Pull requests fusionados en main", "git log main: commits que terminan en (#N)")
+    days = sorted({l[:10] for l in lines})
+    add("git.first_day", days[0], "Primer commit en main", "git log main")
+    add("git.last_day", days[-1], "Último commit en main", "git log main")
+
+
 def course_documents() -> None:
     """Figures quoted from the course documents (docs/biblia/datos/problema_prototipico.yaml)."""
     for key, d in (read_yaml("docs/biblia/datos/problema_prototipico.yaml") or {}).items():
@@ -796,7 +811,7 @@ def code() -> None:
 
 
 def main() -> None:
-    for step in (seed, calibration, generator, config, simulation, simulation_more, voice, voice_breakdown, voice_timings, business, business_model, manual, history, course_documents, repo, code, database):
+    for step in (seed, calibration, generator, config, simulation, simulation_more, voice, voice_breakdown, voice_timings, business, business_model, manual, history, course_documents, git_history, repo, code, database):
         step()
     OUT.mkdir(parents=True, exist_ok=True)
     (OUT / "numeros.json").write_text(json.dumps(NUMBERS, ensure_ascii=False, indent=1, default=str), encoding="utf-8")

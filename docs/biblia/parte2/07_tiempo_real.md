@@ -104,7 +104,7 @@ sequenceDiagram
   zona.
 - Las horas que se **guardan** (llegadas, términos) las pone PostgreSQL con `clock_timestamp()`: nunca el teléfono.
 - El reloj de WSL2 (Linux dentro de Windows) a veces retrocede unos segundos al sincronizarse; por eso la sesión acepta
-  {{ code.clock_leeway }} de diferencia (historia completa en la Parte IV).
+  {{ code.clock_leeway }} de diferencia (historia completa en @ref(cap-bitacora)).
 
 ### Movimiento real para la demostración
 

@@ -126,7 +126,7 @@ flowchart TB
     sin institución leía por la vista **todas** las fichas, aunque la tabla estuviera protegida. Lo encontramos al
     construir la operación, lo reprodujimos y lo corregimos con `security_invoker = true` (la vista aplica la seguridad
     de **quien consulta**) y agregando RLS a `persons`. Hoy, sin institución, `v_patients` devuelve
-    {{ db.rls_vpatients_none }} filas y `v_persons` {{ db.rls_persons_none }}. La historia completa está en la Parte IV.
+    {{ db.rls_vpatients_none }} filas y `v_persons` {{ db.rls_persons_none }}. La historia completa está en @ref(cap-bitacora).
 
 **Tableros sin datos personales.** Panorama-AM necesita a toda la población, pero no nombres. Para eso hay dos
 vistas **agregadas** (`v_district_population`, `v_population_conditions`) que, a propósito, sí corren con permisos del
