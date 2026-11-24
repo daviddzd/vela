@@ -135,3 +135,11 @@ def test_simulation_results_are_served_read_only(client):
     assert all(r["ci_low"] <= r["mean"] <= r["ci_high"] for r in body["summary"] if r["mean"] is not None)
     login(client, "fam-0001@ejemplo.test")
     assert client.get("/api/simulation/results").status_code == 403
+
+
+def test_api_tells_the_minimum_visits_for_a_con_enlaza_rate(client):
+    """Below min_visits_for_rate the screen shows "Datos insuficientes (N visitas)" (team decision 24 Nov 2026)."""
+    login(client, "coordinacion.a@ejemplo.test")
+    data = client.get("/api/panorama/operation").json()
+    assert data["min_visits_for_rate"] == panorama.MIN_VISITS_FOR_RATE == 30
+    assert isinstance(data["periods"]["vela"]["arrived"], int)       # the N the screen shows
