@@ -37,7 +37,7 @@ de cada persona mayor. El nombre viene de ahí.
 
 !!! nota "Un prototipo escolar, con datos inventados pero realistas"
     Enlaza es el proyecto integrador del 6.º semestre de la Licenciatura en Ciencia de Datos para Negocios
-    (UNRC, 2026-2). «Enlaza Cuidado Coordinado» es una **empresa ficticia**. Ninguna persona del sistema existe:
+    (Universidad Nacional Rosario Castellanos, UNRC, 2026-2). «Enlaza Cuidado Coordinado» es una **empresa ficticia**. Ninguna persona del sistema existe:
     todos los datos son [[datos sintéticos]], creados por computadora para que se parezcan, en sus proporciones, a
     lo que dicen el INEGI, la ENSANUT y otras fuentes oficiales (ver @ref(cap-datos)).
 

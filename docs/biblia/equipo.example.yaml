@@ -1,6 +1,7 @@
-# Datos del equipo para La biblia de Enlaza. Llénalo y vuelve a generar el PDF (bash scripts/build_biblia.sh).
+# Plantilla de los datos del equipo para La biblia de Enlaza (sí se sube a Git, vacía).
+# Copia este archivo como equipo.yaml (local, ignorado por Git) y llénalo; build.py usa equipo.yaml si existe.
 # Lo que quede vacío aparece como "____" en la portada, en la Parte III y en el guion de la defensa.
-escuela: "Universidad Rosario Castellanos (UNRC)"
+escuela: "Universidad Nacional Rosario Castellanos (UNRC)"
 carrera: "Licenciatura en Ciencia de Datos para Negocios"
 periodo: "2026-2"
 defensa:

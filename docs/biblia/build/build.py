@@ -44,7 +44,9 @@ def slug(text: str) -> str:
 # Inputs
 # ----------------------------------------------------------------------------------------------------------------
 NUMBERS: dict = json.loads((OUT / "numeros.json").read_text(encoding="utf-8"))
-TEAM: dict = yaml.safe_load((BIBLIA / "equipo.yaml").read_text(encoding="utf-8")) or {}
+# equipo.yaml is local (git-ignored: real names); the empty template equipo.example.yaml is versioned
+_team_file = BIBLIA / "equipo.yaml" if (BIBLIA / "equipo.yaml").exists() else BIBLIA / "equipo.example.yaml"
+TEAM: dict = yaml.safe_load(_team_file.read_text(encoding="utf-8")) or {}
 GLOSSARY: list[dict] = yaml.safe_load((BIBLIA / "glosario.yaml").read_text(encoding="utf-8")) or []
 CONTENT: dict = yaml.safe_load((BIBLIA / "contenido.yaml").read_text(encoding="utf-8"))
 
