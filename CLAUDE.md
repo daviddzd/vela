@@ -1,4 +1,4 @@
-# CLAUDE.md — Vela · cuidado coordinado
+# CLAUDE.md — Enlaza · cuidado coordinado (internal name: vela)
 
 Instructions for Claude Code working in this repository. The full specification is in Spanish in
 `docs/spec/` (read `docs/spec/00_indice.md` first). When this file and a spec disagree, this file wins.

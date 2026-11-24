@@ -65,10 +65,11 @@ export function AppShell({ children, bare = false }: { children: ReactNode; bare
           <nav id="main-menu" aria-label={es.shell.menu} className="border-t border-navy/15 px-4 pb-3 xl:hidden">
             <p className="py-2" title={user.display_name}><span className="block truncate font-bold">{user.display_name}</span>
               <span className="block truncate text-muted">{roleLine}</span></p>
+            {/* same names as the projector menu (es.nav.short) */}
             <ul className="grid gap-1 sm:grid-cols-2">
               {user.screens.map((path) => (
                 <li key={path}><NavLink to={path} className={({ isActive }) => `${link({ isActive })} w-full`}>
-                  {es.screens[path]}</NavLink></li>
+                  {es.nav.short[path] ?? es.screens[path]}</NavLink></li>
               ))}
             </ul>
             <div className="mt-2 border-t border-navy/15 pt-3"><LogoutButton onLogout={onLogout} /></div>

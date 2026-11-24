@@ -60,7 +60,7 @@ export function LandingPage() {
               <li key={s.label} className="border-l-4 border-teal pl-4">
                 <p className="figure text-4xl text-white">{s.value}</p>
                 <p className="mt-1 text-sky">{s.label}</p>
-                <p className="mt-2 text-sm text-sky/90">{es.panorama.sourcePrefix} {s.source}</p>
+                <p className="mt-2 text-sm text-sky">{es.panorama.sourcePrefix} {s.source}</p>
               </li>))}</ul>
           </div>
         </section>

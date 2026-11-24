@@ -18,7 +18,7 @@ const STYLE: Record<string, { symbol: string; color: string }> = {
   closed: { symbol: "rect", color: "#1D7447" }, unattended: { symbol: "pin", color: "#B42318" },
   not_closed: { symbol: "pin", color: "#8A5A00" },
 };
-const BASE = { symbol: "roundRect", color: "#9AA5AB" };
+const BASE = { symbol: "roundRect", color: "#768189" };
 
 export function VisitsMap({ visits, staff }: { visits: MapVisit[]; staff: MapStaff[] }) {
   const points: MapPoint[] = useMemo(() => [
