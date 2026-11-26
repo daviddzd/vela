@@ -612,6 +612,8 @@ export const es = {
     intro: "Graba una nota de voz (hasta 60 segundos) o escribe lo que pasa. El equipo de cuidado la recibe.",
     patient: "¿De quién es la nota?",
     noConsent: "Falta autorización para usar el asistente de voz con esta persona. Pide a la coordinación que la registre. No se grabó nada.",
+    // signed by a representative, but the person did not agree (assent = no): same block as without consent
+    noAssent: "La persona no estuvo de acuerdo con usar el asistente de voz (así quedó registrado en su consentimiento). No se grabó nada. Si eso cambió, habla con la coordinación.",
     record: "Grabar nota de voz",
     stop: "Terminar y enviar",
     recording: "Grabando… {s} s de 60",
@@ -641,6 +643,12 @@ export const es = {
     callMeDone: "Pedimos a la coordinación que te llame. Lengua: {lang}.",
     levelForStaff: "Nivel para el equipo",
     levels: { emergency: "Emergencia", urgent: "Urgente", routine: "Rutina" } as Record<string, string>,
+  },
+  // Classifier confidence: physician inbox and coordination alerts only, never the family (team decision 25 Nov 2026)
+  classifierConfidence: {
+    label: "Confianza del clasificador",
+    note: "Qué tan seguro estaba el modelo de texto de cada nivel. No es la probabilidad de que sea una emergencia real: el nivel final también depende de las reglas y lo confirma una persona.",
+    levels: { emergency: "emergencia", urgent: "urgente", routine: "rutina" } as Record<string, string>,
   },
   reports: {
     empty: "No hay reportes de voz de tus pacientes.",

@@ -3,6 +3,7 @@
 import { lazy, Suspense, useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "react-router";
 import { api, type Board, type BoardAlert } from "../api/client";
+import { classifierText } from "../lib/classifierText";
 import { AppShell } from "../components/AppShell";
 import { RequestForm } from "../components/RequestForm";
 import { RequestResult } from "../components/RequestResult";
@@ -169,6 +170,8 @@ function ReviewAlert({ a, now, onDone }: { a: BoardAlert; now: Date; onDone: () 
     <li className="rounded-field border-4 border-danger bg-danger-soft p-3" role="alert">
       <p className="font-bold text-danger"><Icon as={AlertTriangle} /> {es.board.reviewTitle}</p>
       <p className="mt-1">{a.message}</p>
+      {classifierText(a.classifier_probs) && <p className="mt-1"><strong>{es.classifierConfidence.label}:</strong>{" "}
+        {classifierText(a.classifier_probs)}<br /><span className="text-sm text-muted">{es.classifierConfidence.note}</span></p>}
       <p className="mt-2 text-lg font-bold" aria-live="off">{a.escalated_at || left === 0
         ? es.board.reviewEscalated : es.board.reviewCountdown.replace("{t}", mmss)}</p>
       <div className="mt-2 grid gap-2">

@@ -48,6 +48,10 @@ todos     ──► LLM local (Ollama) genera reporte JSON ──► bandeja del
     niveles, la roja queda en 7 falsas de 36. Quitarle al clasificador todo aviso perdería esas 20 emergencias. Con dos niveles, las 20 siguen viendo el 911 y los signos de peligro, y una
     persona de coordinación confirma cada caso en minutos. Caso que lo motivó: "el paciente comió bien y está
     tranquilo" (nota escrita, PAC-0112) salió como emergencia con P = 0.925 solo por el clasificador v1.
+- **Confianza del clasificador** (decisión del equipo, 25 nov 2026): la bandeja del médico y las alertas de voz de
+  coordinación muestran «Confianza del clasificador: 83 % emergencia · 16 % rutina · 1 % urgente» con una nota de qué
+  significa; **nunca** se muestra a la familia. Sin consentimiento de datos de salud tampoco se muestra al médico.
+- Sin asentimiento («no estuvo de acuerdo») no hay voz, aunque el representante haya firmado (ver `docs/spec/11`).
 - Confianza de transcripción < 0.6 o texto < 3 palabras → `needs_human_review = true` y se pide repetir.
 - Si el asistente falla o tarda, la interfaz siempre muestra el botón "Llamar al 911".
 
