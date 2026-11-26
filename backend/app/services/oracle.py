@@ -30,7 +30,10 @@ MIN_WORDS = 3
 
 
 class NoConsent(Exception):
-    pass
+    """No voice: no valid voice_assistant consent ("no_consent"), or the person did not assent ("no_assent")."""
+    def __init__(self, reason: str = "no_consent"):
+        super().__init__(reason)
+        self.reason = reason
 
 
 class VoiceUnavailable(Exception):
@@ -59,17 +62,30 @@ def classify(text_: str) -> dict | None:
         return None
 
 
+# Why the voice assistant cannot be used for a patient, or NULL if it can. A representative may sign, but if the
+# person did NOT assent (patient_assent = 'no') the voice is blocked like without consent (team decision 25 Nov 2026;
+# docs/legal/formato_consentimiento.md: "No estuvo de acuerdo (en ese caso no se usa el asistente de voz)").
+VOICE_BLOCK_SQL = """
+    SELECT CASE WHEN NOT coalesce(c.is_valid, false) THEN 'no_consent'
+                WHEN c.patient_assent = 'no' THEN 'no_assent' END
+    FROM (SELECT 1) one LEFT JOIN v_consents c ON c.patient_id = :p AND c.type = 'voice_assistant'"""
+
+
+def voice_block_reason(db: Session, patient_id: str) -> str | None:
+    return db.scalar(text(VOICE_BLOCK_SQL), {"p": patient_id})
+
+
 def has_voice_consent(db: Session, patient_id: str) -> bool:
-    return bool(db.scalar(text("SELECT is_valid FROM v_consents WHERE patient_id = :p AND type = 'voice_assistant'"),
-                          {"p": patient_id}))
+    return voice_block_reason(db, patient_id) is None
 
 
 def process(db: Session, *, user_id: str, institution_id: str, patient_id: str, input_mode: str,
             text_: str | None = None, audio: bytes | None = None, filename: str = "nota.webm") -> dict:
-    if not has_voice_consent(db, patient_id):
-        audit(db, user_id=user_id, institution_id=institution_id, action="voice_blocked_no_consent",
+    reason = voice_block_reason(db, patient_id)
+    if reason is not None:
+        audit(db, user_id=user_id, institution_id=institution_id, action=f"voice_blocked_{reason}",
               entity="patient", entity_id=patient_id, allowed=False)
-        raise NoConsent()
+        raise NoConsent(reason)
     timings: dict = {}
     confidence, no_speech = None, None
     if audio is not None:
@@ -114,9 +130,9 @@ def process(db: Session, *, user_id: str, institution_id: str, patient_id: str, 
         reason = ", ".join(cats[h]["label_es"] for h in hits)
         name = db.scalar(text("""SELECT pe.first_name || ' ' || pe.paternal_surname FROM patients pa
                                  JOIN persons pe USING (person_id) WHERE pa.patient_id = :p"""), {"p": patient_id})
-        alert_id = db.scalar(text("""INSERT INTO alerts (institution_id, type, level, patient_id, message)
-                                     VALUES (:i, 'emergency', 'critical', :p, :m) RETURNING alert_id"""),
-                             {"i": institution_id, "p": patient_id,
+        alert_id = db.scalar(text("""INSERT INTO alerts (institution_id, type, level, patient_id, message, code)
+                                     VALUES (:i, 'emergency', 'critical', :p, :m, :c) RETURNING alert_id"""),
+                             {"i": institution_id, "p": patient_id, "c": f"voice-rule:{report_id}",
                               "m": f"Posible emergencia en nota de voz de {name} ({reason}). Se indicó llamar al 911."})
         publish(db, "alert.created", institution_id, alert_id=alert_id, request_id=None)
     support = next((rules().get("support_lines", {})[h] for h in hits if h in rules().get("support_lines", {})), None)
