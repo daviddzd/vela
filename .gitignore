@@ -46,7 +46,7 @@ docs/biblia/capturas/
 # Windows download metadata (copied from Windows into WSL)
 *:Zone.Identifier
 
-# Private team documents (real names): never in Git
+# Private team documents and QR codes (real names, private links): never in Git
 docs/privado/
 docs/biblia/equipo.yaml
 
