@@ -1,0 +1,20 @@
+/* Guion del coloquio (PDF tamaño carta) con la identidad Enlaza (docs/brand.md). */
+@page { size: letter; margin: 18mm 16mm 18mm 16mm; }
+html { font-family: "Atkinson Hyperlegible", Arial, sans-serif; font-size: 11pt; color: #1B2B38; line-height: 1.4; }
+h1, h2, h3, h4 { font-family: "Plus Jakarta Sans", Arial, sans-serif; color: #1B3349; line-height: 1.2; break-after: avoid; }
+h1 { font-size: 22pt; margin: 0 0 8pt; }
+h1::before { content: ""; display: block; width: 46mm; height: 12mm; margin-bottom: 6mm;
+  background: url("logo.svg") no-repeat left center / contain; }
+h2 { font-size: 16pt; margin: 18pt 0 6pt; color: #137273; break-before: auto; }
+h3 { font-size: 13pt; margin: 14pt 0 4pt; padding: 4pt 8pt; background: #EAF4F8; border-radius: 6pt; }
+h4 { font-size: 11.5pt; margin: 10pt 0 3pt; }
+p { margin: 3pt 0 6pt; }
+ul { margin: 2pt 0 6pt; padding-left: 16pt; }
+li { margin: 1.5pt 0; }
+table { border-collapse: collapse; width: 100%; margin: 6pt 0 10pt; font-size: 10pt; break-inside: auto; }
+tr { break-inside: avoid; }
+th { background: #1B3349; color: #fff; text-align: left; padding: 4pt 6pt; font-family: "Plus Jakarta Sans", Arial, sans-serif; }
+td { border-bottom: 1px solid #D5E3EA; padding: 4pt 6pt; vertical-align: top; }
+tr:nth-child(even) td { background: #F4F9FB; }
+code { font-family: "DejaVu Sans Mono", monospace; font-size: 9pt; background: #F4F9FB; padding: 0 2pt; border-radius: 3pt; }
+strong { color: #1B3349; }

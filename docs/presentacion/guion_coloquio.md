@@ -1,0 +1,294 @@
+<!-- GENERADO por docs/presentacion/build/render_guion.py desde guion_fuente.md. No editar aquí: editar guion_fuente.md y correr scripts/build_presentacion.sh. -->
+# Guion del coloquio · Enlaza · cuidado coordinado
+
+
+**Formato:** 10 minutos de exposición y 5 de preguntas del sínodo. **Presentación:** `docs/presentacion/enlaza_coloquio.pptx`
+(y `.pdf`). **Dirección pública:** `https://enlaza.zenthinks.com`.
+
+Lo que pide la rúbrica oficial (Problema Prototípico, «Rúbrica Analítica…», p. 5, exposición oral 20 %): recursos
+visuales profesionales, **demostración del prototipo en tiempo real**, **defender la viabilidad del plan de negocios** y **no
+exceder el tiempo**. Este guion está hecho para eso: la demo ocupa la mitad del tiempo y el negocio cierra la exposición.
+
+Las frases son **sugeridas**: dichas con sus palabras suenan mejor que memorizadas. Lo que sí hay que respetar son los tiempos.
+
+## Reparto del tiempo
+
+| Parte | Diapositivas | Tiempo |
+|---|---|---|
+| Problema y solución | 1, 2, 3 | 1:25 |
+| Demostración en vivo | 4 | 4:50 |
+| Simulación, voz, seguridad y ética | 5, 6, 7 | 1:55 |
+| Negocio, pitch y cierre | 8, 9, 10 | 1:30 |
+| **Total** | | **9:40** (margen: 0:20) |
+
+| Persona | Habla en total |
+|---|---|
+| Persona 1 | 2:20 |
+| Persona 2 | 2:20 |
+| Persona 3 | 2:30 |
+| Persona 4 | 2:30 |
+
+## Minuto a minuto
+
+### Diapositiva 1 · Portada
+
+**Habla:** Persona 1 · **Dura:** 0:20 · **Se ve:** portada con el QR.
+
+**Qué se dice:**
+
+- Buenos días. Somos el equipo de Enlaza, cuidado coordinado.
+- Si quieren seguir la demostración en su celular, el QR abre la aplicación real: enlaza.zenthinks.com.
+- En diez minutos les mostramos el problema, el sistema funcionando en vivo y por qué es un negocio viable.
+
+### Diapositiva 2 · El problema
+
+**Habla:** Persona 1 · **Dura:** 0:35 · **Se ve:** tres cifras grandes y su fuente.
+
+**Qué se dice:**
+
+- En la Ciudad de México viven 1,491,619 personas de 60 años o más, según el Censo 2020; en todo el país, 17.7 millones.
+- Y no llegan sanas: 55.6 % vive con dos o más enfermedades crónicas, según la ENSANUT.
+- Las residencias y los servicios a domicilio que las cuidan coordinan con llamadas, WhatsApp y hojas de cálculo: se pierden solicitudes, lo urgente compite con lo rutinario y no queda registro.
+
+### Diapositiva 3 · La solución
+
+**Habla:** Persona 1 · **Dura:** 0:30 · **Se ve:** la frase y los seis módulos con su materia.
+
+**Qué se dice:**
+
+- Enlaza es una plataforma web por suscripción que asigna sola cada visita, deja lo delicado a una persona y avisa a tiempo de una emergencia.
+- Cada módulo responde a una materia: la operación a SIE, la simulación a Modelado y Simulación, la voz a Cómputo Cognitivo, los tableros a Visualización, el negocio a Emprendimiento y la ética a Práctica Profesional.
+- Pero es una sola aplicación, y se los vamos a enseñar funcionando.
+
+### Diapositiva 4 · Demostración en vivo
+
+**Habla:** Persona 2, Persona 3 y Persona 4 · **Dura:** 4:50 · **Se ve:** la diapositiva de pausa con el QR y el recorrido; después, la pantalla de la laptop.
+
+**Qué se dice:**
+
+- (Persona 2) Ahora en vivo: esto es la aplicación real, corriendo en esta laptop y publicada en enlaza.zenthinks.com. Son cuatro pasos.
+- Paso 1: una familia pide un servicio desde un celular y Enlaza lo asigna sola, sin que nadie toque nada.
+- Paso 2: lo urgente sí lo aprueba una persona, y el tablero se actualiza en vivo.
+- Paso 3: una contingencia ambiental en el oriente; Enlaza la detecta y propone cambios, pero nada cambia sin aprobación.
+- Paso 4: una nota de voz de emergencia abre la pantalla roja del 911 antes que cualquier otra cosa.
+- El paso a paso, con quién opera qué, está en la sección «Demostración en vivo, paso a paso».
+
+#### 1:25–1:35 · Entrada a la demo
+
+**Habla:** Persona 2 · **Dura:** 0:10 · **Se ve:** diapositiva 4 y luego el tablero de coordinación en el proyector.
+
+- Ahora en vivo. En el proyector está el tablero de coordinación de la Clínica Oriente; y en este celular tenemos la cuenta de una familia.
+
+#### 1:35–2:35 · Paso 1 · La familia solicita y se asigna sola
+
+**Habla:** Persona 2 (narra) · **Opera:** Persona 3 en el celular · **Dura:** 1:00 · **Se ve:** el tablero en el proyector.
+
+- Desde el celular, con datos móviles, la familia pide una visita de enfermería para mañana.
+- Fíjense en el tablero: aparece sola, sin recargar, en un par de segundos.
+- Ya tiene a alguien asignado: el despachador eligió a quien tiene la habilidad, está en turno, no está en su día de descanso y llega antes con el tráfico de esa hora.
+- Es prioridad media, así que no necesitó aprobación.
+
+#### 2:35–3:45 · Paso 2 · Coordinación aprueba una urgente
+
+**Habla:** Persona 2 (narra y opera la laptop) · **Dura:** 1:10 · **Se ve:** `/demo` → `/aprobaciones` → `/tablero`.
+
+- (Antes de hablar, en la ventana de Dirección: «Contingencia en el oriente». Tarda hasta un minuto en detectarse; la usamos en el paso 3.)
+- Ahora una solicitud urgente: prioridad alta, visita en menos de 60 min.
+- Lo urgente no se asigna solo: Enlaza propone a la mejor persona y coordinación decide. Aquí está, en Aprobaciones.
+- Apruebo, y en el tablero cambia en vivo.
+- Si coordinación no contesta en 3 min, se aplica con aviso; eso lo decidimos por lo que nos mostró la simulación, se los cuento en un momento.
+
+#### 3:45–5:05 · Paso 3 · Contingencia en el oriente
+
+**Habla:** Persona 3 · **Opera:** Persona 2 · **Dura:** 1:20 · **Se ve:** `/contingencia` → «Aprobar todo» → `/tablero`.
+
+- Hace un minuto simulamos mala calidad del aire en el oriente de la ciudad. El worker la detectó solo.
+- Enlaza propone cambios por institución: adelantar visitas de quienes tienen enfermedad pulmonar o del corazón y reacomodar al personal.
+- Nada cambia sin aprobación: coordinación revisa y aprueba todo.
+- Y el tablero ya muestra los cambios. Esto responde al incidente crítico del Problema Prototípico.
+
+#### 5:05–6:15 · Paso 4 · Nota de voz de emergencia
+
+**Habla:** Persona 4 · **Opera:** Persona 4 en la ventana de la familia · **Dura:** 1:10 · **Se ve:** `/voz` → pantalla roja.
+
+- Ahora la voz. Una familia graba lo que pasa, como mandaría un audio de WhatsApp.
+- (Al micrófono:) «Mi mamá no puede respirar, tiene los labios morados y casi no responde.»
+- Pantalla roja, «Llama al 911 ahora». Sale antes que el modelo de lenguaje, porque la activó una regla.
+- Si solo el clasificador hubiera sospechado, sería un aviso ámbar y coordinación llamaría a la familia.
+- El médico recibe la transcripción y un reporte. El sistema nunca diagnostica.
+
+### Diapositiva 5 · Lo que demostró la simulación
+
+**Habla:** Persona 3 · **Dura:** 0:40 · **Se ve:** la gráfica de espera de lo urgente con sus intervalos.
+
+**Qué se dice:**
+
+- SIRAG-D simula semanas completas con el mismo código de asignación: 450 corridas, 30 réplicas por combinación.
+- Nos dio un hallazgo incómodo: con una coordinación lenta, lo urgente esperaba más que con un despachador humano.
+- Por eso cambiamos el producto: límite de tiempo para lo urgente y reserva del candidato. Hoy la espera p90 es 20.1 minutos contra 23.6 del despacho humano, con p < 0.001.
+- Y lo decimos con honestidad: la mejora viene sobre todo de priorizar por riesgo, no del tráfico.
+
+### Diapositiva 6 · Enlaza Voz
+
+**Habla:** Persona 4 · **Dura:** 0:40 · **Se ve:** los dos niveles y los números del holdout.
+
+**Qué se dice:**
+
+- Lo evaluamos a ciegas con 150 frases que nunca vio: detectó 98.0 % de las emergencias; solo con reglas habría sido 58.0 %.
+- El costo son 26.0 falsas alarmas por cada 100 notas. Por eso hay dos niveles: la pantalla roja cuando hay una regla y un aviso ámbar que revisa coordinación cuando solo sospecha el clasificador.
+- Preferimos una falsa alarma revisada por una persona a una emergencia perdida.
+
+### Diapositiva 7 · Seguridad, privacidad y ética
+
+**Habla:** Persona 1 · **Dura:** 0:35 · **Se ve:** 0 / 150 / 400 y los cuatro compromisos.
+
+**Qué se dice:**
+
+- La seguridad está en la base de datos: sin institución, la API ve 0 pacientes; con la Clínica Oriente, 150; Dirección, 400.
+- Sin consentimiento del tipo correcto, la API bloquea la voz, la visita o los datos de salud, y si la persona dice que no, también.
+- Cumplimos la LFPDPPP con aviso, derechos ARCO y bitácora, y la Ley Federal del Trabajo: el despachador respeta descanso, jornada y relevos.
+
+### Diapositiva 8 · Modelo de negocio y mercado
+
+**Habla:** Persona 4 · **Dura:** 0:40 · **Se ve:** la gráfica del DENUE y el modelo de suscripción.
+
+**Qué se dice:**
+
+- Vendemos una suscripción mensual por tamaño de institución: en promedio $5,500 al mes el primer año.
+- El mercado no lo inventamos: lo contamos en el DENUE. Solo en la Ciudad de México hay 88 residencias privadas, y crecemos a Estado de México, Jalisco y Nuevo León.
+- Cada cliente vale 21.9 : 1 veces lo que cuesta conseguirlo.
+
+### Diapositiva 9 · Pitch: por qué invertir ahora
+
+**Habla:** Persona 3 · **Dura:** 0:30 · **Se ve:** inversión, VPN, TIR y la curva del envejecimiento.
+
+**Qué se dice:**
+
+- Pedimos $1,011,746. En el escenario recomendado el VPN al 25 % es $1,207,425 y la TIR 65.6 %.
+- Somos honestos: el plan base tiene VPN negativo; por eso recomendamos crecer por regiones con un tope de participación.
+- ¿Por qué ahora? En la Ciudad de México las personas de 60 o más pasan de 17.1 % a 21.4 % de la población en 2030, según CONAPO.
+
+### Diapositiva 10 · Cierre
+
+**Habla:** Persona 1 · **Dura:** 0:20 · **Se ve:** logros, limitaciones y siguientes pasos.
+
+**Qué se dice:**
+
+- En resumen: una sola aplicación, en tiempo real, que integra las seis materias y que la simulación ya mejoró.
+- Sus límites: datos sintéticos, falsas alarmas de voz y que falta probarla con una institución real; ese es el siguiente paso.
+- Gracias. Con gusto respondemos sus preguntas.
+
+### Diapositiva 11 · Respaldo (no se presenta)
+
+**Habla:** quien esté narrando · **Dura:** 0:00 · **Se ve:** cuatro capturas de la demo.
+
+**Qué se dice:**
+
+- Solo si falla la demostración en vivo: se narra cada paso sobre su captura, con las mismas frases de la demo.
+
+## Demostración en vivo, paso a paso
+
+**Quién opera qué:** Persona 2 maneja la laptop (proyector) durante toda la demo; Persona 3 tiene el celular de la familia;
+Persona 4 toma el micrófono de la laptop en el paso 4.
+
+| Dispositivo | Cuenta (contraseña `Demo2026!`) | Dirección y pestañas |
+|---|---|---|
+| Laptop · ventana «Coordinación» (Chrome, perfil normal) | `coordinacion.a@ejemplo.test` | `https://enlaza.zenthinks.com`: pestañas `/tablero`, `/aprobaciones`, `/contingencia` |
+| Laptop · ventana «Dirección» (Chrome, otro perfil) | `owner@ejemplo.test` | `https://enlaza.zenthinks.com/demo` |
+| Laptop · ventana «Familia» (Edge) | `fam-0001@ejemplo.test` | `https://enlaza.zenthinks.com/voz`, con el permiso del micrófono ya aceptado |
+| Laptop · ventana «Respaldo» (Edge) | `fam-0002@ejemplo.test` | `http://localhost:8080/familia` (otra dirección, otra sesión: sirve si el celular no tiene señal) |
+| Celular de Persona 3, **con datos móviles** | `fam-0002@ejemplo.test` | `https://enlaza.zenthinks.com/familia` (prioridad media: se asigna sola) |
+
+Cada ventana necesita su propia sesión: una misma ventana del navegador solo guarda una sesión por dirección. Por eso son
+perfiles o navegadores distintos.
+
+| Paso | Qué se hace | Qué se debe ver | Plan B |
+|---|---|---|---|
+| 1. La familia solicita | Celular: «Solicitar servicio», visita de enfermería, mañana a las 11:00 | En el tablero del proyector aparece la solicitud, ya asignada, sin recargar | Sin señal en el celular: Persona 2 lo hace en la ventana «Respaldo». Si el tablero no se mueve: recargar (F5) |
+| 2. Urgente | Ventana Dirección: «Contingencia en el oriente» (para el paso 3) y «Crear solicitud urgente» → Coordinación `/aprobaciones` → «Aprobar» → `/tablero` | La solicitud pasa de Aprobaciones al tablero, en vivo | Si no aparece en Aprobaciones: recargar. Si se pasa de 3 min, sale «aprobada por tiempo»: se explica que esa es la regla |
+| 3. Contingencia | Coordinación `/contingencia` → «Aprobar todo» → `/tablero` | Propuesta por institución; tras aprobar, los cambios en el tablero | Si aún no hay propuesta (el worker revisa cada minuto): seguir con el paso 4 y volver al final; si no llega, diapositiva 11 |
+| 4. Voz | Ventana Familia `/voz`: grabar la frase de emergencia | Pantalla roja «Llama al 911 ahora» | Micrófono falla: «Escribir el mensaje» y pegar la misma frase. Servicio de voz caído: también escrito |
+
+**Frases de voz ya probadas:**
+
+- Emergencia (activa una regla, pantalla roja): «Mi mamá no puede respirar, tiene los labios morados y casi no responde.»
+- Rutina (por si piden otra): «Mi papá amaneció de buen humor, desayunó completo y ya se tomó sus pastillas.»
+- **No usar** «Hoy mi mamá comió bien y durmió su siesta»: el clasificador la marca como emergencia (aviso ámbar). Si sale un
+  ámbar inesperado, no es un error: es el momento de explicar los dos niveles y la revisión humana.
+
+**Si falla todo lo demás:**
+
+| Qué pasa | Qué hacer (sin detener la exposición) |
+|---|---|
+| No hay internet en el salón | Seguir en `http://localhost:8080` en las mismas ventanas (la app corre en la laptop). El QR del público no abrirá: decirlo y seguir |
+| `enlaza.zenthinks.com` da error 502 o 1033 | Persona 1 corre `bash scripts/enlaza.sh estado` en la terminal mientras Persona 2 sigue en `http://localhost:8080`. Si es 502: `bash scripts/autostart.sh` |
+| La app no responde ni en `localhost` | Ir a la diapositiva 11 (Respaldo) y narrar los cuatro pasos sobre las capturas; al final, ofrecer el video de respaldo |
+| El tablero dice «Reconectando…» | Esperar 5 s; si sigue, recargar |
+
+## Preguntas del sínodo (5 minutos)
+
+En orden de probabilidad. Responde primero quien aparece; los demás completan solo si hace falta. Respuestas cortas: 20 a 30 s.
+
+| # | Pregunta | Responde | Respuesta corta |
+|---|---|---|---|
+| 1 | ¿Es viable el negocio? ¿Cuándo es rentable? | Persona 3 | El plan base deja de perder dinero en el mes 30, pero su VPN al 25 % es −$163,128; lo decimos. El recomendado limita la participación y crece por regiones: VPN $1,207,425, TIR 65.6 %, inversión $1,011,746. |
+| 2 | ¿Qué tan grande es el mercado? | Persona 4 | Contado en el DENUE: 88 residencias privadas en la CDMX, 48 en el Estado de México, 137 en Jalisco y 82 en Nuevo León, más centros de día. Los públicos compran por licitación: van aparte. |
+| 3 | ¿Ustedes programaron esto? | Persona 1 | El problema, el diseño, las reglas, las decisiones y la revisión son del equipo; la mayor parte del código la escribió un asistente de programación con IA (Claude Code) bajo esas reglas, con un pull request por cambio y 178 pruebas (160 funciones). Podemos defender cada parte. |
+| 4 | ¿Por qué datos sintéticos? | Persona 1 | Porque son datos de salud y el proyecto es público. Generamos 20,000 personas calibradas con el Censo, la ENSANUT y la ENASEM: las proporciones se parecen a la realidad, las personas no existen. |
+| 5 | ¿Cómo evitan que una institución vea los datos de otra? | Persona 2 | Seguridad por fila en PostgreSQL: la API se conecta con un usuario que no es dueño de las tablas y fija la institución en cada petición; sin institución ve 0 filas. Un intento ajeno responde 403 y queda en la bitácora. |
+| 6 | ¿La máquina decide todo? | Persona 2 | No. Lo rutinario se asigna solo; lo de prioridad alta lo aprueba una persona. Solo lo urgente sin respuesta en 3 min se aplica con aviso, y coordinación lo puede cambiar. |
+| 7 | ¿Qué pasa con una falsa alarma de voz? | Persona 4 | Si solo sospecha el clasificador, sale un aviso ámbar y coordinación llama a la familia; sin respuesta en 10 min se escala a Dirección. Preferimos una falsa alarma revisada a una emergencia perdida. |
+| 8 | ¿Qué tan bueno es el asistente de voz? | Persona 4 | En el holdout a ciegas: 98.0 % de emergencias detectadas, 26.0 falsas alarmas por 100 notas. No presumimos la prueba interna porque esos datos se usaron para construirlo. |
+| 9 | ¿El modelo de lenguaje diagnostica? | Persona 4 | No. Resume lo dicho en un formato fijo con filtro de frases prohibidas; el nivel lo ponen las reglas y el clasificador, y nunca le dice a nadie que algo no es una emergencia. |
+| 10 | ¿Cómo validaron la simulación? | Persona 3 | Con las reglas de antes, reproduce el «sin atender» del historial en servicios cortos (8.7 % contra 7.4 %); con turnos largos difiere y sabemos por qué. |
+| 11 | ¿Qué cambió en el producto por la simulación? | Persona 3 | El límite de tiempo para lo urgente y la reserva del candidato: con una coordinación lenta, lo urgente esperaba más que con un despachador humano (+3.0 min (p = 0.006), corrida del 21 nov). |
+| 12 | ¿Cómo cumplen la ley de datos personales? | Persona 1 | Consentimiento por tipo de uso con vencimiento, y el asentimiento de la persona; aviso de privacidad; ARCO con los plazos de ley; seguridad por fila y bitácora. Sin consentimiento, la API bloquea la función. |
+| 13 | ¿Y la Ley Federal del Trabajo? | Persona 2 | El despachador respeta el descanso semanal (art. 69), el tipo de jornada (art. 60), los máximos (art. 61) y los relevos; lo que exceda la ley se marca y se avisa. |
+| 14 | ¿Qué pasa si falla el internet? | Persona 2 | Todo corre en la laptop; solo se pierden el enlace público y las calles del mapa. Seguimos en `localhost:8080`. |
+| 15 | ¿Cómo eligen a quién mandar? | Persona 2 | Quien tiene la habilidad, está en turno, no está en su día de descanso y no tiene otra visita que se cruce; entre ellos, quien llega antes con el tráfico de esa hora. La cola va por prioridad, riesgo y espera. |
+| 16 | ¿Por qué Friedman y no ANOVA? | Persona 3 | Porque todas las políticas se prueban sobre las mismas réplicas (números aleatorios comunes): son muestras pareadas y casi nunca normales. Después, Wilcoxon con corrección de Holm. |
+| 17 | ¿Cómo responde Enlaza al incidente crítico? | Persona 1 | La contingencia se ve por estación, no promediada; el despachador prioriza riesgo y tráfico; una sola base reasigna sin copiar datos; la voz declara su sesgo; el consentimiento se exige en la API, y el negocio crece por regiones. |
+| 18 | ¿Qué cambió desde el Avance 2? | Persona 1 | La asignación pasó de sugerida a automática con aprobación humana en lo delicado; más instituciones; y se agregaron la voz, la simulación, la contingencia, la ley laboral y el negocio. |
+| 19 | ¿Qué no funciona o qué falta? | Persona 3 | Las falsas alarmas de voz, la evaluación con hablantes reales (también de lenguas originarias), el diagnóstico de campo y la prueba con una institución real. |
+| 20 | ¿Cuánto le cuesta a una institución? | Persona 4 | Suscripción mensual por tamaño; en promedio $5,500 al mes el primer año. Conseguir un cliente cuesta 15,000 pesos y vale 21.9 : 1 veces eso. |
+
+## Checklist del día
+
+**1 hora antes** (Persona 2 con la laptop, Persona 3 con el celular)
+
+- [ ] Laptop conectada a la corriente; suspensión en «Nunca».
+- [ ] `bash scripts/enlaza.sh estado`: túnel *Running*, archivos «bien», dirección pública ok, reloj en 0 s.
+- [ ] `uv run scripts/check_public_url.py`: 12 de 12.
+- [ ] `ollama run` con el modelo de `OLLAMA_MODEL` y la frase «hola» (lo deja cargado).
+- [ ] `bash scripts/backup_db.sh antes_coloquio` y `python3 scripts/reset_demo.py`; `python3 scripts/verify_db.py` en «Todo correcto».
+- [ ] Ensayo rápido de los cuatro pasos y otra vez `python3 scripts/reset_demo.py`.
+
+**15 minutos antes**
+
+- [ ] Abrir las cuatro ventanas de la tabla de arriba, cada una con su sesión iniciada y en su pestaña.
+- [ ] En la ventana Familia, aceptar el permiso del micrófono (probarlo sin enviar nada).
+- [ ] Celular de Persona 3: wifi apagado, datos móviles, sesión de `fam-0002` en `/familia`.
+- [ ] Proyector a 1280 × 720 o más; presentación abierta en modo presentador; cronómetro listo.
+- [ ] La presentación en PDF y el video de respaldo en el escritorio, por si falla PowerPoint.
+
+**Justo antes**
+
+- [ ] Tablero de coordinación «● En vivo».
+- [ ] Notificaciones de Windows y del celular en silencio.
+- [ ] Cada quien sabe su primera frase y quién le pasa la palabra.
+
+## Video de respaldo (4 minutos)
+
+Se graba **después** del último cambio de interfaz, con la grabadora de pantalla de Windows (Win + Alt + R o la Herramienta
+Recortes), sin audio de fondo. Antes: `python3 scripts/reset_demo.py` y las mismas ventanas de la demo.
+
+| Tiempo | Qué se graba | Qué se dice (voz en off, una sola persona) |
+|---|---|---|
+| 0:00–0:20 | Portada `https://enlaza.zenthinks.com` | «Enlaza coordina el cuidado de personas mayores. Esta es la aplicación real, en vivo.» |
+| 0:20–1:10 | Celular (o ventana Respaldo) solicita; el tablero se actualiza | «La familia pide una visita; Enlaza la asigna sola a quien puede ir y llega antes.» |
+| 1:10–2:00 | Dirección: «Crear solicitud urgente»; Coordinación aprueba; tablero | «Lo urgente lo aprueba una persona; el tablero se actualiza en vivo.» |
+| 2:00–3:00 | Contingencia: propuesta y «Aprobar todo» | «Enlaza detecta la contingencia ambiental y propone cambios; nada cambia sin aprobación.» |
+| 3:00–3:40 | Voz: frase de emergencia → pantalla roja | «Una nota de voz de emergencia abre la pantalla del 911 antes que cualquier otra cosa.» |
+| 3:40–4:00 | `/simulacion` y `/negocio` | «La simulación cambió el producto, y el negocio es viable con crecimiento por regiones.» |
+
+Al terminar: `python3 scripts/reset_demo.py`. Guardar el video como `docs/privado/video_respaldo.mp4` (Git lo ignora).

@@ -1,0 +1,17 @@
+# Cifras de contexto (envejecimiento, «por qué ahora») tomadas de documentos oficiales, con la página donde aparecen.
+# collect_numbers.py las carga como ctx.<clave>. Revisadas sobre el PDF el 26 nov 2026.
+mexico_60mas_2024:
+  valor: "17.7 millones"
+  descripcion: "Personas de 60 años y más en México, 2024"
+  documento: "INEGI, ENASEM 2024, Comunicado de prensa 89/26 (28 sep 2026), p. 1"
+  url: "https://www.inegi.org.mx/contenidos/saladeprensa/aproposito/2026/EAP_Adulmayor_26.pdf"
+cdmx_prop_60mas_2022:
+  valor: "17.1 %"
+  descripcion: "Proporción de personas de 60 años y más en la Ciudad de México, 2022"
+  documento: "CONAPO, «Situación sociodemográfica de las personas mayores: 60 años y más · Ciudad de México», gráfica «Proporción municipal y para la entidad»"
+  url: "https://www.gob.mx/cms/uploads/attachment/file/702736/09_CDMX_PM.pdf"
+cdmx_prop_60mas_2030:
+  valor: "21.4 %"
+  descripcion: "Proporción proyectada de personas de 60 años y más en la Ciudad de México, 2030"
+  documento: "CONAPO, «Situación sociodemográfica de las personas mayores: 60 años y más · Ciudad de México», gráfica «Proporción municipal y para la entidad»"
+  url: "https://www.gob.mx/cms/uploads/attachment/file/702736/09_CDMX_PM.pdf"

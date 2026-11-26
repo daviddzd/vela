@@ -709,6 +709,12 @@ def course_documents() -> None:
         add(f"doc.{key}", d["valor"], d["descripcion"], f"documento del curso: {d['documento']}")
 
 
+def context() -> None:
+    """Official context figures (aging, "why now") with page (docs/biblia/datos/contexto.yaml)."""
+    for key, d in (read_yaml("docs/biblia/datos/contexto.yaml") or {}).items():
+        add(f"ctx.{key}", d["valor"], d["descripcion"], f"{d['documento']} · {d['url']}")
+
+
 def repo() -> None:
     """Counts of the repository itself (tests, screens, routers)."""
     tests = list((ROOT / "backend/tests").glob("test_*.py"))
@@ -811,7 +817,7 @@ def code() -> None:
 
 
 def main() -> None:
-    for step in (seed, calibration, generator, config, simulation, simulation_more, voice, voice_breakdown, voice_timings, business, business_model, manual, history, course_documents, git_history, repo, code, database):
+    for step in (seed, calibration, generator, config, simulation, simulation_more, voice, voice_breakdown, voice_timings, business, business_model, manual, history, course_documents, context, git_history, repo, code, database):
         step()
     OUT.mkdir(parents=True, exist_ok=True)
     (OUT / "numeros.json").write_text(json.dumps(NUMBERS, ensure_ascii=False, indent=1, default=str), encoding="utf-8")
