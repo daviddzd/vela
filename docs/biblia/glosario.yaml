@@ -1,0 +1,138 @@
+# Glosario de La biblia de Enlaza. En los capítulos se marca un término con [[término]] o [[término|texto]].
+# termino: como aparece en el glosario · definicion: en palabras sencillas (Markdown)
+# tambien: otras formas de escribirlo que también cuentan · antes: nombre anterior (si cambió)
+
+# ---------------------------------------------------------------- nombres del proyecto
+- termino: Enlaza
+  definicion: "Nombre del proyecto y de la empresa ficticia «Enlaza Cuidado Coordinado», adoptado el 23 de noviembre de 2026 junto con su logotipo y colores (`docs/brand.md`). El código conserva los nombres internos anteriores (`vela`, `vela_api`)."
+  antes: "Cuidado Inteligente MX (Avance 2 de SIE, noviembre de 2026) y Vela (hasta el 23 nov 2026)"
+- termino: Enlaza Voz
+  definicion: "Módulo de Cómputo Cognitivo: convierte una nota de voz en texto, revisa si hay señales de emergencia con reglas y con un clasificador, y prepara un reporte para el médico. Nunca diagnostica."
+  antes: "ORACLE-Voz (cambió con la nueva identidad del 23 nov 2026; además evita confusión con la marca Oracle; el código conserva `oracle.py`)"
+  tambien: ["ORACLE-Voz"]
+- termino: Panorama-AM
+  definicion: "Módulo de Visualización: tableros e indicadores para coordinación y Dirección (operación, población, aire, tráfico). «AM» por adultos mayores."
+- termino: SIRAG-D
+  definicion: "Módulo de Modelado y Simulación: simula semanas de operación con eventos discretos para comparar formas de asignar visitas, con y sin contingencia ambiental."
+
+# ---------------------------------------------------------------- negocio y sistemas de información
+- termino: SaaS
+  definicion: "«Software como servicio». Un programa que no se instala: se usa desde el navegador y se paga una suscripción. Una sola instalación sirve a muchos clientes (instituciones)."
+- termino: TPS
+  definicion: "Sistema de procesamiento de transacciones. Registra cada operación del día a día: en Enlaza, cada solicitud, asignación, llegada y término de visita."
+- termino: CRM
+  definicion: "Gestión de la relación con clientes. En Enlaza: pacientes, familias, sus consentimientos y su historial de servicios."
+- termino: ERP
+  definicion: "Planeación de recursos de la empresa. En Enlaza: el personal, sus habilidades, turnos, días de descanso y el catálogo de servicios."
+- termino: MIS
+  definicion: "Sistema de información gerencial. Resume la operación en indicadores para quien dirige (puntualidad, carga del personal, sin atender). En Enlaza, Panorama-AM."
+- termino: DSS
+  definicion: "Sistema de apoyo a la decisión. Ayuda a decidir comparando escenarios: en Enlaza, la simulación SIRAG-D y la propuesta de ajustes en una contingencia."
+- termino: DENUE
+  definicion: "Directorio Estadístico Nacional de Unidades Económicas del INEGI: el registro oficial de negocios y establecimientos de México. De ahí sale el tamaño del mercado de residencias en la CDMX."
+
+# ---------------------------------------------------------------- operación
+- termino: plan de cuidado
+  definicion: "Lo que cada paciente necesita de forma regular: qué servicio y cuántas veces por semana. El worker lo convierte en visitas concretas."
+- termino: despachador
+  definicion: "La parte del sistema que elige quién hace cada visita: filtra a quien tiene la habilidad, está en turno y libre, y escoge según la política (por omisión, quien llega antes con el tráfico de esa hora). El mismo código lo usa la simulación."
+  tambien: ["dispatcher"]
+- termino: worker
+  definicion: "Proceso que trabaja solo, en segundo plano: da una vuelta cada minuto para crear visitas del plan de cuidado, reintentar la cola, detectar contingencias y crear alertas."
+- termino: consentimiento
+  definicion: "Autorización firmada por el paciente o su representante legal, con fecha de vencimiento. Enlaza maneja tres: datos de salud, atención a domicilio y asistente de voz. Sin el vigente, la función correspondiente se bloquea en la API."
+  tambien: ["consentimientos"]
+- termino: rol
+  definicion: "El papel de una cuenta en el sistema (Dirección, Coordinación, Medicina, Cuidado o Familia). Decide qué pantallas puede abrir y qué datos puede ver."
+  tambien: ["roles"]
+
+# ---------------------------------------------------------------- interfaz
+- termino: accesibilidad
+  definicion: "Que el sistema lo pueda usar cualquier persona, incluidas quienes ven poco, usan el teclado o se cansan pronto: letra grande y legible, buen contraste, botones grandes y nada dicho solo con color."
+- termino: modo sencillo
+  definicion: "Opción del inicio de sesión que sube la letra de 18 a 24 px y agranda los controles, pensada para personas mayores."
+- termino: WCAG
+  definicion: "Pautas internacionales de accesibilidad para contenido web. El nivel AA pide, entre otras cosas, un contraste de al menos 4.5:1 entre texto y fondo (3:1 para texto grande)."
+
+# ---------------------------------------------------------------- arquitectura
+- termino: API
+  definicion: "«Interfaz de programación de aplicaciones». Es la puerta por la que la página web le pide datos al servidor y le manda órdenes. En Enlaza es FastAPI y todas sus rutas empiezan con `/api`."
+- termino: Docker
+  definicion: "Herramienta que empaqueta un programa con todo lo que necesita (versión de Python, librerías…) en un «contenedor» que corre igual en cualquier computadora. Docker Compose enciende varios contenedores juntos con un comando."
+  tambien: ["Docker Compose", "contenedor"]
+- termino: proxy inverso
+  definicion: "Programa que recibe todas las peticiones en una sola puerta y las reparte al servicio que toca. En Enlaza es Caddy, en el puerto 8080."
+  tambien: ["Caddy"]
+- termino: WebSocket
+  definicion: "Conexión que se queda abierta entre el navegador y el servidor, para que el servidor avise en cuanto algo cambia sin que la página tenga que preguntar a cada rato."
+- termino: túnel
+  definicion: "Conexión que la laptop abre hacia afuera, hacia Cloudflare, para que el público entre por una dirección https sin abrir puertos del router. En Enlaza, un túnel con nombre (`enlaza`) da la dirección fija `https://enlaza.zenthinks.com` y corre como servicio de Windows; el túnel rápido (`trycloudflare.com`, dirección al azar que cambia cada vez) queda de respaldo."
+  tambien: ["Cloudflare"]
+- termino: migraciones
+  definicion: "Archivos que cambian la estructura de la base de datos paso a paso (agregar una tabla, una columna, una regla) y quedan registrados en orden. En Enlaza se hacen con Alembic."
+  tambien: ["migración", "Alembic"]
+- termino: COMMIT
+  definicion: "La orden que confirma una transacción en la base de datos: todo lo que se hizo dentro queda guardado de una vez. Si algo falla antes, se deshace todo (ROLLBACK)."
+  tambien: ["transacción"]
+
+# ---------------------------------------------------------------- inteligencia artificial
+- termino: ASR
+  definicion: "Reconocimiento automático del habla: convertir voz en texto. Enlaza usa Whisper (modelo `small`, en CPU)."
+  tambien: ["Whisper"]
+- termino: modelo de lenguaje
+  definicion: "Programa de inteligencia artificial entrenado con muchísimo texto que puede leer y escribir. En Enlaza resume la nota de voz para el médico; corre en la laptop con Ollama."
+- termino: LLM
+  definicion: "«Large Language Model», modelo de lenguaje grande. Ver *modelo de lenguaje*."
+  tambien: ["Ollama"]
+
+# ---------------------------------------------------------------- datos y estadística
+- termino: datos sintéticos
+  definicion: "Datos creados por computadora que imitan las proporciones de datos reales sin corresponder a ninguna persona. Permiten probar y publicar sin riesgo para la privacidad."
+- termino: cópula gaussiana
+  definicion: "Técnica para sortear varias variables relacionadas entre sí. En Enlaza: a cada persona se le dan factores ocultos (general, cardiometabólico, funcional) y sus enfermedades dependen de ellos, para que se agrupen como en la realidad."
+- termino: multimorbilidad
+  definicion: "Tener dos o más enfermedades crónicas al mismo tiempo."
+- termino: Poisson
+  definicion: "Distribución de probabilidad que describe cuántas veces ocurre algo en un periodo cuando ocurre a un ritmo promedio conocido (por ejemplo, cuántas visitas en un mes si en promedio son dos por semana)."
+
+# ---------------------------------------------------------------- seguridad
+- termino: RLS
+  definicion: "«Row-Level Security», seguridad a nivel de fila. Regla de PostgreSQL que decide, fila por fila, qué puede ver cada sesión. En Enlaza, solo las filas de la institución de la sesión; sin institución, ninguna."
+  tambien: ["seguridad por fila"]
+- termino: JWT
+  definicion: "«JSON Web Token». Texto firmado por el servidor que dice quién eres, tu rol y tu institución, con fecha de caducidad. Nadie puede cambiarlo sin la clave secreta."
+- termino: httpOnly
+  definicion: "Marca de una cookie que impide que el código JavaScript de la página la lea. Protege la sesión aunque alguien lograra inyectar código malicioso."
+- termino: bcrypt
+  definicion: "Forma de guardar contraseñas: en lugar de la contraseña, se guarda un resumen lento de calcular y con «sal» aleatoria, para que adivinarlas sea muy costoso aunque alguien robe la tabla."
+
+# ---------------------------------------------------------------- Parte II
+- termino: simulación de eventos discretos
+  definicion: "Modelo en el que el tiempo salta de un evento al siguiente (llega una solicitud, termina una visita, un paciente entra en crisis) en lugar de avanzar segundo a segundo. SIRAG-D usa SimPy."
+  tambien: ["eventos discretos", "SimPy"]
+- termino: cadena de Markov
+  definicion: "Modelo de estados en el que la probabilidad de pasar al siguiente estado depende solo del estado actual. En SIRAG-D: estable → en riesgo → crisis, hora por hora."
+- termino: números aleatorios comunes
+  definicion: "Técnica de simulación: todas las alternativas usan los mismos sorteos en cada réplica, para que la diferencia entre ellas se deba a la alternativa y no al azar. Vuelve las comparaciones pareadas."
+- termino: Friedman
+  definicion: "Prueba estadística que compara tres o más tratamientos medidos sobre los mismos casos (muestras pareadas) sin suponer normalidad. Es la versión pareada de Kruskal-Wallis."
+- termino: Wilcoxon
+  definicion: "Prueba de rangos con signo: compara dos tratamientos medidos sobre los mismos casos sin suponer normalidad. Se usa para cada política contra el despacho humano."
+- termino: Holm
+  definicion: "Corrección para comparaciones múltiples: ajusta los valores p cuando se hacen varias pruebas a la vez, para no «encontrar» diferencias por casualidad."
+- termino: métricas de clasificación
+  definicion: "Medidas de qué tan bien acierta un clasificador: sensibilidad (de los casos reales, cuántos detecta), precisión, F1 (equilibrio entre ambas) y falsas alarmas."
+  tambien: ["sensibilidad", "F1"]
+- termino: matriz de confusión
+  definicion: "Tabla que cruza la clase real (filas) con la que dijo el modelo (columnas). La diagonal son los aciertos; fuera de ella, los errores y de qué tipo son."
+- termino: VPN
+  definicion: "Valor presente neto: suma de los flujos de dinero futuros traídos a pesos de hoy con una tasa de descuento. Si es positivo, el proyecto crea valor a esa tasa."
+  tambien: ["valor presente neto"]
+- termino: LTV
+  definicion: "«Lifetime value»: lo que deja un cliente durante todo el tiempo que se queda (margen mensual × meses de vida)."
+- termino: CAC
+  definicion: "Costo de adquisición de un cliente: lo que cuesta conseguir una institución nueva (ventas, visitas, demostraciones)."
+- termino: LFPDPPP
+  definicion: "Ley Federal de Protección de Datos Personales en Posesión de los Particulares, publicada en el DOF el 20 de marzo de 2025. Regula cómo las empresas tratan datos personales; los de salud son sensibles."
+- termino: ARCO
+  definicion: "Derechos de Acceso, Rectificación, Cancelación y Oposición sobre los propios datos personales. En Enlaza se ejercen en `/privacidad`."

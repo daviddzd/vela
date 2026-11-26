@@ -1,0 +1,84 @@
+# Orden de La biblia de Enlaza. Un capítulo que todavía no existe se salta (aparece como aviso al compilar).
+# tipo: capitulo (numerado 1, 2, 3…), especial (sin número) o anexo (A, B, C…).
+partes:
+  - id: guia
+    titulo: "Guía rápida"
+    kicker: "Para empezar"
+    descripcion: "El proyecto en pocas páginas, los números que hay que saberse y las preguntas más probables."
+    tipo: especial
+    capitulos:
+      - guia/00_como_usar.md
+      - guia/01_proyecto_en_3_paginas.md
+      - guia/02_numeros.md
+      - guia/03_20_preguntas.md
+      - guia/04_rutas_de_lectura.md
+
+  - id: parte-1
+    titulo: "Parte I · El proyecto"
+    kicker: "Parte I"
+    descripcion: "Qué es Enlaza, qué ve cada persona, cómo está construido, de dónde salen los datos y cómo se protege la información."
+    capitulos:
+      - parte1/01_que_es_enlaza.md
+      - parte1/02_recorrido_por_rol.md
+      - parte1/03_arquitectura.md
+      - parte1/04_datos_sinteticos.md
+      - parte1/05_seguridad.md
+
+  - id: parte-2
+    titulo: "Parte II · Cómo funciona cada módulo"
+    kicker: "Parte II"
+    descripcion: "Operación, tiempo real, Panorama-AM, SIRAG-D, contingencia, Enlaza Voz, negocio y ética, por dentro."
+    capitulos:
+      - parte2/06_operacion.md
+      - parte2/07_tiempo_real.md
+      - parte2/08_panorama.md
+      - parte2/09_sirag_d.md
+      - parte2/10_contingencia_demo.md
+      - parte2/11_enlaza_voz.md
+      - parte2/12_negocio.md
+      - parte2/13_etica_legal.md
+
+  - id: parte-3
+    titulo: "Parte III · Por materia"
+    kicker: "Parte III"
+    descripcion: "Un capítulo por materia: los conceptos desde cero, dónde se ven en Enlaza y cómo defenderlos."
+    capitulos:
+      - parte3/13_problema_prototipico.md
+      - parte3/14_sie.md
+      - parte3/15_simulacion.md
+      - parte3/16_computo_cognitivo.md
+      - parte3/17_visualizacion.md
+      - parte3/18_emprendimiento.md
+      - parte3/19_practica_profesional.md
+
+  - id: parte-4
+    titulo: "Parte IV · Historia y decisiones"
+    kicker: "Parte IV"
+    descripcion: "Qué encontramos, cómo lo descubrimos y qué decidimos, en orden."
+    capitulos:
+      - parte4/20_bitacora.md
+      - parte4/21_avance2.md
+      - parte4/22_como_se_construyo.md
+      - parte4/23_decisiones_descartadas.md
+
+  - id: parte-5
+    titulo: "Parte V · Operación práctica"
+    kicker: "Parte V"
+    descripcion: "Preparar la laptop, arrancar, presentar y resolver problemas el día de la defensa."
+    capitulos:
+      - parte5/24_preparar_laptop.md
+      - parte5/25_operar.md
+      - parte5/26_presentar.md
+      - parte5/27_plan_b.md
+
+  - id: anexos
+    titulo: "Anexos"
+    kicker: "Consulta"
+    descripcion: "Usuarios de prueba, comandos, mapa del repositorio, criterios de aceptación, glosario y referencias en APA 7."
+    tipo: anexo
+    generado: glosario
+    capitulos:
+      - anexos/a_usuarios.md
+      - anexos/b_comandos.md
+      - anexos/c_mapa_repositorio.md
+      - anexos/d_criterios.md

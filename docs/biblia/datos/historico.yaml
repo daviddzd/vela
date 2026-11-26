@@ -1,0 +1,93 @@
+# Resultados de corridas ANTERIORES que ya no están en simulation/results/ (se sobrescribieron con la corrida
+# vigente) pero que explican decisiones del equipo. collect_numbers.py los carga como hist.<clave> y el libro
+# siempre dice que son históricos. Fuente: el documento indicado, escrito el día de la corrida.
+sens_antes_espera:
+  valor: "+3.0 min (p = 0.006)"
+  descripcion: "Enlaza sin límite ni reserva vs. despacho humano, espera p90 alta, aprobación 5–15 min"
+  fecha: "21 nov 2026, plantilla de 7 días"
+  documento: "docs/dev/sirag_d_modelo.md, sección 8"
+sens_limite_sin_reserva_espera:
+  valor: "+1.9 min (p = 0.078)"
+  descripcion: "Enlaza con límite de tiempo, sin reserva: espera p90 alta vs. humano"
+  fecha: "21 nov 2026, plantilla de 7 días"
+  documento: "docs/dev/sirag_d_modelo.md, sección 8"
+sens_limite_y_reserva_espera:
+  valor: "−3.0 min (p = 0.0002)"
+  descripcion: "Enlaza con límite y reserva: espera p90 alta vs. humano"
+  fecha: "21 nov 2026, plantilla de 7 días"
+  documento: "docs/dev/sirag_d_modelo.md, sección 8"
+sens_antes_crisis:
+  valor: "−1.4 min (sin diferencia)"
+  descripcion: "Enlaza sin límite ni reserva: respuesta a crisis p90 vs. humano"
+  fecha: "21 nov 2026, plantilla de 7 días"
+  documento: "docs/dev/sirag_d_modelo.md, sección 8"
+sens_limite_y_reserva_crisis:
+  valor: "−7.8 min (p = 0.0001)"
+  descripcion: "Enlaza con límite y reserva: respuesta a crisis p90 vs. humano"
+  fecha: "21 nov 2026, plantilla de 7 días"
+  documento: "docs/dev/sirag_d_modelo.md, sección 8"
+sin_atender_7dias:
+  valor: "14.7 %"
+  descripcion: "Sin atender, Enlaza, escenario normal, plantilla de 7 días (antes del descanso de ley)"
+  fecha: "21 nov 2026"
+  documento: "docs/dev/sirag_d_modelo.md, sección 5"
+utilizacion_7dias:
+  valor: "26.2 %"
+  descripcion: "Utilización del personal con plantilla de 7 días"
+  fecha: "21 nov 2026"
+  documento: "docs/dev/sirag_d_modelo.md, sección 5"
+nocturna_sin_relevos:
+  valor: "19.6 %"
+  descripcion: "Sin atender al cumplir jornada nocturna ANTES de agregar los relevos"
+  fecha: "22 nov 2026"
+  documento: "docs/dev/sirag_d_modelo.md, sección 10"
+falla_401_frecuencia:
+  valor: "3 o 4 de cada 40 corridas"
+  descripcion: "Frecuencia de la falla intermitente de las pruebas antes de corregir el reloj"
+  fecha: "22 nov 2026"
+  documento: "docs/dev/decisiones_oracle_voz.md, sección 7"
+salto_reloj_wsl2:
+  valor: "unos 3 s cada ~30 s"
+  descripcion: "Cuánto retrocede el reloj de WSL2 al sincronizarse con Windows"
+  fecha: "22 nov 2026"
+  documento: "docs/dev/decisiones_oracle_voz.md, sección 7"
+fuga_vistas_pacientes:
+  valor: "400"
+  descripcion: "Fichas que vela_api sin institución leía por v_patients antes de la corrección"
+  fecha: "21 nov 2026"
+  documento: "docs/dev/decisiones_paso_3.md, sección 1"
+fuga_vistas_personas:
+  valor: "20,000"
+  descripcion: "Personas que vela_api sin institución leía por v_persons antes de la corrección"
+  fecha: "21 nov 2026"
+  documento: "docs/dev/decisiones_paso_3.md, sección 1"
+caso_pac0112:
+  valor: "0.925"
+  descripcion: "Probabilidad de «emergencia» que dio el clasificador v1 a «el paciente comió bien y está tranquilo»"
+  fecha: "23 nov 2026"
+  documento: "docs/spec/05_oracle_voz.md"
+pruebas_pr8:
+  valor: "132"
+  descripcion: "Pruebas del backend al fusionar el negocio y la privacidad"
+  fecha: "22 nov 2026"
+  documento: "docs/dev/decisiones_paso_8.md («Pruebas en otra base de datos»)"
+pruebas_pr13:
+  valor: "164"
+  descripcion: "Pruebas del backend en el PR #13 (revisión visual)"
+  fecha: "23 nov 2026"
+  documento: "descripción del PR #13 en GitHub"
+pruebas_pr15:
+  valor: "172"
+  descripcion: "Pruebas del backend en el PR #15 (voz en dos niveles)"
+  fecha: "23 nov 2026"
+  documento: "descripción del PR #15 en GitHub"
+pruebas_pr16:
+  valor: "175"
+  descripcion: "Pruebas del backend en el PR #16 (diseño)"
+  fecha: "23 nov 2026"
+  documento: "descripción del PR #16 en GitHub"
+graficas_crecian:
+  valor: "262 → 584 px en 10 s"
+  descripcion: "Cuánto crecía sola una gráfica con Windows al 125 % antes de corregirla"
+  fecha: "23 nov 2026"
+  documento: "descripción del PR #14 en GitHub"

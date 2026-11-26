@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+# Build "La biblia de Enlaza" (docs/biblia/biblia_enlaza.pdf) inside Docker. Needs `docker compose up -d` running.
+#
+#   bash scripts/build_biblia.sh              # numbers + PDF (takes the screenshots only if there are none yet)
+#   bash scripts/build_biblia.sh --capturas   # also: reset_demo.py, new screenshots of every screen, reset again
+#
+# Steps: collect_numbers.py (repo + database) -> build.py (Markdown -> HTML) -> render.cjs (HTML -> PDF).
+# The PDF, the HTML and the screenshots are git-ignored: anyone can regenerate them from the repository.
+set -euo pipefail
+cd "$(dirname "$0")/.."
+
+IMAGE=vela-biblia
+NET=vela_default
+RUN=(docker run --rm --init --ipc=host --user "$(id -u):$(id -g)" --network "$NET" --env-file .env -v "$PWD:/repo" -w /repo "$IMAGE")
+
+echo "== Imagen de la biblia"
+docker build -q -t "$IMAGE" docs/biblia/build >/dev/null
+
+if [[ "${1:-}" == "--capturas" ]] || [[ -z "$(ls -A docs/biblia/capturas 2>/dev/null | grep -v '^\.gitkeep$' || true)" ]]; then
+  echo "== Capturas: primero se limpia la operación (reset_demo.py)"
+  python3 scripts/reset_demo.py
+  mkdir -p docs/biblia/capturas
+  "${RUN[@]}" xvfb-run -a node docs/biblia/build/capture.cjs
+  echo "== Se vuelve a limpiar lo que crearon las capturas"
+  python3 scripts/reset_demo.py
+fi
+
+echo "== Pruebas que recolecta pytest (para contar pruebas y funciones)"
+mkdir -p docs/biblia/out
+docker compose exec -T api pytest --collect-only -q 2>/dev/null | grep '::' > docs/biblia/out/pytest_collect.txt || true
+# Pending branch of the voice classifier v2 (not merged): its one-time holdout result, cited as "pendiente"
+git show feature/voz-clasificador-v2:voice/eval/results/v2_holdout.json > docs/biblia/out/v2_holdout.json 2>/dev/null \
+  || rm -f docs/biblia/out/v2_holdout.json
+# History of main (for "Cómo se construyó"): one line per commit, oldest last
+git log main --format='%ad|%s' --date=format:'%Y-%m-%d %H:%M' > docs/biblia/out/git_main.txt
+echo "== Números (repositorio y base de datos)"
+"${RUN[@]}" python3 docs/biblia/build/collect_numbers.py
+echo "== Markdown → HTML"
+"${RUN[@]}" python3 docs/biblia/build/build.py
+echo "== HTML → PDF"
+"${RUN[@]}" node docs/biblia/build/render.cjs
+echo "== Verificación final (números contra sus archivos, texto del PDF, capturas)"
+"${RUN[@]}" python3 docs/biblia/build/verify.py
+echo "Informe completo: docs/biblia/out/verificacion.md"
