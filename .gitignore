@@ -37,3 +37,7 @@ Thumbs.db
 docs/dev/capturas/identidad/fase2/*__*__*.png
 docs/dev/capturas/revision/*__*__*.png
 docs/dev/capturas/identidad/revision_final/
+
+# Team documents and QR codes (names, private links): never in Git
+docs/privado/
+backups/
