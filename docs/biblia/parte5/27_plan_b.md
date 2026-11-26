@@ -12,8 +12,8 @@ Un buen piloto revisa antes de despegar qué hará si falla cada instrumento. Es
 
 ## Por qué lo hicimos así
 
-Todo lo crítico corre en la laptop (base, API, voz, modelo de lenguaje). Lo externo (el túnel y las calles del mapa) tiene un
-respaldo que no depende de internet.
+Todo lo crítico corre en la laptop (base, API, voz, modelo de lenguaje). Lo externo (el enlace fijo y las calles del mapa)
+tiene respaldo: el túnel rápido y, sin internet, `localhost`.
 
 ## Cómo funciona por dentro
 
@@ -22,12 +22,13 @@ respaldo que no depende de internet.
 | Si falla… | Qué se ve | Plan B |
 |---|---|---|
 | El internet de la escuela | el QR no abre; el mapa muestra solo alcaldías | seguir en `http://localhost:8080` en el proyector; el mapa de alcaldías funciona sin internet |
-| El túnel de Cloudflare | error 502 o 1033 en el enlace | `docker compose ps`; si la app está bien, reabrir el túnel y generar otro QR; si no hay tiempo, `localhost` |
+| La app tras reiniciar | error 502 en `enlaza.zenthinks.com`, o pantallas sin datos | `bash scripts/autostart.sh` (repara los contenedores que salieron sin archivos) |
+| El túnel con nombre | error 1033 en `enlaza.zenthinks.com` | `bash scripts/enlaza.sh encender`; si en dos minutos no vuelve a **HEALTHY**: `bash scripts/enlaza.sh rapido`, QR nuevo con `make_qr.py` y proyectarlo; si no hay tiempo, `localhost` |
 | Ollama (modelo de lenguaje) | «El reporte se está preparando…» por mucho tiempo o «no se pudo generar» | la pantalla 911 y las alertas **no dependen** del modelo; explicar que el médico recibe transcripción y nivel; reabrir Ollama |
 | El servicio de voz o el micrófono | «El servicio de voz no responde» o micrófono denegado | escribir el mensaje (mismo flujo: reglas, clasificador, pantalla) |
 | El clasificador da ámbar en una frase rutinaria | aviso ámbar | usarlo para explicar los dos niveles y la revisión humana |
 | La contingencia no aparece | `/contingencia` sin propuesta | esperar al siguiente minuto del worker; revisar que el escenario esté «Activo» en `/demo` |
-| La sesión se cierra sola | «Inicia sesión para continuar» | el reloj de WSL2 se atrasó; la API tolera {{ code.clock_leeway }}; si persiste, `wsl --shutdown` en PowerShell y volver a encender |
+| La sesión se cierra sola | «Inicia sesión para continuar» | el reloj de WSL2 se atrasó (la API tolera {{ code.clock_leeway }}); la tarea «Enlaza - reloj de WSL» lo corrige sola; a mano `bash scripts/enlaza.sh reloj`; si persiste, `wsl --shutdown` en PowerShell |
 | El tablero dice «Reconectando…» | no se actualiza | `curl localhost:8080/api/health` debe decir `"realtime":"ok"`; `docker compose restart api` |
 | La base quedó mal tras un ensayo | datos raros | `bash scripts/restore_db.sh backups/<último>.dump` o `python3 scripts/reset_demo.py` |
 | Todo lo anterior | — | video grabado de la demostración completa |
@@ -48,10 +49,11 @@ respaldo que no depende de internet.
 ```bash
 curl -s localhost:8080/api/health       # status ok, db ok, realtime ok
 python3 scripts/verify_db.py            # Todo correcto
-docker compose ps                       # todo "running" o "healthy"
+bash scripts/enlaza.sh estado           # túnel Running, archivos «bien», dirección pública ok, reloj 0 s
+uv run scripts/check_public_url.py      # 12 de 12 por https://enlaza.zenthinks.com
 ```
 
-Y en Windows: `ollama ps` (modelo cargado) y la ventana de `cloudflared` abierta.
+Y en Windows: `ollama ps` (modelo cargado).
 
 ## Dónde está en el código
 
@@ -60,6 +62,7 @@ Y en Windows: `ollama ps` (modelo cargado) y la ventana de `cloudflared` abierta
 | Problemas comunes (versión larga) | `docs/00_preparar_laptop_y_github.md`, «Problemas comunes» |
 | Mapa sin internet | `frontend/src/components/StreetMap.tsx` (respaldo de alcaldías) |
 | Tolerancia del reloj | `backend/app/core/security.py` (`CLOCK_LEEWAY_SECONDS`) |
+| Arranque y túnel | `scripts/autostart.sh`, `scripts/enlaza.sh`, `scripts/windows/` |
 
 ## Números clave
 
@@ -75,3 +78,7 @@ Y en Windows: `ollama ps` (modelo cargado) y la ventana de `cloudflared` abierta
 !!! pregunta "¿Qué pasa si se cae el internet durante la defensa?"
     Seguimos en `localhost:8080`: la base, la API, la voz y el modelo de lenguaje corren en la laptop. Solo se pierden el enlace
     público y las calles del mapa, que cae a un mapa de alcaldías.
+
+!!! pregunta "¿Por qué el enlace es enlaza.zenthinks.com y no un servidor en la nube?"
+    Porque para el prototipo la laptop cuesta cero y mantiene los datos locales. El túnel de Cloudflare publica la laptop
+    con un certificado HTTPS válido sin abrir puertos del módem; en producción iría a un servidor (@ref(cap-negocio)).

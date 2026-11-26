@@ -40,15 +40,15 @@ Este capítulo es el resumen para no perderse.
     `OLLAMA_IGPU_ENABLE` funcionó en la laptop del equipo (Ryzen con Radeon integrada), pero no está documentado por Ollama.
     Si da problemas, se quita la variable y el modelo corre en CPU: funciona igual, más lento.
 
-### Qué debe estar abierto para que funcione
+### Qué arranca solo al encender la laptop
 
 ```mermaid
 flowchart LR
-  W["Windows"] --> D["Docker Desktop<br/>(abierto)"]
-  W --> O["Ollama<br/>(ícono en la bandeja)"]
+  W["Windows"] --> D["Docker Desktop<br/>(arranca al iniciar sesión)"]
+  W --> O["Ollama<br/>(arranca al iniciar sesión)"]
   W --> U["Ubuntu (WSL2)"]
-  U --> C["docker compose up -d"]
-  W --> T["cloudflared<br/>(ventana abierta)"]
+  U --> C["tarea «Enlaza - arranque»<br/>(autostart.sh)"]
+  W --> T["servicio cloudflared<br/>(enlaza.zenthinks.com)"]
 ```
 
 ## Dónde está en el código

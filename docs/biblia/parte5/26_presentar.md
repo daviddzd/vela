@@ -23,22 +23,46 @@ encendido. Lo que puede fallar (el internet de la escuela, el proyector, el mode
 
 ## Cómo funciona por dentro
 
-### 1. Enlace público y QR
+### 1. Enlace público fijo y QR
 
-```powershell
-cloudflared tunnel --url http://localhost:8080     # en PowerShell; NO cerrar esta ventana
-```
+La app tiene una dirección que no cambia: **`https://enlaza.zenthinks.com`**. Es un [[túnel|túnel con nombre]] de
+Cloudflare (`enlaza`) que lleva esa dirección a `http://127.0.0.1:8080` de la laptop. Funciona desde cualquier celular
+**mientras la laptop esté encendida, con la sesión de Windows iniciada y con internet**. La raíz `zenthinks.com` no apunta a nada.
 
-Aparece `https://palabras-al-azar.trycloudflare.com`. Para el QR (en Ubuntu):
+Todo arranca solo al iniciar sesión en Windows:
+
+| Pieza | Cómo arranca |
+|---|---|
+| Túnel | servicio de Windows `cloudflared` (automático, desde que prende la laptop) |
+| Docker Desktop | «Start Docker Desktop when you sign in» |
+| Contenedores | `restart: unless-stopped` y la tarea «Enlaza - arranque» (`scripts/autostart.sh`), que repara los que Docker levantó antes de que Ubuntu estuviera listo |
+| Ollama | acceso directo en la carpeta Inicio de Windows |
+| Reloj de WSL | tarea «Enlaza - reloj de WSL»: copia la hora de Windows al iniciar sesión, al despertar y cada media hora (evita el «Inicia sesión para continuar») |
+
+El QR fijo ya está hecho (`docs/privado/qr_enlaza.png` y `qr_enlaza_diapositiva.png`, fuera de Git); se regenera con
+`uv run scripts/make_qr.py`.
+
+**Comprobar que el túnel está arriba** (Ubuntu, en la carpeta del proyecto):
 
 ```bash
-sudo apt install -y qrencode
-qrencode -s 12 -o ~/qr_enlaza.png "https://palabras-al-azar.trycloudflare.com"
+bash scripts/enlaza.sh estado            # túnel, contenedores y sus archivos, Ollama, localhost, dirección pública, reloj
+uv run scripts/check_public_url.py       # prueba completa por https: 12 de 12 (crea una solicitud: luego reset_demo.py)
 ```
 
-- El enlace **cambia** cada vez que se reinicia el túnel: generar el QR **después** de abrirlo y no cerrarlo.
-- Probarlo con un celular **con datos móviles** (no con el wifi de la escuela): iniciar sesión, pedir un servicio y ver que
-  aparece en el tablero de la laptop sin recargar.
+En PowerShell, `Get-Service cloudflared` debe decir `Running`; en el panel de Cloudflare (Networks → Tunnels) el túnel
+`enlaza` aparece como **HEALTHY**.
+
+**Si falla**: @ref(cap-planb). En corto: error 502 → la app no corre (`bash scripts/autostart.sh`); error 1033 → el
+túnel no corre (`bash scripts/enlaza.sh encender`); si no se arregla en dos minutos, **túnel rápido** de respaldo:
+
+```bash
+bash scripts/enlaza.sh rapido                                        # da https://palabras-al-azar.trycloudflare.com
+uv run scripts/make_qr.py https://palabras-al-azar.trycloudflare.com   # QR de respaldo → docs/privado/qr_rapido*.png
+```
+
+**Apagar todo** al terminar: `bash scripts/backup_db.sh defensa` y `bash scripts/enlaza.sh apagar` (Windows pide permiso de
+administrador para detener el túnel). Al reiniciar la laptop todo vuelve a encender solo. Solo el túnel, en PowerShell como
+administrador: `Stop-Service cloudflared` / `Start-Service cloudflared`.
 
 ### 2. Presentar en la escuela
 
@@ -55,10 +79,10 @@ qrencode -s 12 -o ~/qr_enlaza.png "https://palabras-al-azar.trycloudflare.com"
 | Cuándo | Qué | Quién |
 |---|---|---|
 | Día anterior | ensayo general con cronómetro; `bash scripts/backup_db.sh ensayo_general`; `python3 scripts/reset_demo.py`; (opcional) recrear la base y `rebase_dates.py` | ____ |
-| −60 min | conectar la corriente; abrir Docker Desktop y Ollama; `docker compose up -d`; `curl localhost:8080/api/health` | ____ |
+| −60 min | conectar la corriente; prender la laptop e iniciar sesión (todo arranca solo); `bash scripts/enlaza.sh estado` | ____ |
 | −50 min | `ollama run` con el modelo de `OLLAMA_MODEL` y la frase «hola» (lo carga en memoria) | ____ |
 | −45 min | `python3 scripts/verify_db.py`; `python3 scripts/reset_demo.py`; `bash scripts/backup_db.sh antes_defensa` | ____ |
-| −40 min | abrir el túnel, generar el QR, probarlo con datos móviles | ____ |
+| −40 min | `uv run scripts/check_public_url.py` (12 de 12); probar el QR fijo con un celular con datos móviles; `reset_demo.py` | ____ |
 | −30 min | abrir las ventanas de cada rol; probar una nota de voz rutinaria y una de emergencia; `reset_demo.py` de nuevo | ____ |
 | −10 min | proyector, «Modo presentación», cronómetro listo | ____ |
 | 0 | guion de 10 minutos | todos |
@@ -94,7 +118,8 @@ están en la Guía rápida y en cada capítulo.
 |---|---|
 | Guion original y criterios | `docs/spec/10_plan_demo_y_criterios.md` |
 | Panel de demostración | `/demo` (`frontend/src/pages/DemoPage.tsx`) |
-| Preparación detallada | `docs/00_preparar_laptop_y_github.md`, sección «Día de la defensa» |
+| Preparación detallada | `docs/00_preparar_laptop_y_github.md`, secciones «Enlace fijo» y «Día de la defensa» |
+| Operación del túnel | `scripts/enlaza.sh`, `scripts/autostart.sh`, `scripts/check_public_url.py`, `scripts/make_qr.py`, `scripts/windows/` |
 
 ## Números clave
 
@@ -102,7 +127,10 @@ están en la Guía rápida y en cada capítulo.
 
 ## Limitaciones honestas
 
-- El túnel rápido de Cloudflare no garantiza disponibilidad: por eso el video y `localhost`.
+- El enlace fijo depende de la laptop, de su internet y de Cloudflare; si se suspende la laptop, se cae. El túnel rápido de
+  respaldo no garantiza disponibilidad: por eso también el video y `localhost`.
+- Tras reiniciar, Docker Desktop suele levantar los contenedores antes que Ubuntu y salen sin archivos; la tarea de arranque
+  lo repara en el primer minuto, pero conviene revisar `enlaza.sh estado` antes de presentar.
 - El modelo de lenguaje tarda; el reporte del médico puede aparecer después de que termine ese minuto del guion.
 - La contingencia de demostración tarda en detectarse hasta el siguiente minuto del worker.
 

@@ -66,7 +66,7 @@
 - termino: WebSocket
   definicion: "Conexión que se queda abierta entre el navegador y el servidor, para que el servidor avise en cuanto algo cambia sin que la página tenga que preguntar a cada rato."
 - termino: túnel
-  definicion: "Conexión que la laptop abre hacia afuera, hacia Cloudflare, para que el público entre por una dirección https sin abrir puertos del router. En Enlaza, `cloudflared` con un túnel rápido (`trycloudflare.com`)."
+  definicion: "Conexión que la laptop abre hacia afuera, hacia Cloudflare, para que el público entre por una dirección https sin abrir puertos del router. En Enlaza, un túnel con nombre (`enlaza`) da la dirección fija `https://enlaza.zenthinks.com` y corre como servicio de Windows; el túnel rápido (`trycloudflare.com`, dirección al azar que cambia cada vez) queda de respaldo."
   tambien: ["Cloudflare"]
 - termino: migraciones
   definicion: "Archivos que cambian la estructura de la base de datos paso a paso (agregar una tabla, una columna, una regla) y quedan registrados en orden. En Enlaza se hacen con Alembic."
