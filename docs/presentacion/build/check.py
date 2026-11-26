@@ -6,6 +6,7 @@
 4. Every slide has speaker notes, and nothing on a slide goes past the edge of the slide.
 """
 import csv
+import os
 import re
 import subprocess
 import sys
@@ -27,10 +28,16 @@ def pdf_text(pdf: Path) -> str:
 
 
 def main() -> None:
-    problems, report = [], ["# Verificación de la presentación y el guion", ""]
+    # DECK_DIR: check another copy of the deck (the private one with names); the script is checked only in docs/presentacion
+    deck_dir = Path(os.environ["DECK_DIR"]).resolve() if os.environ.get("DECK_DIR") else PRES
+    problems, report = [], [f"# Verificación de la presentación y el guion ({deck_dir.name})", ""]
     # 1. numbers in the PDFs
-    for csv_name, pdf in (("numeros_usados.csv", "enlaza_coloquio.pdf"), ("numeros_usados_guion.csv", "guion_coloquio.pdf")):
-        text = pdf_text(PRES / pdf)
+    pairs = [("numeros_usados.csv", deck_dir / "enlaza_coloquio.pdf")]
+    if deck_dir == PRES:
+        pairs.append(("numeros_usados_guion.csv", PRES / "guion_coloquio.pdf"))
+    for csv_name, pdf_path in pairs:
+        pdf = pdf_path.name
+        text = pdf_text(pdf_path)
         rows = list(csv.DictReader(open(OUT / csv_name, encoding="utf-8")))
         drawn = [r for r in rows if r.get("uso") == "gráfica"]      # error bars: drawn, not printed
         rows = [r for r in rows if r.get("uso") != "gráfica"]
@@ -39,7 +46,7 @@ def main() -> None:
                       + (f" (más {len(drawn)} dibujados como intervalos de confianza)" if drawn else ""))
         problems += [f"{pdf}: «{r['texto']}» ({r['clave']}) no aparece" for r in missing]
     # 2-4. the slides
-    deck = Presentation(PRES / "enlaza_coloquio.pptx")
+    deck = Presentation(deck_dir / "enlaza_coloquio.pptx")
     sw, sh = deck.slide_width, deck.slide_height
     cmaps = {f.stem: set(TTFont(f).getBestCmap()) for f in FONTS.glob("*.ttf")}
     small, glyphs, edges, notes = [], set(), [], 0
@@ -74,7 +81,8 @@ def main() -> None:
                f"- Elementos fuera de la diapositiva: **{len(edges)}**", ""]
     if problems:
         report += ["## Problemas", ""] + [f"- {p}" for p in problems]
-    (OUT / "verificacion.md").write_text("\n".join(report) + "\n", encoding="utf-8")
+    if deck_dir == PRES:
+        (OUT / "verificacion.md").write_text("\n".join(report) + "\n", encoding="utf-8")
     print("\n".join(report))
     sys.exit(1 if problems else 0)
 

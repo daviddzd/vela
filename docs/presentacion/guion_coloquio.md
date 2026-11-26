@@ -18,7 +18,7 @@ Las frases son **sugeridas**: dichas con sus palabras suenan mejor que memorizad
 | Problema y solución | 1, 2, 3 | 1:25 |
 | Demostración en vivo | 4 | 4:50 |
 | Simulación, voz, seguridad y ética | 5, 6, 7 | 1:55 |
-| Negocio, pitch y cierre | 8, 9, 10 | 1:30 |
+| Negocio, pitch, cierre y gracias | 8, 9, 10, 11 | 1:30 |
 | **Total** | | **9:40** (margen: 0:20) |
 
 | Persona | Habla en total |
@@ -100,33 +100,34 @@ Las frases son **sugeridas**: dichas con sus palabras suenan mejor que memorizad
 
 #### 3:45–5:05 · Paso 3 · Contingencia en el oriente
 
-**Habla:** Persona 3 · **Opera:** Persona 2 · **Dura:** 1:20 · **Se ve:** `/contingencia` → «Aprobar todo» → `/tablero`.
+**Habla:** Persona 3 · **Opera:** Persona 2 · **Dura:** 1:20 · **Se ve:** `/contingencia` → «Aprobar todo» → `/tablero`; al final, `/demo` → «Volver a normal».
 
 - Hace un minuto simulamos mala calidad del aire en el oriente de la ciudad. El worker la detectó solo.
 - Enlaza propone cambios por institución: adelantar visitas de quienes tienen enfermedad pulmonar o del corazón y reacomodar al personal.
 - Nada cambia sin aprobación: coordinación revisa y aprueba todo.
 - Y el tablero ya muestra los cambios. Esto responde al incidente crítico del Problema Prototípico.
+- (Persona 2, sin decir nada, en la ventana de Dirección `/demo`: «Volver a normal», para que la contingencia no siga activa.)
 
 #### 5:05–6:15 · Paso 4 · Nota de voz de emergencia
 
 **Habla:** Persona 4 · **Opera:** Persona 4 en la ventana de la familia · **Dura:** 1:10 · **Se ve:** `/voz` → pantalla roja.
 
 - Ahora la voz. Una familia graba lo que pasa, como mandaría un audio de WhatsApp.
-- (Al micrófono:) «Mi mamá no puede respirar, tiene los labios morados y casi no responde.»
+- (Al micrófono, exactamente:) «Mi mamá no puede respirar y tiene los labios morados.»
 - Pantalla roja, «Llama al 911 ahora». Sale antes que el modelo de lenguaje, porque la activó una regla.
 - Si solo el clasificador hubiera sospechado, sería un aviso ámbar y coordinación llamaría a la familia.
 - El médico recibe la transcripción y un reporte. El sistema nunca diagnostica.
 
-### Diapositiva 5 · Lo que demostró la simulación
+### Diapositiva 5 · La simulación nos dijo cómo asignar
 
-**Habla:** Persona 3 · **Dura:** 0:40 · **Se ve:** la gráfica de espera de lo urgente con sus intervalos.
+**Habla:** Persona 3 · **Dura:** 0:40 · **Se ve:** la gráfica de espera de lo urgente, con sus intervalos, y el recuadro de la aprobación lenta.
 
 **Qué se dice:**
 
 - SIRAG-D simula semanas completas con el mismo código de asignación: 450 corridas, 30 réplicas por combinación.
-- Nos dio un hallazgo incómodo: con una coordinación lenta, lo urgente esperaba más que con un despachador humano.
-- Por eso cambiamos el producto: límite de tiempo para lo urgente y reserva del candidato. Hoy la espera p90 es 20.1 minutos contra 23.6 del despacho humano, con p < 0.001.
-- Y lo decimos con honestidad: la mejora viene sobre todo de priorizar por riesgo, no del tráfico.
+- Lo que más ayuda es priorizar por riesgo: la espera p90 de lo urgente baja de 23.6 a 20.2 minutos, con p < 0.001. El tráfico casi no agrega.
+- Y cuando coordinación tarda 5–15 min en aprobar, el límite de 3 min y la reserva mantienen la espera en 20.4; sin el límite sube a 21.7.
+- (Historia, corrida anterior del 21 nov con la plantilla de 7 días, solo si da tiempo o si preguntan:) con coordinación lenta, Enlaza sin límite quedaba peor que el despacho humano (+3.0 min (p = 0.006)); por eso agregamos el límite y la reserva.
 
 ### Diapositiva 6 · Enlaza Voz
 
@@ -160,25 +161,32 @@ Las frases son **sugeridas**: dichas con sus palabras suenan mejor que memorizad
 
 ### Diapositiva 9 · Pitch: por qué invertir ahora
 
-**Habla:** Persona 3 · **Dura:** 0:30 · **Se ve:** inversión, VPN, TIR y la curva del envejecimiento.
+**Habla:** Persona 3 · **Dura:** 0:30 · **Se ve:** inversión, VPN, TIR, la condición del escenario y el envejecimiento.
 
 **Qué se dice:**
 
 - Pedimos $1,011,746. En el escenario recomendado el VPN al 25 % es $1,207,425 y la TIR 65.6 %.
-- Somos honestos: el plan base tiene VPN negativo; por eso recomendamos crecer por regiones con un tope de participación.
+- Y lo decimos en voz alta: ese escenario supone el plan Gobierno y que los fundadores cobran el 50 % el primer año; sin ambos, el VPN sería negativo (−$180,904).
 - ¿Por qué ahora? En la Ciudad de México las personas de 60 o más pasan de 17.1 % a 21.4 % de la población en 2030, según CONAPO.
 
 ### Diapositiva 10 · Cierre
 
-**Habla:** Persona 1 · **Dura:** 0:20 · **Se ve:** logros, limitaciones y siguientes pasos.
+**Habla:** Persona 1 · **Dura:** 0:15 · **Se ve:** logros, limitaciones y siguientes pasos.
 
 **Qué se dice:**
 
-- En resumen: una sola aplicación, en tiempo real, que integra las seis materias y que la simulación ya mejoró.
+- En resumen: una sola aplicación, en tiempo real, que integra las seis materias y que la simulación nos ayudó a diseñar.
 - Sus límites: datos sintéticos, falsas alarmas de voz y que falta probarla con una institución real; ese es el siguiente paso.
-- Gracias. Con gusto respondemos sus preguntas.
 
-### Diapositiva 11 · Respaldo (no se presenta)
+### Diapositiva 11 · Gracias
+
+**Habla:** Persona 1 · **Dura:** 0:05 · **Se ve:** «Gracias», «¿Preguntas?», el QR y los nombres. **Se queda en pantalla durante los 5 minutos de preguntas.**
+
+**Qué se dice:**
+
+- (Persona 1 pasa a esta diapositiva.) Gracias. Con gusto respondemos sus preguntas.
+
+### Diapositiva 12 · Respaldo (no se presenta)
 
 **Habla:** quien esté narrando · **Dura:** 0:00 · **Se ve:** cuatro capturas de la demo.
 
@@ -206,12 +214,12 @@ perfiles o navegadores distintos.
 |---|---|---|---|
 | 1. La familia solicita | Celular: «Solicitar servicio», visita de enfermería, mañana a las 11:00 | En el tablero del proyector aparece la solicitud, ya asignada, sin recargar | Sin señal en el celular: Persona 2 lo hace en la ventana «Respaldo». Si el tablero no se mueve: recargar (F5) |
 | 2. Urgente | Ventana Dirección: «Contingencia en el oriente» (para el paso 3) y «Crear solicitud urgente» → Coordinación `/aprobaciones` → «Aprobar» → `/tablero` | La solicitud pasa de Aprobaciones al tablero, en vivo | Si no aparece en Aprobaciones: recargar. Si se pasa de 3 min, sale «aprobada por tiempo»: se explica que esa es la regla |
-| 3. Contingencia | Coordinación `/contingencia` → «Aprobar todo» → `/tablero` | Propuesta por institución; tras aprobar, los cambios en el tablero | Si aún no hay propuesta (el worker revisa cada minuto): seguir con el paso 4 y volver al final; si no llega, diapositiva 11 |
-| 4. Voz | Ventana Familia `/voz`: grabar la frase de emergencia | Pantalla roja «Llama al 911 ahora» | Micrófono falla: «Escribir el mensaje» y pegar la misma frase. Servicio de voz caído: también escrito |
+| 3. Contingencia | Coordinación `/contingencia` → «Aprobar todo» → `/tablero`; después, Dirección `/demo` → «Volver a normal» | Propuesta por institución; tras aprobar, los cambios en el tablero | Si aún no hay propuesta (el worker revisa cada minuto): seguir con el paso 4 y volver al final; si no llega, diapositiva 12 (Respaldo). Siempre «Volver a normal» al terminar |
+| 4. Voz | Ventana Familia `/voz`: grabar «Mi mamá no puede respirar y tiene los labios morados.» | Pantalla roja «Llama al 911 ahora» | Micrófono falla: «Escribir el mensaje» y pegar la misma frase. Servicio de voz caído: también escrito |
 
 **Frases de voz ya probadas:**
 
-- Emergencia (activa una regla, pantalla roja): «Mi mamá no puede respirar, tiene los labios morados y casi no responde.»
+- Emergencia (activa la regla de dificultad grave para respirar, pantalla roja): **«Mi mamá no puede respirar y tiene los labios morados.»** Usar exactamente esta.
 - Rutina (por si piden otra): «Mi papá amaneció de buen humor, desayunó completo y ya se tomó sus pastillas.»
 - **No usar** «Hoy mi mamá comió bien y durmió su siesta»: el clasificador la marca como emergencia (aviso ámbar). Si sale un
   ámbar inesperado, no es un error: es el momento de explicar los dos niveles y la revisión humana.
@@ -222,12 +230,12 @@ perfiles o navegadores distintos.
 |---|---|
 | No hay internet en el salón | Seguir en `http://localhost:8080` en las mismas ventanas (la app corre en la laptop). El QR del público no abrirá: decirlo y seguir |
 | `enlaza.zenthinks.com` da error 502 o 1033 | Persona 1 corre `bash scripts/enlaza.sh estado` en la terminal mientras Persona 2 sigue en `http://localhost:8080`. Si es 502: `bash scripts/autostart.sh` |
-| La app no responde ni en `localhost` | Ir a la diapositiva 11 (Respaldo) y narrar los cuatro pasos sobre las capturas; al final, ofrecer el video de respaldo |
+| La app no responde ni en `localhost` | Ir a la diapositiva 12 (Respaldo) y narrar los cuatro pasos sobre las capturas; al final, ofrecer el video de respaldo |
 | El tablero dice «Reconectando…» | Esperar 5 s; si sigue, recargar |
 
 ## Preguntas del sínodo (5 minutos)
 
-En orden de probabilidad. Responde primero quien aparece; los demás completan solo si hace falta. Respuestas cortas: 20 a 30 s.
+Mientras tanto se queda en pantalla la diapositiva 11 (Gracias, con el QR). En orden de probabilidad. Responde primero quien aparece; los demás completan solo si hace falta. Respuestas cortas: 20 a 30 s.
 
 | # | Pregunta | Responde | Respuesta corta |
 |---|---|---|---|
@@ -266,7 +274,7 @@ En orden de probabilidad. Responde primero quien aparece; los demás completan s
 **15 minutos antes**
 
 - [ ] Abrir las cuatro ventanas de la tabla de arriba, cada una con su sesión iniciada y en su pestaña.
-- [ ] En la ventana Familia, aceptar el permiso del micrófono (probarlo sin enviar nada).
+- [ ] En la ventana Familia, aceptar el permiso del micrófono y **probar la frase** «Mi mamá no puede respirar y tiene los labios morados.»: debe salir la pantalla roja. Después, `python3 scripts/reset_demo.py` (borra esa prueba) y recargar las ventanas.
 - [ ] Celular de Persona 3: wifi apagado, datos móviles, sesión de `fam-0002` en `/familia`.
 - [ ] Proyector a 1280 × 720 o más; presentación abierta en modo presentador; cronómetro listo.
 - [ ] La presentación en PDF y el video de respaldo en el escritorio, por si falla PowerPoint.
@@ -276,6 +284,11 @@ En orden de probabilidad. Responde primero quien aparece; los demás completan s
 - [ ] Tablero de coordinación «● En vivo».
 - [ ] Notificaciones de Windows y del celular en silencio.
 - [ ] Cada quien sabe su primera frase y quién le pasa la palabra.
+
+**Al terminar la presentación**
+
+- [ ] `python3 scripts/reset_demo.py` (borra lo que creó la demo: solicitudes, la contingencia, la nota de voz y sus alertas).
+- [ ] `bash scripts/backup_db.sh despues_coloquio` si se quiere guardar cómo quedó antes de limpiar (correrlo antes del reset).
 
 ## Video de respaldo (4 minutos)
 

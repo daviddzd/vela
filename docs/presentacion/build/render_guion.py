@@ -101,7 +101,7 @@ def main() -> None:
 
     rows = ["| Parte | Diapositivas | Tiempo |", "|---|---|---|"]
     blocks = [("Problema y solución", ["d1", "d2", "d3"]), ("Demostración en vivo", ["d4"]),
-              ("Simulación, voz, seguridad y ética", ["d5", "d6", "d7"]), ("Negocio, pitch y cierre", ["d8", "d9", "d10"])]
+              ("Simulación, voz, seguridad y ética", ["d5", "d6", "d7"]), ("Negocio, pitch, cierre y gracias", ["d8", "d9", "d10", "d11"])]
     for name, ids in blocks:
         rows.append(f"| {name} | {', '.join(i[1:] for i in ids)} | {mmss(sum(p['secs'] for p in slides if p['id'] in ids))} |")
     rows.append(f"| **Total** | | **{mmss(total)}** (margen: {mmss(600 - total)}) |")

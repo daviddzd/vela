@@ -6,6 +6,8 @@
 #
 # Output (docs/presentacion/): enlaza_coloquio.pptx and .pdf, guion_coloquio.md and .pdf, fuentes/ (brand fonts to
 # install on Windows), out/diapositivas/*.png (one image per slide, to check them) and out/verificacion.md.
+# If docs/biblia/equipo.yaml exists (local, git-ignored), also a version WITH the team names on the cover and the thanks
+# slide: docs/privado/coloquio/enlaza_coloquio.pptx and .pdf (git-ignored). The version in Git says "Persona 1–4".
 # The numbers come from the same script as "La biblia de Enlaza" (docs/biblia/build/collect_numbers.py).
 set -euo pipefail
 cd "$(dirname "$0")/.."
@@ -47,3 +49,15 @@ mkdir -p "$P/fuentes"
 "${RUN[@]}" "$IMAGE" sh -c "cp /usr/local/share/fonts/enlaza/*.ttf $P/fuentes/"
 echo "== Verificación"
 "${RUN[@]}" "$IMAGE" python3 "$P/build/check.py"
+
+if [[ -f docs/biblia/equipo.yaml ]]; then
+  echo "== Versión con nombres (docs/privado/coloquio/, fuera de Git)"
+  PRIV=docs/privado/coloquio
+  NAMES=$("${RUN[@]}" "$IMAGE" python3 -c "import yaml; d = yaml.safe_load(open('docs/biblia/equipo.yaml')) or {}; print('|'.join(d.get('integrantes') or []))")
+  "${RUN[@]}" -e NOMBRES="$NAMES" -e OUTFILE="$PRIV/enlaza_coloquio.pptx" "$IMAGE" node "$P/build/deck.cjs"
+  "${RUN[@]}" "$IMAGE" python3 "$P/build/errbars.py" "$PRIV/enlaza_coloquio.pptx"
+  "${RUN[@]}" "$IMAGE" soffice --headless --convert-to pdf --outdir "$PRIV" "$PRIV/enlaza_coloquio.pptx" >/dev/null
+  rm -rf "$PRIV/diapositivas" && mkdir -p "$PRIV/diapositivas"
+  "${RUN[@]}" "$IMAGE" pdftoppm -png -r 110 "$PRIV/enlaza_coloquio.pdf" "$PRIV/diapositivas/diapositiva"
+  "${RUN[@]}" -e DECK_DIR="$PRIV" "$IMAGE" python3 "$P/build/check.py"
+fi
