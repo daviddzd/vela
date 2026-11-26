@@ -132,3 +132,20 @@ def test_a_visit_still_within_its_time_is_not_touched(db_conn):
                                   now() - interval '2 hours')"""), {"r": rid})   # ended 90 min ago: < 2 h
         alerts_followup.mark_not_closed(s)
         assert s.scalar(text("SELECT status FROM service_requests WHERE request_id = :r"), {"r": rid}) == "in_progress"
+
+
+def test_classifier_confidence_is_for_coordination_and_physician_not_family(tx_client, db_conn, monkeypatch):
+    """The review alert and the physician inbox carry the classifier's probabilities; the family's answer does not."""
+    fake_classifier(monkeypatch, "emergency")
+    pid = family_patient(db_conn)
+    login(tx_client, "fam-0001@ejemplo.test")
+    r = send(tx_client, pid, CALM_TEXT)
+    assert "classifier_probs" not in r and "probs" not in r                # never shown to the family
+    login(tx_client, "coordinacion.a@ejemplo.test")
+    alerts = tx_client.get("/api/board").json()["alerts"]
+    review = next(a for a in alerts if a["type"] == "emergency_review" and a["code"] == f"voice:{r['report_id']}")
+    assert review["classifier_probs"] == {"routine": 0.1, "urgent": 0.1, "emergency": 0.8}
+    login(tx_client, "cui-001@ejemplo.test")                               # physician of INS-A (PAC-0001 is theirs)
+    rep = next((x for x in tx_client.get("/api/voice/reports").json() if x["report_id"] == r["report_id"]), None)
+    assert rep is not None and rep["health_consent"]
+    assert rep["classifier_probs"]["emergency"] == 0.8

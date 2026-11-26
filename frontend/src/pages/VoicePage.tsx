@@ -14,7 +14,8 @@ import { es } from "../i18n/es";
 
 const t = es.voice;
 const MAX_SECONDS = 60;
-type Patient = { patient_id: string; name: string; voice_consent: boolean; language: string | null };
+type Patient = { patient_id: string; name: string; voice_consent: boolean; voice_block?: "no_consent" | "no_assent" | null;
+  language: string | null };
 type SupportLine = { name: string; phone: string; tel: string };
 type Result = { level: string; emergency_source?: "rule" | "classifier" | null; transcript: string; ask_repeat: boolean; needs_human_review: boolean; support_line?: SupportLine | null };
 
@@ -61,7 +62,7 @@ export function VoicePage() {
   };
   const fail = (status: number, msg: string) => {
     setMode(status === 503 ? "write" : "idle");
-    setNotice({ kind: "error", text: status === 403 ? t.noConsent : status === 503 ? t.voiceDown : msg || es.common.error });
+    setNotice({ kind: "error", text: status === 403 ? (msg || t.noConsent) : status === 503 ? t.voiceDown : msg || es.common.error });
   };
 
   const start = async () => {
@@ -154,7 +155,8 @@ export function VoicePage() {
             {patients.map((p) => <option key={p.patient_id} value={p.patient_id}>{p.name}</option>)}
           </select>
         </label>
-        {patient && !patient.voice_consent && <div className="mt-3"><Notice kind="error">{t.noConsent}</Notice></div>}
+        {patient && !patient.voice_consent && <div className="mt-3"><Notice kind="error">
+          {patient.voice_block === "no_assent" ? t.noAssent : t.noConsent}</Notice></div>}
         {notice && <div className="mt-3"><Notice kind={notice.kind}>{notice.text}</Notice></div>}
 
         {patient?.voice_consent && (

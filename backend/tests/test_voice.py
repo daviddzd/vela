@@ -215,3 +215,31 @@ def test_inbox_unreviewed_first_then_most_serious(tx_client, db_conn):
     login(tx_client, "cui-001@ejemplo.test")
     order = [r["report_id"] for r in tx_client.get("/api/voice/reports").json() if r["report_id"] in made.values()]
     assert order == [made[("emergency", False)], made[("urgent", False)], made[("routine", False)], made[("emergency", True)]]
+
+
+def test_person_who_did_not_assent_gets_no_voice(tx_client, db_conn, monkeypatch):
+    """A representative signed, but the person did not agree (assent = 'no'): blocked like without consent
+    (team decision 25 Nov 2026; docs/legal/formato_consentimiento.md)."""
+    fake_classifier(monkeypatch, "routine")
+    pid = family_patient(db_conn)
+    count = text("SELECT count(*) FROM voice_reports WHERE patient_id = :p")
+    with session_on(db_conn, "INS-A") as s:
+        before = s.scalar(count, {"p": pid})
+        s.execute(text("""UPDATE consents SET granted = true, granted_by = 'legal_representative', patient_assent = 'no'
+                          WHERE patient_id = :p AND type = 'voice_assistant'"""), {"p": pid})
+        assert s.scalar(text("SELECT is_valid FROM v_consents WHERE patient_id = :p AND type = 'voice_assistant'"),
+                        {"p": pid})                                    # the signature itself is still valid
+        s.commit()
+    login(tx_client, "fam-0001@ejemplo.test")
+    [p] = [x for x in tx_client.get("/api/voice/patients").json() if x["patient_id"] == pid]
+    assert p["voice_consent"] is False and p["voice_block"] == "no_assent"
+    r = tx_client.post("/api/voice/text", json={"patient_id": pid, "text": EMERGENCY_TEXT})
+    assert r.status_code == 403 and "no estuvo de acuerdo" in r.json()["detail"]
+    with session_on(db_conn, "INS-A") as s:
+        assert s.scalar(count, {"p": pid}) == before                    # nothing was stored
+    # any other assent keeps the voice working
+    with session_on(db_conn, "INS-A") as s:
+        s.execute(text("UPDATE consents SET patient_assent = 'unable_to_express' WHERE patient_id = :p AND type = 'voice_assistant'"),
+                  {"p": pid})
+        s.commit()
+    assert send(tx_client, pid, "Hoy desayunó bien y salió a caminar un rato.")["level"] in ("routine", "urgent", "emergency")

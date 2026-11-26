@@ -25,6 +25,7 @@ export function DateField({ label, value, onChange, required = false, error }: {
   const [text, setText] = useState(toDisplay(value));
   const [touched, setTouched] = useState(false);
   const input = useRef<HTMLInputElement>(null);
+  const justFocused = useRef(false);     // the mouseup of the focusing click must not undo the selection
   const emitted = useRef(value ?? "");
   const errorId = useId();
   // a new value from the parent (e.g. "Quitar filtros") replaces the text; our own echo does not
@@ -50,7 +51,9 @@ export function DateField({ label, value, onChange, required = false, error }: {
       <input ref={input} type="text" inputMode="numeric" autoComplete="off" placeholder={es.dates.placeholder} value={text}
         maxLength={10} data-own-error="" required={required}
         // writing over a date that is already there replaces it instead of appending ("24/11/202624/11/2026")
-        onFocus={(e) => { const el = e.currentTarget; setTimeout(() => el.select(), 0); }}   // after the click places the caret
+        // select at once (typing right after the click replaces the date) and keep it through the click's mouseup
+        onFocus={(e) => { e.currentTarget.select(); justFocused.current = true; }}
+        onMouseUp={(e) => { if (justFocused.current) { e.preventDefault(); justFocused.current = false; } }}
         onChange={(e) => change(e.target.value)} onBlur={() => setTouched(true)}
         onInvalid={() => setTouched(true)}
         aria-invalid={show} aria-describedby={show ? errorId : undefined} className={`${inputClass} w-40`} />

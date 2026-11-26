@@ -19,6 +19,10 @@ from app.services import oracle
 router = APIRouter(prefix="/api", tags=["voice"])
 SPEAKERS = (FAMILY, CAREGIVER, PHYSICIAN)
 NO_CONSENT = "Falta autorización para usar el asistente de voz con esta persona. Pide a la coordinación que la registre."
+# The representative signed, but the person did not agree (assent = 'no'): no voice (team decision 25 Nov 2026)
+NO_ASSENT = ("La persona no estuvo de acuerdo con usar el asistente de voz (así quedó registrado en su consentimiento). "
+             "No se grabó nada. Si eso cambió, habla con la coordinación.")
+BLOCK_MESSAGE = {"no_consent": NO_CONSENT, "no_assent": NO_ASSENT}
 VOICE_DOWN = "El servicio de voz no responde. Escribe tu mensaje."
 LANG = {"nahuatl": "náhuatl", "mixtec": "mixteco", "otomi": "otomí", "mazatec": "mazateco", "zapotec": "zapoteco",
         "mazahua": "mazahua", "totonac": "totonaco", "other": "otra lengua indígena"}
@@ -41,11 +45,13 @@ def voice_patients(user: CurrentUser = Depends(require_role(*SPEAKERS)), db: Ses
         SELECT r.patient_id FROM assignments a JOIN service_requests r USING (request_id) WHERE a.caregiver_id = :c)"""
     rows = db.execute(text(f"""
         SELECT pa.patient_id, pe.first_name || ' ' || pe.paternal_surname AS name, pe.indigenous_language,
-               coalesce((SELECT is_valid FROM v_consents c WHERE c.patient_id = pa.patient_id AND c.type = 'voice_assistant'), false) AS voice_consent
+               (SELECT CASE WHEN NOT coalesce(c.is_valid, false) THEN 'no_consent' WHEN c.patient_assent = 'no' THEN 'no_assent' END
+                FROM (SELECT 1) one LEFT JOIN v_consents c ON c.patient_id = pa.patient_id AND c.type = 'voice_assistant') AS voice_block
         FROM patients pa JOIN persons pe USING (person_id) WHERE pa.active AND {where}
         ORDER BY name LIMIT 40"""), {"fp": family_patient_id(db, user) if user.role == FAMILY else None,
                                      "c": user.caregiver_id}).mappings().all()
-    return [{**dict(r), "language": LANG.get(r["indigenous_language"])} for r in rows]
+    # voice_consent = the voice can be used (valid consent AND the person did not refuse); voice_block says why not
+    return [{**dict(r), "voice_consent": r["voice_block"] is None, "language": LANG.get(r["indigenous_language"])} for r in rows]
 
 
 def _respond(result: dict, user: CurrentUser, background: BackgroundTasks) -> dict:
@@ -63,9 +69,9 @@ async def voice_note(background: BackgroundTasks, patient_id: str = Form(...), a
     try:
         result = oracle.process(db, user_id=user.user_id, institution_id=user.institution_id, patient_id=patient_id,
                                 input_mode="audio", audio=data, filename=audio.filename or "nota.webm")
-    except oracle.NoConsent:
+    except oracle.NoConsent as e:
         db.commit()   # keep the audit row of the blocked attempt
-        raise HTTPException(status.HTTP_403_FORBIDDEN, NO_CONSENT)
+        raise HTTPException(status.HTTP_403_FORBIDDEN, BLOCK_MESSAGE[e.reason])
     except oracle.VoiceUnavailable:
         raise HTTPException(status.HTTP_503_SERVICE_UNAVAILABLE, VOICE_DOWN)
     return _respond(result, user, background)
@@ -84,9 +90,9 @@ def voice_text(body: TextNoteIn, background: BackgroundTasks, user: CurrentUser 
     try:
         result = oracle.process(db, user_id=user.user_id, institution_id=user.institution_id, patient_id=body.patient_id,
                                 input_mode="text", text_=body.text)
-    except oracle.NoConsent:
+    except oracle.NoConsent as e:
         db.commit()
-        raise HTTPException(status.HTTP_403_FORBIDDEN, NO_CONSENT)
+        raise HTTPException(status.HTTP_403_FORBIDDEN, BLOCK_MESSAGE[e.reason])
     return _respond(result, user, background)
 
 
@@ -120,7 +126,7 @@ def reports(user: CurrentUser = Depends(require_role(PHYSICIAN)), db: Session = 
     rows = db.execute(text("""
         SELECT v.report_id, v.patient_id, pe.first_name || ' ' || pe.paternal_surname AS patient_name, v.created_at,
                v.transcript, v.transcript_confidence::float AS confidence, v.triage_label, v.rule_hits, v.report,
-               v.report_status, v.report_problem, v.needs_human_review, v.input_mode, v.classifier_label,
+               v.report_status, v.report_problem, v.needs_human_review, v.input_mode, v.classifier_label, v.classifier_probs,
                v.reviewed_at, v.timings,
                coalesce((SELECT is_valid FROM v_consents c WHERE c.patient_id = v.patient_id AND c.type = 'health_data'), false) AS health_consent
         FROM voice_reports v JOIN patients pa ON pa.patient_id = v.patient_id JOIN persons pe ON pe.person_id = pa.person_id
@@ -135,7 +141,8 @@ def reports(user: CurrentUser = Depends(require_role(PHYSICIAN)), db: Session = 
         cats = oracle.rules()["categories"]
         r["rule_labels"] = [cats[h]["label_es"] for h in (r["rule_hits"] or []) if h in cats]   # Spanish names
         if not r["health_consent"]:   # no health data without consent
-            r.update(transcript=None, report=None, rule_hits=[], rule_labels=[], health_notice="Falta consentimiento")
+            r.update(transcript=None, report=None, rule_hits=[], rule_labels=[], classifier_probs=None,
+                     health_notice="Falta consentimiento")
         out.append(r)
     audit(db, user_id=user.user_id, institution_id=user.institution_id, action="read_voice_reports", entity="voice_report",
           entity_id=None, detail={"count": len(out)})
@@ -177,6 +184,7 @@ def demo_voice(body: DemoVoiceIn, background: BackgroundTasks, user: CurrentUser
     phrase = random.Random().choice(phrases)
     patient = db.scalar(text("""SELECT pa.patient_id FROM patients pa JOIN v_consents c USING (patient_id)
                                 WHERE pa.institution_id = :i AND pa.active AND c.type = 'voice_assistant' AND c.is_valid
+                                  AND c.patient_assent IS DISTINCT FROM 'no'
                                 ORDER BY pa.patient_id LIMIT 1"""), {"i": body.institution_id})
     if patient is None:
         raise HTTPException(status.HTTP_409_CONFLICT, "Esa institución no tiene pacientes con autorización de voz.")

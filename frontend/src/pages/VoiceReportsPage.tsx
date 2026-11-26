@@ -7,6 +7,7 @@ import { AppShell } from "../components/AppShell";
 import { Icon } from "../components/icons";
 import { Button, Card, Notice, PageHeader } from "../components/ui";
 import { es } from "../i18n/es";
+import { classifierText } from "../lib/classifierText";
 import { formatDateTime } from "../lib/format";
 
 const t = es.reports;
@@ -58,6 +59,9 @@ export function VoiceReportsPage() {
                 <dl className="mt-3 space-y-2">
                   <div><dt className="font-bold">{t.transcript}</dt><dd>«{r.transcript}»</dd></div>
                   {r.rule_labels?.length > 0 && <div><dt className="font-bold">{t.rules}</dt><dd>{r.rule_labels.join(", ")}</dd></div>}
+                  {classifierText(r.classifier_probs) && <div><dt className="font-bold">{es.classifierConfidence.label}</dt>
+                    <dd>{classifierText(r.classifier_probs)}</dd>
+                    <dd className="text-sm text-muted">{es.classifierConfidence.note}</dd></div>}
                   {r.report_status === "pending" && <p className="text-muted">{t.pending}</p>}
                   {(r.report_status === "invalid" || r.report_status === "failed") && <p className="text-muted">{t.invalid}</p>}
                   {rep && (<>
