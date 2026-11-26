@@ -65,7 +65,7 @@ crisis se resuelve cuando se atiende). Por eso las comparaciones son **pareadas*
 | Hora de las visitas del plan | turnos de 8 h a las 08:00, de 12 h a las 20:00; resto en bloques de 15 min de 8 a 18 h | regla del generador de la semilla (`hora_deseada`) |
 | Transiciones por hora stable→at_risk / at_risk→stable / at_risk→crisis | 0.0006 / 0.05 / 0.01 | **supuesto** calibrado a ~0.9 crisis/año (YAML) |
 | Multiplicadores de riesgo (pulmonar 1.5, cardiaca 1.4, EVC 1.3, diabetes 1.15, dependencia severa 1.6 / moderada 1.25, 80+ 1.3, sin crónica 0.5) | YAML | **supuesto** (YAML) |
-| Efecto PM2.5 por +10 µg/m³ sobre la línea base de 30 días de la estación | respiratorio 2.2 %, cardiovascular 0.78 %, causas naturales 0.91 % | Bell et al. 2014; BMJ 2024 (citados en el YAML) |
+| Efecto PM2.5 por +10 µg/m³ sobre la línea base de 30 días de la estación | respiratorio 2.2 %, cardiovascular 0.78 %, causas naturales 0.91 % | Kloog et al. 2014 (PLoS One 9:e88578; Medicare 65+, EE. UU.); BMJ 2024 (citados en el YAML) |
 | **Aplicar esos coeficientes a un riesgo por hora** | se multiplica la transición stable→at_risk | **supuesto del modelo**: los coeficientes vienen de estudios de mortalidad e ingresos hospitalarios **diarios** |
 | A quién se aplica cada coeficiente | pulmonar → respiratorio; corazón/EVC → cardiovascular; resto → causas naturales | YAML (`apply_*`) + **supuesto** para "resto" |
 | Estación de cada paciente | la más cercana | **supuesto** (coordenadas de estaciones aproximadas) |
