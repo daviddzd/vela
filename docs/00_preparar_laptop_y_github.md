@@ -208,6 +208,7 @@ Desde el 25 nov 2026 la app tiene una dirección fija y un QR que no cambia. Fun
 | Túnel `enlaza` | creado en el panel de Cloudflare (one.dash.cloudflare.com → Networks → Tunnels), ruta pública `enlaza.zenthinks.com` → `http://127.0.0.1:8080`. La raíz `zenthinks.com` no apunta a nada |
 | Servicio de Windows `cloudflared` | instalado con `cloudflared.exe service install <token>` (PowerShell como administrador); arranque automático al prender la laptop |
 | Docker Desktop | Settings → General → «Start Docker Desktop when you sign in» activado; los servicios del compose tienen `restart: unless-stopped` y vuelven solos |
+| Tarea «Enlaza - arranque» | `scripts/windows/install_startup_task.ps1`: al iniciar sesión corre `scripts/autostart.sh`, que espera a Docker, revisa que cada contenedor vea sus archivos y reinicia los que no. **Hace falta**: Docker Desktop suele levantar los contenedores antes de que Ubuntu esté listo; entonces `db` y `proxy` no arrancan («not a directory») y `api`/`worker` arrancan con `config/` vacío (sin reglas de emergencia) aunque digan «healthy». Registro: `~/.local/state/enlaza/arranque.log` |
 | Ollama | arranca al iniciar sesión (acceso directo en la carpeta Inicio de Windows) |
 | Reloj de WSL | tarea de Windows «Enlaza - reloj de WSL» (`scripts/windows/install_clock_task.ps1`): copia la hora de Windows a WSL al iniciar sesión, al despertar y cada 30 min |
 | QR | `uv run scripts/make_qr.py` → `docs/privado/qr_enlaza.png` y `qr_enlaza_diapositiva.png` (Git los ignora) |
@@ -305,6 +306,7 @@ uv run scripts/make_qr.py https://palabras-al-azar.trycloudflare.com   # QR de r
 | La API no alcanza a Ollama | En PowerShell `setx OLLAMA_HOST 0.0.0.0:11434`, reinicia Ollama y permite el acceso en el firewall solo para redes privadas |
 | `verify_db.py` falla en conteos | `docker compose down -v` y volver a `up -d db` (la carga solo corre con el volumen vacío) |
 | El enlace de Cloudflare da error 502 | La app no está corriendo en el puerto 8080: `docker compose ps` |
+| Después de reiniciar, error 502 o pantallas sin datos | `bash scripts/autostart.sh` (los montajes de Ubuntu salieron vacíos; ver «Enlace fijo») |
 | `enlaza.zenthinks.com` da error 1033 | El servicio del túnel no corre: `bash scripts/enlaza.sh estado` y `encender`; respaldo `bash scripts/enlaza.sh rapido` |
 | El tablero se queda en "Reconectando…" | `curl localhost:8080/api/health` debe decir `"realtime":"ok"`; si dice `reconnecting`, revisa `docker compose logs api` y que `db` esté arriba |
 | Te saca la sesión segundos después de entrar | El reloj de WSL2 se atrasó (sobre todo al despertar de la suspensión); la API tolera 60 s. La tarea «Enlaza - reloj de WSL» lo corrige sola; a mano: `bash scripts/enlaza.sh reloj`. Si sigue: en PowerShell `wsl --shutdown` y vuelve a abrir Ubuntu |

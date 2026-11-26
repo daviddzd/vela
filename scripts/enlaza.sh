@@ -27,6 +27,10 @@ case "${1:-estado}" in
     ps "Get-Service cloudflared -ErrorAction SilentlyContinue | ForEach-Object { 'Estado: ' + \$_.Status + ' - arranque: ' + \$_.StartType }; if (-not (Get-Service cloudflared -ErrorAction SilentlyContinue)) { 'NO está instalado' }"
     echo "== Docker"
     docker compose ps --format 'table {{.Service}}\t{{.Status}}' 2>&1
+    echo "== Archivos dentro de los contenedores (reglas de emergencia, configuración, Caddyfile)"
+    if docker compose exec -T api test -s /config/emergency_rules.yaml 2>/dev/null && docker compose exec -T worker test -s /config/simulation.yaml 2>/dev/null \
+       && docker compose exec -T proxy test -s /etc/caddy/Caddyfile 2>/dev/null; then echo "bien"; else echo "FALTAN: bash scripts/autostart.sh"; fi
+    echo "Último arranque: $(tail -1 "$HOME/.local/state/enlaza/arranque.log" 2>/dev/null || echo 'sin registro')"
     echo "== Ollama"
     ps "try { (Invoke-WebRequest -UseBasicParsing -TimeoutSec 5 http://127.0.0.1:11434/api/version).Content } catch { 'Ollama NO responde' }"
     echo "== App en la laptop (http://localhost:8080)"
@@ -38,7 +42,7 @@ case "${1:-estado}" in
     echo "diferencia: $((l - w)) s (debe ser 0 o 1; si es grande: bash scripts/enlaza.sh reloj)"
     ;;
   encender)
-    echo "Encendiendo Docker (servicios de la app)…"; docker compose up -d
+    echo "Encendiendo Docker (servicios de la app)…"; bash scripts/autostart.sh | tail -2
     echo "Encendiendo Ollama…"
     ps "if (-not (Get-Process 'ollama app' -ErrorAction SilentlyContinue)) { Start-Process \"\$env:LOCALAPPDATA\\Programs\\Ollama\\ollama app.exe\" }"
     echo "Encendiendo el túnel (Windows pedirá permiso de administrador)…"; admin "Start-Service cloudflared"
