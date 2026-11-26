@@ -40,6 +40,8 @@ async function settle(page, ms = 2500) {
 async function shot(page, name, { full = true } = {}) {
   const file = path.join(OUT, `${name}.png`);
   await page.screenshot({ path: file, fullPage: full });
+  // the visible text, for the final check that no screenshot shows test data (verify.py)
+  fs.writeFileSync(file.replace(/\.png$/, ".txt"), await page.locator("body").innerText().catch(() => ""));
   console.log("captura", name);
 }
 
@@ -121,7 +123,9 @@ async function screens(user, list, opts = {}) {
       const el = list.nth(i);
       if ((await el.boundingBox())?.height < 40) continue;
       await el.scrollIntoViewIfNeeded(); await page.waitForTimeout(400);
-      await el.screenshot({ path: path.join(OUT, `${prefix}_${String(i + 1).padStart(2, "0")}.png`) });
+      const card = path.join(OUT, `${prefix}_${String(i + 1).padStart(2, "0")}.png`);
+      await el.screenshot({ path: card });
+      fs.writeFileSync(card.replace(/\.png$/, ".txt"), await el.innerText().catch(() => ""));
     }
     console.log("tarjetas", prefix, n);
     await ctx.close();

@@ -39,3 +39,6 @@ echo "== Markdown → HTML"
 "${RUN[@]}" python3 docs/biblia/build/build.py
 echo "== HTML → PDF"
 "${RUN[@]}" node docs/biblia/build/render.cjs
+echo "== Verificación final (números contra sus archivos, texto del PDF, capturas)"
+"${RUN[@]}" python3 docs/biblia/build/verify.py
+echo "Informe completo: docs/biblia/out/verificacion.md"

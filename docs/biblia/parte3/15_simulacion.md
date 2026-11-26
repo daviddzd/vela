@@ -107,7 +107,7 @@ esperar mucho a nadie, no solo el promedio.
 
 ### Intervalo de confianza
 
-**Qué es.** Un rango que, con un nivel de confianza (95 %), contiene el valor verdadero del promedio. Más réplicas →
+**Qué es.** Un rango que, con un nivel de confianza (en Enlaza, {{ cfg.confidence }}), contiene el valor verdadero del promedio. Más réplicas →
 intervalo más angosto.
 
 **Ejemplo.** Una encuesta dice «42 % ± 3 puntos»: el valor real probablemente está entre 39 % y 45 %.

@@ -53,7 +53,7 @@ flowchart TB
   D["Despacho cada {{ code.sim_cycle }}<br/>dispatcher.py de la operación"]
   R["Atención: la crisis se resuelve<br/>al terminar la visita"]
   U["Sin atender"]
-  M["Métricas por réplica → IC 95 %, pruebas"]
+  M["Métricas por réplica → IC {{ cfg.confidence }}, pruebas"]
   S & A & Y --> H & P & D
   H -- "crisis = prioridad alta" --> Q
   P --> Q
@@ -116,7 +116,7 @@ aplican el descanso semanal y la jornada legal, con las mismas funciones de la o
 Con el escenario normal, el despacho humano y la plantilla **como estaba en la semilla** (sin día de descanso, porque
 así ocurrió el historial), contando solo «sin atender por falta de personal»:
 
-| | Historial (semilla) | Simulación (IC 95 %) |
+| | Historial (semilla) | Simulación (IC {{ cfg.confidence }}) |
 |---|---|---|
 | Todas las solicitudes | {{ sim.val_real_pct }} | {{ sim.val_sim_short_ci }} sin turnos largos; más alto con ellos |
 | Sin turnos largos (8 h y 12 h) | {{ sim.val_real_short_pct }} | {{ sim.val_sim_short_pct }} ({{ sim.val_sim_short_ci }}) |

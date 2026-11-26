@@ -65,12 +65,20 @@ partes:
     titulo: "Parte V · Operación práctica"
     kicker: "Parte V"
     descripcion: "Preparar la laptop, arrancar, presentar y resolver problemas el día de la defensa."
-    capitulos: []
+    capitulos:
+      - parte5/24_preparar_laptop.md
+      - parte5/25_operar.md
+      - parte5/26_presentar.md
+      - parte5/27_plan_b.md
 
   - id: anexos
     titulo: "Anexos"
     kicker: "Consulta"
-    descripcion: "Glosario, usuarios de prueba, comandos, mapa del repositorio y fuentes."
+    descripcion: "Usuarios de prueba, comandos, mapa del repositorio, criterios de aceptación, glosario y referencias en APA 7."
     tipo: anexo
     generado: glosario
-    capitulos: []
+    capitulos:
+      - anexos/a_usuarios.md
+      - anexos/b_comandos.md
+      - anexos/c_mapa_repositorio.md
+      - anexos/d_criterios.md

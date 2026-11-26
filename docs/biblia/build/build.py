@@ -90,6 +90,21 @@ class Chapter:
         self.html = ""
 
 
+def users_table() -> str:
+    """Demo accounts from the seed (database/seed/users.csv): e-mail, role, institution, what they open first."""
+    import csv as _csv
+    inst = {r["institution_id"]: r["name"] for r in _csv.DictReader(open(ROOT / "database/seed/institutions.csv", encoding="utf-8"))}
+    roles = {"owner": ("Dirección", "/panorama"), "coordinator": ("Coordinación", "/tablero"), "physician": ("Medicina", "/reportes-voz"),
+             "caregiver": ("Cuidado / enfermería", "/mis-visitas"), "family": ("Familia", "/familia")}
+    rows = []
+    for u in _csv.DictReader(open(ROOT / "database/seed/users.csv", encoding="utf-8")):
+        r, home = roles[u["role"]]
+        rows.append(f"<tr><td><code>{html.escape(u['email'])}</code></td><td>{r}</td>"
+                    f"<td>{html.escape(inst.get(u['institution_id'], 'Todas'))}</td><td><code>{home}</code></td></tr>")
+    return ('<table class="usuarios"><thead><tr><th>Correo</th><th>Rol</th><th>Institución</th><th>Inicio</th></tr></thead><tbody>'
+            + "".join(rows) + "</tbody></table>")
+
+
 def number_html(key: str, where: str) -> str:
     if key not in NUMBERS:
         ERRORS.append(f"{where}: número desconocido {{{{ {key} }}}}")
@@ -132,6 +147,8 @@ def preprocess(ch: Chapter, chapters_by_id: dict[str, Chapter]) -> tuple[str, li
         inner = m.group(1).strip()
         if inner.startswith("tabla "):
             return "\n\n" + table_html(inner.split()[1:], where) + "\n\n"
+        if inner == "tabla_usuarios":
+            return "\n\n" + users_table() + "\n\n"
         if inner.startswith("equipo."):
             return html.escape(team_value(inner[len("equipo."):]))
         return number_html(inner, where)

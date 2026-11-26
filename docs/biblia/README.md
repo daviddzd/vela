@@ -28,7 +28,12 @@ las toma solas.
 - Referencias: `@ref(cap-id)` → «cap. N «Título» (p. X)».
 - Capturas: `![Pie](capturas/nombre.png)`; `{.media}` o `{.celular}` al final para hacerlas más chicas.
 - Cajas: `!!! pregunta "¿…?"`, `!!! nota "…"`, `!!! cuidado "…"`, `!!! ejemplo "…"`, `!!! frase "…"`.
-- Datos del equipo (nombres, materias, defensa): `equipo.yaml`; vacío se imprime «____».
+- Datos del equipo (nombres, materias, defensa): `equipo.yaml`, **local** (Git lo ignora porque trae nombres reales).
+  Para crearlo: `cp docs/biblia/equipo.example.yaml docs/biblia/equipo.yaml` y llenarlo. Vacío se imprime «____».
+- Referencias: `referencias.yaml` en APA 7. La compilación se detiene si una URL de `assumptions.csv` o de
+  `docs/spec/09_datos.md`, o una cita «Autor (año)» del texto, no tiene su referencia.
+- Verificación final: `build/verify.py` (corre al final de `build_biblia.sh`) recalcula cada número por otro camino,
+  revisa que aparezca en el PDF y que las capturas no tengan datos de prueba → `out/verificacion.md`.
 
 ## Archivos
 
@@ -40,3 +45,7 @@ las toma solas.
 | `build/render.cjs` | HTML → PDF (Mermaid, Paged.js, marcadores del PDF) |
 | `build/capture.cjs` | capturas de cada pantalla por rol |
 | `build/style.css` | diseño con la identidad Enlaza (`docs/brand.md`) |
+| `build/verify.py` | verificación final → `out/verificacion.md` |
+| `datos/*.yaml` | mediciones manuales, resultados históricos y cifras de los documentos del curso, cada una con su fuente |
+| `referencias.yaml` | referencias APA 7 |
+| `equipo.example.yaml` | plantilla de los datos del equipo |
