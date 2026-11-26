@@ -74,12 +74,16 @@ IA en los commits (ver @ref(cap-construccion)).
 multimorbilidad (@ref(cap-datos)).
 
 **7. SIRAG-D y el hallazgo que cambió el producto (PR #5).**
-- *Qué pasó:* en la sensibilidad, con una coordinación que tarda 5–15 min en aprobar, **Enlaza quedaba peor que el despacho
-  humano** en lo urgente ({{ hist.sens_antes_espera }}, histórico).
+- *Qué pasó (corrida anterior, plantilla de 7 días):* en la sensibilidad, con una coordinación que tarda
+  {{ sens.approval_delay.5-15.label }} en aprobar, **Enlaza quedaba peor que el despacho humano** en lo urgente
+  ({{ hist.sens_antes_espera }}, histórico).
 - *Cómo se descubrió:* el análisis de sensibilidad del retraso de aprobación, que era un supuesto dudoso.
 - *Qué se decidió:* **aprobación con límite de tiempo solo para lo urgente** ({{ cfg.auto_apply_after }}, visita en menos de
   {{ cfg.urgent_within }}) y **reserva del candidato** ({{ cfg.hold_minutes }}). Con los dos cambios: {{ hist.sens_limite_y_reserva_espera }}
-  frente al humano (@ref(cap-sirag)).
+  frente al humano en esa corrida. En la corrida vigente (plantilla legal), la mejora principal viene de priorizar por riesgo
+  ({{ sim.normal.human_dispatcher.high_wait_p90_min }} → {{ sim.normal.risk_priority.high_wait_p90_min }} min) y el límite importa
+  cuando coordinación tarda ({{ sens.approval_delay.5-15.vela_timeout.high_wait_p90_min }} con límite contra
+  {{ sens.approval_delay.5-15.risk_plus_live_traffic.high_wait_p90_min }} sin él) (@ref(cap-sirag)).
 - *También:* el worker publicaba los turnos de 8 h a horas al azar y nunca se podían asignar. Se creó una regla de horario
   compartida con la simulación (`visit_rules.py`) y se alineó la tolerancia de {{ cfg.late_tolerance }}.
 
@@ -104,7 +108,7 @@ las pruebas a una **base aparte** (`vela_test`), para que dejaran de escribir en
 - *Qué pasó:* con el conteo del DENUE por segmento, el plan base pedía quedarse con el {{ bm.sc.base.share_cdmx }} de los establecimientos
   privados de la CDMX.
 - *Qué se decidió:* quitar el total del sector (incluía establecimientos que no son clientes) y crear el **escenario
-  recomendado** (tope de participación, expansión regional, plan Gobierno) (@ref(cap-negocio)).
+  recomendado** (tope de participación, expansión regional, plan Gobierno), que supone plan Gobierno y fundadores al {{ neg.founder_salary_year1_recommended }} % el año 1; sin ambos, VPN {{ bm.rec_wo_both }} (@ref(cap-negocio)).
 
 **12. El 401 intermitente y el reloj de WSL2 (PR #9).**
 - *Qué pasó:* las pruebas fallaban de vez en cuando ({{ hist.falla_401_frecuencia }}) con «Inicia sesión para continuar» justo
@@ -195,6 +199,30 @@ Todo va en una rama con su PR y se fusiona solo con las pruebas en verde.
 - *Sigue abierto:* una frase claramente rutinaria («Hoy mi mamá comió bien y durmió su siesta») dispara el aviso ámbar; se
   mitiga con la revisión humana.
 
+### 25 y 26 de noviembre: enlace fijo, coloquio y cierre
+
+**25. El enlace fijo {{ ops.public_url }} y el arranque automático (PR #23).**
+- *Qué pasó:* el túnel rápido cambiaba de dirección cada vez y había que regenerar el QR. El equipo compró el dominio
+  `zenthinks.com` en Cloudflare.
+- *Qué se decidió:* un **túnel con nombre administrado desde el panel con token**, como servicio de Windows (el método más
+  estable con WSL2 y Docker Desktop), y que todo arranque solo al iniciar sesión: Docker Desktop, Ollama, la tarea
+  «Enlaza - arranque» y la tarea del reloj de WSL (cada {{ code.clock_task_min }}, además de al iniciar sesión y al despertar).
+  No hizo falta cambiar código: la cookie `Secure` y la revisión de `Origin` ya funcionaban por dominio.
+- *Lo que encontró el primer reinicio:* {{ hist.reinicio1_carrera }}. Docker Desktop arranca los contenedores antes que Ubuntu.
+  Se corrigió con `scripts/autostart.sh`; en el segundo reinicio quedó {{ hist.reinicio2_reparado }}. Prueba por la dirección
+  pública: {{ hist.prueba_publica }} (@ref(cap-arquitectura)).
+- *Plan B:* el túnel rápido sigue disponible (`bash scripts/enlaza.sh rapido`).
+
+**26. La biblia, la presentación y el guion del coloquio (PR #19, #24 y #25).** La biblia se unió a `main`; la presentación y
+el guion se generan con el mismo script de números. La revisión de la presentación cambió cómo contamos la simulación: **nos
+dijo cómo asignar** (priorizar por riesgo, {{ sim.normal.human_dispatcher.high_wait_p90_min }} → {{ sim.normal.risk_priority.high_wait_p90_min }} min;
+el límite de tiempo importa cuando coordinación tarda), y el escenario recomendado se presenta siempre con su condición.
+
+**27. Ajustes finales (26 nov).** Todo el equipo defiende todo (sin responsables por materia); el profesor de Visualización
+confirmó que lo importante es que el tablero se vea bien (la duda de Shiny/R quedó resuelta); se explicaron los tres modelos de
+Enlaza Voz con mediciones en la laptop ({{ mod.llm_nombre }}: {{ mod.llm_gpu_reporte }} por reporte en la GPU integrada) y se
+documentaron con honestidad los falsos positivos y negativos de las pruebas del equipo.
+
 ## Dónde está en el código
 
 | Qué | Dónde |
@@ -206,7 +234,7 @@ Todo va en una rama con su PR y se fusiona solo con las pruebas en verde.
 
 ## Números clave
 
-{{ tabla git.commits_main git.prs_main git.first_day git.last_day hist.fuga_vistas_pacientes gen.planned_overlaps hist.sens_antes_espera hist.sens_limite_y_reserva_espera hist.salto_reloj_wsl2 hist.sin_atender_7dias sim.normal.vela_timeout.unattended_pct hist.caso_pac0112 repo.pytest_collected }}
+{{ tabla git.commits_main git.prs_main git.first_day git.last_day ops.public_url hist.reinicio1_carrera hist.reinicio2_reparado hist.fuga_vistas_pacientes gen.planned_overlaps hist.sens_antes_espera hist.sens_limite_y_reserva_espera hist.salto_reloj_wsl2 hist.sin_atender_7dias sim.normal.vela_timeout.unattended_pct hist.caso_pac0112 repo.pytest_collected }}
 
 ## Limitaciones honestas
 

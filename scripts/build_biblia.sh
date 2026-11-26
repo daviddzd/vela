@@ -34,6 +34,8 @@ git show feature/voz-clasificador-v2:voice/eval/results/v2_holdout.json > docs/b
   || rm -f docs/biblia/out/v2_holdout.json
 # History of main (for "Cómo se construyó"): one line per commit, oldest last
 git log main --format='%ad|%s' --date=format:'%Y-%m-%d %H:%M' > docs/biblia/out/git_main.txt
+# Files tracked by Git (verify.py checks that none has the real team names of equipo.yaml)
+git ls-files > docs/biblia/out/git_files.txt
 echo "== Números (repositorio y base de datos)"
 "${RUN[@]}" python3 docs/biblia/build/collect_numbers.py
 [[ "${1:-}" == "--numeros" ]] && exit 0

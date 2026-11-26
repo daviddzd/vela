@@ -5,6 +5,8 @@
 2. Every printed value appears in the text of the PDF (pdftotext).
 3. The visible text of every screenshot (capturas/*.txt, saved by capture.cjs) has no test data.
 4. Digits typed in the chapters outside {{ }} are listed, to review by hand (dates, articles and ports are fine).
+5. No "____" left in the PDF, and no real team name (docs/biblia/equipo.yaml) in any file tracked by Git
+   (out/git_files.txt, written by build_biblia.sh with `git ls-files`).
 
     python3 docs/biblia/build/verify.py      (inside the vela-biblia image, on the Compose network)
 """
@@ -148,6 +150,27 @@ def main() -> None:
             for n in re.findall(r"(?<![\w.])\d+(?:[.,]\d+)?\s?%", t):
                 typed.append(f"{md.relative_to(BIBLIA)}:{i}: «{n}»")
 
+    # blanks left in the book, and team names in files that go to Git
+    blanks = pdf_text.count("____")
+    names_in_git = []
+    team_file = BIBLIA / "equipo.yaml"
+    names = (yaml.safe_load(team_file.read_text(encoding="utf-8")) or {}).get("integrantes", []) if team_file.exists() else []
+    # a real name = the full name or its two surnames together (single common surnames like "Flores" also appear in the
+    # synthetic seed, so they are not a finding)
+    patterns = {p.lower() for n in names for p in (n, " ".join(n.split()[-2:]))}
+    tracked = (OUT / "git_files.txt").read_text(encoding="utf-8").splitlines() if (OUT / "git_files.txt").exists() else []
+    for rel in tracked:
+        f = ROOT / rel
+        if not f.is_file() or f.stat().st_size > 5_000_000:
+            continue
+        try:
+            low = f.read_text(encoding="utf-8").lower()
+        except (UnicodeDecodeError, OSError):
+            continue
+        hits = sorted(p for p in patterns if re.search(rf"\b{re.escape(p)}\b", low))
+        if hits:
+            names_in_git.append(f"{rel}: {', '.join(hits)}")
+
     report = [
         "# Verificación final de La biblia de Enlaza", "",
         f"- Números distintos que imprime el libro: **{len(USED)}**",
@@ -156,7 +179,9 @@ def main() -> None:
         f"- Sin camino independiente (derivados con el mismo código, se revisan por su fuente): {derived}",
         f"- Valores que no aparecen en el texto del PDF: {len(missing_pdf)}",
         f"- Capturas revisadas: {pngs} imágenes, {len(shots)} textos; con posibles datos de prueba: **{len(dirty)}**",
-        f"- Porcentajes escritos a mano en los capítulos: {len(typed)}", "",
+        f"- Porcentajes escritos a mano en los capítulos: {len(typed)}",
+        f"- «____» que quedan en el PDF: **{blanks}**",
+        f"- Archivos en Git con nombres reales del equipo: **{len(names_in_git)}** (revisados {len(tracked)} archivos)", "",
     ]
     if problems:
         report += ["## No coinciden", "", "| Clave | Libro | Recalculado | Fuente |", "|---|---|---|---|", *problems, ""]
@@ -164,10 +189,12 @@ def main() -> None:
         report += ["## No aparecen en el PDF (revisar)", "", *[f"- {x}" for x in missing_pdf[:80]], ""]
     if dirty:
         report += ["## Capturas con posibles datos de prueba", "", *[f"- {x}" for x in dirty], ""]
+    if names_in_git:
+        report += ["## Nombres reales en archivos de Git (quitar)", "", *[f"- {x}" for x in names_in_git], ""]
     if typed:
         report += ["## Porcentajes escritos a mano (revisar uno por uno)", "", *[f"- {x}" for x in typed], ""]
     (OUT / "verificacion.md").write_text("\n".join(report), encoding="utf-8")
-    print("\n".join(report[:10]))
+    print("\n".join(report[:12]))
 
 
 if __name__ == "__main__":

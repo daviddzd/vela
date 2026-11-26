@@ -1,7 +1,5 @@
 # Visualización {#cap-m-vis}
 
-<p class="responsable">Responsable: {{ equipo.materias.visualizacion }}</p>
-
 ## En una frase
 
 !!! frase "Lo que aporta esta materia"
@@ -142,11 +140,12 @@ tablero, el personal y la contingencia; calles de OpenFreeMap / OpenStreetMap; s
 
 ### Shiny/R o Python
 
-!!! cuidado "Confirmar con el profesor de Visualización"
-    El PP dice «Shiny/R o Python» para el tablero. Enlaza dibuja la interfaz con **React y ECharts**, pero **toda la lógica
+!!! nota "Resuelto con el profesor de Visualización"
+    El PP dice «Shiny/R o Python» para el tablero. Enlaza dibuja la interfaz con **React y ECharts**, y **toda la lógica
     analítica está en Python**: la API calcula cada indicador (`backend/app/routers/panorama.py`), la simulación y el modelo de
     negocio son Python, y el cuaderno `business/model.ipynb` usa el mismo módulo. La interfaz solo dibuja lo que Python ya
-    calculó. **Confirmar con el profesor de Visualización** que esto cumple con «Python».
+    calculó. **El profesor confirmó que lo importante es que el tablero se vea bien** (claro, legible y que responda preguntas),
+    no la herramienta con que se dibuja.
 
 ## Respuesta al incidente crítico de Visualización
 

@@ -27,7 +27,7 @@ Este capítulo es el resumen para no perderse.
 | 1. Virtualización activa | BIOS / Administrador de tareas | «Virtualización: Habilitado» (SVM Mode) | Administrador de tareas → Rendimiento → CPU |
 | 2. WSL2 con Ubuntu 24.04 | PowerShell (administrador) | `wsl --install -d Ubuntu-24.04` | `wsl -l -v` dice versión 2 |
 | 3. Docker Desktop | Windows | motor WSL 2 + integración con Ubuntu-24.04 | `docker ps` en Ubuntu |
-| 4. Ollama + GPU integrada | PowerShell | `setx OLLAMA_VULKAN 1` y `setx OLLAMA_IGPU_ENABLE 1`; `ollama pull` del modelo de `OLLAMA_MODEL` | `ollama ps` menciona GPU |
+| 4. Ollama + GPU integrada | PowerShell | `setx OLLAMA_VULKAN 1` y `setx OLLAMA_IGPU_ENABLE 1`; `ollama pull qwen3:8b` (el modelo de `OLLAMA_MODEL`) | `ollama ps` menciona GPU |
 | 5. cloudflared | PowerShell | `winget install --id Cloudflare.cloudflared` | `cloudflared --version` |
 | 6. Herramientas en Ubuntu | Ubuntu | git, Node.js 22, Python, GitHub CLI | `gh auth status` |
 | 7. Repositorio | Ubuntu | `gh repo clone <usuario>/vela ~/proyectos/vela` | `ls ~/proyectos/vela` |

@@ -24,6 +24,6 @@ Todos se corren en Ubuntu (WSL2) desde `~/proyectos/vela`, salvo los marcados co
 | Generar esta biblia | `bash scripts/build_biblia.sh` · con capturas nuevas: `--capturas` |
 | Enlace público (PowerShell) | `cloudflared tunnel --url http://localhost:8080` |
 | QR del enlace | `qrencode -s 12 -o ~/qr_enlaza.png "<enlace>"` |
-| Cargar el modelo de lenguaje (PowerShell) | `ollama run <modelo de OLLAMA_MODEL> "hola"` · `ollama ps` |
+| Cargar el modelo de lenguaje (PowerShell) | `ollama run qwen3:8b "hola"` · `ollama ps` |
 | Reloj de WSL2 atrasado (PowerShell) | `wsl --shutdown` y volver a abrir Ubuntu |
 | Flujo de un cambio | `git switch -c fix/<tema>` → commit → `git push -u origin fix/<tema>` → `gh pr create` → pruebas → `gh pr merge N --squash --delete-branch` |

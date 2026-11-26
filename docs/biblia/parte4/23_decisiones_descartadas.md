@@ -28,7 +28,7 @@ Las alternativas están dispersas en los capítulos («Por qué lo hicimos así�
 | Ollama dentro de Docker | Ollama en Windows | Usa la GPU integrada; en WSL2 sería solo CPU | @ref(cap-arquitectura) |
 | Varios puertos públicos | Un puerto (Caddy :8080) | Un solo túnel y cookies sin trucos | @ref(cap-arquitectura) |
 | Una app por rol | Una web adaptable | Nada que instalar; se comparte con un QR | @ref(cap-recorrido) |
-| Shiny/R para el tablero (lo sugiere el PP) | React + ECharts con API en Python | Tiempo real, mapas y una sola app; la lógica analítica sigue en Python; **confirmar con el profesor de Visualización** | @ref(cap-m-vis) |
+| Shiny/R para el tablero (lo sugiere el PP) | React + ECharts con API en Python | Tiempo real, mapas y una sola app; la lógica analítica sigue en Python; **resuelto con el profesor: lo importante es que el tablero se vea bien** | @ref(cap-m-vis) |
 | Reloj simulado acelerado en la app | Reloj real | La demostración ocurre de verdad; lo acelerado solo en la simulación | @ref(cap-tiempo-real) |
 
 ### Datos y seguridad
@@ -102,7 +102,8 @@ Cada fila apunta a su capítulo, y ahí está el código.
 !!! pregunta "¿Por qué no usaron una herramienta de tableros como Power BI o Shiny?"
     Porque el tablero debía ser parte de la misma app, en tiempo real, con la misma seguridad por fila y con mapas de la
     operación en vivo. Un tablero externo leería los datos por otra puerta. El PP sugiere Shiny o Python: toda la lógica analítica
-    está en Python (API, simulación, cuaderno) y la interfaz solo dibuja; lo confirmaremos con el profesor de Visualización.
+    está en Python (API, simulación, cuaderno) y la interfaz solo dibuja. El profesor de Visualización confirmó que lo importante es
+    que el tablero se vea bien.
 
 !!! pregunta "¿Consideraron no usar IA en la voz?"
     Sí: con solo reglas, en el holdout se detectaban {{ voz.holdout.sens_rules }} de las emergencias. El clasificador agrega las que

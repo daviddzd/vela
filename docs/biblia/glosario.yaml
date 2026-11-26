@@ -67,7 +67,10 @@
   definicion: "Conexión que se queda abierta entre el navegador y el servidor, para que el servidor avise en cuanto algo cambia sin que la página tenga que preguntar a cada rato."
 - termino: túnel
   definicion: "Conexión que la laptop abre hacia afuera, hacia Cloudflare, para que el público entre por una dirección https sin abrir puertos del router. En Enlaza, un túnel con nombre (`enlaza`) da la dirección fija `https://enlaza.zenthinks.com` y corre como servicio de Windows; el túnel rápido (`trycloudflare.com`, dirección al azar que cambia cada vez) queda de respaldo."
-  tambien: ["Cloudflare"]
+  tambien: ["Cloudflare", "túnel con nombre", "túnel rápido"]
+- termino: dominio
+  definicion: "Nombre fácil de recordar que apunta a una computadora en internet, como el nombre de una calle en lugar de coordenadas. Enlaza usa `enlaza.zenthinks.com` (dominio `zenthinks.com`, comprado en Cloudflare); apunta, por un túnel, a la laptop. No es hosting: si la laptop se apaga, la dirección deja de responder."
+  tambien: ["subdominio", "enlaza.zenthinks.com"]
 - termino: migraciones
   definicion: "Archivos que cambian la estructura de la base de datos paso a paso (agregar una tabla, una columna, una regla) y quedan registrados en orden. En Enlaza se hacen con Alembic."
   tambien: ["migración", "Alembic"]
@@ -80,7 +83,16 @@
   definicion: "Reconocimiento automático del habla: convertir voz en texto. Enlaza usa Whisper (modelo `small`, en CPU)."
   tambien: ["Whisper"]
 - termino: modelo de lenguaje
-  definicion: "Programa de inteligencia artificial entrenado con muchísimo texto que puede leer y escribir. En Enlaza resume la nota de voz para el médico; corre en la laptop con Ollama."
+  definicion: "Programa de inteligencia artificial que aprendió, leyendo muchísimo texto, a adivinar la siguiente palabra (como el teclado del celular que sugiere palabras, pero mucho más grande). En Enlaza es `qwen3:8b`: resume la nota de voz para el médico, corre en la laptop con Ollama y no diagnostica ni decide el nivel de emergencia."
+- termino: qwen3:8b
+  definicion: "El modelo de lenguaje de Enlaza Voz: de la familia Qwen3 del equipo Qwen de Alibaba Cloud (2025), unos 8 mil millones de parámetros, cuantizado a 4 bits (`Q4_K_M`) por Ollama, licencia Apache 2.0. Se usa con el razonamiento desactivado, temperatura baja y salida JSON validada."
+  tambien: ["Qwen", "Qwen3"]
+- termino: parámetro
+  definicion: "Cada uno de los números que un modelo de inteligencia artificial ajusta al aprender. Un modelo «de 8B» tiene unos 8 mil millones; más parámetros suele significar mejor texto, pero más memoria y más tiempo."
+  tambien: ["parámetros"]
+- termino: cuantización
+  definicion: "Guardar los parámetros de un modelo con menos bits (por ejemplo, 4 u 8 en lugar de 16) para que ocupe menos memoria y corra más rápido, a cambio de un poco de precisión. Whisper corre en `int8`; qwen3:8b en `Q4_K_M`."
+  tambien: ["cuantizado", "int8", "Q4_K_M"]
 - termino: LLM
   definicion: "«Large Language Model», modelo de lenguaje grande. Ver *modelo de lenguaje*."
   tambien: ["Ollama"]

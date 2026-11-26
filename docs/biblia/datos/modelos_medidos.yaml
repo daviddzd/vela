@@ -1,0 +1,106 @@
+# Mediciones de los tres modelos de Enlaza Voz en la laptop del equipo. GENERADO por docs/biblia/build/measure_models.sh; no editar a mano. collect_numbers.py las carga como mod.<clave>.
+laptop_ram:
+  valor: 28 GB
+  descripcion: Memoria RAM de la laptop (la GPU integrada usa esta misma memoria)
+  fecha: '2026-11-26'
+  metodo: Windows, Win32_ComputerSystem
+laptop_cpu:
+  valor: AMD Ryzen AI 7 PRO 350 w/ Radeon 860M (8 núcleos, 16 hilos)
+  descripcion: Procesador de la laptop
+  fecha: '2026-11-26'
+  metodo: Windows, Win32_Processor
+laptop_gpu:
+  valor: AMD Radeon(TM) 860M Graphics
+  descripcion: GPU integrada de la laptop
+  fecha: '2026-11-26'
+  metodo: Windows, Win32_VideoController
+llm_archivo:
+  valor: 5.2 GB
+  descripcion: Tamaño de qwen3:8b descargado (Q4_K_M)
+  fecha: '2026-11-26'
+  metodo: Ollama /api/tags
+llm_parametros:
+  valor: 8.2B
+  descripcion: Parámetros de qwen3:8b
+  fecha: '2026-11-26'
+  metodo: Ollama /api/tags
+llm_cuantizacion:
+  valor: Q4_K_M
+  descripcion: Cuantización de qwen3:8b en Ollama
+  fecha: '2026-11-26'
+  metodo: Ollama /api/tags
+llm_gpu_memoria:
+  valor: 5.6 GB
+  descripcion: Memoria que ocupa qwen3:8b cargado, GPU integrada (Vulkan)
+  fecha: '2026-11-26'
+  metodo: Ollama /api/ps
+llm_gpu_carga:
+  valor: 13.4 s
+  descripcion: Cargar qwen3:8b en memoria, GPU integrada (Vulkan)
+  fecha: '2026-11-26'
+  metodo: 'docs/biblia/build/measure_models.py: misma petición que llm_report.py (esquema JSON, think false, temperatura 0.2), nota de 2 frases; 1 llamada en frío y mediana de 3 en caliente'
+llm_gpu_reporte:
+  valor: 16.8 s
+  descripcion: Escribir un reporte (modelo ya cargado), GPU integrada (Vulkan)
+  fecha: '2026-11-26'
+  metodo: 'docs/biblia/build/measure_models.py: misma petición que llm_report.py (esquema JSON, think false, temperatura 0.2), nota de 2 frases; 1 llamada en frío y mediana de 3 en caliente'
+llm_gpu_frio:
+  valor: 36.9 s
+  descripcion: Primer reporte con el modelo sin cargar, GPU integrada (Vulkan)
+  fecha: '2026-11-26'
+  metodo: 'docs/biblia/build/measure_models.py: misma petición que llm_report.py (esquema JSON, think false, temperatura 0.2), nota de 2 frases; 1 llamada en frío y mediana de 3 en caliente'
+llm_gpu_velocidad:
+  valor: 10.9 tokens/s
+  descripcion: Velocidad al escribir, GPU integrada (Vulkan)
+  fecha: '2026-11-26'
+  metodo: 'docs/biblia/build/measure_models.py: misma petición que llm_report.py (esquema JSON, think false, temperatura 0.2), nota de 2 frases; 1 llamada en frío y mediana de 3 en caliente'
+llm_cpu_memoria:
+  valor: 5.9 GB
+  descripcion: Memoria que ocupa qwen3:8b cargado, solo CPU
+  fecha: '2026-11-26'
+  metodo: Ollama /api/ps
+llm_cpu_carga:
+  valor: 7.0 s
+  descripcion: Cargar qwen3:8b en memoria, solo CPU
+  fecha: '2026-11-26'
+  metodo: 'docs/biblia/build/measure_models.py: misma petición que llm_report.py (esquema JSON, think false, temperatura 0.2), nota de 2 frases; 1 llamada en frío y mediana de 3 en caliente'
+llm_cpu_reporte:
+  valor: 29.4 s
+  descripcion: Escribir un reporte (modelo ya cargado), solo CPU
+  fecha: '2026-11-26'
+  metodo: 'docs/biblia/build/measure_models.py: misma petición que llm_report.py (esquema JSON, think false, temperatura 0.2), nota de 2 frases; 1 llamada en frío y mediana de 3 en caliente'
+llm_cpu_frio:
+  valor: 47.0 s
+  descripcion: Primer reporte con el modelo sin cargar, solo CPU
+  fecha: '2026-11-26'
+  metodo: 'docs/biblia/build/measure_models.py: misma petición que llm_report.py (esquema JSON, think false, temperatura 0.2), nota de 2 frases; 1 llamada en frío y mediana de 3 en caliente'
+llm_cpu_velocidad:
+  valor: 6.3 tokens/s
+  descripcion: Velocidad al escribir, solo CPU
+  fecha: '2026-11-26'
+  metodo: 'docs/biblia/build/measure_models.py: misma petición que llm_report.py (esquema JSON, think false, temperatura 0.2), nota de 2 frases; 1 llamada en frío y mediana de 3 en caliente'
+llm_gpu_en_vram:
+  valor: 5.6 GB
+  descripcion: Parte de qwen3:8b que Ollama pone en la GPU integrada
+  fecha: '2026-11-26'
+  metodo: Ollama /api/ps
+clasificador_ms:
+  valor: 185 ms
+  descripcion: Clasificar una nota (llamada al servicio de voz, mediana de 20)
+  fecha: '2026-11-26'
+  metodo: measure_models.py
+clasificador_parametros:
+  valor: 2,052,355
+  descripcion: Parámetros del clasificador de Keras
+  fecha: '2026-11-26'
+  metodo: keras count_params()
+clasificador_archivo:
+  valor: 25.1 MB
+  descripcion: Tamaño del archivo del clasificador (.keras)
+  fecha: '2026-11-26'
+  metodo: voice/models/triage_classifier.keras
+whisper_archivo:
+  valor: 486 MB
+  descripcion: Tamaño de Whisper small (int8) descargado
+  fecha: '2026-11-26'
+  metodo: du en la caché del contenedor voice

@@ -5,7 +5,8 @@
 !!! frase "En una frase"
     **Enlaza son varios programas pequeños que corren juntos en la laptop dentro de Docker (base de datos, API,
     worker, página web, voz y un portero que los une en un solo puerto), más dos piezas fuera de Docker: la
-    inteligencia artificial local (Ollama) y el túnel de Cloudflare que lo publica en internet.**
+    inteligencia artificial local (Ollama con {{ mod.llm_nombre }}) y el túnel de Cloudflare que lo publica en internet,
+    en {{ ops.public_url }}.**
 
 ## Explicado sin tecnicismos
 
@@ -20,7 +21,8 @@ Imagina un **restaurante**:
 | La campanita que suena cuando sale un plato | El **[[WebSocket]]** | Avisa al tablero, al instante, que algo cambió |
 | El capitán de meseros en la puerta | **Caddy** ([[proxy inverso]]) | Una sola puerta de entrada que manda a cada quien a donde va |
 | Quien toma los recados por teléfono y los escribe | **Whisper** (servicio de voz) | Convierte la voz en texto |
-| El chef que escribe un resumen para el doctor | **Ollama** (modelo de lenguaje local) | Escribe el reporte de la nota de voz |
+| El chef que escribe un resumen para el doctor | **Ollama** con **{{ mod.llm_nombre }}** (modelo de lenguaje local) | Escribe el reporte de la nota de voz |
+| El letrero con la dirección del restaurante | El **[[dominio]]** `enlaza.zenthinks.com` | Un nombre fácil de recordar que no cambia |
 | El repartidor que lleva el restaurante a otra ciudad | **Cloudflare** ([[túnel]]) | Hace que el público entre desde su celular, por internet, sin abrir puertas de la casa |
 
 Y todo el restaurante cabe en una **lonchera**: [[Docker]]. Docker empaqueta cada programa con lo que necesita, de modo
@@ -47,7 +49,7 @@ que se enciende igual en cualquier computadora con un solo comando: `docker comp
 
 ```mermaid
 flowchart TB
-  U1["Celular del público<br/>https://….trycloudflare.com"] --> CF["cloudflared<br/>túnel saliente (fuera de Docker)"]
+  U1["Celular del público<br/>https://enlaza.zenthinks.com"] --> CF["cloudflared<br/>servicio de Windows, túnel saliente"]
   L["Navegador en la laptop<br/>http://localhost:8080"] --> PX
   CF --> PX["proxy · Caddy<br/>localhost:8080"]
   subgraph Docker["Docker Compose, en la laptop"]
@@ -58,7 +60,7 @@ flowchart TB
     MG["migrate<br/>corre una vez"] --> DB
     API --> VO["voice<br/>Whisper + clasificador"]
   end
-  API -- "host.docker.internal:11434" --> OL["Ollama en Windows<br/>modelo de lenguaje local<br/>(GPU Radeon, Vulkan)"]
+  API -- "host.docker.internal:11434" --> OL["Ollama en Windows<br/>qwen3:8b<br/>(GPU Radeon, Vulkan)"]
 ```
 
 ### Los servicios de Docker Compose, uno por uno
@@ -74,7 +76,7 @@ flowchart TB
 | `proxy` | `caddy:2` | La única puerta: `localhost:8080` | Sí, solo en la laptop |
 | `sim` | la de simulación | SIRAG-D, se corre a mano (`docker compose run --rm sim`) | No |
 
-Fuera de Docker: **Ollama** (Windows nativo) y **cloudflared** (el túnel).
+Fuera de Docker: **Ollama** (Windows nativo, con {{ mod.llm_nombre }}) y **cloudflared** (el túnel, como servicio de Windows).
 
 !!! nota "Por qué `api` y `worker` no conocen la contraseña del dueño de la base"
     Solo `db` y `migrate` reciben la contraseña de `vela_owner`, el dueño de las tablas. La API y el worker se
@@ -167,23 +169,74 @@ flowchart LR
   O --> MED["Bandeja del médico"]
 ```
 
-- **Whisper** es un modelo de [[ASR]] (reconocimiento automático de voz). Usamos el tamaño `small`, cuantizado a
-  enteros de 8 bits (`int8`) para que corra en CPU. Cargarlo tarda {{ voz.t_whisper_load }}; transcribir una nota de
-  ~10 s tarda {{ voz.t_transcribe_10 }} y una de ~60 s, {{ voz.t_transcribe_60 }}.
-- El **clasificador** es una red neuronal de Keras que lee el texto y dice `routine`, `urgent` o `emergency`.
-- **Ollama** corre el modelo de lenguaje configurado en `OLLAMA_MODEL` y escribe un reporte en JSON con un esquema
-  fijo. Tarda {{ voz.t_llm_short }} con una nota corta y {{ voz.t_llm_long }} con una larga: por eso **nada urgente
-  espera al LLM**.
+Enlaza Voz usa **tres modelos**, cada uno para una sola cosa (el detalle, en @ref(cap-voz)):
 
-### Cloudflare: https afuera, http adentro
+| Modelo | Qué hace | Tamaño | Dónde corre | Tiempo medido en la laptop |
+|---|---|---|---|---|
+| **Whisper {{ mod.whisper_modelo }}** | Voz → texto ([[ASR]]) | {{ ctx.whisper_small_params }} parámetros, {{ mod.whisper_tipo }} | contenedor `voice`, CPU | nota de ~10 s: {{ voz.t_transcribe_10 }} |
+| **Clasificador de Keras** | Texto → rutina, urgente o emergencia | {{ mod.clasificador_parametros }} parámetros | contenedor `voice`, CPU | {{ mod.clasificador_ms }} |
+| **{{ mod.llm_nombre }}** ([[modelo de lenguaje]]) | Texto → reporte para el médico, en JSON | {{ mod.llm_parametros }} parámetros, {{ mod.llm_cuantizacion }} | Ollama en Windows, GPU integrada | {{ mod.llm_gpu_reporte }} por reporte |
 
-`cloudflared` abre un túnel **saliente** desde la laptop y Cloudflare entrega una dirección aleatoria
-`https://….trycloudflare.com`. El público entra por https; dentro de la laptop todo viaja por http. Para que la API
-sepa que la persona entró por https (y marque la cookie como `Secure`), se usan dos señales: el encabezado
-`Cf-Visitor` que agrega Cloudflare y `X-Forwarded-Proto`, que Caddy respeta solo si viene de una dirección privada
-(`trusted_proxies static private_ranges` en `infra/Caddyfile`). Límites del túnel rápido: la dirección cambia cada
-vez que se reinicia, no garantiza disponibilidad y no soporta SSE. La Parte V explica cómo prepararlo para la defensa
-y el QR.
+- Un **modelo de lenguaje** aprendió a adivinar la siguiente palabra leyendo muchísimo texto, como el teclado del celular
+  que sugiere palabras, pero mucho más grande. Por eso solo **resume**: no diagnostica ni decide el nivel de emergencia.
+- **{{ mod.llm_nombre }}** es del equipo Qwen de Alibaba Cloud (Yang et al., 2025), licencia Apache 2.0. En la GPU integrada
+  ocupa {{ mod.llm_gpu_memoria }} de los {{ mod.laptop_ram }} de la laptop y tarda {{ mod.llm_gpu_reporte }} por reporte; en CPU,
+  {{ mod.llm_cpu_reporte }}. Se le pide con el razonamiento {{ mod.llm_think }}, temperatura {{ mod.llm_temperatura }} y salida JSON
+  validada. Como tarda, **nada urgente espera al modelo de lenguaje**.
+
+### El dominio y el enlace público: {{ ops.public_url }}
+
+**Qué es un dominio.** Es un nombre fácil de recordar que apunta a una computadora, como el nombre de una calle en lugar de
+coordenadas. El equipo compró el [[dominio]] `zenthinks.com` en Cloudflare y usa solo el subdominio `enlaza`; la raíz
+`zenthinks.com` queda libre.
+
+**Qué es un túnel.** La laptop abre una conexión **hacia afuera** con Cloudflare (`cloudflared`) y la deja abierta. Cuando
+alguien escribe la dirección en su celular, Cloudflare le manda la petición a la laptop por ese túnel. Por eso no hay que
+abrir puertos del módem ni tener una IP fija, y Cloudflare pone el certificado https.
+
+**Por qué no es «hosting».** Un hosting es rentar una computadora que está siempre prendida en un centro de datos. Aquí la
+aplicación **corre en la laptop**: si la laptop se apaga, se suspende o pierde internet, la dirección deja de responder
+(error 502 o 1033). La dirección es fija; la computadora detrás no es un servidor.
+
+**Por qué un túnel administrado con token.** Hay dos formas de crear un [[túnel]] con nombre: con archivos de configuración en
+la laptop (`cloudflared tunnel login/create/route`) o desde el panel de Cloudflare, que da un **token**. En Windows el túnel
+corre como servicio del sistema, que busca sus archivos en una carpeta escondida; con el token todo va dentro del servicio y
+la regla «`enlaza.zenthinks.com` → `http://127.0.0.1:8080`» vive en Cloudflare, así que se cambia sin tocar la laptop. Es la
+forma más estable. El token es una llave: no se sube a Git.
+
+**Arranque automático.** Para que funcione con solo prender la laptop e iniciar sesión en Windows:
+
+| Pieza | Cómo arranca |
+|---|---|
+| Túnel `enlaza` | servicio de Windows `cloudflared`, automático desde que prende la laptop |
+| Docker Desktop | «Start Docker Desktop when you sign in» |
+| Contenedores | `restart: unless-stopped` en `docker-compose.yml` |
+| Ollama ({{ mod.llm_nombre }}) | acceso directo en la carpeta Inicio de Windows |
+| Tarea «Enlaza - arranque» | {{ code.autostart_delay }} después de iniciar sesión corre `scripts/autostart.sh`: espera a Docker, revisa que cada contenedor vea sus archivos y reinicia los que no |
+| Tarea «Enlaza - reloj de WSL» | copia la hora de Windows a WSL al iniciar sesión, al despertar y cada {{ code.clock_task_min }}; evita el «Inicia sesión para continuar» por el reloj atrasado |
+
+**Lo que encontró el primer reinicio** (25 nov 2026). En la primera prueba de apagar y prender la laptop:
+{{ hist.reinicio1_carrera }}. La causa es una **carrera**: Docker Desktop levanta los contenedores antes de que
+Ubuntu (WSL) termine de arrancar, y lo que cada contenedor toma de la carpeta del proyecto sale vacío o falla.
+`restart: unless-stopped` no lo cubre, porque Docker no reintenta un contenedor que ni siquiera se pudo crear. Lo más
+peligroso: `api` se veía «sana» sin las reglas de emergencia. Se corrigió con la tarea «Enlaza - arranque»; en el segundo
+reinicio quedó {{ hist.reinicio2_reparado }}, y la prueba completa por la dirección pública dio {{ hist.prueba_publica }}.
+
+**https afuera, http adentro.** El público entra por https; dentro de la laptop todo viaja por http. Para que la API sepa que
+la persona entró por https (y marque la cookie como `Secure`), se usan dos señales: el encabezado `Cf-Visitor` que agrega
+Cloudflare y `X-Forwarded-Proto`, que Caddy respeta solo si viene de una dirección privada (`trusted_proxies static
+private_ranges` en `infra/Caddyfile`). La revisión de `Origin` del WebSocket compara contra el dominio que pidió el
+navegador, así que el dominio nuevo funcionó **sin cambiar código**.
+
+**Plan B: el túnel rápido.** Si la dirección fija falla, `bash scripts/enlaza.sh rapido` abre un túnel rápido
+(`https://palabras-al-azar.trycloudflare.com`, sin cuenta ni dominio) y `uv run scripts/make_qr.py <enlace>` hace su QR.
+Cambia cada vez que se abre y no garantiza disponibilidad; sirve para salir del paso (@ref(cap-planb)).
+
+**Trabajo futuro: que funcione con la laptop apagada.** Haría falta un **servidor en la nube** (una máquina virtual o un
+servicio de contenedores) con la base de datos administrada, respaldos automáticos y monitoreo; el mismo
+`docker-compose.yml` serviría de punto de partida. El modelo de lenguaje necesitaría una GPU en ese servidor o un servicio
+con contrato de privacidad, porque las notas de voz son datos sensibles. El costo de ese servidor está en el modelo de negocio
+(@ref(cap-negocio)).
 
 ## Dónde está en el código
 
@@ -198,20 +251,21 @@ y el QR.
 | WebSocket del tablero y su Hub | `backend/app/ws/` |
 | El worker | `backend/app/worker.py` |
 | Servicio de voz | `voice/triage/service.py`, `voice/Dockerfile` |
-| Reporte con Ollama | `backend/app/services/llm_report.py` |
+| Reporte con Ollama ({{ mod.llm_nombre }}) | `backend/app/services/llm_report.py` |
+| Enlace público y arranque automático | `scripts/enlaza.sh`, `scripts/autostart.sh`, `scripts/windows/`, `scripts/check_public_url.py` |
 | Variables (sin secretos) | `.env.example` (el `.env` real no se sube a Git) |
 | Arquitectura en la especificación | `docs/spec/02_arquitectura.md`, `docs/dev/decisiones_paso_4.md` |
 
 ## Números clave
 
-{{ tabla code.worker_tick code.ws_ping code.ws_recheck code.ws_retry_s man.evento_tunel_s man.reconexion_listen_s voz.t_whisper_load voz.t_transcribe_10 voz.t_transcribe_60 voz.t_llm_short voz.t_llm_long repo.migrations db.tables_total db.views_total }}
+{{ tabla ops.public_url code.worker_tick code.ws_ping code.ws_recheck code.ws_retry_s man.evento_tunel_s man.reconexion_listen_s voz.t_whisper_load voz.t_transcribe_10 mod.llm_nombre mod.llm_gpu_memoria mod.llm_gpu_reporte mod.llm_cpu_reporte mod.laptop_ram code.clock_task_min repo.migrations db.tables_total db.views_total }}
 
 ## Limitaciones honestas
 
-- **Todo depende de una laptop.** Si se apaga, se apaga Enlaza. Un producto real necesitaría un servidor, respaldos
-  automáticos y monitoreo.
-- **El túnel rápido de Cloudflare es para pruebas**: la dirección cambia al reiniciar y no hay garantía de servicio.
-  La opción estable sería un túnel con nombre y dominio propio.
+- **Todo depende de una laptop.** {{ ops.public_url }} es una dirección fija, no un hosting: si la laptop se apaga o se
+  suspende, se apaga Enlaza. Un producto real necesitaría un servidor en la nube, respaldos automáticos y monitoreo.
+- **El arranque automático depende de iniciar sesión en Windows**: Docker Desktop y Ollama arrancan con la sesión, no con la
+  laptop.
 - **El LLM es lento** en una laptop (decenas de segundos por reporte). Para muchas notas a la vez haría falta una GPU
   dedicada o un servicio en la nube con contrato de privacidad.
 - **WSL2 tiene su propio reloj**, que a veces se atrasa cuando Windows suspende la máquina. Eso causó un error
@@ -239,6 +293,11 @@ y el QR.
     No. Whisper corre en un contenedor de la laptop y el modelo de lenguaje corre en Ollama, también en la laptop.
     Ninguna nota se manda a un servicio externo. Lo único que pasa por Cloudflare es el tráfico cifrado (https) entre
     el celular y la laptop.
+
+!!! pregunta "¿Enlaza está en la nube?"
+    No. {{ ops.public_url }} es un dominio con un túnel de Cloudflare que llega a la laptop: la app corre aquí. Si la
+    laptop se apaga, la dirección deja de responder. Para que funcione siempre haría falta un servidor en la nube; es trabajo
+    futuro y está en el modelo de negocio.
 
 !!! pregunta "¿Qué pasa si el servicio de voz o Ollama se caen?"
     El resto sigue funcionando. Si la voz no responde, la pantalla ofrece escribir el mensaje. Si Ollama no responde,

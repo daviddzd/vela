@@ -15,6 +15,9 @@ bloqueadas, un clasificador de voz que no entiende a hablantes de lenguas origin
 consentimiento firmado por conveniencia y un plan de negocios que promete demasiado. Cada capítulo de esta Parte III dice
 qué pide el documento de esa materia y dónde está la respuesta.
 
+La Parte III está organizada **por materia porque así evalúa el sínodo**, pero **todo el equipo defiende todo**: no nos
+dividimos por materias, y cualquiera de nosotros debe poder responder cualquier capítulo.
+
 **Documentos citados** (son del equipo y no se suben a Git; están en `docs/privado/`):
 
 - **PP:** *Problema Prototípico e Incidentes Críticos, semestre 2026-2*, Licenciatura en Ciencia de Datos para Negocios,
@@ -41,11 +44,12 @@ crea solicitudes y alertas reales; Panorama lee la operación; el negocio usa lo
 | Emprendimiento: Plan de Negocios Viable y Canvas de la Startup | `/negocio`, `assumptions.csv`, Canvas, VPN, TIR, escenarios | @ref(cap-negocio), @ref(cap-m-emp) |
 | Práctica Profesional: Diagnóstico de Campo, Protocolo de Ética y Práctica Profesional | Consentimientos, aviso, ARCO, bitácora, LFT; el diagnóstico de campo se hace esta semana (material en `docs/diagnostico/`) | @ref(cap-etica), @ref(cap-m-pp) |
 
-!!! cuidado "Confirmar con el profesor de Visualización"
-    El PP dice «Shiny/R o Python» para el tablero. Enlaza dibuja la interfaz con **React y ECharts**, pero **toda la lógica
+!!! nota "Resuelto con el profesor de Visualización"
+    El PP dice «Shiny/R o Python» para el tablero. Enlaza dibuja la interfaz con **React y ECharts**, y **toda la lógica
     analítica está en Python**: la API calcula cada indicador (`backend/app/routers/panorama.py`), la simulación y el modelo de
     negocio son Python, y el cuaderno `business/model.ipynb` usa el mismo módulo. La interfaz solo dibuja lo que Python ya
-    calculó. **Confirmar con el profesor de Visualización** que esto cumple con «Python».
+    calculó. **El profesor confirmó que lo importante es que el tablero se vea bien** (claro, legible y que responda preguntas),
+    no la herramienta con que se dibuja.
 
 ### 2. Cómo se califica
 
@@ -109,7 +113,7 @@ El PP (p. 6) plantea una contingencia extraordinaria por PM2.5 y ozono en la CDM
 | ¿Ceder a despachadores humanos o recalibrar con variables no validadas? | Ni una cosa ni la otra: la asignación automática usa reglas **validadas en simulación**; lo delicado lo aprueba una persona y la contingencia **propone**, no impone. |
 | ¿Cómo integrar áreas sin comprometer seguridad ni autonomía? | Una base con roles y seguridad por fila: cada área ve lo suyo y la bitácora registra quién accede. |
 | ¿Ceder ante la presión para omitir el consentimiento? | No. El sistema no lo permite técnicamente (bloqueo en la API) y queda registrado. |
-| ¿Sostener la promesa de escalamiento nacional? | No. Escenario recomendado regional y con tope de participación, presentado con sus riesgos. |
+| ¿Sostener la promesa de escalamiento nacional? | No. Escenario recomendado regional y con tope de participación, presentado con sus riesgos: supone plan Gobierno y fundadores al {{ neg.founder_salary_year1_recommended }} % el año 1; sin ambos, VPN {{ bm.rec_wo_both }}. |
 | ¿Quién es responsable de un daño por interacción entre sistemas? | Trazabilidad: cada decisión automática o humana queda en la bitácora con su origen (`auto`, `coordinator`, `timeout`). |
 
 ## Dónde está en el código
@@ -127,7 +131,8 @@ Cada fila de las tablas anteriores apunta a su capítulo, y ahí está el códig
   están en `docs/diagnostico/` y los hallazgos van en @ref(cap-m-pp).
 - Falta la **evaluación de voz con hablantes reales**. Las referencias en **APA 7** están en el anexo de fuentes.
 - El **respaldo** de la base es manual (`scripts/backup_db.sh`), no automático (@ref(cap-m-sie)).
-- El tablero no es Shiny: la lógica está en Python y la interfaz solo dibuja; confirmar con el profesor de Visualización.
+- El tablero no es Shiny: la lógica está en Python y la interfaz solo dibuja. Resuelto con el profesor: lo importante es que el
+  tablero se vea bien.
 
 ## Preguntas que te pueden hacer
 

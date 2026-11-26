@@ -5,7 +5,8 @@ render.cjs then prints that HTML to PDF with Chromium (Mermaid diagrams + Paged.
 What a chapter may write (everything else is ordinary Markdown):
   {{ clave }}                  a number collected by collect_numbers.py (unknown key -> the build stops)
   {{ tabla clave1 clave2 ... }} a "Dato | Valor | Fuente" table with those numbers
-  {{ equipo.defensa.fecha }}   a value from equipo.yaml ("____" while it is empty)
+  {{ paginas cap-a cap-b }}   how many pages from chapter cap-a up to chapter cap-b (counted after the layout, render.cjs)
+  {{ equipo.integrantes }}     a value from equipo.yaml (local, git-ignored; names joined "A, B, C y D")
   [[término]] / [[término|texto]]  a glossary term (must exist in glosario.yaml); links to the glossary
   @ref(cap-id)                 a cross reference: "cap. 3 «Arquitectura» (p. 41)"
   ```mermaid ... ```           a diagram, drawn by Mermaid in the browser
@@ -64,14 +65,20 @@ USED_NUMBERS: dict[str, list[str]] = {}
 FIRST_USE: dict[str, str] = {}          # glossary id -> anchor of its first use in the book
 
 
+# Without equipo.yaml (or with it empty) nothing prints "____": the names fall back to a neutral phrase.
+TEAM_FALLBACK = {"integrantes": "los cuatro integrantes del equipo"}
+
+
 def team_value(path: str) -> str:
     node = TEAM
     for part in path.split("."):
         node = node.get(part) if isinstance(node, dict) else None
     if node in (None, "", []):
-        return "____"
-    if isinstance(node, list):
-        return ", ".join(node)
+        if path in TEAM_FALLBACK:
+            return TEAM_FALLBACK[path]
+        raise SystemExit(f"ERROR: equipo.{path} está vacío o no existe en equipo.yaml / equipo.example.yaml")
+    if isinstance(node, list):                     # "A, B, C y D"
+        return ", ".join(node[:-1]) + " y " + node[-1] if len(node) > 1 else node[0]
     return str(node)
 
 
@@ -147,6 +154,9 @@ def preprocess(ch: Chapter, chapters_by_id: dict[str, Chapter]) -> tuple[str, li
         inner = m.group(1).strip()
         if inner.startswith("tabla "):
             return "\n\n" + table_html(inner.split()[1:], where) + "\n\n"
+        if inner.startswith("paginas "):          # pages from chapter A up to (not including) chapter B: counted by render.cjs
+            a, b = inner.split()[1:3]
+            return f'<span class="pagecount" data-from="{a}" data-to="{b}">000</span>'
         if inner == "tabla_usuarios":
             return "\n\n" + users_table() + "\n\n"
         if inner.startswith("equipo."):
@@ -345,8 +355,7 @@ def toc_html(parts: list[dict]) -> str:
 
 def cover_html() -> str:
     names = TEAM.get("integrantes") or []
-    team = "".join(f"<li>{html.escape(n)}</li>" for n in names) or "<li>____</li><li>____</li><li>____</li>"
-    d = TEAM.get("defensa") or {}
+    team = "".join(f"<li>{html.escape(n)}</li>" for n in names) or "<li>Equipo Enlaza</li>"
     return f"""
 <section class="cover">
   <img class="cover-logo" src="assets/logo-white.svg" alt="Enlaza · cuidado coordinado">
@@ -354,7 +363,6 @@ def cover_html() -> str:
   <p class="cover-sub">Todo el proyecto explicado: qué hace, cómo funciona y por qué se decidió así</p>
   <div class="cover-meta">
     <p>{html.escape(team_value("escuela"))} · {html.escape(team_value("carrera"))} · <span class="nowrap">{html.escape(team_value("periodo"))}</span></p>
-    <p>Defensa: {html.escape(d.get("fecha") or "____")} · {html.escape(d.get("hora") or "____")} · {html.escape(d.get("lugar") or "____")}</p>
     <p class="cover-team-h">Equipo</p><ul class="cover-team">{team}</ul>
   </div>
   <p class="cover-foot">Prototipo académico · todos los datos son sintéticos · generado desde el repositorio</p>

@@ -28,8 +28,11 @@ las toma solas.
 - Referencias: `@ref(cap-id)` → «cap. N «Título» (p. X)».
 - Capturas: `![Pie](capturas/nombre.png)`; `{.media}` o `{.celular}` al final para hacerlas más chicas.
 - Cajas: `!!! pregunta "¿…?"`, `!!! nota "…"`, `!!! cuidado "…"`, `!!! ejemplo "…"`, `!!! frase "…"`.
-- Datos del equipo (nombres, materias, defensa): `equipo.yaml`, **local** (Git lo ignora porque trae nombres reales).
-  Para crearlo: `cp docs/biblia/equipo.example.yaml docs/biblia/equipo.yaml` y llenarlo. Vacío se imprime «____».
+- Datos del equipo (escuela, carrera, periodo y nombres): `equipo.yaml`, **local** (Git lo ignora porque trae nombres reales).
+  Para crearlo: `cp docs/biblia/equipo.example.yaml docs/biblia/equipo.yaml` y escribir los nombres. Sin nombres, la portada dice
+  «Equipo Enlaza». Todo el equipo defiende todo: no hay responsables por materia.
+- Páginas de un tramo del libro: `{{ paginas cap-a cap-b }}` (se cuentan al maquetar; las usa el plan de estudio).
+- Modelos de Enlaza Voz medidos en la laptop: `bash docs/biblia/build/measure_models.sh` → `datos/modelos_medidos.yaml`.
 - Referencias: `referencias.yaml` en APA 7. La compilación se detiene si una URL de `assumptions.csv` o de
   `docs/spec/09_datos.md`, o una cita «Autor (año)» del texto, no tiene su referencia.
 - Verificación final: `build/verify.py` (corre al final de `build_biblia.sh`) recalcula cada número por otro camino,

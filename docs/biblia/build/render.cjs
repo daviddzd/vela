@@ -176,6 +176,19 @@ async function layout(page, url, mods) {
       else m.done = true;                                         // give up on this one
     }
   }
+  // {{ paginas A B }}: now that the layout is final, count the pages between the start of chapter A and chapter B
+  const counts = await page.evaluate(() => {
+    const pageOf = (id) => { const el = document.getElementById(id); const pg = el && el.closest(".pagedjs_page");
+      return pg ? Number(pg.dataset.pageNumber) : null; };
+    const bad = [];
+    for (const s of document.querySelectorAll(".pagecount")) {
+      const a = pageOf(s.dataset.from), b = pageOf(s.dataset.to);
+      if (a === null || b === null) { bad.push(`${s.dataset.from}→${s.dataset.to}`); continue; }
+      s.textContent = String(b - a);
+    }
+    return bad;
+  });
+  if (counts.length) { console.error("ERROR: {{ paginas }} con capítulos que no existen: " + counts.join(", ")); process.exit(1); }
   const pdf = path.join(BIBLIA, process.env.PDF_NAME || "biblia_enlaza.pdf");
   await page.pdf({ path: pdf, preferCSSPageSize: true, printBackground: true, outline: true, tagged: true });
   await browser.close();

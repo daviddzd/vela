@@ -91,3 +91,18 @@ graficas_crecian:
   descripcion: "Cuánto crecía sola una gráfica con Windows al 125 % antes de corregirla"
   fecha: "23 nov 2026"
   documento: "descripción del PR #14 en GitHub"
+reinicio1_carrera:
+  valor: "db y proxy no arrancaron; api y worker arrancaron «sanos» pero sin config/ (sin reglas de emergencia)"
+  descripcion: "Primer reinicio con arranque automático: Docker Desktop levantó los contenedores antes de que Ubuntu estuviera listo"
+  fecha: "25 nov 2026, 23:41, primer reinicio"
+  documento: "docs/00_preparar_laptop_y_github.md, «Enlace fijo»; PR #23"
+reinicio2_reparado:
+  valor: "reparado solo a las 23:51:34, seis minutos antes de abrir la terminal"
+  descripcion: "Segundo reinicio: la tarea «Enlaza - arranque» reinició api y worker sin archivos y la app quedó lista"
+  fecha: "25 nov 2026, segundo reinicio"
+  documento: "registro ~/.local/state/enlaza/arranque.log; PR #23"
+prueba_publica:
+  valor: "12 de 12"
+  descripcion: "Revisiones de scripts/check_public_url.py por https://enlaza.zenthinks.com después del reinicio"
+  fecha: "25 nov 2026"
+  documento: "PR #23"
