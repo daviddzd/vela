@@ -198,14 +198,57 @@ Qué saber del túnel rápido:
 - Límite de 200 peticiones simultáneas y no admite Server-Sent Events (por eso usamos WebSockets).
 - Es para pruebas, sin garantía de disponibilidad.
 
-**Enlace fijo (opcional):** con una cuenta gratuita de Cloudflare y un dominio propio se crea un túnel con
-nombre (`cloudflared tunnel login`, `cloudflared tunnel create vela`, `cloudflared tunnel route dns vela demo.tudominio.mx`)
-y el enlace ya no cambia.
+### Enlace fijo: https://enlaza.zenthinks.com (túnel con nombre)
+
+Desde el 25 nov 2026 la app tiene una dirección fija y un QR que no cambia. Funciona desde cualquier dispositivo
+**mientras la laptop esté encendida, con sesión iniciada en Windows y con internet**.
+
+| Pieza | Cómo quedó |
+|---|---|
+| Túnel `enlaza` | creado en el panel de Cloudflare (one.dash.cloudflare.com → Networks → Tunnels), ruta pública `enlaza.zenthinks.com` → `http://127.0.0.1:8080`. La raíz `zenthinks.com` no apunta a nada |
+| Servicio de Windows `cloudflared` | instalado con `cloudflared.exe service install <token>` (PowerShell como administrador); arranque automático al prender la laptop |
+| Docker Desktop | Settings → General → «Start Docker Desktop when you sign in» activado; los servicios del compose tienen `restart: unless-stopped` y vuelven solos |
+| Tarea «Enlaza - arranque» | `scripts/windows/install_startup_task.ps1`: al iniciar sesión corre `scripts/autostart.sh`, que espera a Docker, revisa que cada contenedor vea sus archivos y reinicia los que no. **Hace falta**: Docker Desktop suele levantar los contenedores antes de que Ubuntu esté listo; entonces `db` y `proxy` no arrancan («not a directory») y `api`/`worker` arrancan con `config/` vacío (sin reglas de emergencia) aunque digan «healthy». Registro: `~/.local/state/enlaza/arranque.log` |
+| Ollama | arranca al iniciar sesión (acceso directo en la carpeta Inicio de Windows) |
+| Reloj de WSL | tarea de Windows «Enlaza - reloj de WSL» (`scripts/windows/install_clock_task.ps1`): copia la hora de Windows a WSL al iniciar sesión, al despertar y cada 30 min |
+| QR | `uv run scripts/make_qr.py` → `docs/privado/qr_enlaza.png` y `qr_enlaza_diapositiva.png` (Git los ignora) |
+
+Por qué con token desde el panel y no con `cloudflared tunnel login/create/route`: el servicio de Windows corre
+como cuenta del sistema; con el método de archivos necesita `config.yml` y las credenciales en
+`C:\Windows\System32\config\systemprofile\.cloudflared`, que es donde más suele fallar. Con token todo va dentro del
+servicio, y la regla «dirección → puerto 8080» vive en Cloudflare (se cambia sin tocar la laptop).
+
+**El token es una llave**: no se sube a Git ni se comparte. Si se filtra, en el panel: túnel `enlaza` → *Refresh token*,
+y volver a instalar el servicio (`cloudflared.exe service uninstall` y `service install <token nuevo>`).
+
+**Comprobar que todo está arriba** (en Ubuntu, desde la carpeta del proyecto):
+```bash
+bash scripts/enlaza.sh estado                 # túnel, Docker, Ollama, localhost, dirección pública y reloj
+uv run scripts/check_public_url.py            # prueba completa por https (crea una solicitud: luego reset_demo.py)
+```
+En PowerShell: `Get-Service cloudflared` debe decir `Running`. En el panel de Cloudflare el túnel aparece como **HEALTHY**.
+
+**Encender y apagar a mano:**
+```bash
+bash scripts/enlaza.sh encender   # Docker, Ollama y el túnel (Windows pide permiso de administrador)
+bash scripts/enlaza.sh apagar     # todo abajo; al reiniciar la laptop vuelve a encender solo
+```
+Solo el túnel, en PowerShell como administrador: `Stop-Service cloudflared` / `Start-Service cloudflared`. Para que no
+arranque al prender la laptop: `Set-Service cloudflared -StartupType Manual` (y `Automatic` para regresarlo).
+
+**Si la dirección fija falla, el respaldo es el túnel rápido** (no depende del panel ni del dominio):
+```bash
+bash scripts/enlaza.sh rapido                                    # o en PowerShell: cloudflared tunnel --url http://localhost:8080
+uv run scripts/make_qr.py https://palabras-al-azar.trycloudflare.com   # QR de respaldo → docs/privado/qr_rapido*.png
+```
 
 ### Día de la defensa
 1. Laptop conectada a la corriente; desactiva suspensión (Configuración → Sistema → Energía → "Nunca").
-2. 1 h antes: abrir Docker Desktop, `docker compose up -d`, abrir Ollama, `ollama run qwen3:8b "hola"` para
-   cargar el modelo, abrir el túnel y generar el QR.
+2. 1 h antes: Docker, Ollama y el túnel ya arrancan solos al iniciar sesión en Windows. Comprobar con
+   `bash scripts/enlaza.sh estado` (todo arriba, `https://enlaza.zenthinks.com` responde y el reloj con diferencia
+   0 o 1 s) y `uv run scripts/check_public_url.py` (12 de 12). Cargar el modelo: `ollama run qwen3:8b "hola"`.
+   El QR fijo ya está en `docs/privado/qr_enlaza_diapositiva.png`. Si la dirección fija no responde: «Si falla el
+   enlace fijo» abajo.
 3. **Base de la demo desde cero (el día anterior, antes del ensayo general).** Las pruebas automáticas usan su
    propia base (`vela_test`), así que ya no escriben en la bitácora de la demo. Pero la base de la demo todavía
    guarda la bitácora de las semanas de desarrollo. Para que la bitácora de `/privacidad` muestre solo el uso
@@ -246,6 +289,16 @@ y el enlace ya no cambia.
    tiempo real de arriba.
 7. Respaldo: la demo funciona en `http://localhost:8080` sin internet (salvo el enlace público) y hay un video grabado.
 
+**Si falla el enlace fijo** (`https://enlaza.zenthinks.com` da error):
+| Qué se ve | Qué hacer |
+|---|---|
+| Error 502 de Cloudflare | la app no corre: `docker compose ps`, `docker compose up -d` |
+| Error 1033 (túnel caído) | `bash scripts/enlaza.sh encender`; en el panel el túnel debe volver a **HEALTHY** |
+| No se arregla en 2 minutos | túnel rápido: `bash scripts/enlaza.sh rapido`, QR nuevo con `make_qr.py <enlace>` y proyectarlo |
+| Sin internet en la escuela | seguir en `http://localhost:8080` en el proyector |
+
+**Apagar todo al terminar:** `bash scripts/backup_db.sh defensa` y `bash scripts/enlaza.sh apagar`.
+
 ## Problemas comunes
 | Síntoma | Solución |
 |---|---|
@@ -253,6 +306,8 @@ y el enlace ya no cambia.
 | La API no alcanza a Ollama | En PowerShell `setx OLLAMA_HOST 0.0.0.0:11434`, reinicia Ollama y permite el acceso en el firewall solo para redes privadas |
 | `verify_db.py` falla en conteos | `docker compose down -v` y volver a `up -d db` (la carga solo corre con el volumen vacío) |
 | El enlace de Cloudflare da error 502 | La app no está corriendo en el puerto 8080: `docker compose ps` |
+| Después de reiniciar, error 502 o pantallas sin datos | `bash scripts/autostart.sh` (los montajes de Ubuntu salieron vacíos; ver «Enlace fijo») |
+| `enlaza.zenthinks.com` da error 1033 | El servicio del túnel no corre: `bash scripts/enlaza.sh estado` y `encender`; respaldo `bash scripts/enlaza.sh rapido` |
 | El tablero se queda en "Reconectando…" | `curl localhost:8080/api/health` debe decir `"realtime":"ok"`; si dice `reconnecting`, revisa `docker compose logs api` y que `db` esté arriba |
-| Te saca la sesión segundos después de entrar | El reloj de WSL2 se atrasa al sincronizarse con Windows; la API ya tolera 60 s. Si es más: en PowerShell `wsl --shutdown` y vuelve a abrir Ubuntu |
+| Te saca la sesión segundos después de entrar | El reloj de WSL2 se atrasó (sobre todo al despertar de la suspensión); la API tolera 60 s. La tarea «Enlaza - reloj de WSL» lo corrige sola; a mano: `bash scripts/enlaza.sh reloj`. Si sigue: en PowerShell `wsl --shutdown` y vuelve a abrir Ubuntu |
 | Todo va lento | Cierra el navegador con muchas pestañas; usa el modelo `llama3.2:3b` |
