@@ -281,7 +281,7 @@ def glossary_html() -> str:
 
 
 def team_authors() -> str:
-    """APA authors from equipo.yaml (local file): "Pitol Arana, D., …, & Bautista Gutiérrez, A." (last two words = surnames)."""
+    """APA authors from equipo.yaml (local file): "Pérez López, A., …, & Gómez Ruiz, M. L." (last two words = surnames)."""
     names = TEAM.get("integrantes") or []
     if not names:
         return "Equipo del proyecto Enlaza."
