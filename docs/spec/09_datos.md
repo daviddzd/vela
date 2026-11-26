@@ -41,5 +41,6 @@ aproximadas (`location_source = approximate`); al descargar el catálogo oficial
 - Portal de Datos Abiertos CDMX — https://datos.cdmx.gob.mx
 - TomTom Traffic Index — https://www.tomtom.com/traffic-index/
 - Secretaría de Economía, DataMéxico — https://www.economia.gob.mx/datamexico/
-- DOF, Ley Federal de Protección de Datos Personales en Posesión de los Particulares (20-03-2025) — https://sidof.segob.gob.mx/notas/docFuente/5803553
+- Ley Federal de Protección de Datos Personales en Posesión de los Particulares (DOF 20-03-2025; texto vigente) — https://www.diputados.gob.mx/LeyesBiblio/pdf/LFPDPPP.pdf
+- DOF, Tasas de interés interbancarias de equilibrio (TIIE a 28 días, nov 2026) — https://sidof.segob.gob.mx/notas/docFuente/5803553
 - Las URL específicas de cada supuesto de negocio están en la columna `url` de `assumptions.csv`.

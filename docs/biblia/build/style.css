@@ -139,3 +139,4 @@ th code { background: rgba(255,255,255,.18); color: #fff; }
 /* set by render.cjs when a figure must shrink to fit with its text on the page */
 figure.fit img, figure.fit svg { max-height: var(--fit-height) !important; width: auto; }
 th .num { color: #fff; }
+p.ref { padding-left: 8mm; text-indent: -8mm; margin: 0 0 2.2mm; font-size: 9.5pt; word-break: break-word; }

@@ -66,7 +66,7 @@ flowchart TB
     | Identidad y logotipo | ____ |
     | Modelo de negocio y escenarios | ____ |
     | Frases de voz del equipo (pendiente) | ____ |
-    | Diagnóstico de campo (pendiente o realizado) | ____ |
+    | Diagnóstico de campo (semana del 25 nov) | ____ |
 
 ### Cómo se revisó cada cambio
 

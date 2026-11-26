@@ -50,6 +50,10 @@ TEAM: dict = yaml.safe_load(_team_file.read_text(encoding="utf-8")) or {}
 GLOSSARY: list[dict] = yaml.safe_load((BIBLIA / "glosario.yaml").read_text(encoding="utf-8")) or []
 CONTENT: dict = yaml.safe_load((BIBLIA / "contenido.yaml").read_text(encoding="utf-8"))
 
+REFERENCES: list[dict] = yaml.safe_load((BIBLIA / "referencias.yaml").read_text(encoding="utf-8")) or []
+CITED: list[tuple[str, str]] = []
+NOT_CITATIONS = {"Particulares", "UNRC", "Censo", "ENSANUT", "ENASEM", "TomTom", "DOF", "INEGI", "DENUE"}  # name + year, not a citation        # (where, "Autor, año") found in the chapters, checked against REFERENCES
+
 TERMS: dict[str, dict] = {}
 for entry in GLOSSARY:
     for name in [entry["termino"], *entry.get("tambien", [])]:
@@ -164,6 +168,11 @@ def preprocess(ch: Chapter, chapters_by_id: dict[str, Chapter]) -> tuple[str, li
         ERRORS.append(f"{where}: referencia desconocida @ref({target})")
         return target
     text = re.sub(r"@ref\(([a-z0-9/-]+)\)", ref, text)
+    # author-year citations: "Cairo (2019)", "(Kloog et al., 2014)", "Hernández-Sampieri y Mendoza, 2018"
+    for m in re.finditer(r"([A-ZÁÉÍÓÚÑ][\w'’\-]+(?: [A-ZÁÉÍÓÚÑ][\w'’\-]+)?(?: et al\.)?(?: y [A-ZÁÉÍÓÚÑ][\w\-]+)?)"
+                         r"(?:, | \()((?:19|20)\d\d)\)?", text):
+        if m.group(1) not in NOT_CITATIONS:
+            CITED.append((where, m.group(1)))
     return text, mermaids
 
 
@@ -254,6 +263,53 @@ def glossary_html() -> str:
     return '<dl class="glossary">' + "".join(items) + "</dl>"
 
 
+def team_authors() -> str:
+    """APA authors from equipo.yaml (local file): "Pitol Arana, D., …, & Bautista Gutiérrez, A." (last two words = surnames)."""
+    names = TEAM.get("integrantes") or []
+    if not names:
+        return "Equipo del proyecto Enlaza."
+    out = []
+    for n in names:
+        w = n.split()
+        given, surnames = w[:-2] or w[:1], w[-2:] if len(w) > 2 else w[1:]
+        out.append(f"{' '.join(surnames)}, {' '.join(g[0] + '.' for g in given)}")
+    return (", ".join(out[:-1]) + ", & " + out[-1]) if len(out) > 1 else out[0]
+
+
+def references_html() -> str:
+    """Annex: every reference in APA 7, alphabetical (hanging indent)."""
+    def key(r):
+        t = r["apa"].replace("{autores_equipo}", team_authors())
+        return unicodedata.normalize("NFKD", t).encode("ascii", "ignore").decode().lower()
+    items = []
+    for r in sorted(REFERENCES, key=key):
+        apa = html.escape(r["apa"].replace("{autores_equipo}", team_authors()), quote=False)
+        apa = re.sub(r"\*([^*]+)\*", r"<em>\1</em>", apa)
+        apa = re.sub(r"(https?://\S+)", r'<a href="\1">\1</a>', apa)
+        items.append(f"<p class=\"ref\">{apa}</p>")
+    return "".join(items)
+
+
+def check_references() -> None:
+    """Every source URL of the data has a reference; every author-year citation in the text has a reference."""
+    known_urls = {u for r in REFERENCES for u in (r.get("urls") or [])}
+    import csv as _csv
+    with open(ROOT / "data/business/assumptions.csv", encoding="utf-8") as f:
+        for row in _csv.DictReader(f):
+            u = row["url"].strip()
+            if u.startswith("http") and u not in known_urls:
+                ERRORS.append(f"referencias.yaml: falta la referencia de {u} ({row['key']} en assumptions.csv)")
+    for u in re.findall(r"https?://[^\s`)]+", (ROOT / "docs/spec/09_datos.md").read_text(encoding="utf-8")):
+        u = u.rstrip(".,")
+        if u not in known_urls:
+            ERRORS.append(f"referencias.yaml: falta la referencia de {u} (docs/spec/09_datos.md)")
+    names = [c.lower() for r in REFERENCES for c in r.get("cita", [])]
+    for where, author in CITED:
+        a = author.lower().replace(" et al.", "").strip()
+        if not any(a.startswith(n) or n.startswith(a.split(" y ")[0].split(",")[0]) for n in names):
+            ERRORS.append(f"{where}: la cita «{author}» no tiene referencia en referencias.yaml")
+
+
 def toc_html(parts: list[dict]) -> str:
     out = ['<nav class="toc" id="indice"><h1 class="toc-title">Índice</h1><ol>']
     for p in parts:
@@ -305,6 +361,11 @@ def build(only: str | None = None) -> None:
             body.append(f'<section class="chapter {ch.kind}" id="{ch.id}" data-title="{html.escape(ch.title)}">'
                         f'<p class="ch-kicker">{kicker}</p><h1 class="ch-title">{html.escape(ch.title)}</h1>{ch.html}</section>')
         if p.get("generado") == "glosario":
+            body.append('<section class="chapter anexo" id="anexo-referencias" data-title="Referencias">'
+                        '<p class="ch-kicker">Anexo</p><h1 class="ch-title">Referencias (APA 7)</h1>'
+                        '<p>Todas las fuentes de los datos (<code>data/business/assumptions.csv</code>, '
+                        '<code>docs/spec/09_datos.md</code>) y las citadas en el libro, en formato APA 7. La compilación se detiene '
+                        'si una fuente de los datos o una cita del texto no tiene su referencia.</p>' + references_html() + "</section>")
             body.append('<section class="chapter anexo" id="anexo-glosario" data-title="Glosario">'
                         '<p class="ch-kicker">Anexo</p><h1 class="ch-title">Glosario</h1>'
                         '<p>Cada término técnico del libro, explicado en palabras sencillas. «Primera vez» lleva a la página '
@@ -329,6 +390,7 @@ def build(only: str | None = None) -> None:
             d = NUMBERS[k]
             f.write(f'"{k}","{d["text"]}","{d["source"]}","{"; ".join(sorted(set(places)))}"\n')
 
+    check_references()
     for w in WARNINGS:
         print("AVISO:", w)
     if ERRORS:

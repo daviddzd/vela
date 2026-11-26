@@ -13,7 +13,7 @@
 
 | Pide | Documento y sección | Dónde se responde |
 |---|---|---|
-| Entregable: «Dashboard de Monitoreo Territorial y Temporal (Shiny/R o Python)» | PP, «Evidencia integradora», p. 2 | Panorama-AM, tablero y contingencia (@ref(cap-panorama)); **confirmar con el profesor** que React + API en Python cumple |
+| Entregable: «Dashboard de Monitoreo Territorial y Temporal (Shiny/R o Python)» | PP, «Evidencia integradora», p. 2 | Panorama-AM, tablero y contingencia (@ref(cap-panorama)); ver «Shiny/R o Python» (abajo) |
 | Visualización territorial y temporal | PP, «Desarrollo del Problema Prototípico», p. 9 | mapas, coropleta y series por hora y por día (abajo) |
 | No diluir crisis localizadas en promedios (crítica a los tableros, Cairo, 2019) | PP, p. 9; «Incidente crítico de la UCA: Visualización de Datos», p. 12 | «Respuesta al incidente crítico» (abajo) |
 | Escalas calibradas para resaltar anomalías súbitas, no solo promedios históricos | PP, p. 12; «Problemas suscitados», p. 7 | umbrales absolutos de contingencia por estación (abajo) |
@@ -139,6 +139,14 @@ tablero, el personal y la contingencia; calles de OpenFreeMap / OpenStreetMap; s
 
 **En Enlaza.** La demostración sigue esa historia: problema (Panorama, población y riesgo) → operación en vivo → contingencia
 → simulación que compara políticas → decisión que cambió el producto.
+
+### Shiny/R o Python
+
+!!! cuidado "Confirmar con el profesor de Visualización"
+    El PP dice «Shiny/R o Python» para el tablero. Enlaza dibuja la interfaz con **React y ECharts**, pero **toda la lógica
+    analítica está en Python**: la API calcula cada indicador (`backend/app/routers/panorama.py`), la simulación y el modelo de
+    negocio son Python, y el cuaderno `business/model.ipynb` usa el mismo módulo. La interfaz solo dibuja lo que Python ya
+    calculó. **Confirmar con el profesor de Visualización** que esto cumple con «Python».
 
 ## Respuesta al incidente crítico de Visualización
 

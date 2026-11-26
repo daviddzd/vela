@@ -44,7 +44,7 @@ Eso es lo que este capítulo explica: qué dice la ley y cómo Enlaza lo cumple.
 |---|---|
 | Aviso de privacidad | `/privacidad` muestra el aviso (`docs/legal/aviso_de_privacidad.md`) a todos los roles |
 | Consentimiento **expreso y por escrito** para datos sensibles (salud) | Tres tipos de [[consentimiento]] con firma, fecha y vencimiento; formato en `docs/legal/formato_consentimiento.md` |
-| Representación de quien no puede decidir | Firma el representante legal (un familiar registrado de esa persona) y se registra el **asentimiento** de la persona |
+| Representación de quien no puede decidir | Firma el representante legal (un familiar registrado de esa persona) y se registra el **asentimiento** de la persona; si no asintió, no se usa el asistente de voz (desde el 25 nov 2026) |
 | Derechos [[ARCO]] (acceso, rectificación, cancelación, oposición) | Formulario en `/privacidad` con folio y fecha límite |
 | Plazo de respuesta (art. 31) | {{ neg.arco_response_days }} días hábiles para responder y {{ neg.arco_effective_days }} para hacerlo efectivo; los días son hábiles (art. 2, fr. VIII); el trámite es gratuito (art. 34) |
 | Medidas de seguridad | Seguridad por fila, roles, contraseñas con bcrypt, bitácora (@ref(cap-seguridad)) |
@@ -124,7 +124,7 @@ Detalle en @ref(cap-operacion). La simulación midió el costo de cumplir la jor
 - **No se cubre la NOM-004-SSA3-2012** (expediente clínico): Enlaza no es un expediente; se usa solo como referencia de
   confidencialidad.
 - **El plazo ARCO no descuenta festivos.**
-- **El asentimiento se registra, pero el flujo de una persona que no está de acuerdo** depende de la institución.
+- **El asentimiento «no» bloquea la voz**; para visitas y datos de salud, qué hacer cuando la persona no está de acuerdo lo decide la institución.
 - **Los nocturnos de 12 h siguen excediendo la ley** en la plantilla de la semilla: Enlaza lo señala, la institución decide.
 - **No hay un comité de ética** ni evaluación de impacto formal: es un prototipo escolar.
 

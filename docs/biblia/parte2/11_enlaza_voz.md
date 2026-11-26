@@ -42,7 +42,9 @@ lado de alarmar, nunca hacia el lado de tranquilizar.
 ```mermaid
 flowchart TB
   C{"¿Consentimiento<br/>«asistente de voz» vigente?"} -- no --> NO["«Falta autorización…<br/>No se grabó nada»"]
-  C -- sí --> G["Grabación (hasta 60 s)<br/>o mensaje escrito"]
+  C -- sí --> AS{"¿La persona asintió?<br/>(si firmó un representante)"}
+  AS -- "no estuvo de acuerdo" --> NO
+  AS -- "sí / no pudo expresarlo" --> G["Grabación (hasta 60 s)<br/>o mensaje escrito"]
   G --> W["Whisper small int8 (CPU)<br/>voz → texto"]
   W --> Q{"¿Se entendió?<br/>confianza baja o muy corto"}
   Q -- no --> REP["Pedir repetir o escribir"]
@@ -109,6 +111,11 @@ resumir lo dicho, **no inferir enfermedades, no recomendar tratamientos** y marc
 1. el esquema JSON se valida con Pydantic; si no valida, se guarda solo la transcripción y el nivel;
 2. un **filtro** busca frases prohibidas («probablemente tiene», «le recomiendo», «no es una emergencia»);
 3. **el nivel siempre lo pone el sistema**, nunca el modelo de lenguaje.
+
+**Confianza del clasificador** (decisión del equipo, 25 nov 2026): la bandeja del médico y las alertas de voz de coordinación
+muestran las probabilidades del clasificador («83 % emergencia · 16 % rutina · 1 % urgente») con una nota: es qué tan seguro
+estaba el modelo de texto, no la probabilidad de que sea una emergencia real. **Nunca se muestra a la familia**, y al médico solo
+con consentimiento de datos de salud.
 
 En la revisión del criterio A8, los {{ voz.reports_reviewed }} reportes generados fueron válidos y
 {{ voz.reports_clean }} pasaron el filtro sin frases prohibidas. **Falta la revisión humana** del equipo (casillas en
@@ -255,4 +262,10 @@ del equipo con consentimiento y las de Common Voice están **pendientes**.
     después de ver los resultados.
 
 !!! pregunta "¿Se guarda la grabación?"
-    No. Solo la transcripción y el nivel. Y sin consentimiento de «asistente de voz» vigente no se graba nada.
+    No. Solo la transcripción y el nivel. Y sin consentimiento de «asistente de voz» vigente no se graba nada. Si firmó un
+    representante pero la persona **no estuvo de acuerdo** (asentimiento «no»), tampoco.
+
+!!! pregunta "¿Por qué la familia no ve qué tan seguro estaba el modelo?"
+    Porque un porcentaje puede tranquilizar de más («solo 40 % emergencia») o asustar de más. A la familia le damos una acción
+    clara: llamar al 911 si ve ciertos signos. La confianza es una herramienta para quien revisa (médico y coordinación), con una
+    nota que explica que no es la probabilidad de una emergencia real.

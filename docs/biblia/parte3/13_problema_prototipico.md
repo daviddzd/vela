@@ -39,11 +39,13 @@ crea solicitudes y alertas reales; Panorama lee la operación; el negocio usa lo
 | Modelado y Simulación: Simulador de Optimización de Servicios de Cuidado (Agentes/Markov) | SIRAG-D: eventos discretos + agentes con cadena de Markov | @ref(cap-sirag), @ref(cap-m-sim) |
 | SIE: Arquitectura del Sistema de Información Institucional (CRM/ERP/Nube) | Operación: TPS/CRM/ERP en una base con seguridad por fila | @ref(cap-operacion), @ref(cap-m-sie) |
 | Emprendimiento: Plan de Negocios Viable y Canvas de la Startup | `/negocio`, `assumptions.csv`, Canvas, VPN, TIR, escenarios | @ref(cap-negocio), @ref(cap-m-emp) |
-| Práctica Profesional: Diagnóstico de Campo, Protocolo de Ética y Práctica Profesional | Consentimientos, aviso, ARCO, bitácora, LFT; el diagnóstico de campo está **pendiente** | @ref(cap-etica), @ref(cap-m-pp) |
+| Práctica Profesional: Diagnóstico de Campo, Protocolo de Ética y Práctica Profesional | Consentimientos, aviso, ARCO, bitácora, LFT; el diagnóstico de campo se hace esta semana (material en `docs/diagnostico/`) | @ref(cap-etica), @ref(cap-m-pp) |
 
-!!! cuidado "Confirmar con el profesor"
-    El PP dice «Shiny/R o Python» para el tablero. Enlaza lo hizo en **React con gráficas ECharts**, y los datos los calcula una
-    API en **Python**. Conviene confirmar que eso cumple.
+!!! cuidado "Confirmar con el profesor de Visualización"
+    El PP dice «Shiny/R o Python» para el tablero. Enlaza dibuja la interfaz con **React y ECharts**, pero **toda la lógica
+    analítica está en Python**: la API calcula cada indicador (`backend/app/routers/panorama.py`), la simulación y el modelo de
+    negocio son Python, y el cuaderno `business/model.ipynb` usa el mismo módulo. La interfaz solo dibuja lo que Python ya
+    calculó. **Confirmar con el profesor de Visualización** que esto cumple con «Python».
 
 ### 2. Cómo se califica
 
@@ -121,11 +123,11 @@ Cada fila de las tablas anteriores apunta a su capítulo, y ahí está el códig
 
 ## Limitaciones honestas
 
-- El **diagnóstico de campo** (Práctica Profesional) no está documentado en el repositorio: si no se hizo, es el hueco más
-  importante del portafolio.
-- Faltan la **evaluación de voz con hablantes reales** y la revisión **APA 7** de las referencias.
-- No hay **plan de respaldo** de la base implementado (@ref(cap-m-sie)).
-- El tablero no es Shiny; confirmar que «Python» en la API cumple.
+- El **diagnóstico de campo** (Práctica Profesional) se hace esta semana; la guía, el consentimiento verbal y la plantilla
+  están en `docs/diagnostico/` y los hallazgos van en @ref(cap-m-pp).
+- Falta la **evaluación de voz con hablantes reales**. Las referencias en **APA 7** están en el anexo de fuentes.
+- El **respaldo** de la base es manual (`scripts/backup_db.sh`), no automático (@ref(cap-m-sie)).
+- El tablero no es Shiny: la lógica está en Python y la interfaz solo dibuja; confirmar con el profesor de Visualización.
 
 ## Preguntas que te pueden hacer
 

@@ -193,14 +193,17 @@ flowchart TB
 
 ### Plan de respaldo
 
-!!! cuidado "Lo que hay y lo que no"
-    **Hoy no hay respaldos automáticos de la base de datos.** Lo que sí hay: la semilla y las migraciones están en Git, así que la
-    base se puede **reconstruir desde cero** en minutos (Parte V). Lo que se perdería si se borrara el volumen de Docker es la
-    **operación en vivo** (visitas, notas, bitácora de los ensayos).
+Hay tres niveles (decisión del equipo, 25 nov 2026):
 
-Propuesta (para una institución real, no implementada): respaldo diario con `pg_dump` cifrado, copia fuera de la laptop o
-del servidor, retención de 30 días, prueba mensual de restauración, y respaldo antes de cada migración. Para la defensa basta
-un respaldo manual antes de empezar (comando en la Parte V).
+1. **Respaldo manual con un comando**: `bash scripts/backup_db.sh` hace un `pg_dump` completo (semilla, operación en vivo y
+   bitácora) con la fecha en el nombre, en `backups/` (carpeta que Git ignora). Se hace **antes de la defensa y después de cada
+   ensayo**.
+2. **Restauración**: `bash scripts/restore_db.sh backups/<archivo>.dump` detiene la API y el worker, restaura, los vuelve a
+   encender y corre `verify_db.py`. Se probó restaurando en una base temporal: mismos conteos y mismas políticas de seguridad.
+3. **Reconstrucción desde cero**: la semilla y las migraciones están en Git; la base se puede volver a crear en minutos (Parte V).
+
+**Lo que falta para una institución real:** respaldos **automáticos** (diarios), cifrados, guardados fuera del equipo, con pruebas
+periódicas de restauración y un respaldo antes de cada migración.
 
 ### Arquitectura en la nube
 

@@ -121,21 +121,49 @@ con personas reales.
 
 ## Diagnóstico de campo
 
-!!! cuidado "Estado: no documentado en el repositorio"
+!!! nota "Estado: se hace esta semana"
     El PP pide un diagnóstico de campo y el Plan SIE propone «validar el problema con personas reales del sector (sin usar datos
-    de pacientes)». En el repositorio **no hay** entrevistas, guías ni resultados. **Confirmar con el equipo** si se hizo; si no,
-    es el hueco más importante del portafolio y conviene hacerlo antes de la defensa, aunque sea pequeño.
+    de pacientes)». El equipo lo hace la semana del 25 de noviembre de 2026. El material está en `docs/diagnostico/`:
+    `guia_entrevista.md` (20 minutos, 12 preguntas), `consentimiento_verbal.md` (sin nombres ni datos de salud; se cita por rol y
+    alcaldía) y `plantilla_resumen.md` (una por entrevista, en `docs/diagnostico/entrevistas/`).
 
-Propuesta de diseño (para hacerlo o para documentar lo que ya se hizo):
+Diseño:
 
 | Elemento | Propuesta |
 |---|---|
 | Objetivo | validar que la coordinación de visitas es un problema real y qué información necesita cada actor |
 | Método | entrevistas semiestructuradas (ruta cualitativa, Hernández-Sampieri y Mendoza, 2018) |
 | Participantes | coordinación de una residencia o centro de día, personal de cuidado o enfermería, un geriatra, familiares cuidadores |
-| Consentimiento | consentimiento informado de los **entrevistados**; sin datos de pacientes; sin grabar si no lo autorizan |
-| Guía | ¿cómo se piden y asignan hoy las visitas?, ¿qué se pierde?, ¿qué pasa en una contingencia?, ¿qué les preocuparía de un sistema así?, ¿cuánto pagarían? |
+| Consentimiento | verbal, leído al inicio (`docs/diagnostico/consentimiento_verbal.md`); sin nombres ni datos de salud; cita por rol y alcaldía; audio solo si lo autorizan y se borra tras el resumen |
+| Guía | `docs/diagnostico/guia_entrevista.md`: cómo coordinan hoy (4 preguntas), qué falla (5) y qué pensarían de algo como Enlaza (3) |
 | Uso | ajustar la propuesta de valor, el precio y las pantallas; citar resultados en el portafolio |
+
+### Hallazgos del diagnóstico de campo
+
+!!! nota "Para llenar después de las entrevistas"
+    Copiar aquí lo más importante de `docs/diagnostico/entrevistas/E01.md`, `E02.md`… Citar solo por rol y alcaldía.
+
+| Entrevista | Rol y alcaldía | Fecha |
+|---|---|---|
+| E01 | ____ | ____ |
+| E02 | ____ | ____ |
+| E03 | ____ | ____ |
+
+**Lo que supusimos y lo que encontramos**
+
+| Lo que supuso Enlaza | Se confirmó / se contradijo / no se habló | Evidencia (frase textual, rol y alcaldía) |
+|---|---|---|
+| Hoy se coordina con llamadas, WhatsApp y hojas de cálculo | ____ | ____ |
+| Se pierden o duplican solicitudes | ____ | ____ |
+| No se sabe quién está libre ni cuánto tarda en llegar | ____ | ____ |
+| Lo urgente compite con lo rutinario | ____ | ____ |
+| La contingencia ambiental cambia la operación | ____ | ____ |
+| Es aceptable que el sistema asigne lo rutinario y una persona apruebe lo urgente | ____ | ____ |
+| Es aceptable el límite de tiempo en lo urgente | ____ | ____ |
+| Los precios supuestos son razonables para una institución | ____ | ____ |
+| Las familias usarían un asistente de voz | ____ | ____ |
+
+**Qué cambiaríamos en Enlaza por lo que encontramos:** ____
 
 ## Protocolo de ética (consentimiento y gobernanza de datos)
 
@@ -153,10 +181,12 @@ El protocolo que aplica Enlaza, paso a paso (las partes en cursiva son de la ins
 7. Derechos ARCO con folio y plazo de ley; bitácora que no se puede borrar.
 8. *Si hay presión para saltarse el consentimiento, se detiene la intervención y se escala* (ver abajo).
 
-!!! cuidado "Una diferencia entre el formato y el sistema"
-    El formato de consentimiento dice que si la persona **no estuvo de acuerdo**, no se usa el asistente de voz. El sistema
-    **registra** el asentimiento, pero hoy **no bloquea** la voz cuando es «no»: la validez del consentimiento solo revisa que esté
-    otorgado y vigente (`v_consents.is_valid`). Es un pendiente que el equipo debe decidir (corregir el sistema o el formato).
+!!! nota "El asentimiento cuenta (corregido el 25 nov 2026)"
+    El formato de consentimiento dice que si la persona **no estuvo de acuerdo**, no se usa el asistente de voz. Al escribir este
+    libro se encontró que el sistema solo **registraba** el asentimiento. El equipo decidió corregirlo (PR #21): si la persona no
+    asintió (`patient_assent = 'no'`), **la voz se bloquea igual que sin consentimiento**, aunque el representante haya firmado,
+    con el mensaje «La persona no estuvo de acuerdo con usar el asistente de voz… No se grabó nada.», y queda en la bitácora
+    (`voice_blocked_no_assent`). Hay una prueba automática.
 
 ## Respuesta al incidente crítico de Práctica Profesional
 
@@ -170,7 +200,7 @@ indicadores de los financiadores. Además, el personal de salud desconfía de re
   papel.
 - **Lo que hace el sistema:** no deja procesar sin consentimiento (bloqueo en la API) y obliga a registrar **quién** firmó y el
   **asentimiento**; todo queda auditado. Lo que no puede hacer es saber si la firma fue informada: eso es responsabilidad
-  profesional de las personas (y la diferencia del recuadro anterior es justo un punto a mejorar).
+  profesional de las personas (y por eso el asentimiento «no» ahora bloquea la voz).
 - **Ante la desconfianza del personal de salud:** Enlaza no diagnostica ni sustituye el criterio clínico; el médico ve la
   transcripción y frases textuales, no solo un número; el modo sencillo y los textos cortos buscan que cada usuario lo entienda.
 
@@ -200,8 +230,9 @@ indicadores de los financiadores. Además, el personal de salud desconfía de re
 
 ## Limitaciones honestas
 
-- **Diagnóstico de campo** no documentado en el repositorio (confirmar con el equipo).
-- El **asentimiento «no»** se registra pero no bloquea el asistente de voz, como sí dice el formato.
+- El **diagnóstico de campo** se hace esta semana; los hallazgos se agregan en la sección de arriba.
+- El asentimiento «no» bloquea la **voz**; para las visitas y los datos de salud, qué hacer cuando la persona no asiente lo decide la
+  institución.
 - Plantillas legales **sin revisión de un abogado**.
 - **Sin comité de ética** ni evaluación de impacto formal.
 - El **flujo de una persona que no asiente** depende de la institución.

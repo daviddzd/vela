@@ -182,11 +182,18 @@ Todo va en una rama con su PR y se fusiona solo con las pruebas en verde.
 - *Qué se decidió:* con menos de {{ code.min_visits_rate }} se muestra «datos insuficientes (N visitas)», y el correo pasó a
   `privacidad@enlaza.test`.
 
-**24. Hallazgos de la biblia que quedan para el equipo.**
-- Una frase claramente rutinaria («Hoy mi mamá comió bien y durmió su siesta») dispara el aviso ámbar.
-- El asentimiento «no» se registra, pero no bloquea la voz como dice el formato.
-- No hay respaldos automáticos de la base.
-- El diagnóstico de campo no está documentado.
+**24. Hallazgos de la biblia y lo que se decidió (25 nov).**
+- *El asentimiento «no» no bloqueaba la voz*, aunque el formato de consentimiento lo decía → **se corrigió** (PR #21,
+  excepción al congelamiento): la voz se bloquea igual que sin consentimiento, con su mensaje y su registro.
+- *El plan general pedía mostrar la confianza del modelo* → la bandeja del médico y las alertas de coordinación muestran la
+  **confianza del clasificador**, nunca a la familia (PR #21).
+- *Una prueba de navegador fallaba en `main`* (el campo de fecha no reemplazaba lo escrito si se tecleaba de inmediato) → se
+  corrigió en el mismo PR.
+- *No había respaldos de la base* → `scripts/backup_db.sh` y `scripts/restore_db.sh`, antes de la defensa y después de cada ensayo.
+- *El diagnóstico de campo no estaba documentado* → el equipo lo hace esta semana con el material de `docs/diagnostico/`.
+- *Las referencias* → lista completa en APA 7 en los anexos.
+- *Sigue abierto:* una frase claramente rutinaria («Hoy mi mamá comió bien y durmió su siesta») dispara el aviso ámbar; se
+  mitiga con la revisión humana.
 
 ## Dónde está en el código
 

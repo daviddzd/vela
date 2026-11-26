@@ -49,3 +49,6 @@ docs/biblia/capturas/
 # Private team documents (real names): never in Git
 docs/privado/
 docs/biblia/equipo.yaml
+
+# Database backups (scripts/backup_db.sh): never in Git
+backups/

@@ -85,7 +85,7 @@ flowchart LR
 - Y por el **efecto del aire**: por cada +10 µg/m³ de PM2.5 sobre la línea base de la estación más cercana, sube
   {{ cfg.pm_respiratory }} (respiratorio, a quien tiene enfermedad pulmonar), {{ cfg.pm_cardiovascular }}
   (cardiovascular, corazón o embolia) o {{ cfg.pm_natural_causes }} (causas naturales, el resto). Esos coeficientes
-  vienen de estudios publicados (Bell et al. 2014; BMJ 2024), citados en el YAML; **aplicarlos a una probabilidad por
+  vienen de estudios publicados (Kloog et al., 2014; Delavar et al., 2023; Sun et al., 2024), citados en el YAML; **aplicarlos a una probabilidad por
   hora es un supuesto del modelo**, porque los estudios miden ingresos hospitalarios diarios.
 - Una crisis genera una solicitud de prioridad alta (una visita de enfermería). Si nadie llega a tiempo, la familia
   acude a urgencias y cuenta como no atendida.

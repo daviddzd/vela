@@ -164,7 +164,7 @@ Cada paciente tiene tres tipos de consentimiento, cada uno con fecha de firma y 
 |---|---|
 | `health_data` (datos de salud) | la ficha no muestra enfermedades ni riesgo («Falta consentimiento»), y **el despachador no usa el riesgo calculado con datos de salud** (la solicitud compite solo con su prioridad) |
 | `home_care` (atención a domicilio) | no se puede pedir una visita ni registrar «Llegué» o «Terminé»; si se revoca, las visitas pendientes se cancelan y coordinación recibe una alerta |
-| `voice_assistant` (asistente de voz) | no se graba ni se procesa ninguna nota («Falta autorización… No se grabó nada») |
+| `voice_assistant` (asistente de voz) | no se graba ni se procesa ninguna nota («Falta autorización… No se grabó nada»); **tampoco** si firmó un representante y la persona no asintió (desde el 25 nov 2026) |
 
 - «Vigente» lo calcula la base: `v_consents.is_valid = granted AND expires_on >= current_date`.
 - Si la persona no puede decidir, firma su **representante legal** (un familiar de ese paciente) y se registra su

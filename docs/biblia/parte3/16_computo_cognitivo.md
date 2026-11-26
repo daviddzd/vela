@@ -200,8 +200,10 @@ frases reales de esas comunidades, recogidas con consentimiento y evaluadas a ci
 - **Urgencia:** cada reporte lleva su nivel (emergencia, urgente, rutina) y las reglas que se activaron.
 - **Confianza de la transcripción:** Whisper da una confianza; si es baja o el texto es muy corto, se pide repetir y se marca
   para revisión humana. El médico la ve en la bandeja («Confianza de la transcripción»).
-- **Confianza del clasificador:** las probabilidades de cada nivel **se guardan** con cada reporte (`classifier_probs`), pero
-  **no se muestran** en pantalla. Es un pendiente que el equipo puede decidir mostrar (sería un cambio de interfaz).
+- **Confianza del clasificador** (decisión del equipo, 25 nov 2026, PR #21): la bandeja del médico y las alertas de voz de
+  coordinación muestran, por ejemplo, «Confianza del clasificador: 83 % emergencia · 16 % rutina · 1 % urgente», con una nota:
+  es qué tan seguro estaba el modelo de texto, no la probabilidad de que sea una emergencia real. **Nunca se muestra a la
+  familia**, y al médico solo con consentimiento de datos de salud.
 
 ## Por qué lo hicimos así
 

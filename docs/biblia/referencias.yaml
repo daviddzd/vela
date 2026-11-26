@@ -1,0 +1,170 @@
+# Referencias de La biblia de Enlaza, en formato APA 7. build.py las ordena y las imprime en el anexo «Referencias».
+# Cada entrada: apa (texto APA 7 en Markdown), urls (para comprobar que toda URL de data/business/assumptions.csv tiene
+# su referencia) y cita (apellido o nombre corto con que se cita en el texto, para comprobar que cada cita del libro
+# tiene referencia). Los datos de artículos se verificaron en Crossref (25 nov 2026).
+# {autores_equipo} se llena con los nombres de equipo.yaml (local, no se sube a Git): aquí no van nombres reales.
+
+# ---------------------------------------------------------------- salud y población
+- cita: [Salinas-Rodríguez, ENSANUT]
+  apa: "Salinas-Rodríguez, A., De la Cruz-Góngora, V., & Manrique-Espinoza, B. (2020). Condiciones de salud, síndromes geriátricos y estado nutricional de los adultos mayores en México. *Salud Pública de México, 62*(6), 777–785. https://doi.org/10.21149/11840"
+  urls: ["https://ensanut.insp.mx/encuestas/ensanut2018/doctos/analiticos/estado.nutricional.de.los.adultos.mayores.pdf"]
+- cita: [INSP]
+  apa: "Instituto Nacional de Salud Pública. (s. f.). *Encuesta Nacional de Salud y Nutrición (ENSANUT)*. https://ensanut.insp.mx"
+  urls: ["https://ensanut.insp.mx"]
+- cita: [ENASEM, comunicado 89/26]
+  apa: "Instituto Nacional de Estadística y Geografía. (2026). *Estadísticas a propósito del Día Internacional de las Personas Adultas Mayores* (Comunicado de prensa núm. 89/26). https://www.inegi.org.mx/contenidos/saladeprensa/aproposito/2026/EAP_Adulmayor_26.pdf"
+  urls: ["https://www.inegi.org.mx/contenidos/saladeprensa/aproposito/2026/EAP_Adulmayor_26.pdf"]
+- cita: [Censo 2020, INEGI]
+  apa: "Instituto Nacional de Estadística y Geografía. (2021). *Censo de Población y Vivienda 2020*. https://www.inegi.org.mx"
+  urls: ["https://www.inegi.org.mx"]
+- cita: [Censo 2020 CDMX]
+  apa: "Universidad Nacional Autónoma de México, Escuela Nacional de Trabajo Social. (2021). *[Ficha sobre personas adultas mayores en la Ciudad de México con datos del Censo de Población y Vivienda 2020]*. https://trabajosocial.unam.mx/politicasocial/material/vivienda/2021/vivie_feb_c_adultos_mayores_cdmx.pdf"
+  urls: ["https://trabajosocial.unam.mx/politicasocial/material/vivienda/2021/vivie_feb_c_adultos_mayores_cdmx.pdf"]
+- cita: [CONAPO]
+  apa: "Consejo Nacional de Población. (2025). *Envejecimiento en México*. Gobierno de México. https://www.gob.mx/conapo/articulos/envejecimiento-en-mexico"
+  urls: ["https://www.gob.mx/conapo/articulos/envejecimiento-en-mexico"]
+- cita: [Kloog]
+  apa: "Kloog, I., Nordio, F., Zanobetti, A., Coull, B. A., Koutrakis, P., & Schwartz, J. D. (2014). Short term effects of particle exposure on hospital admissions in the Mid-Atlantic States: A population estimate. *PLoS ONE, 9*(2), Artículo e88578. https://doi.org/10.1371/journal.pone.0088578"
+  urls: []
+- cita: [Sun]
+  apa: "Sun, Y., Milando, C. W., Spangler, K. R., Wei, Y., Schwartz, J., Dominici, F., Nori-Sarma, A., Sun, S., & Wellenius, G. A. (2024). Short term exposure to low level ambient fine particulate matter and natural cause, cardiovascular, and respiratory morbidity among US adults with health insurance: Case time series study. *BMJ, 384*, Artículo e076322. https://doi.org/10.1136/bmj-2023-076322"
+  urls: []
+- cita: [Delavar]
+  apa: "Delavar, M. A., Jahani, M. A., Sepidarkish, M., Alidoost, S., Mehdinezhad, H., & Farhadi, Z. (2023). Relationship between fine particulate matter (PM2.5) concentration and risk of hospitalization due to chronic obstructive pulmonary disease: A systematic review and meta-analysis. *BMC Public Health, 23*, Artículo 2229. https://doi.org/10.1186/s12889-023-17093-6"
+  urls: []
+- cita: [Línea de la Vida, CONASAMA]
+  apa: "Comisión Nacional de Salud Mental y Adicciones. (s. f.). *La Línea de la Vida, te escucha*. Gobierno de México. https://www.gob.mx/conasama/articulos/linea-de-la-vida-800-911-2000"
+  urls: ["https://www.gob.mx/conasama/articulos/linea-de-la-vida-800-911-2000"]
+
+# ---------------------------------------------------------------- aire, tráfico y territorio
+- cita: [SIMAT, SEDEMA]
+  apa: "Secretaría del Medio Ambiente de la Ciudad de México. (s. f.). *Sistema de Monitoreo Atmosférico (SIMAT)*. http://www.aire.cdmx.gob.mx"
+  urls: ["http://www.aire.cdmx.gob.mx"]
+- cita: [SIMAT datos abiertos]
+  apa: "Secretaría del Medio Ambiente de la Ciudad de México. (s. f.). *Datos abiertos del Sistema de Monitoreo Atmosférico* [Conjunto de datos]. http://148.243.232.112:8080/opendata/"
+  urls: ["http://148.243.232.112:8080/opendata/"]
+- cita: [Amador-Muñoz]
+  apa: "Amador-Muñoz, O., et al. (2023). Marcadores orgánicos en PM2.5 por quema de biomasa durante la contingencia ambiental por partículas. En *Informe de la Calidad del Aire en la Zona Metropolitana del Valle de México* (CAMe). UNAM. https://www.atmosfera.unam.mx/ciencias-ambientales/biologia-y-quimica-atmosfericas/omar-amador-munoz/"
+  urls: []
+- cita: [TomTom]
+  apa: "TomTom. (2025). *TomTom Traffic Index: Mexico City*. https://www.tomtom.com/traffic-index/"
+  urls: ["https://www.tomtom.com/traffic-index/"]
+- cita: [Datos Abiertos CDMX]
+  apa: "Gobierno de la Ciudad de México. (s. f.). *Portal de Datos Abiertos de la Ciudad de México* [Conjunto de datos: límites de alcaldías, INEGI, CC BY 4.0]. https://datos.cdmx.gob.mx"
+  urls: ["https://datos.cdmx.gob.mx"]
+- cita: [OpenStreetMap]
+  apa: "OpenStreetMap contributors. (s. f.). *OpenStreetMap* [Base de datos geográfica, ODbL]. https://www.openstreetmap.org"
+  urls: []
+
+# ---------------------------------------------------------------- mercado y economía
+- cita: [DENUE]
+  apa: "Instituto Nacional de Estadística y Geografía. (2026). *Directorio Estadístico Nacional de Unidades Económicas (DENUE), descarga masiva, sector 62* (versión 05/2026) [Conjunto de datos]. https://www.inegi.org.mx/contenidos/masiva/denue/denue_00_62_csv.zip"
+  urls: ["https://www.inegi.org.mx/contenidos/masiva/denue/denue_00_62_csv.zip"]
+- cita: [DataMéxico]
+  apa: "Secretaría de Economía. (s. f.). *Asilos y otras residencias del sector privado para el cuidado de ancianos* [Perfil de industria]. DataMéxico. https://www.economia.gob.mx/datamexico/es/profile/industry/continuing-care-retirement-communities-and-assisted-living-facilities-for-the-elderly"
+  urls: ["https://www.economia.gob.mx/datamexico/es/profile/industry/continuing-care-retirement-communities-and-assisted-living-facilities-for-the-elderly"]
+- cita: [DataMéxico]
+  apa: "Secretaría de Economía. (s. f.). *Residencias de asistencia social y para el cuidado de la salud* [Perfil de industria]. DataMéxico. https://www.economia.gob.mx/datamexico/es/profile/industry/nursing-and-residential-care-facilities"
+  urls: ["https://www.economia.gob.mx/datamexico/es/profile/industry/nursing-and-residential-care-facilities"]
+- cita: [DataMéxico]
+  apa: "Secretaría de Economía. (s. f.). *Desarrolladores y analistas de software y multimedia* [Perfil de ocupación]. DataMéxico. https://www.economia.gob.mx/datamexico/es/profile/occupation/desarrolladores-y-analistas-de-software-y-multimedia"
+  urls: ["https://www.economia.gob.mx/datamexico/es/profile/occupation/desarrolladores-y-analistas-de-software-y-multimedia"]
+- cita: [DataMéxico]
+  apa: "Secretaría de Economía. (s. f.). *Enfermeras técnicas* [Perfil de ocupación]. DataMéxico. https://www.economia.gob.mx/datamexico/es/profile/occupation/enfermeras-tecnicas"
+  urls: ["https://www.economia.gob.mx/datamexico/es/profile/occupation/enfermeras-tecnicas"]
+- cita: [DataMéxico]
+  apa: "Secretaría de Economía. (s. f.). *Auxiliares y técnicos en informática y en equipos de comunicaciones y grabación* [Perfil de ocupación]. DataMéxico. https://www.economia.gob.mx/datamexico/es/profile/occupation/auxiliares-y-tecnicos-en-informatica-y-en-equipos-de-comunicaciones-y-grabacion"
+  urls: ["https://www.economia.gob.mx/datamexico/es/profile/occupation/auxiliares-y-tecnicos-en-informatica-y-en-equipos-de-comunicaciones-y-grabacion"]
+- cita: [DataMéxico]
+  apa: "Secretaría de Economía. (s. f.). *DataMéxico*. https://www.economia.gob.mx/datamexico/"
+  urls: ["https://www.economia.gob.mx/datamexico/"]
+- cita: [Expansión Política]
+  apa: "Expansión Política. (2024, 23 de noviembre). *BJ, Coyoacán y Azcapotzalco concentran retos para población de 65 años y más*. https://politica.expansion.mx/cdmx/2024/11/23/bj-coyoacan-y-azcapotzalco-concentran-retos-para-poblacion-de-65-anos-y-mas"
+  urls: ["https://politica.expansion.mx/cdmx/2024/11/23/bj-coyoacan-y-azcapotzalco-concentran-retos-para-poblacion-de-65-anos-y-mas"]
+- cita: [Milenio]
+  apa: "Milenio. (2020). *[Nota sobre asilos y albergues de personas mayores en la CDMX durante la pandemia de COVID-19]*. https://www.milenio.com/politica/comunidad/cdmx-adultos-mayores-albergues-sector-afectado-covid-19"
+  urls: ["https://www.milenio.com/politica/comunidad/cdmx-adultos-mayores-albergues-sector-afectado-covid-19"]
+- cita: [Indeed]
+  apa: "Indeed México. (2026). *Sueldo de desarrollador/a en Ciudad de México* [Página de sueldos]. https://mx.indeed.com/career/developer/salaries/DIF"
+  urls: ["https://mx.indeed.com/career/developer/salaries/DIF"]
+- cita: [El Siglo de Torreón]
+  apa: "El Siglo de Torreón. (2026). *Los supuestos del modelo* [Nota periodística]. https://www.elsiglodetorreon.com.mx/noticia/2026/los-supuestos-del-modelo.2527378.html"
+  urls: ["https://www.elsiglodetorreon.com.mx/noticia/2026/los-supuestos-del-modelo.2527378.html"]
+- cita: [DOF, TIIE]
+  apa: "Diario Oficial de la Federación. (2026). *Tasas de interés interbancarias de equilibrio* [TIIE a 28 días]. https://sidof.segob.gob.mx/notas/docFuente/5803553"
+  urls: ["https://sidof.segob.gob.mx/notas/docFuente/5803553"]
+- cita: [Grupo Animal]
+  apa: "Grupo Animal. (2026). *Inflación anual llega a 3.75% en octubre y acumula tres meses consecutivos al alza*. https://grupoanimal.mx/economia/inflacion-anual-3-75-octubre-tres-meses-alza"
+  urls: ["https://grupoanimal.mx/economia/inflacion-anual-3-75-octubre-tres-meses-alza"]
+- cita: [Banxico]
+  apa: "Banco de México. (2026). *Tipo de cambio para solventar obligaciones denominadas en dólares (FIX)* [Conjunto de datos]. https://www.banxico.org.mx/tipcamb/tipCamMIAction.do?idioma=es"
+  urls: ["https://www.banxico.org.mx/tipcamb/tipCamMIAction.do?idioma=es"]
+- cita: [Medesk]
+  apa: "Medesk. (2026). *HuliPractice vs. Medesk: Comparativa 2026 para México*. https://www.medesk.net/es/blog/hulipractice-vs-medesk-comparativa/"
+  urls: ["https://www.medesk.net/es/blog/hulipractice-vs-medesk-comparativa/"]
+- cita: [Doctoralia]
+  apa: "Doctoralia. (2026). *Precios para médicos y especialistas* [Página de precios]. https://pro.doctoralia.com.mx/precios/medicos-y-especialistas"
+  urls: ["https://pro.doctoralia.com.mx/precios/medicos-y-especialistas"]
+- cita: [Nimbo]
+  apa: "Nimbo. (2026). *Precios* [Página de precios]. https://www.nimbo-x.com/precios"
+  urls: ["https://www.nimbo-x.com/precios"]
+- cita: [Hack'celeration]
+  apa: "Hack'celeration. (2026). *Mejor software para residencias de mayores 2026: 5 programas*. https://hackceleration.com/es/labs/mejor/software-residencias-mayores"
+  urls: ["https://hackceleration.com/es/labs/mejor/software-residencias-mayores"]
+- cita: [DigitalOcean]
+  apa: "DigitalOcean. (2026). *Droplet pricing* [Página de precios]. https://www.digitalocean.com/pricing/droplets"
+  urls: ["https://www.digitalocean.com/pricing/droplets"]
+- cita: [DigitalOcean]
+  apa: "DigitalOcean. (2026). *Managed databases pricing* [Página de precios]. https://www.digitalocean.com/pricing/managed-databases"
+  urls: ["https://www.digitalocean.com/pricing/managed-databases"]
+
+# ---------------------------------------------------------------- leyes
+- cita: [LFPDPPP]
+  apa: "Ley Federal de Protección de Datos Personales en Posesión de los Particulares. (2025). *Diario Oficial de la Federación*, 20 de marzo de 2025 (última reforma: 14 de noviembre de 2025). https://www.diputados.gob.mx/LeyesBiblio/pdf/LFPDPPP.pdf"
+  urls: ["https://www.diputados.gob.mx/LeyesBiblio/pdf/LFPDPPP.pdf"]
+- cita: [LFT, Ley Federal del Trabajo]
+  apa: "Ley Federal del Trabajo. (1970). *Diario Oficial de la Federación*, 1 de abril de 1970 (última reforma: 14 de mayo de 2026). https://www.diputados.gob.mx/LeyesBiblio/pdf/LFT.pdf"
+  urls: ["https://www.diputados.gob.mx/LeyesBiblio/pdf/LFT.pdf"]
+
+# ---------------------------------------------------------------- bibliografía del Problema Prototípico
+- cita: [Cairo]
+  apa: "Cairo, A. (2019). *How charts lie: Getting smarter about visual information*. W. W. Norton & Company."
+  urls: []
+- cita: [Few]
+  apa: "Few, S. (2013). *Information dashboard design: Displaying data for at-a-glance monitoring* (2a ed.). Analytics Press."
+  urls: []
+- cita: [Nussbaumer Knaflic]
+  apa: "Nussbaumer Knaflic, C. (2015). *Storytelling with data: A data visualization guide for business professionals*. Wiley."
+  urls: []
+- cita: [Sievert]
+  apa: "Sievert, C. (2020). *Interactive web-based data visualization with R, plotly, and shiny*. CRC Press."
+  urls: []
+- cita: [Hernández-Sampieri]
+  apa: "Hernández-Sampieri, R., & Mendoza, C. (2018). *Metodología de la investigación: Las rutas cuantitativa, cualitativa y mixta*. McGraw-Hill."
+  urls: []
+- cita: [AMIPCI]
+  apa: "Asociación Mexicana de Internet. (2021). *Código de ética para el manejo de datos personales en plataformas digitales e investigación social*. AMIPCI."
+  urls: []
+- cita: [OMS]
+  apa: "Organización Mundial de la Salud. (2021). *Ética y gobernanza de la inteligencia artificial para la salud: Directrices de la OMS*. https://www.who.int/es/publications/b/60710"
+  urls: []
+- cita: [Aguilar Santiago]
+  apa: "Aguilar Santiago, C. A., & García Zúñiga, H. A. (2023). Tecnologías del lenguaje aplicadas al procesamiento de lenguas indígenas en México: Una visión general. *Lingüística y Literatura, 44*(84), 79–102. https://revistas.udea.edu.co/index.php/lyl/article/view/354772"
+  urls: []
+- cita: [Muñoz-Basols]
+  apa: "Muñoz-Basols, J., Palomares Marín, M. del M., & Moreno Fernández, F. (2024). El sesgo lingüístico digital (SLD) en la inteligencia artificial: Implicaciones para los modelos de lenguaje masivos en español. *Lengua y Sociedad, 23*(2), 623–647. http://www.scielo.org.pe/scielo.php?script=sci_arttext&pid=S2413-26592024000200024"
+  urls: []
+- cita: [De los Reyes-Aragón]
+  apa: "De los Reyes-Aragón, C. J., Adrián, J. A., Rodríguez-Parra, M. J., Cantillo Santis, K., & Arango-Lasprilla, J. C. (2024). Detección precoz del deterioro del lenguaje oral en el adulto mayor con déficit cognitivo: Resultados de un estudio piloto en la población colombiana. *Revista de Logopedia, Foniatría y Audiología, 44*(4), Artículo 100498. https://doi.org/10.1016/j.rlfa.2024.100498"
+  urls: []
+
+# ---------------------------------------------------------------- documentos del curso y del equipo
+- cita: [PP, Problema Prototípico]
+  apa: "Universidad Nacional “Rosario Castellanos”, Dirección de Asuntos Académicos. (2026). *Problema prototípico e incidentes críticos, semestre 2026-2: La ciencia de datos aplicada al cuidado de personas mayores y no autosuficientes* [Documento interno del curso, Licenciatura en Ciencia de Datos para Negocios]."
+  urls: []
+- cita: [Avance 2]
+  apa: "{autores_equipo} (2026). *Cuidado Inteligente MX · Avance 2: Lógica funcional del sistema de información: solicitudes y cuidadores (versión 0.8)* [Documento del equipo no publicado]. Universidad Nacional “Rosario Castellanos”."
+  urls: []
+- cita: [Plan SIE, Plan General]
+  apa: "{autores_equipo} (2026). *Plan general del proyecto: Primer avance, Sistemas de Información Empresarial* [Documento del equipo no publicado]. Universidad Nacional “Rosario Castellanos”."
+  urls: []
