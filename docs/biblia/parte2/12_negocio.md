@@ -6,7 +6,8 @@
     **Enlaza cobra a cada institución una suscripción mensual según su tamaño; con los supuestos base deja de perder dinero
     en el mes {{ bm.breakeven_month }} y cada cliente paga con creces lo que cuesta conseguirlo, pero el valor presente del
     plan a cinco años es negativo al {{ bm.rate_25 }} y el mercado privado real (DENUE) es más chico de lo que el plan
-    supone; el escenario recomendado lo resuelve con un tope de participación y un plan para centros públicos.**
+    supone; el escenario recomendado lo resuelve con un tope de participación y un plan para centros públicos, pero
+    supone plan Gobierno y fundadores al {{ neg.founder_salary_year1_recommended }} % el año 1; sin ambos, VPN {{ bm.rec_wo_both }}.**
 
 ## Explicado sin tecnicismos
 
@@ -179,7 +180,7 @@ automáticas, por coordinación y «por tiempo», y horas de coordinación ahorr
 !!! pregunta "Si el VPN es negativo, ¿el negocio no sirve?"
     Con la tasa base de {{ bm.rate_25 }} y el plan base, el VPN es {{ bm.npv_25 }}: las pérdidas de los primeros años pesan más
     que las utilidades de los últimos. Pero la unidad es muy rentable (LTV/CAC {{ bm.ltv_cac }}). Por eso propusimos el escenario
-    recomendado, con VPN {{ bm.sc.recommended.npv25 }}, y decimos de qué supuestos depende.
+    recomendado, con VPN {{ bm.sc.recommended.npv25 }}, que supone plan Gobierno y fundadores al {{ neg.founder_salary_year1_recommended }} % el año 1; sin ambos, VPN {{ bm.rec_wo_both }}.
 
 !!! pregunta "¿Qué es LTV/CAC y por qué importa?"
     LTV es cuánto deja un cliente en toda su vida (margen mensual × meses que se queda); CAC es cuánto cuesta conseguirlo.

@@ -1,7 +1,5 @@
 # Cómputo Cognitivo {#cap-m-cc}
 
-<p class="responsable">Responsable: {{ equipo.materias.computo_cognitivo }}</p>
-
 ## En una frase
 
 !!! frase "Lo que aporta esta materia"
@@ -147,7 +145,7 @@ y por eso perdió emergencias ({{ vozv2.v2.sens }}).
 ***prompt*** es la instrucción que recibe. **Salida estructurada:** obligarlo a responder en un formato fijo (JSON con
 campos definidos).
 
-**En Enlaza.** Ollama corre el modelo configurado en `OLLAMA_MODEL` en la laptop. Instrucción: resumir, no inferir
+**En Enlaza.** Ollama corre **{{ mod.llm_nombre }}** ({{ mod.llm_parametros }} de parámetros, {{ mod.llm_cuantizacion }}, licencia Apache 2.0) en la laptop; qué es y por qué ese, en @ref(cap-voz). Instrucción: resumir, no inferir
 enfermedades, no recomendar tratamientos. Esquema JSON fijo validado con Pydantic y filtro de frases prohibidas.
 
 ### Alucinación

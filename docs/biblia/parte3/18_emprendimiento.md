@@ -1,7 +1,5 @@
 # Emprendimiento {#cap-m-emp}
 
-<p class="responsable">Responsable: {{ equipo.materias.emprendimiento }}</p>
-
 ## En una frase
 
 !!! frase "Lo que aporta esta materia"
@@ -111,7 +109,7 @@ exigen los inversionistas, el proyecto crea valor.
 conviene.
 
 **En Enlaza.** Base {{ bm.sc.base.tir }} (menor que la tasa exigida de {{ bm.rate_25 }}: VAN negativo); recomendado
-{{ bm.sc.recommended.tir }}.
+{{ bm.sc.recommended.tir }} (supone plan Gobierno y fundadores al {{ neg.founder_salary_year1_recommended }} % el año 1; sin ambos, VPN {{ bm.rec_wo_both }}).
 
 ### Churn (cancelación)
 
@@ -146,7 +144,7 @@ Doctoralia) cobra por médico; Enlaza cobra por institución e incluye la coordi
 resultado.
 
 **En Enlaza.** Base (VPN {{ bm.sc.base.npv25 }}), conservador ({{ bm.sc.conservative.npv25 }}) y recomendado
-({{ bm.sc.recommended.npv25 }}). ¿Qué haría el VPN base = 0? Precio Profesional {{ bm.zero_price }}, o {{ bm.zero_year5 }}
+({{ bm.sc.recommended.npv25 }}; supone plan Gobierno y fundadores al {{ neg.founder_salary_year1_recommended }} % el año 1; sin ambos, VPN {{ bm.rec_wo_both }}). ¿Qué haría el VPN base = 0? Precio Profesional {{ bm.zero_price }}, o {{ bm.zero_year5 }}
 instituciones en el año 5, o CAC {{ bm.zero_cac }}.
 
 ## El plan de negocios formal, estudio por estudio
@@ -197,7 +195,7 @@ Proyecciones mensuales a {{ doc.emp_anios }} con el mismo modelo de `/negocio` (
 | Recomendado | {{ bm.sc.recommended.npv25 }} | {{ bm.sc.recommended.tir }} | {{ bm.sc.recommended.breakeven }} | {{ bm.sc.recommended.investment }} |
 
 La **TIR** es la tasa de descuento anual con la que el VAN de los cinco años vale cero. La del escenario base queda **debajo**
-de la tasa exigida ({{ bm.rate_25 }}), por eso su VAN es negativo; la del recomendado la supera con holgura.
+de la tasa exigida ({{ bm.rate_25 }}), por eso su VAN es negativo; la del recomendado la supera con holgura, pero supone plan Gobierno y fundadores al {{ neg.founder_salary_year1_recommended }} % el año 1; sin ambos, VPN {{ bm.rec_wo_both }}.
 
 **Riesgos financieros, incluidos los que revelaron los otros componentes:**
 
@@ -216,12 +214,12 @@ de la tasa exigida ({{ bm.rate_25 }}), por eso su VAN es negativo; la del recome
 
 1. **Problema:** {{ seed.pop60_cdmx }} personas de 60+ en la CDMX; instituciones que coordinan visitas por WhatsApp.
 2. **Solución:** Enlaza, demostración en vivo.
-3. **Evidencia:** la simulación muestra menos espera para lo urgente ({{ sim.normal.vela_timeout.high_wait_p90_min }} contra
-   {{ sim.normal.human_dispatcher.high_wait_p90_min }} min de p90).
+3. **Evidencia:** la simulación muestra que priorizar por riesgo baja la espera de lo urgente
+   ({{ sim.normal.human_dispatcher.high_wait_p90_min }} a {{ sim.normal.risk_priority.high_wait_p90_min }} min de p90).
 4. **Mercado:** DENUE por segmento; expansión regional.
 5. **Modelo:** suscripción; LTV/CAC {{ bm.ltv_cac }}.
 6. **Lo que pedimos:** la inversión necesaria del escenario recomendado, {{ bm.sc.recommended.investment }}, para llegar al equilibrio
-   en el mes {{ bm.sc.recommended.breakeven }}.
+   en el mes {{ bm.sc.recommended.breakeven }}. Dicho en voz alta: ese escenario supone plan Gobierno y fundadores al {{ neg.founder_salary_year1_recommended }} % el año 1; sin ambos, VPN {{ bm.rec_wo_both }}.
 7. **Riesgos y cómo los atendemos** (la tabla anterior): mostrar los riesgos da credibilidad ante inversionistas.
 
 **Silver economy en Latinoamérica:** el modelo solo cubre México; la expansión latinoamericana **no se modeló** y se presenta
@@ -303,7 +301,7 @@ SROI formal.
     Pero somos honestos: al {{ bm.rate_25 }} de descuento el **VPN del plan base es negativo** ({{ bm.npv_25 }}), y medimos el
     mercado real con el **DENUE**: el plan base pediría quedarnos con el {{ bm.sc.base.share_cdmx }} de los establecimientos privados de la CDMX. Por eso
     proponemos un **escenario recomendado**: tope de participación, expansión a otros estados y un plan para centros públicos;
-    su VPN es {{ bm.sc.recommended.npv25 }}, y decimos de qué supuestos depende.»
+    su VPN es {{ bm.sc.recommended.npv25 }}, pero supone plan Gobierno y fundadores al {{ neg.founder_salary_year1_recommended }} % el año 1; sin ambos, VPN {{ bm.rec_wo_both }}.»
 
 ## 10 preguntas difíciles
 
@@ -321,8 +319,7 @@ SROI formal.
 
 !!! pregunta "4. Si el VPN es negativo, ¿por qué invertir?"
     Al {{ bm.rate_25 }} el plan base no crea valor: las pérdidas de los primeros años pesan más que las utilidades del final.
-    Por eso proponemos el escenario recomendado (VPN {{ bm.sc.recommended.npv25 }}), y decimos que depende del plan Gobierno y del
-    recorte de sueldo a los fundadores el primer año.
+    Por eso proponemos el escenario recomendado (VPN {{ bm.sc.recommended.npv25 }}), que supone plan Gobierno y fundadores al {{ neg.founder_salary_year1_recommended }} % el año 1; sin ambos, VPN {{ bm.rec_wo_both }}.
 
 !!! pregunta "5. ¿Qué es LTV/CAC y por qué el suyo es tan alto?"
     Lo que deja un cliente en su vida contra lo que cuesta conseguirlo. Es alto ({{ bm.ltv_cac }}) porque el churn supuesto es
@@ -340,7 +337,7 @@ SROI formal.
 
 !!! pregunta "8. ¿Cuánto dinero necesitan?"
     {{ bm.investment }} en el plan base (el punto más bajo de la caja, en el mes {{ bm.investment_month }}); en el recomendado,
-    {{ bm.sc.recommended.investment }}.
+    {{ bm.sc.recommended.investment }} (que supone plan Gobierno y fundadores al {{ neg.founder_salary_year1_recommended }} % el año 1; sin ambos, VPN {{ bm.rec_wo_both }}).
 
 !!! pregunta "9. ¿Qué los diferencia de la competencia?"
     La competencia cobra por médico y se centra en el consultorio. Enlaza es para la institución: asigna personal a domicilio
@@ -349,6 +346,6 @@ SROI formal.
 
 !!! pregunta "10. ¿Sostendrían la promesa de escalamiento nacional ante los inversionistas?"
     No. El plan base no cabe en el mercado privado y el asistente de voz no está evaluado con hablantes de lenguas originarias.
-    Proponemos crecer por regiones con tope de participación (escenario recomendado, TIR {{ bm.sc.recommended.tir }}) y llevar la
+    Proponemos crecer por regiones con tope de participación (escenario recomendado, TIR {{ bm.sc.recommended.tir }}; supone plan Gobierno y fundadores al {{ neg.founder_salary_year1_recommended }} % el año 1; sin ambos, VPN {{ bm.rec_wo_both }}) y llevar la
     voz a una región solo después de evaluarla ahí. Presentar los riesgos completos da más credibilidad que una promesa que no se
     puede cumplir. El supuesto más débil es el precio del plan Gobierno, sin referencia pública.

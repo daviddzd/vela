@@ -1,7 +1,5 @@
 # Sistemas de Información Empresarial {#cap-m-sie}
 
-<p class="responsable">Responsable: {{ equipo.materias.sie }}</p>
-
 ## En una frase
 
 !!! frase "Lo que aporta esta materia"

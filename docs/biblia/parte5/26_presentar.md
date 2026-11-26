@@ -1,12 +1,11 @@
-# Enlace público, presentar en la escuela y día de la defensa {#cap-defensa}
+# Enlace público, presentar en la escuela y día del coloquio {#cap-defensa}
 
 ## En una frase
 
 !!! frase "En una frase"
-    **El día de la defensa la laptop corre todo, Cloudflare da un enlace público que el sínodo abre con un QR, y la
-    demostración sigue un guion de 10 minutos que pasa por las seis materias y por un día normal y una contingencia.**
-
-Defensa: {{ equipo.defensa.fecha }} · {{ equipo.defensa.hora }} · {{ equipo.defensa.lugar }}.
+    **El día del coloquio la laptop corre todo, el sínodo entra por {{ ops.public_url }} con un QR, y la exposición sigue la
+    presentación y el guion de `docs/presentacion/`: 10 minutos con la demostración en vivo a la mitad y 5 de preguntas.
+    Todo el equipo defiende todo.**
 
 ## Explicado sin tecnicismos
 
@@ -74,39 +73,46 @@ administrador: `Stop-Service cloudflared` / `Start-Service cloudflared`.
 | Energía | laptop conectada; suspensión en «Nunca» |
 | Respaldo | video grabado de la demo completa y `http://localhost:8080` |
 
-### 3. Día de la defensa, minuto a minuto
+### 3. Día del coloquio, minuto a minuto
 
-| Cuándo | Qué | Quién |
-|---|---|---|
-| Día anterior | ensayo general con cronómetro; `bash scripts/backup_db.sh ensayo_general`; `python3 scripts/reset_demo.py`; (opcional) recrear la base y `rebase_dates.py` | ____ |
-| −60 min | conectar la corriente; prender la laptop e iniciar sesión (todo arranca solo); `bash scripts/enlaza.sh estado` | ____ |
-| −50 min | `ollama run` con el modelo de `OLLAMA_MODEL` y la frase «hola» (lo carga en memoria) | ____ |
-| −45 min | `python3 scripts/verify_db.py`; `python3 scripts/reset_demo.py`; `bash scripts/backup_db.sh antes_defensa` | ____ |
-| −40 min | `uv run scripts/check_public_url.py` (12 de 12); probar el QR fijo con un celular con datos móviles; `reset_demo.py` | ____ |
-| −30 min | abrir las ventanas de cada rol; probar una nota de voz rutinaria y una de emergencia; `reset_demo.py` de nuevo | ____ |
-| −10 min | proyector, «Modo presentación», cronómetro listo | ____ |
-| 0 | guion de 10 minutos | todos |
-| +10 | preguntas (5 min) | todos |
-| Después | `bash scripts/backup_db.sh defensa` | ____ |
+Lo hace todo el equipo; el checklist detallado (1 hora antes, 15 minutos antes, justo antes y al terminar) está en el guion.
 
-### 4. Guion de la demostración (10 minutos)
+| Cuándo | Qué |
+|---|---|
+| Día anterior | ensayo general con cronómetro; `bash scripts/backup_db.sh ensayo_general`; `python3 scripts/reset_demo.py`; (opcional) recrear la base y `rebase_dates.py` |
+| −60 min | conectar la corriente; prender la laptop e iniciar sesión (todo arranca solo); `bash scripts/enlaza.sh estado` |
+| −50 min | `ollama run qwen3:8b "hola"` (lo deja cargado: el primer reporte tarda {{ mod.llm_gpu_frio }} en frío) |
+| −45 min | `python3 scripts/verify_db.py`; `bash scripts/backup_db.sh antes_coloquio`; `python3 scripts/reset_demo.py` |
+| −40 min | `uv run scripts/check_public_url.py` ({{ hist.prueba_publica }}); probar el QR con un celular con datos móviles; `reset_demo.py` |
+| −15 min | abrir las ventanas de cada rol con su sesión; probar la frase de emergencia; `reset_demo.py` de nuevo |
+| 0 | exposición de 10 minutos (presentación y guion) |
+| +10 | preguntas del sínodo (5 min), con la diapositiva de «Gracias» en pantalla |
+| Al terminar | `python3 scripts/reset_demo.py` (y antes, si se quiere guardar cómo quedó, `bash scripts/backup_db.sh coloquio`) |
 
-Basado en `docs/spec/10_plan_demo_y_criterios.md`, con los cambios posteriores.
+### 4. La presentación y el guion
 
-| Min | Responsable | Qué se dice | Qué se muestra |
-|---|---|---|---|
-| 0–1 | {{ equipo.materias.emprendimiento }} (Emprendimiento) | el problema y Enlaza en una frase; el público abre el QR | página `/` |
-| 1–3 | {{ equipo.materias.sie }} (SIE) | transacción central, asignación automática, aprobación humana de lo alto, aislamiento | familia pide un servicio → asignado solo; una alta → `/aprobaciones` → aparece en el tablero |
-| 3–5 | {{ equipo.materias.visualizacion }} (Visualización) | preguntas por tarjeta, contra qué se compara, «datos insuficientes», sin promedios engañosos | `/panorama` (población y operación) |
-| 5–7 | {{ equipo.materias.simulacion }} (Modelado y Simulación) | contingencia en vivo: detecta, propone, coordinación aprueba; SIRAG-D y el hallazgo que cambió el producto | `/demo` → «Contingencia en el oriente» → `/contingencia` → «Aprobar todo»; `/simulacion` en modo presentación |
-| 7–9 | {{ equipo.materias.computo_cognitivo }} (Cómputo Cognitivo) | reglas + clasificador, dos niveles, holdout honesto | nota rutinaria → reporte del médico con confianza; frase de emergencia → pantalla roja 911 |
-| 9–10 | {{ equipo.materias.practica_profesional }} (Práctica Profesional) y {{ equipo.materias.emprendimiento }} | consentimiento (y asentimiento), bitácora, diagnóstico de campo; equilibrio y escenario recomendado; cierre | `/privacidad`; `/negocio` |
+Todo lo del coloquio vive en **`docs/presentacion/`** y se regenera con `bash scripts/build_presentacion.sh` (los números salen
+del mismo script que este libro):
 
-!!! cuidado "Frases de voz ensayadas"
-    Usar **frases ya probadas**. Rutina: «Mi papá amaneció de buen humor, desayunó completo y ya se tomó sus pastillas.»
-    Emergencia por regla: «Mi mamá no puede respirar, tiene los labios morados y casi no responde.» **Evitar** frases como «Hoy mi
-    mamá comió bien y durmió su siesta», que el clasificador marca como emergencia (aviso ámbar). Si sale el ámbar, no es un error
-    del guion: es el momento de explicar los dos niveles y la revisión humana.
+| Archivo | Qué es |
+|---|---|
+| `enlaza_coloquio.pptx` y `.pdf` | la presentación 16:9, con texto editable y el guion en las notas del orador |
+| `guion_coloquio.md` y `.pdf` | minuto a minuto (quién habla, qué dice, qué se ve), la demostración paso a paso con cuentas y ventanas, el plan B de cada paso, las 20 preguntas más probables, el **checklist** del día y el guion del video de respaldo |
+| `README.md` | cómo se genera y qué fuentes instalar en Windows |
+
+La versión que está en Git dice «Persona 1–4». **La versión con los nombres del equipo**, la que se proyecta, se genera en
+**`docs/privado/coloquio/`** (`enlaza_coloquio.pptx` y `.pdf`) a partir de `docs/biblia/equipo.yaml`; esa carpeta no se sube a
+Git. En el guion los papeles siguen como «Persona 1–4»: reparten el tiempo de exposición, pero cualquiera responde cualquier
+pregunta.
+
+La presentación sigue lo mismo que este libro: la simulación **nos dijo cómo asignar** (@ref(cap-sirag)), la voz se presenta con
+sus falsas alarmas (@ref(cap-voz)) y el escenario recomendado siempre con su condición (@ref(cap-negocio)).
+
+!!! cuidado "Frase de voz ensayada"
+    En la demostración se usa **exactamente**: «Mi mamá no puede respirar y tiene los labios morados.» (activa la regla de
+    dificultad grave para respirar: pantalla roja). Rutina, si piden otra: «Mi papá amaneció de buen humor, desayunó completo y ya
+    se tomó sus pastillas.» **Evitar** «Hoy mi mamá comió bien y durmió su siesta», que el clasificador marca como emergencia
+    (aviso ámbar). Si sale un ámbar inesperado, no es un error del guion: es el momento de explicar los dos niveles.
 
 **Las preguntas más probables** (spec 10): por qué datos sintéticos, qué pasa si falla el internet, cómo se evita que una
 institución vea a otra, qué pasa con una falsa alarma, cuánto cuesta operar y cómo se validó la simulación. Las respuestas modelo
@@ -116,6 +122,8 @@ están en la Guía rápida y en cada capítulo.
 
 | Qué | Dónde |
 |---|---|
+| Presentación, guion y checklist | `docs/presentacion/` (versión con nombres: `docs/privado/coloquio/`) |
+| Cómo se generan | `scripts/build_presentacion.sh`, `docs/presentacion/build/` |
 | Guion original y criterios | `docs/spec/10_plan_demo_y_criterios.md` |
 | Panel de demostración | `/demo` (`frontend/src/pages/DemoPage.tsx`) |
 | Preparación detallada | `docs/00_preparar_laptop_y_github.md`, secciones «Enlace fijo» y «Día de la defensa» |

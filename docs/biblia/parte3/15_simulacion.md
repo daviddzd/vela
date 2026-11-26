@@ -1,7 +1,5 @@
 # Modelado y Simulación {#cap-m-sim}
 
-<p class="responsable">Responsable: {{ equipo.materias.simulacion }}</p>
-
 ## En una frase
 
 !!! frase "Lo que aporta esta materia"
@@ -112,8 +110,8 @@ intervalo más angosto.
 
 **Ejemplo.** Una encuesta dice «42 % ± 3 puntos»: el valor real probablemente está entre 39 % y 45 %.
 
-**En Enlaza.** Espera p90 de prioridad alta, Enlaza: {{ sim.normal.vela_timeout.high_wait_p90_min }} min
-[{{ sim.normal.vela_timeout.high_wait_p90_min.ci }}]; despacho humano: {{ sim.normal.human_dispatcher.high_wait_p90_min }}
+**En Enlaza.** Espera p90 de prioridad alta, prioridad por riesgo: {{ sim.normal.risk_priority.high_wait_p90_min }} min
+[{{ sim.normal.risk_priority.high_wait_p90_min.ci }}]; despacho humano: {{ sim.normal.human_dispatcher.high_wait_p90_min }}
 [{{ sim.normal.human_dispatcher.high_wait_p90_min.ci }}].
 
 ### Verificación y validación
@@ -166,9 +164,10 @@ p para que eso no pase.
 **Qué es.** Mover un supuesto dudoso (uno a la vez) para ver si la conclusión cambia.
 
 **En Enlaza.** Rapidez de aprobación (inmediata, 1–5, 5–15 min), riesgo de crisis (×1, ×2, ×3) y plantilla (actual con {{ sens.extra_staff.current.vela_timeout.staff }} personas, con refuerzos, con refuerzos dirigidos,
-jornada nocturna legal). Con aprobación de 5–15 min, Enlaza (hoy)
-{{ sens.approval_delay.5-15.vela_timeout.high_wait_p90_min }} contra {{ sens.approval_delay.5-15.human_dispatcher.high_wait_p90_min }}
-del humano.
+jornada nocturna legal). Con aprobación de {{ sens.approval_delay.5-15.label }}, la espera p90 de lo urgente es
+{{ sens.approval_delay.5-15.vela_timeout.high_wait_p90_min }} con el límite de tiempo y la reserva, contra
+{{ sens.approval_delay.5-15.risk_plus_live_traffic.high_wait_p90_min }} sin el límite y
+{{ sens.approval_delay.5-15.human_dispatcher.high_wait_p90_min }} con el despacho humano: ahí es donde el límite importa.
 
 ### Escenarios
 
@@ -249,13 +248,15 @@ km ({{ sim.normal.vela_timeout.travel_km }} por semana).
     escenarios con {{ cfg.replications }} réplicas de una semana y **números aleatorios comunes**, así que cada comparación es
     pareada; por eso usamos **Friedman y Wilcoxon con Holm** y no ANOVA de una vía.
 
-    Primero **validamos**: con las reglas de antes, el modelo reproduce el historial en servicios cortos. Resultado: Enlaza
-    baja la espera p90 de lo urgente de {{ sim.normal.human_dispatcher.high_wait_p90_min }} a
-    {{ sim.normal.vela_timeout.high_wait_p90_min }} minutos ({{ test.normal.high_wait_p90_min.vela_timeout.p }}), pero no el «sin
-    atender», que depende del personal.
+    Primero **validamos**: con las reglas de antes, el modelo reproduce el historial en servicios cortos. Resultado: la
+    simulación nos dijo cómo asignar. Priorizar por riesgo baja la espera p90 de lo urgente de
+    {{ sim.normal.human_dispatcher.high_wait_p90_min }} a {{ sim.normal.risk_priority.high_wait_p90_min }} minutos
+    ({{ test.normal.high_wait_p90_min.risk_priority.p }}), pero no el «sin atender», que depende del personal.
 
-    Y la **sensibilidad** encontró algo que cambió el producto: con una coordinación lenta, lo urgente esperaba de más. Por eso
-    agregamos el límite de tiempo y la reserva del candidato.»
+    Y la **sensibilidad** dice cuándo importa el límite de tiempo: si coordinación tarda {{ sens.approval_delay.5-15.label }}, la
+    espera queda en {{ sens.approval_delay.5-15.vela_timeout.high_wait_p90_min }} con límite y reserva contra
+    {{ sens.approval_delay.5-15.risk_plus_live_traffic.high_wait_p90_min }} sin el límite. Así llegamos (corrida anterior): con la
+    plantilla de 7 días, Enlaza sin límite quedaba peor que el humano.»
 
 ## 10 preguntas difíciles
 

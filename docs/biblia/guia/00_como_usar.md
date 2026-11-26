@@ -9,8 +9,8 @@ profesor, aunque no la haya programado.
 |---|---|---|
 | Guía rápida | lo indispensable en pocas páginas | el día antes y una hora antes de la defensa |
 | I · El proyecto | qué es, qué ve cada persona, arquitectura, datos, seguridad | todos, primero |
-| II · Cómo funciona cada módulo | cada módulo por dentro | según tu materia |
-| III · Por materia | lo que pide el documento oficial, conceptos desde cero, guion de 2 minutos, 10 preguntas | quien defiende esa materia |
+| II · Cómo funciona cada módulo | cada módulo por dentro | todo el equipo |
+| III · Por materia | lo que pide el documento oficial, conceptos desde cero, guion de 2 minutos, 10 preguntas | todo el equipo: cada quien defiende todo |
 | IV · Historia y decisiones | qué pasó, por qué se decidió así, cómo se construyó | todos (preguntas de «¿por qué?») |
 | V · Operación práctica | preparar, encender, respaldar, presentar, plan B | quien opera la laptop |
 | Anexos | glosario, usuarios, comandos, mapa del repositorio, criterios y referencias APA 7 | consulta |

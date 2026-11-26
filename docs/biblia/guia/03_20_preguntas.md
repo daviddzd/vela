@@ -25,7 +25,8 @@ Respuesta corta; la larga está en el capítulo indicado.
     antes con el tráfico de esa hora. La cola va por prioridad, riesgo y espera. @ref(cap-operacion)
 
 !!! pregunta "6. ¿Qué pasa si falla el internet?"
-    Todo corre en la laptop; solo se pierden el enlace público y las calles del mapa. Seguimos en `localhost:8080`. @ref(cap-planb)
+    Todo corre en la laptop; solo se pierden el enlace público ({{ ops.public_url }}) y las calles del mapa. Seguimos en
+    `localhost:8080`. Si falla solo el enlace fijo, el respaldo es el túnel rápido. @ref(cap-planb)
 
 !!! pregunta "7. ¿Qué pasa con una falsa alarma de voz?"
     Si la detecta solo el clasificador, sale un aviso ámbar (no la pantalla roja) y coordinación llama a la familia; si nadie
@@ -37,8 +38,9 @@ Respuesta corta; la larga está en el capítulo indicado.
     No presumimos la prueba interna porque esos datos se usaron para construirlo. @ref(cap-voz)
 
 !!! pregunta "9. ¿El modelo de lenguaje diagnostica?"
-    No: resume lo dicho en un formato fijo, con filtro de frases prohibidas, y el nivel lo ponen las reglas y el clasificador.
-    @ref(cap-voz)
+    No. Es {{ mod.llm_nombre }} (Qwen, Alibaba Cloud; {{ mod.llm_parametros }} de parámetros, licencia Apache 2.0), corre en la laptop
+    y solo resume lo dicho en un formato JSON fijo, con filtro de frases prohibidas. El nivel lo ponen las reglas y el clasificador,
+    antes de que el modelo escriba. @ref(cap-voz)
 
 !!! pregunta "10. ¿Cómo validaron la simulación?"
     Con las reglas de antes, el modelo reproduce el «sin atender» del historial en servicios cortos ({{ sim.val_sim_short_pct }} contra
@@ -48,13 +50,16 @@ Respuesta corta; la larga está en el capítulo indicado.
     Porque las políticas se prueban sobre las mismas réplicas (números aleatorios comunes): son muestras pareadas, y casi nunca
     normales. @ref(cap-m-sim)
 
-!!! pregunta "12. ¿Qué cambió en el producto por la simulación?"
-    El límite de tiempo para lo urgente y la reserva del candidato: con una coordinación lenta, lo urgente esperaba más que con un
-    despachador humano. @ref(cap-bitacora)
+!!! pregunta "12. ¿Qué nos dijo la simulación?"
+    Cómo asignar: priorizar por riesgo baja la espera p90 de lo urgente de {{ sim.normal.human_dispatcher.high_wait_p90_min }} a
+    {{ sim.normal.risk_priority.high_wait_p90_min }} min ({{ test.normal.high_wait_p90_min.risk_priority.p }}). Y cuándo importa el límite
+    de tiempo: si coordinación tarda {{ sens.approval_delay.5-15.label }}, {{ sens.approval_delay.5-15.vela_timeout.high_wait_p90_min }} con
+    límite y reserva contra {{ sens.approval_delay.5-15.risk_plus_live_traffic.high_wait_p90_min }} sin él. Lo descubrimos en una corrida
+    anterior, cuando Enlaza sin límite quedaba peor que el humano. @ref(cap-sirag)
 
 !!! pregunta "13. ¿Cuánto cuesta y cuándo es rentable?"
     {{ bm.arpa1 }} al mes de ingreso promedio por institución; deja de perder dinero en el mes {{ bm.breakeven_month }}; el VPN base al
-    {{ bm.rate_25 }} es {{ bm.npv_25 }} y el del escenario recomendado {{ bm.sc.recommended.npv25 }}. @ref(cap-negocio)
+    {{ bm.rate_25 }} es {{ bm.npv_25 }} y el del escenario recomendado {{ bm.sc.recommended.npv25 }}, que supone plan Gobierno y fundadores al {{ neg.founder_salary_year1_recommended }} % el año 1; sin ambos, VPN {{ bm.rec_wo_both }}. @ref(cap-negocio)
 
 !!! pregunta "14. ¿Qué tan grande es el mercado?"
     Lo medimos con el DENUE por segmento: por ejemplo, {{ neg.denue_residences_private_cdmx }} residencias privadas en la CDMX. El plan

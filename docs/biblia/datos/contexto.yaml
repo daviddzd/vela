@@ -15,3 +15,8 @@ cdmx_prop_60mas_2030:
   descripcion: "Proporción proyectada de personas de 60 años y más en la Ciudad de México, 2030"
   documento: "CONAPO, «Situación sociodemográfica de las personas mayores: 60 años y más · Ciudad de México», gráfica «Proporción municipal y para la entidad»"
   url: "https://www.gob.mx/cms/uploads/attachment/file/702736/09_CDMX_PM.pdf"
+whisper_small_params:
+  valor: "244 millones"
+  descripcion: "Parámetros del modelo Whisper small"
+  documento: "Radford et al. (2023), Robust Speech Recognition via Large-Scale Weak Supervision, tabla 1"
+  url: "https://proceedings.mlr.press/v202/radford23a.html"

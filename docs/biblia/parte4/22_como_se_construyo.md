@@ -13,6 +13,8 @@ Piensa en una obra: el equipo es el arquitecto y el dueño, que deciden qué se 
 avance; el asistente de programación es una cuadrilla muy rápida que construye lo que se le pide, propone opciones y avisa
 cuando encuentra un problema. La cuadrilla no decide qué casa se hace ni firma la entrega.
 
+**El equipo:** {{ equipo.integrantes }}. Todo el equipo defiende todo el proyecto: no nos dividimos por materias.
+
 Este capítulo existe porque un profesor puede preguntar, con toda razón, **«¿ustedes programaron esto?»**. La respuesta
 honesta no es «sí, todo» ni «no, fue la IA»: es la de este capítulo.
 
@@ -50,23 +52,9 @@ flowchart TB
 | El logotipo original (`assets/brand/source/logo_enlaza.jpg`) y la identidad | Recrear el logotipo en vectores y aplicar la identidad en la app |
 | Las reglas de `CLAUDE.md` | Escribir las pruebas automáticas ({{ repo.tests_summary }} en el backend) |
 | Las decisiones fechadas (límite de tiempo, descanso de ley, relevos, consentimiento en decisiones automáticas, escenario de negocio, voz en dos niveles, congelamiento, «siempre PR», «datos insuficientes») | Proponer opciones con sus pros y contras cuando había que decidir |
-| Revisar las pantallas y el uso real, y pedir las correcciones (por ejemplo, la revisión en Chrome en Windows del 23 nov; **confirmar quién la hizo**) | Encontrar problemas técnicos: la fuga de las vistas, el reloj de WSL2, las gráficas que crecían, las falsas alarmas |
+| Revisar las pantallas y el uso real, y pedir las correcciones (por ejemplo, la revisión en Chrome en Windows del 23 nov) | Encontrar problemas técnicos: la fuga de las vistas, el reloj de WSL2, las gráficas que crecían, las falsas alarmas |
 | Aprobar las excepciones al congelamiento | Documentar las decisiones (`docs/dev/`) y escribir este libro |
 | La defensa y la explicación de cada parte | Tomar las capturas y generar las cifras desde los archivos |
-
-!!! nota "Para llenar por el equipo"
-    Esta tabla se basa en lo que consta en el repositorio. El equipo debe completar **quién** del equipo hizo cada revisión y
-    decisión, y corregir lo que no sea exacto:
-
-    | Tarea | Responsable |
-    |---|---|
-    | Revisión en Chrome en Windows (23 nov) | ____ |
-    | Decisiones de SIRAG-D (límite de tiempo, reserva) | ____ |
-    | Decisión de la voz en dos niveles | ____ |
-    | Identidad y logotipo | ____ |
-    | Modelo de negocio y escenarios | ____ |
-    | Frases de voz del equipo (pendiente) | ____ |
-    | Diagnóstico de campo (semana del 25 nov) | ____ |
 
 ### Cómo se revisó cada cambio
 

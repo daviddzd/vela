@@ -126,8 +126,6 @@ dl.glossary dt { font-family: "Plus Jakarta Sans", sans-serif; font-weight: 800;
 dl.glossary dd { margin: .5mm 0 0 0; break-before: avoid; }
 dl.glossary .also { color: var(--muted); font-size: 9pt; }
 
-/* the "Responsable" line of Parte III */
-.responsable { border: 1.5px dashed var(--teal-text); border-radius: 8px; padding: 3mm 4mm; font-family: "Plus Jakarta Sans", sans-serif; font-weight: 700; color: var(--navy); }
 
 /* phone screenshots: narrower; "media": half height */
 figure.shot.celular img { max-height: 150mm; }

@@ -7,18 +7,24 @@ respuesta está en esa columna.
 
 {{ tabla seed.pop60_cdmx seed.persons seed.institutions seed.patients seed.caregivers seed.service_requests seed.requests_unattended_pct seed.broad_multimorbidity_pct cal.ref_multimorbidity }}
 
+## La dirección pública
+
+{{ tabla ops.public_url code.clock_task_min hist.prueba_publica }}
+
 ## Seguridad y operación
 
 {{ tabla db.rls_patients_none db.rls_patients_insa db.rls_patients_all cfg.auto_apply_after cfg.urgent_within cfg.hold_minutes cfg.late_tolerance code.min_visits_rate repo.tests_summary }}
 
 ## SIRAG-D
 
-{{ tabla sim.runs_main cfg.replications sim.normal.vela_timeout.high_wait_p90_min sim.normal.human_dispatcher.high_wait_p90_min sim.normal.vela_timeout.crisis_response_p90_min sim.normal.vela_timeout.unattended_pct sens.extra_staff.targeted.vela_timeout.unattended_pct sim.val_real_short_pct sim.val_sim_short_pct }}
+{{ tabla sim.runs_main cfg.replications sim.normal.human_dispatcher.high_wait_p90_min sim.normal.risk_priority.high_wait_p90_min test.normal.high_wait_p90_min.risk_priority.p sens.approval_delay.5-15.label sens.approval_delay.5-15.vela_timeout.high_wait_p90_min sens.approval_delay.5-15.risk_plus_live_traffic.high_wait_p90_min sim.normal.vela_timeout.crisis_response_p90_min sim.normal.vela_timeout.unattended_pct sens.extra_staff.targeted.vela_timeout.unattended_pct sim.val_real_short_pct sim.val_sim_short_pct }}
 
 ## Enlaza Voz
+
+{{ tabla mod.llm_nombre mod.llm_parametros mod.llm_cuantizacion mod.llm_gpu_memoria mod.llm_gpu_reporte mod.llm_cpu_reporte mod.laptop_ram mod.whisper_modelo mod.whisper_archivo mod.clasificador_parametros mod.clasificador_ms }}
 
 {{ tabla voz.holdout.n voz.holdout.sens voz.holdout.sens_rules voz.holdout.fa100 vozb.holdout.red vozb.holdout.red_false vozb.holdout.amber vozb.holdout.amber_false vozv2.v2.sens }}
 
 ## Negocio
 
-{{ tabla bm.arpa1 bm.fixed1 bm.breakeven_static bm.breakeven_month bm.npv_25 bm.sc.base.tir bm.ltv_cac bm.sc.recommended.npv25 bm.sc.recommended.tir neg.denue_residences_private_cdmx }}
+{{ tabla bm.arpa1 bm.fixed1 bm.breakeven_static bm.breakeven_month bm.npv_25 bm.sc.base.tir bm.ltv_cac bm.sc.recommended.npv25 bm.sc.recommended.tir neg.founder_salary_year1_recommended bm.rec_wo_both neg.denue_residences_private_cdmx }}

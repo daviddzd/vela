@@ -1,7 +1,5 @@
 # Práctica Profesional {#cap-m-pp}
 
-<p class="responsable">Responsable: {{ equipo.materias.practica_profesional }}</p>
-
 ## En una frase
 
 !!! frase "Lo que aporta esta materia"
@@ -140,30 +138,27 @@ Diseño:
 
 ### Hallazgos del diagnóstico de campo
 
-!!! nota "Para llenar después de las entrevistas"
-    Copiar aquí lo más importante de `docs/diagnostico/entrevistas/E01.md`, `E02.md`… Citar solo por rol y alcaldía.
+!!! cuidado "Pendiente: todavía no hay hallazgos registrados"
+    Al generar este libro las entrevistas no estaban registradas en `docs/diagnostico/entrevistas/`. **No presentes ningún
+    hallazgo como hecho.** Cuando se hagan, cada entrevista se guarda como `E01.md`, `E02.md`… (citando solo por rol y alcaldía)
+    y esta sección se llena con lo que se confirmó y lo que se contradijo.
 
-| Entrevista | Rol y alcaldía | Fecha |
-|---|---|---|
-| E01 | ____ | ____ |
-| E02 | ____ | ____ |
-| E03 | ____ | ____ |
+**Lo que supuso Enlaza y que el diagnóstico debe confirmar o contradecir**
 
-**Lo que supusimos y lo que encontramos**
+| Lo que supuso Enlaza | Estado |
+|---|---|
+| Hoy se coordina con llamadas, WhatsApp y hojas de cálculo | pendiente de las entrevistas |
+| Se pierden o duplican solicitudes | pendiente de las entrevistas |
+| No se sabe quién está libre ni cuánto tarda en llegar | pendiente de las entrevistas |
+| Lo urgente compite con lo rutinario | pendiente de las entrevistas |
+| La contingencia ambiental cambia la operación | pendiente de las entrevistas |
+| Es aceptable que el sistema asigne lo rutinario y una persona apruebe lo urgente | pendiente de las entrevistas |
+| Es aceptable el límite de tiempo en lo urgente | pendiente de las entrevistas |
+| Los precios supuestos son razonables para una institución | pendiente de las entrevistas |
+| Las familias usarían un asistente de voz | pendiente de las entrevistas |
 
-| Lo que supuso Enlaza | Se confirmó / se contradijo / no se habló | Evidencia (frase textual, rol y alcaldía) |
-|---|---|---|
-| Hoy se coordina con llamadas, WhatsApp y hojas de cálculo | ____ | ____ |
-| Se pierden o duplican solicitudes | ____ | ____ |
-| No se sabe quién está libre ni cuánto tarda en llegar | ____ | ____ |
-| Lo urgente compite con lo rutinario | ____ | ____ |
-| La contingencia ambiental cambia la operación | ____ | ____ |
-| Es aceptable que el sistema asigne lo rutinario y una persona apruebe lo urgente | ____ | ____ |
-| Es aceptable el límite de tiempo en lo urgente | ____ | ____ |
-| Los precios supuestos son razonables para una institución | ____ | ____ |
-| Las familias usarían un asistente de voz | ____ | ____ |
-
-**Qué cambiaríamos en Enlaza por lo que encontramos:** ____
+Si en el coloquio preguntan por el diagnóstico: «Tenemos la guía de entrevista, el consentimiento verbal y la plantilla de resumen
+(`docs/diagnostico/`); las entrevistas están en curso y todavía no tenemos hallazgos que presentar como resultado».
 
 ## Protocolo de ética (consentimiento y gobernanza de datos)
 

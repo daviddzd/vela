@@ -5,8 +5,8 @@
 !!! frase "En una frase"
     **Enlaza Voz (antes ORACLE-Voz) convierte una nota de voz en texto con Whisper, busca señales de emergencia primero
     con reglas y después con un clasificador, muestra de inmediato la pantalla del 911 (roja si fue una regla, ámbar si
-    fue solo el clasificador) y después un modelo de lenguaje local escribe un resumen para el médico que nunca
-    diagnostica.**
+    fue solo el clasificador) y después un modelo de lenguaje local, **{{ mod.llm_nombre }}**, escribe un resumen para el
+    médico que nunca diagnostica.**
 
 ## Explicado sin tecnicismos
 
@@ -58,6 +58,20 @@ flowchart TB
   LLM --> MED["Bandeja del médico"]
 ```
 
+### Los tres modelos de Enlaza Voz
+
+Enlaza Voz usa **tres modelos distintos**, cada uno para una sola cosa. Ninguno decide solo: el nivel de emergencia lo ponen
+las reglas y el clasificador, y lo que se le dice a la familia está escrito de antemano.
+
+| Modelo | Qué hace | Tamaño | Dónde corre | Tiempo medido |
+|---|---|---|---|---|
+| **Whisper {{ mod.whisper_modelo }}** (OpenAI, Radford et al., 2023) | Voz → texto | {{ ctx.whisper_small_params }} parámetros; {{ mod.whisper_archivo }} descargado; corre en {{ mod.whisper_tipo }} | contenedor `voice`, CPU | nota de ~10 s: {{ voz.t_transcribe_10 }}; de ~60 s: {{ voz.t_transcribe_60 }} |
+| **Clasificador de Keras** (nuestro) | Texto → rutina, urgente o emergencia | {{ mod.clasificador_parametros }} parámetros; {{ mod.clasificador_archivo }} | contenedor `voice`, CPU | {{ mod.clasificador_ms }} por nota |
+| **{{ mod.llm_nombre }}** (Qwen, Alibaba Cloud; Yang et al., 2025) | Texto → reporte para el médico, en JSON | {{ mod.llm_parametros }} parámetros; {{ mod.llm_archivo }} en {{ mod.llm_cuantizacion }} | Ollama en Windows, GPU integrada | {{ mod.llm_gpu_reporte }} por reporte (ya cargado) |
+
+Tiempos y tamaños medidos en la laptop del equipo ({{ mod.laptop_cpu }}, {{ mod.laptop_ram }} de RAM) con
+`docs/biblia/build/measure_models.sh`.
+
 ### 1. Whisper: de voz a texto
 
 [[ASR]] (reconocimiento automático del habla) con **faster-whisper**, modelo `small` cuantizado a enteros de 8 bits
@@ -102,9 +116,69 @@ médico. Solo cambia **cómo se muestra**:
   emergencia» (escala a Dirección) y «Contactada: no era emergencia». Si nadie responde en {{ cfg.escalate_after }}, el worker
   la escala a Dirección. Todo queda en la bitácora.
 
-### 5. El reporte para el médico
+### 5. El reporte para el médico: {{ mod.llm_nombre }}
 
-Ollama corre el modelo configurado en `OLLAMA_MODEL` con temperatura baja y un **esquema JSON fijo**: resumen, síntomas
+#### Qué es un modelo de lenguaje
+
+Un [[modelo de lenguaje]] es un programa que aprendió, leyendo muchísimo texto, a **adivinar la siguiente palabra**. Es
+como el teclado del celular que sugiere «mañana» cuando escribes «nos vemos», pero tan grande que, palabra tras palabra,
+puede escribir párrafos completos, resumir o llenar un formato. No «sabe» medicina ni entiende como una persona: produce
+el texto más probable. Por eso **se usa para resumir lo que ya se dijo, nunca para decidir**.
+
+#### Qué es {{ mod.llm_nombre }}
+
+- **Quién lo hizo:** el equipo Qwen de Alibaba Cloud; es de la familia Qwen3, publicada en 2025 (Yang et al., 2025).
+- **Tamaño:** {{ mod.llm_parametros }} de [[parámetros]] (los «números» que el modelo ajustó al aprender).
+- **Cuantización:** Ollama lo descarga en {{ mod.llm_cuantizacion }}: cada parámetro se guarda con unos 4 bits en lugar de
+  16 ([[cuantización]]). Así pesa {{ mod.llm_archivo }} y cabe en la memoria de una laptop, a cambio de un poco de precisión.
+- **Licencia:** Apache 2.0 (se puede usar, también comercialmente, citando la fuente).
+- **Dónde corre:** en **Ollama**, un programa que corre modelos de lenguaje en la propia computadora. En esta laptop Ollama usa
+  la GPU integrada ({{ mod.laptop_gpu }}), que comparte la memoria RAM.
+
+#### Por qué ese y no uno más grande
+
+Medido en esta laptop con la misma petición que hace Enlaza:
+
+| | GPU integrada (lo que usamos) | Solo CPU |
+|---|---|---|
+| Memoria que ocupa cargado | {{ mod.llm_gpu_memoria }} | {{ mod.llm_cpu_memoria }} |
+| Cargarlo en memoria | {{ mod.llm_gpu_carga }} | {{ mod.llm_cpu_carga }} |
+| Escribir un reporte (ya cargado) | {{ mod.llm_gpu_reporte }} | {{ mod.llm_cpu_reporte }} |
+| Primer reporte (sin cargar) | {{ mod.llm_gpu_frio }} | {{ mod.llm_cpu_frio }} |
+| Velocidad al escribir | {{ mod.llm_gpu_velocidad }} | {{ mod.llm_cpu_velocidad }} |
+
+La laptop tiene {{ mod.laptop_ram }} de RAM que comparten Windows, Docker (base de datos, API, Whisper, clasificador) y el
+modelo. {{ mod.llm_nombre }} ya ocupa {{ mod.llm_gpu_memoria }} y tarda {{ mod.llm_gpu_reporte }} por reporte. Un modelo más
+grande (por ejemplo, uno de 14 mil millones de parámetros) ocupa y tarda aproximadamente en proporción a su tamaño: no
+cabría con holgura junto con todo lo demás y cada reporte tardaría bastante más. **No lo medimos**; es una estimación por
+tamaño. Uno más chico sería más rápido, pero escribe peor en español y respeta peor el formato; tampoco lo comparamos
+formalmente. {{ mod.llm_nombre }} es el más grande que cabe y responde en un tiempo razonable, y como la pantalla del 911
+**no espera al reporte**, ese tiempo no pone en riesgo a nadie.
+
+#### Cómo lo usa Enlaza
+
+La API le pide el reporte a Ollama (`backend/app/services/llm_report.py`) así:
+
+- **Razonamiento («thinking») {{ mod.llm_think }}:** {{ mod.llm_nombre }} puede «pensar en voz alta» antes de contestar; eso
+  alarga la respuesta y no ayuda a resumir lo que ya se dijo, así que se apaga (`"think": false`).
+- **Temperatura {{ mod.llm_temperatura }}:** la temperatura controla qué tan «creativo» es; baja = respuestas parecidas cada vez,
+  sin inventar.
+- **Salida JSON con esquema fijo** (`format` = el esquema de Pydantic): resumen, síntomas mencionados, inicio, signos de alarma,
+  medicamentos mencionados, frases textuales y limitaciones. **No hay campo de diagnóstico.**
+- **Se valida** con Pydantic; si la respuesta no cumple el esquema o tarda más de {{ mod.llm_timeout }}, se guarda solo la
+  transcripción y el nivel.
+
+#### Qué NO hace
+
+- **No diagnostica** ni recomienda tratamientos: la instrucción lo prohíbe, el esquema no tiene dónde, y un filtro busca frases
+  prohibidas.
+- **No decide el nivel de emergencia**: lo ponen las reglas y el clasificador antes de que el modelo escriba una sola palabra;
+  el sistema sobrescribe el nivel en el reporte.
+- **No habla con la familia**: lo que ve la familia (pantalla roja, aviso ámbar, «tu mensaje se envió») está escrito de antemano.
+
+#### Las defensas, en orden
+
+Ollama corre {{ mod.llm_nombre }} con temperatura baja y un **esquema JSON fijo**: resumen, síntomas
 mencionados, inicio, signos de alarma, medicamentos mencionados, frases textuales y limitaciones. La instrucción le pide
 resumir lo dicho, **no inferir enfermedades, no recomendar tratamientos** y marcar lo que no se entendió. Defensas:
 
@@ -191,13 +265,35 @@ que crea una solicitud a coordinación con la lengua registrada. El procedimient
 (WER) por grupo está listo (`voice/eval/bias_wer.py`); con voz sintética dio {{ man.whisper_wer_sintetico }}. Las grabaciones
 del equipo con consentimiento y las de Common Voice están **pendientes**.
 
+### 9. Lo que vimos en las pruebas del equipo
+
+Cuando el equipo probó la voz a mano, con sus propias frases, hubo **falsos positivos** (frases tranquilas que salieron como
+emergencia, por ejemplo «Hoy mi mamá comió bien y durmió su siesta», aviso ámbar) y **falsos negativos** (frases de alarma,
+dichas con palabras distintas a las de entrenamiento, que no subieron de nivel cuando no las atrapó una regla). No fue una
+evaluación formal: no tiene conteo y no sustituye al cuarto conjunto pendiente.
+
+**Por qué pasa:** el clasificador se entrenó con **frases sintéticas muy parecidas entre sí** (mismas plantillas, mismas
+personas —«mi mamá», «mi papá»—, mismo vocabulario). Aprende palabras de superficie más que el sentido: si una frase rutinaria
+se parece a las de emergencia, sube; si una emergencia usa palabras que nunca vio, se le escapa. Por eso el holdout a ciegas da
+{{ voz.holdout.fa100 }} falsas alarmas por 100 notas aunque la prueba interna salga casi perfecta.
+
+**Qué sigue:**
+
+1. Las **frases del equipo**, dichas con sus propias palabras, como cuarto conjunto de evaluación (instructivo en
+   `data/voice/INSTRUCTIVO_frases_equipo.md`).
+2. Una **segunda opinión con {{ mod.llm_nombre }}** para los casos que solo marca el clasificador: preguntarle al modelo de
+   lenguaje si el texto describe signos de alarma, como apoyo a la revisión de coordinación. **Pendiente de evaluar**: no se
+   adoptará sin medirla antes con la regla escrita de antemano, y nunca podrá bajar una regla.
+3. Mientras tanto, las reglas siguen primero, el aviso ámbar lo revisa una persona y el botón del 911 siempre está.
+
 ## Dónde está en el código
 
 | Qué | Dónde |
 |---|---|
 | Orquestación (consentimiento → transcripción → reglas → clasificador → aviso → reporte) | `backend/app/services/oracle.py`, `backend/app/routers/voice.py` |
 | Reglas | `config/emergency_rules.yaml`, `backend/app/services/triage_rules.py` |
-| Reporte con el modelo de lenguaje | `backend/app/services/llm_report.py` |
+| Reporte con el modelo de lenguaje ({{ mod.llm_nombre }}) | `backend/app/services/llm_report.py` (petición a Ollama, esquema, filtro) |
+| Medición de los tres modelos | `docs/biblia/build/measure_models.sh` → `docs/biblia/datos/modelos_medidos.yaml` |
 | Revisión del aviso ámbar y escalamiento | `backend/app/services/alerts_followup.py` |
 | Servicio de voz (Whisper + clasificador) | `voice/triage/service.py`, `classifier.py`, `augment.py`, `text.py` |
 | Evaluación | `voice/eval/evaluate.py`, `compare_rules.py`, `review_reports.py`, `timings.py`, `bias_wer.py` |
@@ -209,7 +305,7 @@ del equipo con consentimiento y las de Common Voice están **pendientes**.
 
 ## Números clave
 
-{{ tabla voz.holdout.n voz.holdout.sens voz.holdout.sens_rules voz.holdout.fa100 voz.holdout.f1 voz.holdout.missed vozb.holdout.red vozb.holdout.red_false vozb.holdout.amber vozb.holdout.amber_false cfg.emergency_categories cfg.emergency_patterns cfg.escalate_after voz.t_transcribe_10 voz.t_llm_short voz.t_llm_long voz.reports_reviewed }}
+{{ tabla voz.holdout.n voz.holdout.sens voz.holdout.sens_rules voz.holdout.fa100 voz.holdout.f1 voz.holdout.missed vozb.holdout.red vozb.holdout.red_false vozb.holdout.amber vozb.holdout.amber_false cfg.emergency_categories cfg.emergency_patterns cfg.escalate_after voz.t_transcribe_10 mod.llm_nombre mod.llm_parametros mod.llm_cuantizacion mod.llm_gpu_memoria mod.llm_gpu_reporte mod.llm_cpu_reporte mod.clasificador_parametros mod.clasificador_ms voz.reports_reviewed }}
 
 ## Limitaciones honestas
 
@@ -221,6 +317,8 @@ del equipo con consentimiento y las de Common Voice están **pendientes**.
   pantalla siempre muestra el botón del 911.
 - **Whisper se probó con voz sintética** para medir tiempo, no exactitud con personas mayores reales.
 - **No reconoce lenguas indígenas.**
+- **En las pruebas del equipo hubo falsos positivos y falsos negativos**: el clasificador aprendió de frases sintéticas muy
+  parecidas entre sí. La segunda opinión con {{ mod.llm_nombre }} está pendiente de evaluar.
 - **La revisión humana de los {{ voz.reports_reviewed }} reportes** (criterio A8) está pendiente.
 
 ## Preguntas que te pueden hacer
@@ -241,6 +339,12 @@ del equipo con consentimiento y las de Common Voice están **pendientes**.
     tiene {{ vozb.holdout.red_false }} falsas de {{ vozb.holdout.red }}. Lo que detecta solo el clasificador sale en ámbar, con el
     mismo botón del 911, y una persona de coordinación llama a la familia. Quitarle el aviso al clasificador perdería
     {{ vozb.holdout.emerg_only_classifier }} emergencias reales.
+
+!!! pregunta "¿Qué modelo de lenguaje usan y por qué ese?"
+    {{ mod.llm_nombre }}, del equipo Qwen de Alibaba Cloud: {{ mod.llm_parametros }} de parámetros, cuantizado a
+    {{ mod.llm_cuantizacion }} por Ollama, licencia Apache 2.0. Corre en la laptop, en la GPU integrada: ocupa
+    {{ mod.llm_gpu_memoria }} y escribe un reporte en {{ mod.llm_gpu_reporte }} (en CPU, {{ mod.llm_cpu_reporte }}). Es el más
+    grande que cabe junto con todo lo demás y responde a tiempo; como el 911 no lo espera, su lentitud no pone a nadie en riesgo.
 
 !!! pregunta "¿El modelo de lenguaje diagnostica?"
     No. La instrucción lo prohíbe, la salida tiene un esquema fijo sin campo de diagnóstico, se valida con Pydantic y un

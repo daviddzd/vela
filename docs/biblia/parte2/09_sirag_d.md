@@ -6,7 +6,8 @@
     **SIRAG-D (Simulación de Riesgo Ambiental y Gestión de Despacho) recrea en la computadora semanas completas de las
     cinco instituciones, con pacientes que pueden entrar en crisis, tráfico por hora y contingencias ambientales, para
     comparar formas de asignar visitas con el mismo código de la operación y decidir con intervalos de confianza y
-    pruebas estadísticas.**
+    pruebas estadísticas. La simulación nos dijo cómo asignar: priorizar por riesgo, y un límite de tiempo para cuando
+    coordinación tarda en aprobar.**
 
 ## Explicado sin tecnicismos
 
@@ -151,6 +152,11 @@ Y las cinco políticas en el escenario normal (espera p90 de prioridad alta, en 
 
 Prueba global de Friedman en esa métrica: {{ test.normal.high_wait_p90_min.omnibus }}.
 
+!!! cuidado "Cómo NO leer esta tabla"
+    La diferencia entre Enlaza (hoy) y el despacho humano en el escenario normal **no es efecto del límite de tiempo**: con
+    coordinación que aprueba a tiempo, «prioridad por riesgo» sola ya baja la espera a {{ sim.normal.risk_priority.high_wait_p90_min }}.
+    El límite importa cuando coordinación tarda (sección siguiente).
+
 ![La comparación en la pantalla `/simulacion`: cada punto es la media de las réplicas y la barra su intervalo de confianza; en teal las dos variantes de Enlaza.](capturas/tarjeta_simulacion_03.png)
 
 **Cómo leerlo, con honestidad:**
@@ -212,28 +218,39 @@ cumplimiento legal que decide cada institución.
 «en riesgo» {{ ceff.normal.win_at_risk_entries }} → {{ ceff.contingency_east.win_at_risk_entries }}; crisis
 {{ ceff.normal.win_crises }} → {{ ceff.contingency_east.win_crises }}.
 
-### El hallazgo que cambió el producto
+### Lo que la simulación nos dijo sobre cómo asignar
 
-En una corrida anterior (21 nov 2026, con la plantilla sin día de descanso), la sensibilidad mostró algo incómodo: con
-una coordinación lenta (5–15 min para aprobar), **Enlaza quedaba peor que el despacho humano** en la espera de lo urgente
-({{ hist.sens_antes_espera }}, histórico). Lo urgente esperaba a una persona.
+**1. Priorizar por riesgo es lo que más ayuda.** En el escenario normal, ordenar la cola por prioridad y riesgo baja la espera
+p90 de lo urgente de {{ sim.normal.human_dispatcher.high_wait_p90_min }} [{{ sim.normal.human_dispatcher.high_wait_p90_min.ci }}] a
+{{ sim.normal.risk_priority.high_wait_p90_min }} [{{ sim.normal.risk_priority.high_wait_p90_min.ci }}] min
+({{ test.normal.high_wait_p90_min.risk_priority.p }}, Wilcoxon con Holm contra el despacho humano). Sumar el tráfico de la hora
+casi no agrega: {{ sim.normal.risk_plus_live_traffic.high_wait_p90_min }}.
 
-El equipo decidió dos cambios, iguales en la operación y en la simulación:
+**2. El límite de tiempo y la reserva importan cuando coordinación tarda.** Si coordinación se tarda
+{{ sens.approval_delay.5-15.label }} en aprobar (sensibilidad de la corrida vigente, plantilla legal), la espera p90 de lo urgente es
+{{ sens.approval_delay.5-15.vela_timeout.high_wait_p90_min }} [{{ sens.approval_delay.5-15.vela_timeout.high_wait_p90_min.ci }}] con el
+límite de {{ cfg.auto_apply_after }} y la reserva, contra {{ sens.approval_delay.5-15.risk_plus_live_traffic.high_wait_p90_min }}
+[{{ sens.approval_delay.5-15.risk_plus_live_traffic.high_wait_p90_min.ci }}] sin el límite y
+{{ sens.approval_delay.5-15.human_dispatcher.high_wait_p90_min }} con el despacho humano
+({{ senstest.approval_delay.5-15.high_wait_p90_min.vela_timeout.p }} contra el humano). Por eso el producto tiene:
 
 1. **Aprobación con límite de tiempo, solo para lo urgente** (visita en menos de {{ cfg.urgent_within }}, sin respuesta en
    {{ cfg.auto_apply_after }}).
 2. **Reserva del candidato** mientras se espera la aprobación ({{ cfg.hold_minutes }}).
 
-| En esa corrida (histórico) | Espera p90 alta vs. humano | Respuesta a crisis p90 vs. humano |
+**3. Historia: cómo llegamos ahí (corrida anterior).** En una corrida **anterior** (21 nov 2026, con la plantilla de 7 días,
+sin día de descanso), la sensibilidad mostró algo incómodo: con una coordinación lenta, **Enlaza sin límite quedaba peor que
+el despacho humano** en la espera de lo urgente ({{ hist.sens_antes_espera }}). Lo urgente esperaba a una persona. De ahí
+salieron el límite y la reserva:
+
+| Corrida anterior (histórico, plantilla de 7 días) | Espera p90 alta vs. humano | Respuesta a crisis p90 vs. humano |
 |---|---|---|
 | Enlaza sin límite ni reserva | {{ hist.sens_antes_espera }} | {{ hist.sens_antes_crisis }} |
 | Con límite, sin reserva | {{ hist.sens_limite_sin_reserva_espera }} | — |
 | **Con límite y reserva** | **{{ hist.sens_limite_y_reserva_espera }}** | **{{ hist.sens_limite_y_reserva_crisis }}** |
 
-Con la plantilla legal (corrida vigente), Enlaza sin límite ya no queda peor, pero el límite de tiempo sigue siendo la
-mejor opción: con aprobación de 5–15 min, la espera p90 de Enlaza (hoy) es {{ sens.approval_delay.5-15.vela_timeout.high_wait_p90_min }}
-contra {{ sens.approval_delay.5-15.human_dispatcher.high_wait_p90_min }} del humano
-({{ senstest.approval_delay.5-15.high_wait_p90_min.vela_timeout.p }}). Lo contamos completo en @ref(cap-bitacora).
+Con la plantilla legal (corrida vigente), Enlaza sin límite ya no queda peor que el humano, pero el límite sigue siendo la mejor
+opción cuando coordinación tarda (punto 2). Lo contamos completo en @ref(cap-bitacora).
 
 ![El hallazgo explicado en la propia pantalla de simulación, con las pruebas de la corrida vigente.](capturas/tarjeta_simulacion_02.png)
 
@@ -256,7 +273,7 @@ contra {{ sens.approval_delay.5-15.human_dispatcher.high_wait_p90_min }} del hum
 
 ## Números clave
 
-{{ tabla sim.runs_main sim.runs_sensitivity sim.runs_validation sim.elapsed_s cfg.replications cfg.horizon_days cfg.confidence sim.normal.vela_timeout.high_wait_p90_min sim.normal.human_dispatcher.high_wait_p90_min sim.normal.vela_timeout.crisis_response_p90_min sim.normal.vela_timeout.unattended_pct sens.extra_staff.targeted.vela_timeout.unattended_pct sim.val_real_short_pct sim.val_sim_short_pct }}
+{{ tabla sim.runs_main sim.runs_sensitivity sim.runs_validation sim.elapsed_s cfg.replications cfg.horizon_days cfg.confidence sim.normal.human_dispatcher.high_wait_p90_min sim.normal.risk_priority.high_wait_p90_min test.normal.high_wait_p90_min.risk_priority.p sens.approval_delay.5-15.vela_timeout.high_wait_p90_min sens.approval_delay.5-15.risk_plus_live_traffic.high_wait_p90_min sim.normal.vela_timeout.crisis_response_p90_min sim.normal.vela_timeout.unattended_pct sens.extra_staff.targeted.vela_timeout.unattended_pct sim.val_real_short_pct sim.val_sim_short_pct }}
 
 ## Limitaciones honestas
 
@@ -300,15 +317,18 @@ contra {{ sens.approval_delay.5-15.human_dispatcher.high_wait_p90_min }} del hum
     aplica la tolerancia acordada.
 
 !!! pregunta "Entonces, ¿Enlaza es mejor?"
-    En lo que importa para lo urgente, sí y con significancia: la espera p90 de prioridad alta baja de
-    {{ sim.normal.human_dispatcher.high_wait_p90_min }} a {{ sim.normal.vela_timeout.high_wait_p90_min }} min
-    ({{ test.normal.high_wait_p90_min.vela_timeout.p }}). En el «sin atender» no: eso depende del personal disponible. Y la
-    mayor parte de la mejora viene de priorizar por riesgo, no del tráfico.
+    En lo que importa para lo urgente, sí y con significancia, y sabemos por qué: priorizar por riesgo baja la espera p90 de
+    prioridad alta de {{ sim.normal.human_dispatcher.high_wait_p90_min }} a {{ sim.normal.risk_priority.high_wait_p90_min }} min
+    ({{ test.normal.high_wait_p90_min.risk_priority.p }}). El límite de tiempo y la reserva la mantienen baja cuando coordinación
+    tarda {{ sens.approval_delay.5-15.label }} ({{ sens.approval_delay.5-15.vela_timeout.high_wait_p90_min }} con límite contra
+    {{ sens.approval_delay.5-15.risk_plus_live_traffic.high_wait_p90_min }} sin él). En el «sin atender» no mejora: eso depende del
+    personal disponible.
 
 !!! pregunta "¿Qué cambió en el producto por la simulación?"
-    El límite de tiempo para lo urgente y la reserva del candidato. La simulación mostró que, si coordinación tarda en
-    aprobar, lo urgente espera más que con un despachador humano. Con los dos cambios, la espera ya casi no depende de
-    qué tan rápido apruebe coordinación.
+    El límite de tiempo para lo urgente y la reserva del candidato. En una corrida anterior (plantilla de 7 días), si
+    coordinación tardaba en aprobar, lo urgente esperaba más que con un despachador humano. Con los dos cambios, en la corrida
+    vigente la espera con aprobación lenta queda en {{ sens.approval_delay.5-15.vela_timeout.high_wait_p90_min }} contra
+    {{ sens.approval_delay.5-15.risk_plus_live_traffic.high_wait_p90_min }} sin el límite.
 
 !!! pregunta "¿La simulación usa el mismo código que el sistema?"
     Sí: `simulation/sirag/model.py` importa `backend/app/services/dispatcher.py`, `visit_rules.py` y `labor.py`, las

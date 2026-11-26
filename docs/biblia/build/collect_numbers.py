@@ -685,6 +685,33 @@ def manual() -> None:
         add(f"man.{key}", d["valor"], d["descripcion"], f"medición manual, {d['fecha']} ({d['documento']})")
 
 
+def models() -> None:
+    """The three models of Enlaza Voz measured on this laptop (docs/biblia/datos/modelos_medidos.yaml, measure_models.sh),
+    the LLM settings read from the code, and the public address."""
+    import re
+    for key, d in (read_yaml("docs/biblia/datos/modelos_medidos.yaml") or {}).items():
+        add(f"mod.{key}", d["valor"], d["descripcion"], f"medición en la laptop, {d['fecha']} ({d['metodo']})")
+    src = (ROOT / "backend/app/services/llm_report.py").read_text(encoding="utf-8")
+    model = re.search(r'os\.environ\.get\("OLLAMA_MODEL", "([^"]+)"\)', src).group(1)
+    add("mod.llm_nombre", model, "Modelo de lenguaje de Enlaza Voz (OLLAMA_MODEL, valor por defecto)",
+        "backend/app/services/llm_report.py y .env.example")
+    temp = re.search(r'"temperature": ([\d.]+)', src).group(1)
+    add("mod.llm_temperatura", temp, "Temperatura con la que se pide el reporte", "backend/app/services/llm_report.py")
+    think = re.search(r'"think": (True|False)', src).group(1)
+    add("mod.llm_think", "desactivado" if think == "False" else "activado", "Razonamiento («thinking») de qwen3:8b",
+        "backend/app/services/llm_report.py (\"think\")")
+    timeout = re.search(r"timeout: float = ([\d.]+)", src).group(1)
+    add("mod.llm_timeout", f"{float(timeout):.0f} s", "Tiempo máximo de espera del reporte antes de darlo por fallido",
+        "backend/app/services/llm_report.py")
+    svc = (ROOT / "voice/triage/service.py").read_text(encoding="utf-8")
+    add("mod.whisper_modelo", re.search(r'os\.environ\.get\("WHISPER_MODEL", "([^"]+)"\)', svc).group(1),
+        "Tamaño del modelo Whisper (WHISPER_MODEL)", "voice/triage/service.py")
+    add("mod.whisper_tipo", re.search(r'compute_type="([^"]+)"', svc).group(1), "Precisión con la que corre Whisper",
+        "voice/triage/service.py (compute_type)")
+    url = re.search(r'PUBLIC_URL="\$\{PUBLIC_URL:-([^}]+)\}"', (ROOT / "scripts/enlaza.sh").read_text(encoding="utf-8")).group(1)
+    add("ops.public_url", url, "Dirección pública fija de Enlaza (túnel con nombre de Cloudflare)", "scripts/enlaza.sh (PUBLIC_URL)")
+
+
 def history() -> None:
     """Results of earlier runs that explain team decisions (docs/biblia/datos/historico.yaml)."""
     for key, d in (read_yaml("docs/biblia/datos/historico.yaml") or {}).items():
@@ -716,6 +743,16 @@ def context() -> None:
     """Official context figures (aging, "why now") with page (docs/biblia/datos/contexto.yaml)."""
     for key, d in (read_yaml("docs/biblia/datos/contexto.yaml") or {}).items():
         add(f"ctx.{key}", d["valor"], d["descripcion"], f"{d['documento']} · {d['url']}")
+
+
+def presentation() -> None:
+    """The colloquium script (docs/presentacion/guion_coloquio.pdf): its number of pages, for the study plan."""
+    import subprocess
+    pdf = ROOT / "docs/presentacion/guion_coloquio.pdf"
+    if pdf.exists():
+        info = subprocess.run(["pdfinfo", str(pdf)], capture_output=True, text=True).stdout
+        pages = int(next(l.split()[-1] for l in info.splitlines() if l.startswith("Pages:")))
+        add("pres.guion_paginas", pages, "Páginas del guion del coloquio", "docs/presentacion/guion_coloquio.pdf (pdfinfo)")
 
 
 def repo() -> None:
@@ -772,6 +809,10 @@ def code() -> None:
         ("code.ws_recheck", "backend/app/ws/board.py", r"RECHECK_SECONDS = (\d+)",
          "Cada cuántos segundos el WebSocket vuelve a revisar la sesión", "s"),
         ("code.ws_retry", "frontend/src/lib/useBoardSocket.ts", r"RETRY_MS = (\d+)", "Reintento de conexión del tablero", "ms"),
+        ("code.clock_task_min", "scripts/windows/install_clock_task.ps1", r"RepetitionInterval \(New-TimeSpan -Minutes (\d+)\)",
+         "Cada cuántos minutos la tarea de Windows copia la hora a WSL (además de al iniciar sesión y al despertar)", "min"),
+        ("code.autostart_delay", "scripts/windows/install_startup_task.ps1", r'Delay = "PT(\d+)S"',
+         "Segundos que espera la tarea «Enlaza - arranque» después de iniciar sesión", "s"),
         ("code.duplicate_window_h", "backend/app/services/operations.py", r"DUPLICATE_WINDOW = timedelta\(hours=(\d+)\)",
          "Ventana para considerar duplicada una solicitud (antes o después)", "h"),
         ("code.max_days_ahead", "backend/app/services/operations.py", r"MAX_DAYS_AHEAD = (\d+)",
@@ -820,7 +861,7 @@ def code() -> None:
 
 
 def main() -> None:
-    for step in (seed, calibration, generator, config, simulation, simulation_more, voice, voice_breakdown, voice_timings, business, business_model, manual, history, course_documents, context, git_history, repo, code, database):
+    for step in (seed, calibration, generator, config, simulation, simulation_more, voice, voice_breakdown, voice_timings, business, business_model, manual, models, history, course_documents, context, presentation, git_history, repo, code, database):
         step()
     OUT.mkdir(parents=True, exist_ok=True)
     (OUT / "numeros.json").write_text(json.dumps(NUMBERS, ensure_ascii=False, indent=1, default=str), encoding="utf-8")
