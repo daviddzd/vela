@@ -9,6 +9,10 @@
 | `fuentes/` | tipografías de la marca (Plus Jakarta Sans y Atkinson Hyperlegible, licencia SIL OFL) |
 | `build/` | cómo se genera todo |
 
+**Versión con nombres:** la de este directorio dice «Persona 1–4». Si existe `docs/biblia/equipo.yaml` (local, Git lo ignora),
+`build_presentacion.sh` genera además `docs/privado/coloquio/enlaza_coloquio.pptx` y `.pdf` con los nombres del equipo en la
+portada y en la diapositiva de gracias. Esa es la que se proyecta; no se sube a Git.
+
 ## Antes de abrirla en PowerPoint
 
 Instalar las cuatro fuentes de `fuentes/` (doble clic en cada `.ttf` → Instalar). Sin ellas, PowerPoint pone otra letra y

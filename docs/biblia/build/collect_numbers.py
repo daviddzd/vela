@@ -324,6 +324,9 @@ def simulation_more() -> None:
         kind = "pct" if r["metric"].endswith("_pct") else ("int" if r["metric"] == "staff" else "dec")
         add(key, float(r["mean"]), f"Sensibilidad {r['knob']}={level}: {r['metric']} · {names.get(r['policy'])}", src, kind=kind)
         add(key + ".ci", f"{float(r['ci_low']):.1f}–{float(r['ci_high']):.1f}", f"IC 95 % de {key}", src)
+        if r["approval_delay"] and "-" in level and f"sens.approval_delay.{level}.label" not in NUMBERS:  # "5-15" -> "5–15 min"
+            lo, hi = level.split("-")
+            add(f"sens.approval_delay.{level}.label", f"{lo}–{hi} min", "Nivel de retraso de la aprobación en la sensibilidad", src)
 
     for fname, prefix in (("tests.csv", "test"), ("sensitivity_tests.csv", "senstest")):
         src = f"simulation/results/{fname}"

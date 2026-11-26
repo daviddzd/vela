@@ -1,6 +1,6 @@
 """Add native error bars (the 95 % confidence intervals) to the simulation chart of enlaza_coloquio.pptx.
 
-    python3 docs/presentacion/build/errbars.py
+    python3 docs/presentacion/build/errbars.py [deck.pptx]      (default: docs/presentacion/enlaza_coloquio.pptx)
 
 pptxgenjs cannot write error bars, so deck.cjs leaves the values in out/errbars.json (series name, plus, minus) and this
 script inserts a <c:errBars> with custom values into that series of the chart XML. The chart stays a native,
@@ -9,13 +9,14 @@ errBars, cat, val …).
 """
 import json
 import re
+import sys
 import shutil
 import tempfile
 import zipfile
 from pathlib import Path
 
 PRES = Path(__file__).resolve().parents[1]
-DECK = PRES / "enlaza_coloquio.pptx"
+DECK = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else PRES / "enlaza_coloquio.pptx"
 SPECS = json.loads((PRES / "out" / "errbars.json").read_text(encoding="utf-8"))
 
 

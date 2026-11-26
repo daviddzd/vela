@@ -20,6 +20,11 @@ const N = JSON.parse(fs.readFileSync(path.join(ROOT, "docs/biblia/out/numeros.js
 const NOTES = JSON.parse(fs.readFileSync(path.join(OUT, "notas.json"), "utf8"));
 const SHOTS = path.join(PRES, "capturas");
 const QR = path.join(ROOT, "docs", "privado", "qr_enlaza.png");
+// Team names: only in the private version (NOMBRES="A|B|C|D", read by build_presentacion.sh from docs/biblia/equipo.yaml,
+// which Git ignores). The version in Git says "Persona 1–4". OUTFILE chooses where the .pptx goes.
+const NAMES = (process.env.NOMBRES || "").split("|").map((n) => n.trim()).filter(Boolean);
+const TEAM = NAMES.length ? NAMES : ["Persona 1", "Persona 2", "Persona 3", "Persona 4"];
+const OUTFILE = process.env.OUTFILE ? path.resolve(ROOT, process.env.OUTFILE) : path.join(PRES, "enlaza_coloquio.pptx");
 if (!fs.existsSync(QR)) throw new Error("Falta docs/privado/qr_enlaza.png: correr `uv run scripts/make_qr.py`");
 
 const USED = new Map();
@@ -111,19 +116,28 @@ function image(s, file, x, y, w, alt) {          // keeps the aspect ratio; retu
   return h;
 }
 
+// the four names across the bottom: one line if they fit ("Persona 1–4"), two lines of two names otherwise
+function namesBand(s) {
+  const t = NAMES.length ? `${TEAM[0]} · ${TEAM[1]}\n${TEAM[2]} · ${TEAM[3]}` : TEAM.join(" · ");
+  text(s, t, { x: M, y: 5.8, w: W - 2 * M - 0.9, h: 0.95, color: C.white, bold: true, valign: "middle", objectName: "Equipo" });
+}
+function qrCard(s, caption) {
+  card(s, 8.75, 0.6, 4.0, 4.95, C.white, "Tarjeta QR");
+  s.addImage({ path: QR, x: 9.15, y: 0.8, w: 3.2, h: 3.2, altText: "QR de https://enlaza.zenthinks.com" });
+  text(s, "enlaza.zenthinks.com", { x: 8.85, y: 4.1, w: 3.8, h: 0.55, fontFace: HEAD, bold: true, color: C.deep, align: "center" });
+  text(s, caption, { x: 8.85, y: 4.7, w: 3.8, h: 0.5, color: C.tealText, align: "center" });
+}
+
 // ======================================================================= 1. Portada
 {
   const s = slide("OSCURO", "Exposición");
   image(s, LOGO_WHITE, M, 0.6, 4.4, "Enlaza · cuidado coordinado");
-  text(s, "Coordinamos el cuidado de las personas mayores", { x: M, y: 2.35, w: 7.6, h: 1.4,
+  text(s, "Coordinamos el cuidado de las personas mayores", { x: M, y: 2.15, w: 7.6, h: 1.4,
     fontFace: HEAD, fontSize: 36, bold: true, color: C.white });
   text(s, "Universidad Nacional “Rosario Castellanos”\nLicenciatura en Ciencia de Datos para Negocios\nEvidencia integradora · 2026-2",
-    { x: M, y: 3.95, w: 7.9, h: 1.45, color: "D6E4EE" });
-  text(s, "Persona 1 · Persona 2 · Persona 3 · Persona 4", { x: M, y: 5.75, w: 7.6, h: 0.5, color: C.white, bold: true });
-  card(s, 8.75, 0.9, 4.0, 5.55, C.white, "Tarjeta QR");
-  s.addImage({ path: QR, x: 9.05, y: 1.1, w: 3.4, h: 3.4, altText: "QR de https://enlaza.zenthinks.com" });
-  text(s, "enlaza.zenthinks.com", { x: 8.85, y: 4.6, w: 3.8, h: 0.55, fontFace: HEAD, bold: true, color: C.deep, align: "center" });
-  text(s, "Entra desde tu celular", { x: 8.85, y: 5.25, w: 3.8, h: 0.5, color: C.tealText, align: "center" });
+    { x: M, y: 3.7, w: 7.9, h: 1.45, color: "D6E4EE" });
+  qrCard(s, "Entra desde tu celular");
+  namesBand(s);
 }
 
 // ======================================================================= 2. El problema
@@ -199,17 +213,18 @@ function image(s, file, x, y, w, alt) {          // keeps the aspect ratio; retu
 const ERRBARS = [];
 {
   const s = slide("CONTENIDO", "Resultados");
-  title(s, ["La simulación ", ["cambió"], " el producto"]);
+  title(s, ["La simulación nos dijo ", ["cómo asignar"]]);
   const pol = [["human_dispatcher", "Despacho humano"], ["nearest", "Más cercano"], ["risk_priority", "Prioridad por riesgo"],
     ["risk_plus_live_traffic", "Riesgo + tráfico"], ["vela_timeout", "Enlaza hoy"]];
   const key = (p) => `sim.normal.${p}.high_wait_p90_min`;
   const vals = pol.map(([p]) => V(key(p)));
   const ci = pol.map(([p]) => CI(`${key(p)}.ci`));
-  text(s, "Espera p90 de lo urgente (minutos)", { x: M, y: 1.4, w: 7.7, h: 0.5, bold: true, color: C.ink });
+  const cw = 7.2;
+  text(s, "Espera p90 de lo urgente (minutos)", { x: M, y: 1.4, w: cw, h: 0.5, bold: true, color: C.ink });
   const series = "Espera p90 de prioridad alta (min)";
   s.addChart(pres.charts.BAR, [{ name: series, labels: pol.map(([, l]) => l), values: vals }], {
-    x: M, y: 1.95, w: 7.7, h: 4.35, barDir: "bar", catAxisOrientation: "maxMin", barGapWidthPct: 45,
-    chartColors: [C.navy, C.navy, C.navy, C.navy, C.tealText],
+    x: M, y: 1.95, w: cw, h: 4.35, barDir: "bar", catAxisOrientation: "maxMin", barGapWidthPct: 45,
+    chartColors: [C.navy, C.navy, C.tealText, C.tealText, C.tealText],     // teal: the three that prioritize by risk
     catAxisLabelFontFace: BODY, catAxisLabelFontSize: 24, catAxisLabelColor: C.ink, catAxisLineShow: false,
     valAxisHidden: true, valAxisMinVal: 0, valAxisMaxVal: 28, valGridLine: { style: "none" }, catGridLine: { style: "none" },
     showValue: true, dataLabelPosition: "inBase", dataLabelColor: C.white, dataLabelFontFace: HEAD, dataLabelFontSize: 24,
@@ -217,19 +232,25 @@ const ERRBARS = [];
   });
   ERRBARS.push({ series, plus: vals.map((v, i) => +(ci[i][1] - v).toFixed(2)), minus: vals.map((v, i) => +(v - ci[i][0]).toFixed(2)) });
   text(s, `Barra: promedio de ${T("cfg.replications")} réplicas · línea: intervalo de confianza del ${T("cfg.confidence")}`,
-    { x: M, y: 6.33, w: 7.7, h: 0.4, fontSize: 14, color: C.muted, objectName: "Nota de la gráfica" });
-  const x = 8.65, w = W - M - x;
-  card(s, x, 1.4, w, 5.3, C.sky, "Hallazgo");
-  text(s, "El hallazgo", { x: x + 0.3, y: 1.6, w: w - 0.6, h: 0.45, bold: true, color: C.tealText });
-  text(s, "Con coordinación lenta, lo urgente esperaba más que con una persona.", { x: x + 0.3, y: 2.05, w: w - 0.6, h: 1.65 });
-  text(s, "El cambio", { x: x + 0.3, y: 3.75, w: w - 0.6, h: 0.45, bold: true, color: C.tealText });
-  text(s, `Límite de ${T("cfg.auto_apply_after")} y reserva del candidato.`, { x: x + 0.3, y: 4.2, w: w - 0.6, h: 0.85 });
-  text(s, [{ text: T("sim.normal.vela_timeout.high_wait_p90_min"), options: { color: C.tealText } },
-    { text: " vs. ", options: { color: C.ink, fontSize: 24, bold: false } },
-    { text: T("sim.normal.human_dispatcher.high_wait_p90_min"), options: { color: C.deep } }],
-  { x: x + 0.3, y: 5.1, w: w - 0.6, h: 0.7, fontFace: HEAD, fontSize: 36, bold: true });
-  text(s, `minutos · ${T("test.normal.high_wait_p90_min.vela_timeout.p")}`, { x: x + 0.3, y: 5.85, w: w - 0.6, h: 0.5, color: C.muted });
-  source(s, `SIRAG-D, simulation/results/summary.csv · ${T("sim.runs_main")} corridas · Friedman y Wilcoxon con corrección de Holm`);
+    { x: M, y: 6.33, w: cw, h: 0.4, fontSize: 14, color: C.muted, objectName: "Nota de la gráfica" });
+  const x = M + cw + 0.35, w = W - M - x;
+  card(s, x, 1.4, w, 2.0, C.sky, "Priorizar por riesgo");
+  text(s, "Priorizar por riesgo", { x: x + 0.3, y: 1.55, w: w - 0.6, h: 0.45, bold: true, color: C.tealText });
+  text(s, [{ text: T("sim.normal.human_dispatcher.high_wait_p90_min"), options: { color: C.deep } },
+    { text: " a ", options: { color: C.ink, fontSize: 24, bold: false } },
+    { text: `${T("sim.normal.risk_priority.high_wait_p90_min")}`, options: { color: C.tealText } },
+    { text: " min", options: { color: C.ink, fontSize: 24, bold: false } }],
+  { x: x + 0.3, y: 2.0, w: w - 0.6, h: 0.7, fontFace: HEAD, fontSize: 36, bold: true });
+  text(s, `${T("test.normal.high_wait_p90_min.risk_priority.p")} vs. humano`, { x: x + 0.3, y: 2.75, w: w - 0.6, h: 0.5,
+    color: C.muted });
+  card(s, x, 3.6, w, 3.1, C.skySoft, "Aprobación lenta");
+  text(s, `Cuando coordinación tarda ${T("sens.approval_delay.5-15.label")} en aprobar, el límite de ${T("cfg.auto_apply_after")} y la reserva mantienen baja la espera`,
+    { x: x + 0.3, y: 3.75, w: w - 0.6, h: 1.8 });
+  text(s, [{ text: T("sens.approval_delay.5-15.vela_timeout.high_wait_p90_min"), options: { bold: true, color: C.tealText } },
+    { text: " min con límite", options: { breakLine: true } },
+    { text: T("sens.approval_delay.5-15.risk_plus_live_traffic.high_wait_p90_min"), options: { bold: true, color: C.deep } },
+    { text: " min sin límite" }], { x: x + 0.3, y: 5.6, w: w - 0.6, h: 0.9 });
+  source(s, `SIRAG-D, corrida vigente con plantilla legal · ${T("sim.runs_main")} corridas · Friedman y Wilcoxon con Holm`);
 }
 
 // ======================================================================= 6. Enlaza Voz
@@ -321,26 +342,28 @@ const ERRBARS = [];
   const tw = (W - 2 * M - 3 * 0.25) / 4;
   tiles.forEach(([big, label], i) => {
     const x = M + i * (tw + 0.25);
-    card(s, x, 1.45, tw, 1.95, i === 0 ? C.deep : C.sky, `Cifra ${label}`);
-    text(s, big, { x: x + 0.2, y: 1.6, w: tw - 0.4, h: 0.8, fontFace: HEAD, fontSize: 32, bold: true,
+    card(s, x, 1.4, tw, 1.85, i === 0 ? C.deep : C.sky, `Cifra ${label}`);
+    text(s, big, { x: x + 0.2, y: 1.5, w: tw - 0.4, h: 0.75, fontFace: HEAD, fontSize: 32, bold: true,
       color: i === 0 ? C.white : C.deep });
-    text(s, label, { x: x + 0.2, y: 2.45, w: tw - 0.4, h: 0.85, color: i === 0 ? C.white : C.ink });
+    text(s, label, { x: x + 0.2, y: 2.3, w: tw - 0.4, h: 0.85, color: i === 0 ? C.white : C.ink });
   });
-  text(s, "% de la CDMX con 60 años o más", { x: M, y: 3.7, w: 6.6, h: 0.5, bold: true });
-  s.addChart(pres.charts.BAR, [{ name: "60 años o más (%)", labels: ["2022", "2030"],
-    values: [PCT("ctx.cdmx_prop_60mas_2022"), PCT("ctx.cdmx_prop_60mas_2030")] }], {
-    x: M, y: 4.25, w: 6.6, h: 2.5, barDir: "bar", catAxisOrientation: "maxMin", barGapWidthPct: 35,
-    chartColors: [C.navy, C.tealText], catAxisLabelFontFace: HEAD, catAxisLabelFontSize: 24, catAxisLabelColor: C.ink,
-    catAxisLineShow: false, valAxisHidden: true, valAxisMinVal: 0, valAxisMaxVal: 30, valGridLine: { style: "none" },
-    catGridLine: { style: "none" }, showValue: true, dataLabelPosition: "outEnd", dataLabelColor: C.ink, dataLabelFontFace: HEAD,
-    dataLabelFontSize: 24, dataLabelFontBold: true, dataLabelFormatCode: "0.0", showLegend: false, showTitle: false,
+  card(s, M, 3.4, W - 2 * M, 1.05, C.warnSoft, "Condición del escenario");
+  iconCircle(s, M + 0.2, 3.5, 0.85, "triangle-alert", C.warn, C.white);
+  text(s, [{ text: "Escenario recomendado: ", options: { bold: true } },
+    { text: `supone plan Gobierno y fundadores al ${T("neg.founder_salary_year1_recommended")} % el año 1; sin ambos, VPN negativo (${T("bm.rec_wo_both")}).` }],
+  { x: M + 1.25, y: 3.45, w: W - 2 * M - 1.45, h: 0.95, valign: "middle" });
+  text(s, "% de la CDMX con 60 años o más", { x: M, y: 4.65, w: 6.6, h: 0.5, bold: true });
+  // two bars drawn with shapes (a chart this small wraps its labels in some viewers); width proportional to the value
+  [["2022", "ctx.cdmx_prop_60mas_2022", C.navy], ["2030", "ctx.cdmx_prop_60mas_2030", C.tealText]].forEach(([year, k, color], i) => {
+    const y = 5.2 + i * 0.78, v = Number(T(k).replace(/[^\d.]/g, "")), bw = (4.4 * v) / 25;
+    text(s, year, { x: M, y, w: 1.1, h: 0.6, fontFace: HEAD, valign: "middle" });
+    s.addShape(pres.shapes.RECTANGLE, { x: M + 1.2, y: y + 0.05, w: bw, h: 0.5, fill: { color }, line: { color }, objectName: `Barra ${year}` });
+    text(s, T(k), { x: M + 1.3 + bw, y, w: 1.4, h: 0.6, fontFace: HEAD, bold: true, valign: "middle" });
   });
   const x = 7.6, w = W - M - x;
-  card(s, x, 3.7, w, 3.0, C.skySoft, "Honestidad");
-  text(s, `Plan base: VPN ${T("bm.sc.base.npv25")}.`, { x: x + 0.3, y: 3.9, w: w - 0.6, h: 0.5, bold: true });
-  text(s, `Por eso recomendamos un tope de ${T("neg.recommended_private_cap")} % por entidad y crecer por regiones.`,
-    { x: x + 0.3, y: 4.4, w: w - 0.6, h: 1.3 });
-  text(s, `${T("ctx.mexico_60mas_2024")} de personas mayores en México.`, { x: x + 0.3, y: 5.75, w: w - 0.6, h: 0.85, color: C.tealText, bold: true });
+  card(s, x, 4.65, w, 2.05, C.skySoft, "Por qué ahora");
+  text(s, `${T("ctx.mexico_60mas_2024")} de personas de 60 años o más en México, y la CDMX envejece rápido.`,
+    { x: x + 0.3, y: 4.8, w: w - 0.6, h: 1.75, color: C.tealText, bold: true, valign: "middle" });
   source(s, "escenario recomendado del modelo de negocio (/negocio) · CONAPO, ficha CDMX (2022) · INEGI, ENASEM 2024");
 }
 
@@ -354,18 +377,26 @@ const ERRBARS = [];
   const cw = (W - 2 * M - 2 * 0.3) / 3;
   cols.forEach(([ic, head, items], i) => {
     const x = M + i * (cw + 0.3);
-    card(s, x, 1.55, cw, 4.45, C.navy, head);
+    card(s, x, 1.55, cw, 4.9, C.navy, head);
     iconCircle(s, x + 0.3, 1.85, 0.8, ic, C.deep, "BFE7E7");
     text(s, head, { x: x + 1.25, y: 1.85, w: cw - 1.45, h: 0.8, bold: true, color: C.white, valign: "middle" });
     s.addText(items.map((t, j) => ({ text: t, options: { bullet: { indent: 18 }, breakLine: j < items.length - 1 } })),
       { isTextBox: true, x: x + 0.3, y: 2.8, w: cw - 0.5, h: 3.05, fontFace: BODY, fontSize: 24, color: C.white, margin: 0,
         valign: "top", paraSpaceAfter: 8 });
   });
-  text(s, "Gracias · enlaza.zenthinks.com", { x: M, y: 6.25, w: 10, h: 0.7, fontFace: HEAD, fontSize: 28, bold: true, color: C.white,
-    valign: "middle" });
 }
 
-// ======================================================================= 11. Respaldo (no se presenta)
+// ======================================================================= 11. Gracias (stays on screen during the questions)
+{
+  const s = slide("OSCURO", "Preguntas");
+  image(s, LOGO_WHITE, M, 0.6, 3.8, "Enlaza · cuidado coordinado");
+  text(s, "Gracias", { x: M, y: 2.0, w: 7.8, h: 1.5, fontFace: HEAD, fontSize: 80, bold: true, color: C.white });
+  text(s, "¿Preguntas?", { x: M, y: 3.6, w: 7.8, h: 0.9, fontFace: HEAD, fontSize: 40, bold: true, color: "7FD3D3" });
+  qrCard(s, "La app sigue en vivo");
+  namesBand(s);
+}
+
+// ======================================================================= 12. Respaldo (no se presenta)
 {
   const s = slide("CONTENIDO", "Respaldo (no se presenta)");
   title(s, ["Respaldo: la demostración en ", ["capturas"]]);
@@ -386,7 +417,8 @@ const ERRBARS = [];
 
 // ---- write
 (async () => {
-  const file = path.join(PRES, "enlaza_coloquio.pptx");
+  const file = OUTFILE;
+  fs.mkdirSync(path.dirname(file), { recursive: true });
   await pres.writeFile({ fileName: file });
   fs.writeFileSync(path.join(OUT, "errbars.json"), JSON.stringify(ERRBARS));
   const rows = [["clave", "texto", "fuente", "uso"], ...[...USED].map(([k, d]) => [k, LABEL.get(k) ?? d.text, d.source, DRAWN.has(k) ? "gráfica" : LABEL.has(k) ? "etiqueta de gráfica" : "texto"])];
