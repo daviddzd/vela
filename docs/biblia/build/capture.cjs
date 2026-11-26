@@ -9,9 +9,11 @@ const path = require("path");
 const { chromium } = require("playwright");
 
 const BASE = process.env.BASE || "http://proxy:8080";
-const OUT = path.resolve(__dirname, "..", "capturas");
+// CAPTURE_OUT and VIEWPORT (e.g. 1440x810, 16:9 for the colloquium deck) are optional; the book uses the defaults.
+const OUT = process.env.CAPTURE_OUT ? path.resolve(process.env.CAPTURE_OUT) : path.resolve(__dirname, "..", "capturas");
 const ONLY = (process.env.ONLY || "").split(",").filter(Boolean);
-const PROJECTOR = { width: 1280, height: 800 };
+const [VW, VH] = (process.env.VIEWPORT || "1280x800").split("x").map(Number);
+const PROJECTOR = { width: VW, height: VH };
 const PHONE = { width: 390, height: 844 };
 fs.mkdirSync(OUT, { recursive: true });
 
