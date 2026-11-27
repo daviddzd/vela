@@ -27,7 +27,7 @@ Al final, las seis materias y los números que hay que saberse.
 **Se ve:** diapositiva «El problema»: el número de personas mayores, y cuatro íconos: WhatsApp, hoja de cálculo, tráfico, aire contaminado.
 
 **Dice:**
-En la Ciudad de México viven 1,491,619 personas de sesenta años o más. Las instituciones que las cuidan,
+En la Ciudad de México, según el Censo 2020, viven 1,491,619 personas de sesenta años o más. Las instituciones que las cuidan,
 residencias, centros de día y redes de cuidado a domicilio, coordinan las visitas con llamadas, WhatsApp y hojas de
 cálculo. Se pierden solicitudes, nadie sabe quién está libre ni cuánto va a tardar con el tráfico, lo urgente compite
 con lo rutinario y no queda registro. Y en una contingencia ambiental, las personas con enfermedades del pulmón o del
@@ -38,8 +38,9 @@ corazón son las más afectadas.
 
 **Dice:**
 Enlaza es una plataforma web por suscripción para esas instituciones. La familia, la coordinación o una nota de voz
-crean una solicitud; el sistema asigna sola a la persona adecuada; la coordinación sigue cada visita en vivo; la
-dirección decide con datos; y una nota de voz que suena a emergencia abre de inmediato la pantalla del nueve once.
+crean una solicitud; la solicitud se asigna sola a la persona adecuada; la coordinación sigue cada visita en vivo; la
+dirección decide con datos; y si una nota de voz trae una frase de emergencia, se abre de inmediato la pantalla del
+nueve once.
 Es un prototipo escolar: la empresa es ficticia y todos los datos son sintéticos. Generamos 20,000 personas
 calibradas con el Censo, la ENSANUT y la ENASEM. Las proporciones se parecen a la realidad; las personas no existen.
 
@@ -143,9 +144,9 @@ comparan formas de asignar, con intervalos de confianza. Lo explicamos más adel
 
 **Dice:**
 El panel de demostración solo cambia datos de entrada, como las lecturas del aire. Simulamos mala calidad del aire en el
-oriente. En el minuto siguiente, el worker la detecta solo y Enlaza propone cambios por institución: adelantar visitas
-de quienes tienen enfermedad del pulmón o del corazón y reacomodar al personal. Nada cambia sin aprobación: coordinación
-revisa y aprueba. Al terminar, volvemos a la normalidad.
+oriente. En el minuto siguiente, el worker la detecta solo y Enlaza propone cambios por institución: subir la prioridad
+de quienes tienen enfermedad del pulmón o del corazón, adelantar su oxigenoterapia y avisar a sus familias. Nada cambia
+sin aprobación: coordinación revisa y aprueba. Al terminar, volvemos a la normalidad.
 
 ### Escena 2.13 · Dirección: negocio y privacidad
 **Se ve:** grabación: `/negocio` (ingreso, costo fijo, equilibrio, VPN; etiquetas «supuesto») → `/privacidad` (aviso, ARCO, bitácora).
@@ -216,8 +217,8 @@ nunca le dice a nadie que algo no es una emergencia.
 Por último, ¿cómo entra el público desde su celular? Un túnel de Cloudflare conecta la laptop con la dirección fija
 https://enlaza.zenthinks.com. No es un servidor en la nube: si la laptop se apaga, se apaga Enlaza. Todo entra por una sola puerta,
 Caddy, en el puerto ocho mil ochenta. El túnel usa HTTP dos, para que funcione también en el hotspot de un celular, y
-se reconecta solo cuando cambia la red. Si un día la página da el error diez treinta y tres, se abre PowerShell como
-administrador y se reinicia el servicio cloudflared.
+se reconecta solo cuando cambia la red; en las pruebas volvió en menos de diez segundos. Si aun así la página diera el
+error diez treinta y tres, basta con reiniciar el servicio cloudflared.
 
 ## 4. Las seis materias (≈ 6:20)
 
@@ -244,10 +245,12 @@ tres escenarios, con 30 réplicas, intervalos de confianza y pruebas pareadas. S
 historial: en servicios cortos, el «sin atender» simulado es 8.7 %, contra 7.4 % real. El
 número clave: priorizar por riesgo baja la espera del percentil noventa de lo urgente de
 23.6 a 20.2 minutos. Y cuando coordinación tarda
-5–15 min en aprobar, el límite de tiempo la deja en 20.4
-minutos, contra 21.7 sin el límite. Ese hallazgo cambió el producto. La
+5–15 min en aprobar, el límite de tiempo, junto con la reserva del candidato, la deja en
+20.4 minutos, contra 21.7 sin ellos.
+Ese hallazgo cambió el producto. La
 limitación honesta: varias probabilidades de salud son supuestos, y el «sin atender», 19.1 %, no lo
-mejora ninguna forma de asignar: depende del personal disponible.
+mejora ninguna forma de asignar: depende del personal disponible; con contratación dirigida baja a
+17.5 %.
 
 ### Escena 4.3 · Cómputo Cognitivo
 **Se ve:** diapositiva de materia: 98.0 % de emergencias detectadas (reglas solas: 58.0 %), 26.0 falsas alarmas por 100 notas; la limitación.
@@ -275,14 +278,14 @@ agregado tiene menos de 10 personas. La limitación honesta: no se ha probado co
 personas mayores, y los mapas con calles necesitan internet.
 
 ### Escena 4.5 · Emprendimiento
-**Se ve:** diapositiva de materia: ingreso promedio $5,500, equilibrio en el mes 30, VPN base −$163,128, recomendado $1,207,425, LTV/CAC 21.9 : 1; la limitación.
+**Se ve:** diapositiva de materia: ingreso promedio $5,500, equilibrio en el mes 30, VPN del escenario base −$163,128, recomendado $1,207,425, LTV/CAC 21.9 : 1, participación máxima 15 %; la limitación.
 
 **Dice:**
 Emprendimiento. Enlaza es un negocio por suscripción, con tres planes según el tamaño de la institución. En promedio,
-cada institución paga $5,500 al mes el primer año, y un cliente vale 21.9 : 1 veces lo que cuesta
-conseguirlo. El plan base deja de perder dinero en el mes 30, pero su valor presente neto al
-25 % es negativo, −$163,128, y lo decimos de frente. El escenario recomendado limita la participación y crece
-por regiones: da $1,207,425, pero supone un plan Gobierno y que los fundadores cobren el
+cada institución paga $5,500 al mes el primer año, y un cliente deja 21.9 veces lo que cuesta
+conseguirlo. El escenario base deja de perder dinero en el mes 30, pero su valor presente neto al
+25 % es negativo, −$163,128, y lo decimos de frente. El escenario recomendado limita la participación al
+15 por ciento del mercado privado de cada entidad y crece por regiones: da $1,207,425, pero supone un plan Gobierno y que los fundadores cobren el
 50 por ciento de su sueldo el primer año; sin esas dos cosas, el valor sería −$180,904. El
 mercado se contó en el DENUE: 88 residencias privadas en la Ciudad de México. La limitación
 honesta: no hay entrevistas a clientes y los precios son supuestos.
@@ -294,8 +297,8 @@ honesta: no hay entrevistas a clientes y los precios son supuestos.
 Práctica Profesional. Enlaza se construyó como lo haría un profesional responsable. Hay consentimiento informado por
 tipo de uso, con vencimiento, y el asentimiento de la persona mayor; sin consentimiento, la API bloquea la función, no
 solo la pantalla. Hay aviso de privacidad y derechos ARCO con los plazos de la ley: 20 días hábiles para
-responder. El despachador respeta la Ley Federal del Trabajo: el descanso semanal y la jornada nocturna máxima de
-7 h. La inteligencia artificial está supervisada por personas, y todo queda en la bitácora. También somos
+responder. El despachador respeta el día de descanso semanal, y los turnos que pasan la jornada legal, como la nocturna de
+7 h, aparecen como alerta para que coordinación los corrija. La inteligencia artificial está supervisada por personas, y todo queda en la bitácora. También somos
 honestos sobre quién hizo qué: gran parte del código lo escribió un asistente de programación con IA, con las reglas y
 la revisión del equipo. La limitación honesta: las plantillas legales no las ha revisado un abogado, no hubo comité de
 ética y el diagnóstico de campo todavía está en curso.
@@ -312,7 +315,7 @@ operación: lo urgente sin respuesta se aplica con aviso a los 3 min. La simulac
 baja la espera de lo urgente de 23.6 a 20.2 minutos.
 La voz: 98.0 % de emergencias detectadas y 26.0 falsas alarmas por cada cien notas. El modelo de
 lenguaje: qwen3:8b, local. Y el negocio: equilibrio en el mes 30, con un valor presente
-negativo en el plan base, −$163,128, que decimos de frente.
+negativo en el escenario base, −$163,128, que decimos de frente.
 
 ### Escena 5.2 · Gracias
 **Se ve:** diapositiva final: https://enlaza.zenthinks.com, «La biblia de Enlaza tiene todo el detalle», «Prototipo académico · datos sintéticos».
@@ -358,10 +361,11 @@ coordinación lo puede cambiar. Esa regla salió de la simulación: con una coor
 
 **Dice:**
 Paso tres. Hace un momento simulamos mala calidad del aire en el oriente de la ciudad, y el worker la detectó solo.
-Enlaza propone cambios por institución: adelantar visitas de quienes tienen enfermedad del pulmón o del corazón y
-reacomodar al personal. Nada cambia sin aprobación: coordinación revisa y aprueba todo, y el tablero ya muestra los
-cambios. La contingencia se ve estación por estación, no promediada. Esto responde al incidente crítico del Problema
-Prototípico: aire contaminado y calles bloqueadas, y el sistema reacciona sin que nadie pierda el control.
+Enlaza propone cambios por institución: subir la prioridad de quienes tienen enfermedad del pulmón o del corazón,
+adelantar su oxigenoterapia y avisar a sus familias. Nada cambia sin aprobación: coordinación revisa y aprueba todo, y
+el tablero ya muestra los cambios. La contingencia se ve estación por estación, no promediada. Esto responde al
+incidente crítico del Problema Prototípico, que combina aire contaminado y calles bloqueadas; aquí se ve la parte del
+aire, y el tráfico entra en cada asignación.
 
 ### Escena D.5 · Paso 4: nota de emergencia
 **Se ve:** grabación: `fam-0001` en `/voz` → «Escribir el mensaje» → «Mi mamá no puede respirar y tiene los labios morados.» → pantalla roja.
@@ -378,5 +382,5 @@ reporte que escribe un modelo de lenguaje local, qwen3:8b. El sistema nunca diag
 **Dice:**
 Detrás de esto hay una simulación que cambió el producto: priorizar por riesgo baja la espera de lo urgente de
 23.6 a 20.2 minutos. Y un modelo de negocio honesto:
-el plan base no alcanza, y el escenario recomendado crece por regiones. Una sola aplicación, seis materias, y datos que
+el escenario base no alcanza, y el escenario recomendado crece por regiones. Una sola aplicación, seis materias, y datos que
 dicen su fuente. Eso es Enlaza.

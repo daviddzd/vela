@@ -19,6 +19,10 @@ VIDEO = ROOT / "docs/video"
 NUM = json.loads((ROOT / "docs/biblia/out/numeros.json").read_text(encoding="utf-8"))
 WPM = 140  # measured with Piper es_MX-claude-high, length_scale 1.12 (see build/voz.py)
 
+# Derived keys: the same figure, worded for a sentence. Each one asserts the shape of its source so it cannot drift.
+assert NUM["bm.ltv_cac"]["text"].endswith(" : 1"), NUM["bm.ltv_cac"]["text"]
+NUM["bm.ltv_cac_veces"] = {"text": NUM["bm.ltv_cac"]["text"].removesuffix(" : 1")}   # "21.9 : 1" -> "21.9"
+
 
 def fill(text: str) -> str:
     """Replace every {{ key }} with its text from numeros.json; stop on an unknown key."""
