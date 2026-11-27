@@ -54,14 +54,17 @@ async function click(locator) {
   if (/^tel:/i.test(info.href) || /911/.test(info.text)) {
     throw new Error(`GUARDIA: se intentó hacer clic en un enlace de llamada («${info.text}» ${info.href}). Grabación detenida.`);
   }
+  if (/Mostrar contraseña|Usuarios de prueba/i.test(info.text)) {   // the password never shows on video
+    throw new Error(`GUARDIA: se intentó hacer clic en «${info.text}». Grabación detenida.`);
+  }
   await target.hover().catch(() => {});        // the pointer moves there first: easier to follow on video
   await target.page().waitForTimeout(350);
   await target.click();
 }
 
 // ---- sessions -----------------------------------------------------------------------------------------------
-async function login(page, user, { slow = false } = {}) {
-  await page.goto(`${BASE}/entrar`);
+async function login(page, user, { slow = false, here = false } = {}) {
+  if (!here) await page.goto(`${BASE}/entrar`);
   const pwd = page.locator('input[autocomplete="current-password"]');
   if ((await pwd.getAttribute("type")) !== "password") throw new Error("GUARDIA: la contraseña no se mostraría como puntos");
   const email = page.locator('input[type="email"]');
@@ -254,11 +257,178 @@ const VIDEO2 = {
   },
 };
 
+// The family asks for nursing "para hoy, en un par de horas" on its own page (video 1 and video 2 do the same).
+async function familyAsksToday(page) {
+  const form = page.locator("form").filter({ has: page.getByRole("button", { name: "Solicitar servicio" }) });
+  await form.scrollIntoViewIfNeeded(); await page.waitForTimeout(1500);
+  await click(form.locator("label").filter({ hasText: /Enfermería/i }));
+  await page.waitForTimeout(800);
+  const { date, time } = todayInTwoHours(await form.locator("select").first().locator("option").allTextContents());
+  await form.getByPlaceholder("dd/mm/aaaa").first().fill(date);
+  await form.locator("select").first().selectOption({ label: time });
+  await page.waitForTimeout(1500);
+  await click(form.getByRole("button", { name: "Solicitar servicio" }));
+  await page.waitForTimeout(3500);
+}
+
+// ---- Video 1 · Enlaza explained (the recorded scenes; the others are slides) --------------------------------
+const VIDEO1 = {
+  async "2.1"() {   // public page, then a family signs in on camera (the password shows as dots)
+    const w = await recorded("2.1", null);
+    await w.page.goto(`${BASE}/`); await settle(w.page, 800); w.mark();
+    await w.page.waitForTimeout(3000); await scroll(w.page, 1200, 8, 600); await w.page.waitForTimeout(1500);
+    await click(w.page.getByRole("link", { name: "Entrar" }).first());
+    await settle(w.page, 1200);
+    await w.page.getByLabel("Modo sencillo", { exact: false }).hover().catch(() => {});
+    await w.page.waitForTimeout(1500);
+    await login(w.page, "fam-0002", { slow: true, here: true });
+    await settle(w.page, 2500);
+    await w.close();
+  },
+  async "2.2"() {
+    const w = await recorded("2.2", "fam-0002");
+    await w.page.goto(`${BASE}/familia`); await settle(w.page); w.mark();
+    await w.page.waitForTimeout(4000); await scroll(w.page, 500, 5, 600);
+    await familyAsksToday(w.page);
+    await w.page.getByText(/Asignada/i).last().scrollIntoViewIfNeeded().catch(() => {});
+    await w.page.waitForTimeout(6000);
+    await w.close();
+  },
+  async "2.3"() {
+    const w = await recorded("2.3", "fam-0001");
+    await w.page.goto(`${BASE}/familia`); await settle(w.page); w.mark();
+    await familyAsksToday(w.page);
+    await w.page.getByText(/En espera/i).last().scrollIntoViewIfNeeded().catch(() => {});
+    await w.page.waitForTimeout(6000);
+    await w.close();
+  },
+  async "2.4"() {
+    const w = await recorded("2.4", "coordinacion.a");
+    await w.page.goto(`${BASE}/tablero`); await settle(w.page, 3000); w.mark();
+    await w.page.waitForTimeout(6000); await scroll(w.page, 700, 7, 900); await w.page.waitForTimeout(4000);
+    await scroll(w.page, 700, 7, 900); await w.page.waitForTimeout(5000);
+    await scroll(w.page, -1400, 4, 300); await w.page.waitForTimeout(3000);
+    await w.close();
+  },
+  async "2.5"() {
+    const w = await recorded("2.5", "coordinacion.a");
+    await w.page.goto(`${BASE}/aprobaciones`); await settle(w.page, 2000); w.mark();
+    await w.page.waitForTimeout(7000);
+    await click(w.page.getByRole("button", { name: /^Aprobar/ }));
+    await w.page.waitForTimeout(3000);
+    await w.page.goto(`${BASE}/tablero`); await settle(w.page, 2000); await w.page.waitForTimeout(6000);
+    await w.close();
+  },
+  async "2.6"() {
+    const w = await recorded("2.6", "coordinacion.a");
+    await w.page.goto(`${BASE}/pacientes`); await settle(w.page, 2000); w.mark();
+    await w.page.waitForTimeout(4000); await scroll(w.page, 600, 5, 700);
+    await w.page.goto(`${BASE}/pacientes/PAC-0001`); await settle(w.page, 2000);
+    await w.page.waitForTimeout(3000); await scroll(w.page, 900, 7, 700);
+    await w.page.goto(`${BASE}/personal`); await settle(w.page, 3000);
+    await w.page.waitForTimeout(4000); await scroll(w.page, 800, 6, 800); await w.page.waitForTimeout(3000);
+    await w.close();
+  },
+  async "2.7"() {   // the caregiver needs a visit whose "Llegué" is open now (it opens 60 min before); otherwise stop
+    const mine = await api("cui-003", "/api/visits/mine");
+    const list = Array.isArray(mine) ? mine : (mine.visits || []);
+    const open = list.find((v) => v.step === "arrive" && (!v.arrive_from || new Date(v.arrive_from) <= new Date()));
+    if (!open) throw new Error("ALTO: cui-003 no tiene ahora una visita con «Llegué» activo (se abre 60 min antes).");
+    const w = await recorded("2.7", "cui-003", { viewport: { width: 430, height: 932 } });
+    await w.page.goto(`${BASE}/mis-visitas`); await settle(w.page, 1500); w.mark();
+    await w.page.waitForTimeout(5000);
+    const card = w.page.locator("main li, main article, main section").filter({ hasText: open.patient_name }).first();
+    await card.scrollIntoViewIfNeeded().catch(() => {});
+    await w.page.waitForTimeout(2000);
+    await click(card.getByRole("button", { name: "Llegué" }));
+    await w.page.waitForTimeout(4000);
+    await click(card.getByRole("button", { name: "Terminé" }));
+    await w.page.waitForTimeout(1500);
+    const sure = w.page.getByRole("button", { name: "Sí, ya terminé" });
+    if (await sure.count()) { await w.page.waitForTimeout(2000); await click(sure); }
+    await w.page.waitForTimeout(5000);
+    await w.close();
+  },
+  async "2.8"() {
+    const w = await recorded("2.8", "fam-0001");
+    await w.page.goto(`${BASE}/voz`); await settle(w.page, 1200); w.mark();
+    await w.page.waitForTimeout(3000);
+    await click(w.page.getByRole("button", { name: "Escribir el mensaje" }));
+    await w.page.getByLabel("Escribe lo que pasa").pressSequentially(
+      "Mi mamá no puede respirar y tiene los labios morados.", { delay: 45 });
+    await w.page.waitForTimeout(1000);
+    await click(w.page.getByRole("button", { name: "Enviar mensaje" }));
+    await w.page.waitForTimeout(12000);    // the red screen stays: nobody touches "Llamar al 911"
+    await w.close();
+  },
+  async "2.9"() {   // off camera: wait until the local LLM has written the report (it takes some seconds)
+    for (let i = 0; i < 36; i++) {
+      const txt = JSON.stringify(await api("cui-001", "/api/voice/reports"));
+      if (/morados/.test(txt) && !/"(pending|processing)"/.test(txt)) break;
+      await new Promise((r) => setTimeout(r, 5000));
+    }
+    const w = await recorded("2.9", "cui-001");
+    await w.page.goto(`${BASE}/reportes-voz`); await settle(w.page, 2000); w.mark();
+    await w.page.waitForTimeout(5000); await scroll(w.page, 700, 6, 900); await w.page.waitForTimeout(5000);
+    await w.close();
+  },
+  async "2.10"() {
+    const w = await recorded("2.10", "owner");
+    await w.page.goto(`${BASE}/panorama`); await settle(w.page, 3500); w.mark();
+    await w.page.waitForTimeout(4000); await scroll(w.page, 900, 7, 800);
+    await w.page.goto(`${BASE}/panorama?vista=panorama`); await settle(w.page, 3500);
+    await w.page.waitForTimeout(4000); await scroll(w.page, 900, 7, 800); await w.page.waitForTimeout(3000);
+    await w.close();
+  },
+  async "2.11"() {
+    const w = await recorded("2.11", "owner");
+    await w.page.goto(`${BASE}/simulacion`); await settle(w.page, 3000); w.mark();
+    await w.page.waitForTimeout(4000); await scroll(w.page, 900, 7, 800); await w.page.waitForTimeout(3000);
+    await w.close();
+  },
+  async "2.12"() {
+    const own = await recorded("2.12", "owner", { part: "_a" });
+    await own.page.goto(`${BASE}/demo`); await settle(own.page); own.mark();
+    await own.page.waitForTimeout(3000);
+    await click(own.page.getByRole("button", { name: "Contingencia en el oriente" }));
+    await own.page.waitForTimeout(3000);
+    await own.close();
+    for (let i = 0; i < 36; i++) {          // off camera: the worker detects it within a minute and proposes
+      const c = await api("coordinacion.a", "/api/contingency/current");
+      if ((c.events || []).some((e) => !e.ended_at && (e.proposals || []).length)) break;
+      await new Promise((r) => setTimeout(r, 5000));
+    }
+    const coord = await recorded("2.12", "coordinacion.a", { part: "_b" });
+    await coord.page.goto(`${BASE}/contingencia`); await settle(coord.page, 2500); coord.mark();
+    await coord.page.waitForTimeout(3000); await scroll(coord.page, 700, 6, 700); await coord.page.waitForTimeout(1500);
+    await click(coord.page.getByRole("button", { name: "Aprobar todo" }));
+    await coord.page.waitForTimeout(3000);
+    await coord.close();
+    const back = await recorded("2.12", "owner", { part: "_c" });
+    await back.page.goto(`${BASE}/demo`); await settle(back.page); back.mark();
+    await back.page.waitForTimeout(1500);
+    await click(back.page.getByRole("button", { name: "Volver a normal" }));
+    await back.page.waitForTimeout(3000);
+    await back.close();
+  },
+  async "2.13"() {
+    const w = await recorded("2.13", "owner");
+    await w.page.goto(`${BASE}/negocio`); await settle(w.page, 3000); w.mark();
+    await w.page.waitForTimeout(4000); await scroll(w.page, 900, 7, 800);
+    await w.page.goto(`${BASE}/privacidad`); await settle(w.page, 2000);
+    await w.page.waitForTimeout(3000);
+    await click(w.page.getByRole("button", { name: "Bitácora" }).first()
+      .or(w.page.getByRole("tab", { name: "Bitácora" }).first()));
+    await w.page.waitForTimeout(6000);
+    await w.close();
+  },
+};
+
 module.exports = { click, BLOCK_TEL };   // for test_guardia.cjs
 
 if (require.main === module) (async () => {
   browser = await chromium.launch({ headless: false });
-  const scenes = { 2: VIDEO2 }[VIDEO];
+  const scenes = { 1: VIDEO1, 2: VIDEO2 }[VIDEO];
   if (!scenes) throw new Error(`VIDEO=${VIDEO}: todavía no hay escenas para ese video`);
   for (const [id, run] of Object.entries(scenes)) if (want(id)) await run();
   await browser.close();

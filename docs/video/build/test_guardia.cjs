@@ -14,9 +14,10 @@ const { click, BLOCK_TEL } = require("./grabar.cjs");
     <a id="a" href="tel:911">Llamar al 911</a>
     <a id="b" href="tel:8009112000">800 911 2000</a>
     <a id="c" href="tel:5555555555"><span id="c2">Llamar a la institución</span></a>
+    <label id="d"><input type="checkbox"> Mostrar contraseña</label>
     <button id="ok" onclick="this.dataset.done=1">Solicitar servicio</button>`);
   let fails = 0;
-  for (const id of ["a", "b", "c2"]) {
+  for (const id of ["a", "b", "c2", "d"]) {
     try { await click(page.locator("#" + id)); console.log(`MAL: el guardia dejó hacer clic en #${id}`); fails++; }
     catch (e) { console.log(`bien: #${id} bloqueado (${e.message.slice(0, 60)}…)`); }
   }

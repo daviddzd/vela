@@ -32,6 +32,11 @@ echo "== Números y guion de narración"
 bash scripts/build_biblia.sh --numeros >/dev/null
 python3 docs/video/build/render_guion.py
 
+if [[ "$VIDEO" == "1" ]]; then
+  echo "== Diapositivas (diapositivas.yaml → PNG 1920x1080)"
+  "${RUN[@]}" sh -c 'python3 docs/video/build/diapositivas.py && node docs/video/build/diapositivas.cjs'
+fi
+
 echo "== Narración (Piper, es_MX-claude-high)"
 ids=$(python3 -c "import json;print(','.join(s['id'] for s in json.load(open('docs/video/out/escenas.json')) if s['video']==$VIDEO))")
 "${PIPER[@]}" docs/video/build/voz.py --escenas "$ids"
