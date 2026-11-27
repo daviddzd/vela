@@ -29,6 +29,7 @@ Este capítulo es el resumen para no perderse.
 | 3. Docker Desktop | Windows | motor WSL 2 + integración con Ubuntu-24.04 | `docker ps` en Ubuntu |
 | 4. Ollama + GPU integrada | PowerShell | `setx OLLAMA_VULKAN 1` y `setx OLLAMA_IGPU_ENABLE 1`; `ollama pull qwen3:8b` (el modelo de `OLLAMA_MODEL`) | `ollama ps` menciona GPU |
 | 5. cloudflared | PowerShell | `winget install --id Cloudflare.cloudflared` | `cloudflared --version` |
+| 5b. Túnel en HTTP/2 y reconexión | PowerShell (administrador, una vez) | `scripts/windows/configure_tunnel_service.ps1`; después, sin administrador, `install_tunnel_task.ps1` | `bash scripts/enlaza.sh estado`: «CONECTADO», «Protocolo: http2» |
 | 6. Herramientas en Ubuntu | Ubuntu | git, Node.js 22, Python, GitHub CLI | `gh auth status` |
 | 7. Repositorio | Ubuntu | `gh repo clone <usuario>/vela ~/proyectos/vela` | `ls ~/proyectos/vela` |
 | 8. Configuración local | Ubuntu | `cp .env.example .env` y cambiar contraseñas y `JWT_SECRET` | `.env` existe y **no** aparece en `git status` |
@@ -48,7 +49,9 @@ flowchart LR
   W --> O["Ollama<br/>(arranca al iniciar sesión)"]
   W --> U["Ubuntu (WSL2)"]
   U --> C["tarea «Enlaza - arranque»<br/>(autostart.sh)"]
-  W --> T["servicio cloudflared<br/>(enlaza.zenthinks.com)"]
+  W --> T["servicio cloudflared<br/>(enlaza.zenthinks.com, http2)"]
+  W --> R["tareas «Enlaza - túnel»<br/>(reconexión al cambiar de red)"]
+  R --> T
 ```
 
 ## Dónde está en el código

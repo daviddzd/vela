@@ -32,7 +32,8 @@ Todo arranca solo al iniciar sesión en Windows:
 
 | Pieza | Cómo arranca |
 |---|---|
-| Túnel | servicio de Windows `cloudflared` (automático, desde que prende la laptop) |
+| Túnel | servicio de Windows `cloudflared` (automático, desde que prende la laptop), con `--protocol http2` para que funcione también en el hotspot de un celular |
+| Reconexión del túnel | tareas «Enlaza - túnel»: al cambiar de red o al despertar la laptop reinician el túnel; cada 2 min revisan que esté conectado con Cloudflare y, si no, lo reinician. Vuelve solo en menos de un minuto |
 | Docker Desktop | «Start Docker Desktop when you sign in» |
 | Contenedores | `restart: unless-stopped` y la tarea «Enlaza - arranque» (`scripts/autostart.sh`), que repara los que Docker levantó antes de que Ubuntu estuviera listo |
 | Ollama | acceso directo en la carpeta Inicio de Windows |
@@ -44,7 +45,7 @@ El QR fijo ya está hecho (`docs/privado/qr_enlaza.png` y `qr_enlaza_diapositiva
 **Comprobar que el túnel está arriba** (Ubuntu, en la carpeta del proyecto):
 
 ```bash
-bash scripts/enlaza.sh estado            # túnel, contenedores y sus archivos, Ollama, localhost, dirección pública, reloj
+bash scripts/enlaza.sh estado            # túnel CONECTADO con Cloudflare, contenedores y sus archivos, Ollama, localhost, dirección pública, reloj
 uv run scripts/check_public_url.py       # prueba completa por https: 12 de 12 (crea una solicitud: luego reset_demo.py)
 ```
 
@@ -52,15 +53,23 @@ En PowerShell, `Get-Service cloudflared` debe decir `Running`; en el panel de Cl
 `enlaza` aparece como **HEALTHY**.
 
 **Si falla**: @ref(cap-planb). En corto: error 502 → la app no corre (`bash scripts/autostart.sh`); error 1033 → el
-túnel no corre (`bash scripts/enlaza.sh encender`); si no se arregla en dos minutos, **túnel rápido** de respaldo:
+túnel está desconectado de Cloudflare (pasa al cambiar de wifi a hotspot; las tareas lo reconectan solas en menos de un minuto).
+
+!!! cuidado "Si la página da error 1033"
+    **Si la página da error 1033: PowerShell como administrador → `Restart-Service cloudflared`.**
+    Desde Ubuntu sirve igual `bash scripts/enlaza.sh reconectar`. En unos segundos `bash scripts/enlaza.sh estado` debe decir
+    «Conexión con Cloudflare: CONECTADO».
+
+Si no se arregla en dos minutos, **plan B: túnel rápido** (también con `--protocol http2`, para que funcione en el hotspot):
 
 ```bash
 bash scripts/enlaza.sh rapido                                        # da https://palabras-al-azar.trycloudflare.com
+# sin Ubuntu, en PowerShell: cloudflared tunnel --protocol http2 --url http://localhost:8080
 uv run scripts/make_qr.py https://palabras-al-azar.trycloudflare.com   # QR de respaldo → docs/privado/qr_rapido*.png
 ```
 
-**Apagar todo** al terminar: `bash scripts/backup_db.sh defensa` y `bash scripts/enlaza.sh apagar` (Windows pide permiso de
-administrador para detener el túnel). Al reiniciar la laptop todo vuelve a encender solo. Solo el túnel, en PowerShell como
+**Apagar todo** al terminar: `bash scripts/backup_db.sh defensa` y `bash scripts/enlaza.sh apagar`. Al reiniciar la laptop
+todo vuelve a encender solo. Solo el túnel, en PowerShell como
 administrador: `Stop-Service cloudflared` / `Start-Service cloudflared`.
 
 ### 2. Presentar en la escuela

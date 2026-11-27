@@ -207,6 +207,8 @@ Desde el 25 nov 2026 la app tiene una dirección fija y un QR que no cambia. Fun
 |---|---|
 | Túnel `enlaza` | creado en el panel de Cloudflare (one.dash.cloudflare.com → Networks → Tunnels), ruta pública `enlaza.zenthinks.com` → `http://127.0.0.1:8080`. La raíz `zenthinks.com` no apunta a nada |
 | Servicio de Windows `cloudflared` | instalado con `cloudflared.exe service install <token>` (PowerShell como administrador); arranque automático al prender la laptop |
+| Protocolo HTTP/2 y permiso de reinicio | `scripts/windows/configure_tunnel_service.ps1`, **una vez como administrador**: agrega `--protocol http2` (los hotspots del celular y algunas redes escolares bloquean QUIC, UDP 7844, y el túnel se queda «Running» pero desconectado: error 1033), fija la página de estado local `127.0.0.1:20241` y deja que el usuario reinicie solo ese servicio |
+| Tareas «Enlaza - túnel» | `scripts/windows/install_tunnel_task.ps1` (sin administrador): «(red)» reinicia el túnel al conectarse a una red o al despertar la laptop; la otra revisa cada 2 min que esté conectado con Cloudflare y, si no, lo reinicia. Registro: `%LOCALAPPDATA%\Enlaza\tunel.log` |
 | Docker Desktop | Settings → General → «Start Docker Desktop when you sign in» activado; los servicios del compose tienen `restart: unless-stopped` y vuelven solos |
 | Tarea «Enlaza - arranque» | `scripts/windows/install_startup_task.ps1`: al iniciar sesión corre `scripts/autostart.sh`, que espera a Docker, revisa que cada contenedor vea sus archivos y reinicia los que no. **Hace falta**: Docker Desktop suele levantar los contenedores antes de que Ubuntu esté listo; entonces `db` y `proxy` no arrancan («not a directory») y `api`/`worker` arrancan con `config/` vacío (sin reglas de emergencia) aunque digan «healthy». Registro: `~/.local/state/enlaza/arranque.log` |
 | Ollama | arranca al iniciar sesión (acceso directo en la carpeta Inicio de Windows) |
@@ -223,14 +225,15 @@ y volver a instalar el servicio (`cloudflared.exe service uninstall` y `service 
 
 **Comprobar que todo está arriba** (en Ubuntu, desde la carpeta del proyecto):
 ```bash
-bash scripts/enlaza.sh estado                 # túnel, Docker, Ollama, localhost, dirección pública y reloj
+bash scripts/enlaza.sh estado                 # túnel (¿CONECTADO con Cloudflare?), Docker, Ollama, localhost, dirección pública y reloj
 uv run scripts/check_public_url.py            # prueba completa por https (crea una solicitud: luego reset_demo.py)
 ```
 En PowerShell: `Get-Service cloudflared` debe decir `Running`. En el panel de Cloudflare el túnel aparece como **HEALTHY**.
 
 **Encender y apagar a mano:**
 ```bash
-bash scripts/enlaza.sh encender   # Docker, Ollama y el túnel (Windows pide permiso de administrador)
+bash scripts/enlaza.sh encender   # Docker, Ollama y el túnel
+bash scripts/enlaza.sh reconectar # reinicia solo el túnel y espera a que se conecte (error 1033)
 bash scripts/enlaza.sh apagar     # todo abajo; al reiniciar la laptop vuelve a encender solo
 ```
 Solo el túnel, en PowerShell como administrador: `Stop-Service cloudflared` / `Start-Service cloudflared`. Para que no
@@ -238,7 +241,7 @@ arranque al prender la laptop: `Set-Service cloudflared -StartupType Manual` (y 
 
 **Si la dirección fija falla, el respaldo es el túnel rápido** (no depende del panel ni del dominio):
 ```bash
-bash scripts/enlaza.sh rapido                                    # o en PowerShell: cloudflared tunnel --url http://localhost:8080
+bash scripts/enlaza.sh rapido                                    # o en PowerShell: cloudflared tunnel --protocol http2 --url http://localhost:8080
 uv run scripts/make_qr.py https://palabras-al-azar.trycloudflare.com   # QR de respaldo → docs/privado/qr_rapido*.png
 ```
 
@@ -293,7 +296,7 @@ uv run scripts/make_qr.py https://palabras-al-azar.trycloudflare.com   # QR de r
 | Qué se ve | Qué hacer |
 |---|---|
 | Error 502 de Cloudflare | la app no corre: `docker compose ps`, `docker compose up -d` |
-| Error 1033 (túnel caído) | `bash scripts/enlaza.sh encender`; en el panel el túnel debe volver a **HEALTHY** |
+| Error 1033 (túnel desconectado) | casi siempre se arregla solo en menos de un minuto (tareas «Enlaza - túnel»). Si no: PowerShell como administrador → `Restart-Service cloudflared` (o `bash scripts/enlaza.sh reconectar`); en el panel el túnel debe volver a **HEALTHY** |
 | No se arregla en 2 minutos | túnel rápido: `bash scripts/enlaza.sh rapido`, QR nuevo con `make_qr.py <enlace>` y proyectarlo |
 | Sin internet en la escuela | seguir en `http://localhost:8080` en el proyector |
 
@@ -307,7 +310,7 @@ uv run scripts/make_qr.py https://palabras-al-azar.trycloudflare.com   # QR de r
 | `verify_db.py` falla en conteos | `docker compose down -v` y volver a `up -d db` (la carga solo corre con el volumen vacío) |
 | El enlace de Cloudflare da error 502 | La app no está corriendo en el puerto 8080: `docker compose ps` |
 | Después de reiniciar, error 502 o pantallas sin datos | `bash scripts/autostart.sh` (los montajes de Ubuntu salieron vacíos; ver «Enlace fijo») |
-| `enlaza.zenthinks.com` da error 1033 | El servicio del túnel no corre: `bash scripts/enlaza.sh estado` y `encender`; respaldo `bash scripts/enlaza.sh rapido` |
+| `enlaza.zenthinks.com` da error 1033 | El túnel no está conectado con Cloudflare (típico al cambiar de wifi a hotspot). PowerShell como administrador → `Restart-Service cloudflared`; `bash scripts/enlaza.sh estado` dice «CONECTADO» o «NO CONECTADO»; respaldo `bash scripts/enlaza.sh rapido` (usa `--protocol http2`) |
 | El tablero se queda en "Reconectando…" | `curl localhost:8080/api/health` debe decir `"realtime":"ok"`; si dice `reconnecting`, revisa `docker compose logs api` y que `db` esté arriba |
 | Te saca la sesión segundos después de entrar | El reloj de WSL2 se atrasó (sobre todo al despertar de la suspensión); la API tolera 60 s. La tarea «Enlaza - reloj de WSL» lo corrige sola; a mano: `bash scripts/enlaza.sh reloj`. Si sigue: en PowerShell `wsl --shutdown` y vuelve a abrir Ubuntu |
 | Todo va lento | Cierra el navegador con muchas pestañas; usa el modelo `llama3.2:3b` |
