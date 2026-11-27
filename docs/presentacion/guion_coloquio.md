@@ -83,7 +83,7 @@ Las frases son **sugeridas**: dichas con sus palabras suenan mejor que memorizad
 
 **Habla:** Persona 2 (narra) · **Opera:** Persona 3 en el celular · **Dura:** 1:00 · **Se ve:** el tablero en el proyector.
 
-- Desde el celular, con datos móviles, la familia pide una visita de enfermería para mañana.
+- Desde el celular, con datos móviles, la familia pide una visita de enfermería para hoy, en un par de horas.
 - Fíjense en el tablero: aparece sola, sin recargar, en un par de segundos.
 - Ya tiene a alguien asignado: el despachador eligió a quien tiene la habilidad, está en turno, no está en su día de descanso y llega antes con el tráfico de esa hora.
 - Es prioridad media, así que no necesitó aprobación.
@@ -103,7 +103,7 @@ Las frases son **sugeridas**: dichas con sus palabras suenan mejor que memorizad
 **Habla:** Persona 3 · **Opera:** Persona 2 · **Dura:** 1:20 · **Se ve:** `/contingencia` → «Aprobar todo» → `/tablero`; al final, `/demo` → «Volver a normal».
 
 - Hace un minuto simulamos mala calidad del aire en el oriente de la ciudad. El worker la detectó solo.
-- Enlaza propone cambios por institución: subir la prioridad de quienes tienen enfermedad del pulmón o del corazón, adelantar su oxigenoterapia y avisar a sus familias. El personal se reacomoda solo si además hay tráfico degradado (escenario «Contingencia + bloqueo en Iztapalapa»).
+- Enlaza propone cambios por institución: subir la prioridad de quienes tienen enfermedad del pulmón o del corazón, avisar a sus familias y, si tienen oxigenoterapia en las próximas horas, adelantarla. El personal se reacomoda solo si además hay tráfico degradado (escenario «Contingencia + bloqueo en Iztapalapa»).
 - Nada cambia sin aprobación: coordinación revisa y aprueba todo.
 - Y el tablero ya muestra los cambios. Esto responde al incidente crítico del Problema Prototípico.
 - (Persona 2, sin decir nada, en la ventana de Dirección `/demo`: «Volver a normal», para que la contingencia no siga activa.)
@@ -212,7 +212,7 @@ perfiles o navegadores distintos.
 
 | Paso | Qué se hace | Qué se debe ver | Plan B |
 |---|---|---|---|
-| 1. La familia solicita | Celular: «Solicitar servicio», visita de enfermería, mañana a las 11:00 | En el tablero del proyector aparece la solicitud, ya asignada, sin recargar | Sin señal en el celular: Persona 2 lo hace en la ventana «Respaldo». Si el tablero no se mueve: recargar (F5) |
+| 1. La familia solicita | Celular: «Solicitar servicio», visita de enfermería, para hoy, en un par de horas (la fecha de hoy y la primera hora disponible unas dos horas después de la hora actual) | En el tablero del proyector aparece la solicitud, ya asignada y marcada «Nueva», sin recargar | Sin señal en el celular: Persona 2 lo hace en la ventana «Respaldo». Si el tablero no se mueve: recargar (F5) |
 | 2. Urgente | Ventana Dirección: «Contingencia en el oriente» (para el paso 3) y «Crear solicitud urgente» → Coordinación `/aprobaciones` → «Aprobar» → `/tablero` | La solicitud pasa de Aprobaciones al tablero, en vivo | Si no aparece en Aprobaciones: recargar. Si se pasa de 3 min, sale «aprobada por tiempo»: se explica que esa es la regla |
 | 3. Contingencia | Coordinación `/contingencia` → «Aprobar todo» → `/tablero`; después, Dirección `/demo` → «Volver a normal» | Propuesta por institución; tras aprobar, los cambios en el tablero | Si aún no hay propuesta (el worker revisa cada minuto): seguir con el paso 4 y volver al final; si no llega, diapositiva 12 (Respaldo). Siempre «Volver a normal» al terminar |
 | 4. Voz | Ventana Familia `/voz`: grabar «Mi mamá no puede respirar y tiene los labios morados.» | Pantalla roja «Llama al 911 ahora» | Micrófono falla: «Escribir el mensaje» y pegar la misma frase. Servicio de voz caído: también escrito |
