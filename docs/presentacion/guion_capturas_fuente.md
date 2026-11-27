@@ -133,7 +133,7 @@ Las frases son **sugeridas**: dichas con sus palabras suenan mejor que memorizad
 
 **Qué se dice:**
 
-- (Señala la llamada 1.) Si se activa una regla, pantalla roja. (Señala la llamada 2.) Si solo sospecha el clasificador, aviso ámbar y coordinación llama.
+- La pantalla roja ya la vieron; lo nuevo es el ámbar. (Señala la llamada 2.) Si solo sospecha el clasificador, aviso ámbar y coordinación llama.
 - A ciegas, con {{ voz.holdout.n }} frases, detectó {{ voz.holdout.sens }} de las emergencias, con {{ voz.holdout.fa100 }} falsas alarmas por cada 100 notas.
 - Su límite: frases sintéticas; faltan hablantes reales.
 

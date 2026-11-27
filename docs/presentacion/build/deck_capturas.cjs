@@ -436,18 +436,20 @@ function limitCard(s, t, x, y, w, h) {    // the honest limitation of each subje
     M + 0.75, 1.45, W - 2 * M - 1.5, 2.6, [{ n: 1, side: "left", fy: 0.62, box: [0.0, 0.27, 1.0, 0.99] }, { n: 2, side: "right", fy: 0.62 }]);
   legend(s, [[1, "Otra institución pidió un paciente de INS-A"]], M, a.y + a.h + 0.2, 6.6, 0.6);
   legend(s, [[2, "Bloqueado y registrado"]], 7.4, a.y + a.h + 0.2, W - M - 7.4, 0.6);
-  card(s, M, 4.75, 6.3, 1.95, C.sky, "Seguridad por fila");
-  text(s, "Pacientes que ve la API", { x: M + 0.25, y: 4.8, w: 5.8, h: 0.5, bold: true });
+  // the security card right under the legend (no gap), a bit taller and with bigger figures
+  const y0 = a.y + a.h + 1.2;
+  card(s, M, y0, 6.3, 2.35, C.sky, "Seguridad por fila");
+  text(s, "Pacientes que ve la API", { x: M + 0.25, y: y0 + 0.1, w: 5.8, h: 0.5, bold: true });
   [["db.rls_patients_none", "sin institución"], ["db.rls_patients_insa", "una clínica"], ["db.rls_patients_all", "Dirección"]]
     .forEach(([k, label], i) => {
       const x = M + 0.25 + [0, 2.2, 4.1][i];
-      text(s, T(k), { x, y: 5.3, w: 1.85, h: 0.7, fontFace: HEAD, fontSize: 40, bold: true, color: i === 0 ? C.tealText : C.deep });
-      text(s, label, { x, y: 6.0, w: [2.15, 1.85, 1.9][i], h: 0.55 });
+      text(s, T(k), { x, y: y0 + 0.65, w: 1.85, h: 0.9, fontFace: HEAD, fontSize: 48, bold: true, color: i === 0 ? C.tealText : C.deep });
+      text(s, label, { x, y: y0 + 1.6, w: [2.15, 1.85, 1.9][i], h: 0.55 });
     });
   const x = 7.15, w = W - M - x;
   [["file-check", "Sin consentimiento, la API bloquea"], ["calendar-clock", "Descanso respetado; jornada excedida, marcada"]].forEach(([ic, t], i) => {
-    iconCircle(s, x, 4.8 + i * 1.0, 0.8, ic);
-    text(s, t, { x: x + 1.0, y: 4.72 + i * 1.0, w: w - 1.0, h: 0.96, valign: "middle" });
+    iconCircle(s, x, y0 + 0.2 + i * 1.15, 0.8, ic);
+    text(s, t, { x: x + 1.0, y: y0 + 0.12 + i * 1.15, w: w - 1.0, h: 0.96, valign: "middle" });
   });
   source(s, `captura de la app en vivo (/privacidad, Dirección) · PostgreSQL como vela_api · ${T("repo.tests_summary")}`);
 }
