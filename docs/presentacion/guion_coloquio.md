@@ -85,6 +85,7 @@ Las frases son **sugeridas**: dichas con sus palabras suenan mejor que memorizad
 
 - Desde el celular, con datos móviles, la familia pide una visita de enfermería para hoy, en un par de horas.
 - Fíjense en el tablero: aparece sola, sin recargar, en un par de segundos.
+- (Señala la fila por el nombre del paciente; puede haber otras marcadas «Nueva» por el plan de cuidado.)
 - Ya tiene a alguien asignado: el despachador eligió a quien tiene la habilidad, está en turno, no está en su día de descanso y llega antes con el tráfico de esa hora.
 - Es prioridad media, así que no necesitó aprobación.
 
@@ -96,6 +97,7 @@ Las frases son **sugeridas**: dichas con sus palabras suenan mejor que memorizad
 - Ahora una solicitud urgente: prioridad alta, visita en menos de 60 min.
 - Lo urgente no se asigna solo: Enlaza propone a la mejor persona y coordinación decide. Aquí está, en Aprobaciones.
 - Apruebo, y en el tablero cambia en vivo.
+- (Señala la fila por el nombre del paciente; puede haber otras marcadas «Nueva» por el plan de cuidado.)
 - Si coordinación no contesta en 3 min, se aplica con aviso; eso lo decidimos por lo que nos mostró la simulación, se los cuento en un momento.
 
 #### 3:45–5:05 · Paso 3 · Contingencia en el oriente
@@ -212,7 +214,7 @@ perfiles o navegadores distintos.
 
 | Paso | Qué se hace | Qué se debe ver | Plan B |
 |---|---|---|---|
-| 1. La familia solicita | Celular: «Solicitar servicio», visita de enfermería, para hoy, en un par de horas (la fecha de hoy y la primera hora disponible unas dos horas después de la hora actual) | En el tablero del proyector aparece la solicitud, ya asignada y marcada «Nueva», sin recargar | Sin señal en el celular: Persona 2 lo hace en la ventana «Respaldo». Si el tablero no se mueve: recargar (F5) |
+| 1. La familia solicita | Celular: «Solicitar servicio», visita de enfermería, para hoy, en un par de horas (la fecha de hoy y la primera hora disponible unas dos horas después de la hora actual) | En el tablero del proyector aparece la solicitud, ya asignada y marcada «Nueva», sin recargar. Se señala por el nombre del paciente: puede haber otras marcadas «Nueva» por el plan de cuidado | Sin señal en el celular: Persona 2 lo hace en la ventana «Respaldo». Si el tablero no se mueve: recargar (F5) |
 | 2. Urgente | Ventana Dirección: «Contingencia en el oriente» (para el paso 3) y «Crear solicitud urgente» → Coordinación `/aprobaciones` → «Aprobar» → `/tablero` | La solicitud pasa de Aprobaciones al tablero, en vivo | Si no aparece en Aprobaciones: recargar. Si se pasa de 3 min, sale «aprobada por tiempo»: se explica que esa es la regla |
 | 3. Contingencia | Coordinación `/contingencia` → «Aprobar todo» → `/tablero`; después, Dirección `/demo` → «Volver a normal» | Propuesta por institución; tras aprobar, los cambios en el tablero | Si aún no hay propuesta (el worker revisa cada minuto): seguir con el paso 4 y volver al final; si no llega, diapositiva 12 (Respaldo). Siempre «Volver a normal» al terminar |
 | 4. Voz | Ventana Familia `/voz`: grabar «Mi mamá no puede respirar y tiene los labios morados.» | Pantalla roja «Llama al 911 ahora» | Micrófono falla: «Escribir el mensaje» y pegar la misma frase. Servicio de voz caído: también escrito |
@@ -241,7 +243,7 @@ Mientras tanto se queda en pantalla la diapositiva 11 (Gracias, con el QR). En o
 |---|---|---|---|
 | 1 | ¿Es viable el negocio? ¿Cuándo es rentable? | Persona 3 | El plan base deja de perder dinero en el mes 30, pero su VPN al 25 % es −$163,128; lo decimos. El recomendado limita la participación y crece por regiones: VPN $1,207,425, TIR 65.6 %, inversión $1,011,746. |
 | 2 | ¿Qué tan grande es el mercado? | Persona 4 | Contado en el DENUE: 88 residencias privadas en la CDMX, 48 en el Estado de México, 137 en Jalisco y 82 en Nuevo León, más centros de día. Los públicos compran por licitación: van aparte. |
-| 3 | ¿Ustedes programaron esto? | Persona 1 | El problema, el diseño, las reglas, las decisiones y la revisión son del equipo; la mayor parte del código la escribió un asistente de programación con IA (Claude Code) bajo esas reglas, con un pull request por cambio y 178 pruebas (160 funciones). Podemos defender cada parte. |
+| 3 | ¿Ustedes programaron esto? | Persona 1 | El problema, el diseño, las reglas, las decisiones y la revisión son del equipo; la mayor parte del código la escribió un asistente de programación con IA (Claude Code) bajo esas reglas, con un pull request por cambio y 181 pruebas (163 funciones). Podemos defender cada parte. |
 | 4 | ¿Por qué datos sintéticos? | Persona 1 | Porque son datos de salud y el proyecto es público. Generamos 20,000 personas calibradas con el Censo, la ENSANUT y la ENASEM: las proporciones se parecen a la realidad, las personas no existen. |
 | 5 | ¿Cómo evitan que una institución vea los datos de otra? | Persona 2 | Seguridad por fila en PostgreSQL: la API se conecta con un usuario que no es dueño de las tablas y fija la institución en cada petición; sin institución ve 0 filas. Un intento ajeno responde 403 y queda en la bitácora. |
 | 6 | ¿La máquina decide todo? | Persona 2 | No. Lo rutinario se asigna solo; lo de prioridad alta lo aprueba una persona. Solo lo urgente sin respuesta en 3 min se aplica con aviso, y coordinación lo puede cambiar. |
