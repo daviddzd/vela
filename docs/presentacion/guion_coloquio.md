@@ -229,7 +229,7 @@ perfiles o navegadores distintos.
 | Qué pasa | Qué hacer (sin detener la exposición) |
 |---|---|
 | No hay internet en el salón | Seguir en `http://localhost:8080` en las mismas ventanas (la app corre en la laptop). El QR del público no abrirá: decirlo y seguir |
-| `enlaza.zenthinks.com` da error 502 o 1033 | Persona 1 corre `bash scripts/enlaza.sh estado` en la terminal mientras Persona 2 sigue en `http://localhost:8080`. Si es 502: `bash scripts/autostart.sh` |
+| `enlaza.zenthinks.com` da error 502 o 1033 | Persona 1 corre `bash scripts/enlaza.sh estado` en la terminal mientras Persona 2 sigue en `http://localhost:8080`. Si es 502: `bash scripts/autostart.sh`. Si es 1033: PowerShell como administrador → `Restart-Service cloudflared`; si en 2 min no vuelve, plan B: túnel rápido `bash scripts/enlaza.sh rapido` (con `--protocol http2`) y QR nuevo con `uv run scripts/make_qr.py <enlace>` |
 | La app no responde ni en `localhost` | Ir a la diapositiva 12 (Respaldo) y narrar los cuatro pasos sobre las capturas; al final, ofrecer el video de respaldo |
 | El tablero dice «Reconectando…» | Esperar 5 s; si sigue, recargar |
 
@@ -265,7 +265,9 @@ Mientras tanto se queda en pantalla la diapositiva 11 (Gracias, con el QR). En o
 **1 hora antes** (Persona 2 con la laptop, Persona 3 con el celular)
 
 - [ ] Laptop conectada a la corriente; suspensión en «Nunca».
-- [ ] `bash scripts/enlaza.sh estado`: túnel *Running*, archivos «bien», dirección pública ok, reloj en 0 s.
+- [ ] `bash scripts/enlaza.sh estado`: «Conexión con Cloudflare: CONECTADO», «Protocolo: http2», reconexión automática instalada, archivos «bien», dirección pública ok, reloj en 0 s.
+- [ ] **Si la página da error 1033: PowerShell como administrador → `Restart-Service cloudflared`.** Se arregla solo en menos de un minuto al cambiar de red; si no, este comando.
+- [ ] Plan B listo: si en 2 min no vuelve, `bash scripts/enlaza.sh rapido` (túnel rápido con `--protocol http2`; en PowerShell: `cloudflared tunnel --protocol http2 --url http://localhost:8080`) y QR nuevo con `uv run scripts/make_qr.py <enlace>`.
 - [ ] `uv run scripts/check_public_url.py`: 12 de 12.
 - [ ] `ollama run` con el modelo de `OLLAMA_MODEL` y la frase «hola» (lo deja cargado).
 - [ ] `bash scripts/backup_db.sh antes_coloquio` y `python3 scripts/reset_demo.py`; `python3 scripts/verify_db.py` en «Todo correcto».
