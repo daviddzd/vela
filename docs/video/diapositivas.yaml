@@ -1,0 +1,172 @@
+# Diapositivas del video 1 (las escenas que no son grabación de la app). Una entrada por escena del guion.
+# Los números se escriben como clave entre dobles llaves y salen de numeros.json (como en el guion); una clave
+# desconocida detiene la compilación. Tipos: portada, problema, solucion, flujo, analogia, edificio, tiempo_real,
+# modelos, enlace, materia, numeros, cierre.
+
+"1.1":
+  tipo: portada
+  titulo: "Enlaza · cuidado coordinado"
+  subtitulo: "Video explicativo para el equipo"
+  nota: "Prototipo académico · datos sintéticos"
+
+"1.2":
+  tipo: problema
+  titulo: "El problema"
+  cifra: "{{ seed.pop60_cdmx }}"
+  cifra_texto: "personas de 60 años o más en la Ciudad de México"
+  fuente: "Censo de Población y Vivienda 2020 (INEGI)"
+  puntos:
+    - ["Llamadas y WhatsApp", "se pierden solicitudes"]
+    - ["Hojas de cálculo", "nadie sabe quién está libre"]
+    - ["Tráfico", "no se sabe cuánto tarda en llegar"]
+    - ["Aire contaminado", "afecta más a quien tiene enfermedad del pulmón o del corazón"]
+
+"1.3":
+  tipo: solucion
+  titulo: "La solución"
+  frase: "Una plataforma web por suscripción donde la institución, su personal y las familias se enlazan alrededor de cada persona mayor."
+  puntos:
+    - ["Operación", "la solicitud se asigna sola; lo de prioridad alta lo aprueba una persona"]
+    - ["Tiempo real", "el tablero se actualiza solo, a la hora de la CDMX"]
+    - ["Panorama", "tableros para decidir, con su fuente"]
+    - ["Simulación", "nos dijo cómo asignar"]
+    - ["Contingencia", "detecta el aire contaminado y propone; nada cambia sin aprobación"]
+    - ["Voz", "una frase de emergencia abre la pantalla del 911"]
+  nota: "{{ seed.persons }} personas sintéticas calibradas con el Censo, la ENSANUT y la ENASEM"
+
+"3.1":
+  tipo: flujo
+  titulo: "El recorrido de una solicitud"
+  pasos:
+    - ["Solicitud", "familia, coordinación, plan de cuidado o voz"]
+    - ["Despachador", "habilidad · en turno · no es su descanso · sin cruces · llega antes con el tráfico"]
+    - ["¿Prioridad?", "baja o media: se asigna sola · alta: propuesta y una persona aprueba"]
+    - ["Visita", "«Llegué» y «Terminé», con la hora del servidor"]
+    - ["Confirmación", "la familia confirma que sí se hizo"]
+  nota: "Solo lo urgente (visita en menos de {{ cfg.urgent_within }}) sin respuesta en {{ cfg.auto_apply_after }} se aplica con aviso: «aprobada por tiempo»."
+
+"3.2":
+  tipo: analogia
+  titulo: "Por dentro: un restaurante"
+  filas:
+    - ["El comedor", "La página web (React)"]
+    - ["El mesero", "La API (FastAPI, Python)"]
+    - ["La bodega", "La base de datos (PostgreSQL)"]
+    - ["El ayudante de cocina", "El worker: una vuelta cada {{ code.worker_tick }}"]
+    - ["La campanita", "El WebSocket: avisa que algo cambió"]
+    - ["El capitán de meseros", "Caddy: una sola puerta (puerto 8080)"]
+    - ["El repartidor", "Cloudflare: el túnel hasta el celular"]
+  nota: "Todo cabe en una lonchera: Docker"
+
+"3.3":
+  tipo: edificio
+  titulo: "Seguridad por fila"
+  frase: "Cinco instituciones, una base de datos. El elevador solo te lleva a tu piso."
+  cifras:
+    - ["{{ db.rls_patients_none }}", "pacientes que ve la API sin institución"]
+    - ["{{ db.rls_patients_insa }}", "con la Clínica Oriente"]
+    - ["{{ db.rls_patients_all }}", "Dirección (todas)"]
+  nota: "Un intento de ver algo ajeno se rechaza y queda en la bitácora."
+
+"3.4":
+  tipo: flujo
+  titulo: "Tiempo real: como el tablero de un aeropuerto"
+  pasos:
+    - ["Algo cambia", "una solicitud, una visita, una alerta"]
+    - ["La base avisa", "«cambió la solicitud», sin datos personales"]
+    - ["WebSocket", "la API lo manda al tablero"]
+    - ["El tablero pide", "los datos, con los permisos de siempre"]
+  nota: "Si se cae la conexión: «Reconectando…», reintenta cada {{ code.ws_retry_s }}. La hora es la del servidor, en la CDMX."
+
+"3.5":
+  tipo: modelos
+  titulo: "Enlaza Voz: tres modelos, todos en la laptop"
+  modelos:
+    - ["Whisper {{ mod.whisper_modelo }}", "voz → texto", "{{ mod.whisper_archivo }}"]
+    - ["Reglas + clasificador", "¿hay señales de emergencia?", "{{ mod.clasificador_parametros }} parámetros · {{ mod.clasificador_ms }}"]
+    - ["{{ mod.llm_nombre }}", "reporte para el médico", "{{ mod.llm_parametros }} parámetros · {{ mod.llm_gpu_reporte }}"]
+  niveles:
+    - ["Regla", "pantalla roja «Llama al 911 ahora»"]
+    - ["Solo el clasificador", "aviso ámbar y coordinación llama"]
+  nota: "El modelo de lenguaje nunca diagnostica y nunca dice que algo no es una emergencia."
+
+"3.6":
+  tipo: enlace
+  titulo: "La dirección {{ ops.public_url }}"
+  pasos:
+    - ["Celular", "cualquier red"]
+    - ["Cloudflare", "certificado HTTPS"]
+    - ["Túnel (HTTP/2)", "se reconecta solo al cambiar de red"]
+    - ["Laptop", "Caddy :8080 → página, API, WebSocket"]
+  nota: "No es un servidor en la nube: si la laptop se apaga, se apaga Enlaza. Error 1033 → reiniciar el servicio cloudflared."
+
+"4.1":
+  tipo: materia
+  titulo: "Sistemas de Información Empresarial"
+  hicimos: "TPS (transacciones) · CRM (pacientes y familias) · ERP (personal y servicios) · MIS (Panorama) · DSS (simulación y contingencia), en una sola base de {{ db.tables_total }} tablas"
+  cifras:
+    - ["{{ seed.assign_auto }}", "asignaciones automáticas en el historial"]
+    - ["{{ seed.assign_coordinator }}", "aprobadas por coordinación"]
+  limite: "ERP acotado: sin nómina, facturación ni inventario; no se ha probado con una institución real."
+
+"4.2":
+  tipo: materia
+  titulo: "Modelado y Simulación"
+  hicimos: "SIRAG-D: eventos discretos con cadenas de Markov de salud; cinco formas de asignar, tres escenarios, {{ cfg.replications }} réplicas, pruebas pareadas. Validación: {{ sim.val_sim_short_pct }} simulado contra {{ sim.val_real_short_pct }} real."
+  cifras:
+    - ["{{ sim.normal.human_dispatcher.high_wait_p90_min }} → {{ sim.normal.risk_priority.high_wait_p90_min }} min", "espera p90 de lo urgente al priorizar por riesgo ({{ test.normal.high_wait_p90_min.risk_priority.p }})"]
+    - ["{{ sens.approval_delay.5-15.vela_timeout.high_wait_p90_min }} contra {{ sens.approval_delay.5-15.risk_plus_live_traffic.high_wait_p90_min }} min", "con coordinación lenta: límite de tiempo y reserva, contra sin ellos"]
+  limite: "Varias probabilidades son supuestos. El «sin atender» ({{ sim.normal.vela_timeout.unattended_pct }}) depende del personal: con contratación dirigida, {{ sens.extra_staff.targeted.vela_timeout.unattended_pct }}."
+
+"4.3":
+  tipo: materia
+  titulo: "Cómputo Cognitivo"
+  hicimos: "Voz → texto → reglas → red neuronal → pantalla roja o ámbar → reporte del modelo de lenguaje. Evaluación a ciegas con {{ voz.holdout.n }} frases."
+  cifras:
+    - ["{{ voz.holdout.sens }}", "de emergencias detectadas (reglas solas: {{ voz.holdout.sens_rules }})"]
+    - ["{{ voz.holdout.fa100 }}", "falsas alarmas por cada 100 notas"]
+  limite: "No se cumple la meta de menos de 10 falsas alarmas; frases sintéticas; sin personas mayores reales ni lenguas originarias."
+
+"4.4":
+  tipo: materia
+  titulo: "Visualización"
+  hicimos: "{{ repo.pages }} pantallas: cada gráfica responde una pregunta, se compara con una referencia y dice su fuente; forma y palabra además de color; letra grande."
+  cifras:
+    - ["{{ code.min_visits_rate }}", "mínimo para mostrar un porcentaje"]
+    - ["{{ code.small_cell }}", "tamaño mínimo de un grupo agregado"]
+  limite: "Sin pruebas con lectores de pantalla ni con personas mayores; los mapas con calles necesitan internet."
+
+"4.5":
+  tipo: materia
+  titulo: "Emprendimiento"
+  hicimos: "Suscripción con tres planes por tamaño; ingreso promedio {{ bm.arpa1 }} al mes; LTV/CAC {{ bm.ltv_cac }}; mercado contado en el DENUE: {{ neg.denue_residences_private_cdmx }} residencias privadas en la CDMX."
+  cifras:
+    - ["mes {{ bm.breakeven_month }}", "equilibrio del escenario base · VPN {{ bm.npv_25 }}"]
+    - ["{{ bm.sc.recommended.npv25 }}", "VPN del recomendado (participación máxima {{ neg.recommended_private_cap }} %, plan Gobierno, fundadores al {{ neg.founder_salary_year1_recommended }} % el año 1); sin ambos: {{ bm.rec_wo_both }}"]
+  limite: "Sin entrevistas a clientes; precios y crecimiento son supuestos."
+
+"4.6":
+  tipo: materia
+  titulo: "Práctica Profesional"
+  hicimos: "Consentimiento por tipo de uso y asentimiento; la API bloquea sin consentimiento; aviso de privacidad y ARCO; descanso semanal y alertas de jornada (nocturna de {{ code.max_night }}); IA supervisada; bitácora."
+  cifras:
+    - ["{{ seed.consents }}", "consentimientos en la semilla"]
+    - ["{{ neg.arco_response_days }} días hábiles", "para responder una solicitud ARCO"]
+  limite: "Plantillas legales sin revisión de un abogado; sin comité de ética; diagnóstico de campo en curso."
+
+"5.1":
+  tipo: numeros
+  titulo: "Los números que hay que saberse"
+  cifras:
+    - ["{{ seed.persons }}", "personas sintéticas · {{ seed.institutions }} instituciones · {{ seed.patients }} pacientes"]
+    - ["{{ db.rls_patients_none }}", "pacientes que ve la API sin institución"]
+    - ["{{ cfg.auto_apply_after }}", "lo urgente sin respuesta se aplica con aviso"]
+    - ["{{ sim.normal.human_dispatcher.high_wait_p90_min }} → {{ sim.normal.risk_priority.high_wait_p90_min }} min", "espera de lo urgente al priorizar por riesgo"]
+    - ["{{ voz.holdout.sens }} · {{ voz.holdout.fa100 }}", "emergencias detectadas · falsas alarmas por 100"]
+    - ["mes {{ bm.breakeven_month }}", "equilibrio · VPN del escenario base {{ bm.npv_25 }}"]
+
+"5.2":
+  tipo: cierre
+  titulo: "{{ ops.public_url }}"
+  subtitulo: "La biblia de Enlaza tiene todo el detalle, con cada fuente."
+  nota: "Prototipo académico · datos sintéticos"
