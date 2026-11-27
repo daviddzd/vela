@@ -17,6 +17,13 @@ const OUT = path.resolve(__dirname, "..", "..", "privado", "video", "diapositiva
     // nothing may overflow the slide: a long text would be cut on video
     const over = await page.evaluate(() => document.body.scrollHeight > 1080 || document.body.scrollWidth > 1920);
     if (over) throw new Error(`La diapositiva ${f} no cabe en 1920x1080: acortar el texto`);
+    // the footer sits above the subtitles (bottom 160 px): no content may reach it
+    const hit = await page.evaluate(() => {
+      const foot = document.querySelector(".foot").getBoundingClientRect();
+      return [...document.body.children].filter((e) => !e.classList.contains("foot") && !e.classList.contains("logo"))
+        .some((e) => e.getBoundingClientRect().bottom > foot.top - 8);
+    });
+    if (hit) throw new Error(`La diapositiva ${f}: el contenido toca el pie de página; acortar el texto`);
     await page.screenshot({ path: path.join(OUT, f.replace(/\.html$/, ".png")) });
   }
   await browser.close();
