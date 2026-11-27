@@ -54,7 +54,7 @@ datos de nadie. Cada persona entra con su correo y su contraseña, y Enlaza le m
 La casilla «Modo sencillo» agranda la letra para quien lo necesite. Empezamos con una familia.
 
 ### Escena 2.2 · Familia: próximas visitas y solicitar
-**Se ve:** grabación: `/familia` de `fam-0002`: «Próximas visitas», «Solicitar servicio» → visita de enfermería, mañana a las 11:00 → «Asignada» con el nombre de quien va.
+**Se ve:** grabación: `/familia` de `fam-0002`: «Próximas visitas», «Solicitar servicio» → visita de enfermería, para hoy, en un par de horas → «Asignada» con el nombre de quien va.
 
 **Dice:**
 La familia ve las próximas visitas: lo que ya está asignado y lo que el plan de cuidado tiene programado. Para pedir
@@ -144,8 +144,8 @@ comparan formas de asignar, con intervalos de confianza. Lo explicamos más adel
 **Dice:**
 El panel de demostración solo cambia datos de entrada, como las lecturas del aire. Simulamos mala calidad del aire en el
 oriente. En el minuto siguiente, el worker la detecta solo y Enlaza propone cambios por institución: subir la prioridad
-de quienes tienen enfermedad del pulmón o del corazón, adelantar su oxigenoterapia y avisar a sus familias. Nada cambia
-sin aprobación: coordinación revisa y aprueba. Al terminar, volvemos a la normalidad.
+de quienes tienen enfermedad del pulmón o del corazón, avisar a sus familias y, si tienen oxigenoterapia en las próximas
+horas, adelantarla. Nada cambia sin aprobación: coordinación revisa y aprueba. Al terminar, volvemos a la normalidad.
 
 ### Escena 2.13 · Dirección: negocio y privacidad
 **Se ve:** grabación: `/negocio` (ingreso, costo fijo, equilibrio, VPN; etiquetas «supuesto») → `/privacidad` (aviso, ARCO, bitácora).
@@ -338,11 +338,12 @@ y publicada en {{ ops.public_url }}. Los datos son sintéticos. Vamos a ver cuat
 una urgente que aprueba una persona, una contingencia ambiental y una nota de emergencia.
 
 ### Escena D.2 · Paso 1: la familia solicita y se asigna sola
-**Se ve:** grabación: lado a lado, `fam-0002` en `/familia` (vista de celular) solicita enfermería mañana a las 11:00, y el `/tablero` de coordinación, donde aparece sin recargar, ya asignada.
+**Se ve:** grabación: lado a lado, `fam-0002` en `/familia` (vista de celular) solicita enfermería para hoy, en un par de horas, y el `/tablero` de coordinación, donde aparece primero, sin recargar, ya asignada y marcada «Nueva».
 
 **Dice:**
-Paso uno. Desde el celular, una familia pide una visita de enfermería para mañana. Fíjense en el tablero de
-coordinación: aparece sola, sin recargar, en un par de segundos, y ya tiene a alguien asignado. El despachador eligió a
+Paso uno. Desde el celular, una familia pide una visita de enfermería para hoy, en un par de horas. Fíjense en el
+tablero de coordinación: aparece sola, primero y marcada «Nueva», sin recargar, en un par de segundos, y ya tiene a
+alguien asignado. El despachador eligió a
 quien tiene la habilidad, está en turno, no está en su día de descanso y llega antes con el tráfico de esa hora. Es
 prioridad media, así que no necesitó aprobación: nadie tuvo que tocar nada.
 
@@ -361,7 +362,8 @@ coordinación lo puede cambiar. Esa regla salió de la simulación: con una coor
 **Dice:**
 Paso tres. Hace un momento simulamos mala calidad del aire en el oriente de la ciudad, y el worker la detectó solo.
 Enlaza propone cambios por institución: subir la prioridad de quienes tienen enfermedad del pulmón o del corazón,
-adelantar su oxigenoterapia y avisar a sus familias. Nada cambia sin aprobación: coordinación revisa y aprueba todo, y
+avisar a sus familias y, si tienen oxigenoterapia en las próximas horas, adelantarla. Nada cambia sin aprobación:
+coordinación revisa y aprueba todo, y
 el tablero ya muestra los cambios. La contingencia se ve estación por estación, no promediada. Esto responde al
 incidente crítico del Problema Prototípico, que combina aire contaminado y calles bloqueadas; aquí se ve la parte del
 aire, y el tráfico entra en cada asignación.

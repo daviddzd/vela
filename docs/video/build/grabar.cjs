@@ -126,6 +126,18 @@ async function api(user, route, body) {
   return out;
 }
 
+// Today's date (dd/mm/aaaa, Mexico City) and the first time in the form's list that is at least 2 h from now.
+function todayInTwoHours(options) {
+  const now = new Date();
+  const fmt = (d, o) => d.toLocaleString("es-MX", { timeZone: "America/Mexico_City", ...o });
+  const date = fmt(now, { day: "2-digit", month: "2-digit", year: "numeric" });
+  const later = fmt(new Date(now.getTime() + 2 * 3600 * 1000), { hour: "2-digit", minute: "2-digit", hourCycle: "h23" });
+  const sameDay = fmt(new Date(now.getTime() + 2 * 3600 * 1000), { day: "2-digit" }) === fmt(now, { day: "2-digit" });
+  const time = sameDay && options.map((o) => o.trim()).filter((o) => /^\d\d:\d\d$/.test(o)).sort().find((o) => o >= later);
+  if (!time) throw new Error("ALTO: ya no hay una hora de hoy dos horas después de ahora; grabar más temprano.");
+  return { date, time };
+}
+
 // ---- Video 2 · the colloquium demo (plan B) -----------------------------------------------------------------
 const VIDEO2 = {
   async "D.1"() {
@@ -147,24 +159,33 @@ const VIDEO2 = {
     await form.scrollIntoViewIfNeeded(); await fam.page.waitForTimeout(1200);
     await click(form.locator("label").filter({ hasText: /Enfermería/i }));
     await fam.page.waitForTimeout(800);
-    await form.locator("select").first().selectOption({ label: "11:00" });
+    // "para hoy, en un par de horas": today's date and the first time on the list at least 2 h from now
+    const { date, time } = todayInTwoHours(await form.locator("select").first().locator("option").allTextContents());
+    await form.getByPlaceholder("dd/mm/aaaa").first().fill(date);
+    await form.locator("select").first().selectOption({ label: time });
     await fam.page.waitForTimeout(1200);
     await click(form.getByRole("button", { name: "Solicitar servicio" }));
     await fam.page.waitForTimeout(2500);
     await fam.page.getByText(/Asignada/i).first().scrollIntoViewIfNeeded().catch(() => {});
-    // the board updates by itself (WebSocket, no reload on camera); then it scrolls to the new row of this patient,
-    // whose name is read from the family's page ("Mi familiar: …"), not typed here
+    // check with the API that the visit IS first on coordination's board and marked new; otherwise stop
     const who = (await fam.page.locator("h1").first().innerText()).replace(/^.*?:\s*/, "").trim();
-    await board.page.waitForTimeout(2500);
-    const row = board.page.locator("main li, main tr, main p").filter({ hasText: who }).filter({ hasText: "11:00" }).first();
-    await row.waitFor({ timeout: 15000 }).catch(() => console.log("aviso: la fila nueva no apareció en el tablero"));
-    await row.evaluate((el) => el.scrollIntoView({ behavior: "smooth", block: "center" })).catch(() => {});
-    await row.evaluate((el) => { el.style.outline = "4px solid #137273"; el.style.outlineOffset = "4px"; }).catch(() => {});
-    await board.page.waitForTimeout(7000);
+    const up = (await api("coordinacion.a", "/api/board")).upcoming || [];
+    if (!up.length || !up[0].is_new || up[0].patient_name !== who) {
+      throw new Error(`ALTO: la visita de ${who} no aparece primero ni marcada «Nueva» en el tablero (API). No se sigue grabando.`);
+    }
+    console.log(`API: ${who} ${up[0].scheduled_for} está primero en el tablero, marcada «Nueva»`);
+    // the board updates by itself (WebSocket, no reload on camera): the new row is first, marked «Nueva»
+    await board.page.getByText("Nueva", { exact: true }).first().waitFor({ timeout: 15000 });
+    await board.page.getByText("Nueva", { exact: true }).first()
+      .evaluate((el) => el.closest("li").scrollIntoView({ behavior: "smooth", block: "center" }));
+    await board.page.waitForTimeout(8000);
     await fam.close(); await board.close();
   },
 
   async "D.3"() {
+    // the urgent visit (in 30 min) needs someone of the Clínica Oriente on shift now; otherwise stop
+    const inst = ((await api("owner", "/api/demo/state")).institutions || []).find((i) => i.institution_id === "INS-A");
+    if (!inst || inst.on_shift < 1) throw new Error("ALTO: la Clínica Oriente (INS-A) no tiene personal en turno ahora.");
     const own = await recorded("D.3", "owner", { part: "_a" });
     await own.page.goto(`${BASE}/demo`); await settle(own.page); own.mark();
     await own.page.waitForTimeout(2000);
