@@ -8,6 +8,7 @@ editable PowerPoint chart (Format → Error bars). Element order follows the OOX
 errBars, cat, val …).
 """
 import json
+import os
 import re
 import sys
 import shutil
@@ -17,7 +18,8 @@ from pathlib import Path
 
 PRES = Path(__file__).resolve().parents[1]
 DECK = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else PRES / "enlaza_coloquio.pptx"
-SPECS = json.loads((PRES / "out" / "errbars.json").read_text(encoding="utf-8"))
+# ERRBARS_DIR: out_capturas for the version without live demo (default: out, the live-demo version)
+SPECS = json.loads((PRES / os.environ.get("ERRBARS_DIR", "out") / "errbars.json").read_text(encoding="utf-8"))
 
 
 def num_lit(values: list[float]) -> str:

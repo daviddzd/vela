@@ -17,13 +17,21 @@ from pptx import Presentation
 from pptx.util import Emu
 
 PRES = Path(__file__).resolve().parents[1]
-OUT = PRES / "out"
+# The version without live demo uses its own folder and names (build_presentacion_capturas.sh); the defaults are the
+# live-demo version's.
+OUT = PRES / os.environ.get("CHECK_OUT", "out")
+DECK = os.environ.get("DECK_NAME", "enlaza_coloquio")
+GUION_PDF = os.environ.get("GUION_PDF", "guion_coloquio.pdf")
 SMALL_OK = ("Fuente", "Nota de la gráfica")
 FONTS = Path("/usr/local/share/fonts/enlaza")
 
 
 def pdf_text(pdf: Path) -> str:
     t = subprocess.run(["pdftotext", "-layout", str(pdf), "-"], capture_output=True, text=True).stdout
+    if os.environ.get("PDF_TEXT_BOTH"):
+        # also the reading order (no -layout): a figure split over two boxes ("17.7" + "millones") or a bullet that
+        # wraps inside a column is found there; -layout mixes the lines of the columns of a slide
+        t += "\n" + subprocess.run(["pdftotext", str(pdf), "-"], capture_output=True, text=True).stdout
     return re.sub(r"\s+", " ", t)
 
 
@@ -32,9 +40,9 @@ def main() -> None:
     deck_dir = Path(os.environ["DECK_DIR"]).resolve() if os.environ.get("DECK_DIR") else PRES
     problems, report = [], [f"# Verificación de la presentación y el guion ({deck_dir.name})", ""]
     # 1. numbers in the PDFs
-    pairs = [("numeros_usados.csv", deck_dir / "enlaza_coloquio.pdf")]
+    pairs = [("numeros_usados.csv", deck_dir / f"{DECK}.pdf")]
     if deck_dir == PRES:
-        pairs.append(("numeros_usados_guion.csv", PRES / "guion_coloquio.pdf"))
+        pairs.append(("numeros_usados_guion.csv", PRES / GUION_PDF))
     for csv_name, pdf_path in pairs:
         pdf = pdf_path.name
         text = pdf_text(pdf_path)
@@ -46,7 +54,7 @@ def main() -> None:
                       + (f" (más {len(drawn)} dibujados como intervalos de confianza)" if drawn else ""))
         problems += [f"{pdf}: «{r['texto']}» ({r['clave']}) no aparece" for r in missing]
     # 2-4. the slides
-    deck = Presentation(deck_dir / "enlaza_coloquio.pptx")
+    deck = Presentation(deck_dir / f"{DECK}.pptx")
     sw, sh = deck.slide_width, deck.slide_height
     cmaps = {f.stem: set(TTFont(f).getBestCmap()) for f in FONTS.glob("*.ttf")}
     small, glyphs, edges, notes = [], set(), [], 0

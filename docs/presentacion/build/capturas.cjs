@@ -13,7 +13,10 @@ const { BLOCK_TEL, PASSWORD, click, noPassword } = require("./guardia.cjs");
 const BASE = process.env.BASE || "http://proxy:8080";
 const OUT = path.resolve(process.env.CAPTURE_OUT || path.join(__dirname, "..", "capturas"));
 const ONLY = (process.env.ONLY || "").split(",").filter(Boolean);
-const DESK = { width: 1920, height: 1080 };
+// PROY=1 ("projector"): desktop screens in a 1280 x 800 window at 3x density, files named P.. instead of C..: the app
+// puts the same content in less width, so each crop reads about 1.5 times larger on a slide.
+const PROY = !!process.env.PROY;
+const DESK = PROY ? { width: 1280, height: 800 } : { width: 1920, height: 1080 };
 const PHONE = { width: 390, height: 844 };
 const EMERGENCY = "Mi mamá no puede respirar y tiene los labios morados.";
 const AMBER = "Hoy mi mamá comió bien y durmió su siesta.";   // routine text the classifier alone flags (amber)
@@ -22,7 +25,7 @@ const want = (id) => !ONLY.length || ONLY.includes(id);
 let browser;
 
 async function session(user, viewport = DESK) {
-  const ctx = await browser.newContext({ viewport, deviceScaleFactor: viewport.width < 500 ? 3 : 2, locale: "es-MX",
+  const ctx = await browser.newContext({ viewport, deviceScaleFactor: viewport.width < 500 || PROY ? 3 : 2, locale: "es-MX",
     timezoneId: "America/Mexico_City" });
   await ctx.addInitScript(BLOCK_TEL);
   if (user) {
@@ -37,11 +40,14 @@ async function settle(page, ms = 2500) {
   await page.waitForTimeout(ms);
 }
 
-async function shot(page, name, { full = true, el = null } = {}) {
+async function shot(page, name, { full = true, el = null, clip = null } = {}) {
   await noPassword(page);
+  if (PROY) name = name.replace(/^C/, "P");
   const file = path.join(OUT, `${name}.png`);
-  if (el) await el.screenshot({ path: file }); else await page.screenshot({ path: file, fullPage: false });
-  if (full && !el) await page.screenshot({ path: path.join(OUT, `${name}_completa.png`), fullPage: true });
+  if (el) await el.screenshot({ path: file });
+  else if (clip) await page.screenshot({ path: file, clip, fullPage: true });
+  else await page.screenshot({ path: file, fullPage: false });
+  if (full && !el && !clip) await page.screenshot({ path: path.join(OUT, `${name}_completa.png`), fullPage: true });
   fs.writeFileSync(file.replace(/\.png$/, ".txt"), await (el || page.locator("body")).innerText().catch(() => ""));
   console.log("captura", name);
 }
@@ -105,6 +111,7 @@ const CAPTURES = {
     await b.page.goto(`${BASE}/personal`); await settle(b.page, 5000);
     const flagged = b.page.locator("li, button").filter({ hasText: "Excede la jornada legal" });
     await flagged.first().evaluate((e) => e.scrollIntoView({ block: "center" }));
+    await shot(b.page, "C12_personal_jornada_fila", { el: flagged.first() });
     await click(flagged.first().getByText(/Cortés|Reyes/).first());
     await settle(b.page, 2500);
     await b.page.evaluate(() => window.scrollTo(0, 0)); await b.page.waitForTimeout(500);
@@ -149,6 +156,7 @@ const CAPTURES = {
     await centerOn(row);
     await shot(coord.page, "C03_tablero_nueva", { full: false });
     await shot(coord.page, "C03_tablero_nueva_fila", { el: row.first() });
+    await shot(coord.page, "C03_tablero_nueva_lista", { el: row.first().locator("xpath=ancestor::ul[1]") });
     await coord.ctx.close();
 
     // C04: the agenda of whoever got the visit (cui-003 or cui-004 have accounts in INS-A)
@@ -192,6 +200,9 @@ const CAPTURES = {
     const left = ((await api("coordinacion.a", "/api/approvals")) || []).some((r) => r.request_id === urgent.request_id);
     if (left) throw new Error("ALTO: la urgente sigue en Aprobaciones después de aprobarla.");
     await shot(coord.page, "C06_tablero_urgente_aprobada", { full: true });
+    const group = coord.page.locator("li").filter({ hasText: "Nueva" }).first().locator("xpath=ancestor::ul[1]");
+    await group.evaluate((e) => e.scrollIntoView({ block: "center" })); await coord.page.waitForTimeout(500);
+    await shot(coord.page, "C06_tablero_lista", { el: group });
     await coord.ctx.close();
   },
   async C07() {   // C07 stations, C08 the proposal per institution; then "Volver a normal"
@@ -312,6 +323,15 @@ const CAPTURES = {
     await page.evaluate(() => window.scrollBy(0, -40));
     await page.waitForTimeout(800);
     await shot(page, "C16_privacidad_tabla", { full: false });
+    const box = await page.evaluate(() => {
+      const t = document.querySelector("main table");
+      const rows = [t.querySelector("thead"), ...t.querySelectorAll("tbody tr")].slice(0, 4);
+      const r = rows.map((e) => e.getBoundingClientRect());
+      const sx = window.scrollX, sy = window.scrollY;
+      return { x: Math.min(...r.map((b) => b.left)) + sx - 8, y: r[0].top + sy - 6,
+        width: Math.max(...r.map((b) => b.right)) - Math.min(...r.map((b) => b.left)) + 16, height: r[3].bottom - r[0].top + 12 };
+    });
+    await shot(page, "C16_privacidad_filas", { clip: box });
     await ctx.close();
   },
 };
@@ -319,7 +339,8 @@ const CAPTURES = {
 (async () => {
   browser = await chromium.launch({ headless: false });
   // DAY=1: the daytime batch (C02/C03/C04 inside C01, C06 inside C05, C08 inside C07)
-  const order = process.env.DAY ? ["C12", "C01", "C05", "C07", "C14", "C17"] : ["C17", "C09", "C11", "C13", "C14", "C15", "C16"];
+  const order = PROY ? ["C12", "C01", "C05", "C07", "C14", "C09", "C11", "C13", "C15", "C16"]
+    : process.env.DAY ? ["C12", "C01", "C05", "C07", "C14", "C17"] : ["C17", "C09", "C11", "C13", "C14", "C15", "C16"];
   for (const id of order) if (want(id) || (id === "C09" && want("C10"))) await CAPTURES[id]();
   await browser.close();
 })().catch((e) => { console.error(e); process.exit(1); });
