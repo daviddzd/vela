@@ -55,7 +55,9 @@ def scene_video(sid: str, video: int, tmp: Path) -> Path:
     """The scene's picture without sound: one clip, several clips one after another, two side by side, or a slide."""
     out = tmp / f"{sid}_raw.mp4"
     slide = PRIV / "diapositivas" / f"{sid}.png"
-    clips = sorted((PRIV / "clips" / f"video{video}").glob(f"{sid}*.webm"))
+    # exactly <id>.webm or <id>_<part>.webm: "2.1*" would also take 2.10, 2.11, ...
+    clips = sorted(c for c in (PRIV / "clips" / f"video{video}").glob(f"{sid}*.webm")
+                   if c.stem == sid or c.stem.startswith(sid + "_"))
     norm = f"fps={FPS},scale=1920:1080:force_original_aspect_ratio=decrease,pad=1920:1080:(ow-iw)/2:(oh-ih)/2:color=white,format=yuv420p"
     if not clips and slide.exists():
         run("-loop", "1", "-t", "4", "-i", str(slide), "-vf", norm, "-c:v", "libx264", "-crf", "18", str(out))

@@ -330,9 +330,26 @@ const VIDEO1 = {
     await w.close();
   },
   async "2.7"() {   // the caregiver needs a visit whose "Llegué" is open now (it opens 60 min before); otherwise stop
-    const mine = await api("cui-003", "/api/visits/mine");
-    const list = Array.isArray(mine) ? mine : (mine.visits || []);
-    const open = list.find((v) => v.step === "arrive" && (!v.arrive_from || new Date(v.arrive_from) <= new Date()));
+    const openVisit = async () => {
+      const mine = await api("cui-003", "/api/visits/mine");
+      const list = Array.isArray(mine) ? mine : (mine.visits || []);
+      return list.find((v) => v.step === "arrive" && (!v.arrive_from || new Date(v.arrive_from) <= new Date()));
+    };
+    let open = await openVisit();
+    if (!open) {   // off camera, as coordination would do it: a visit "para ahora" (in ~25 min) moved to cui-003
+      const at = new Date(Date.now() + 25 * 60 * 1000);
+      at.setMinutes(Math.ceil(at.getMinutes() / 5) * 5, 0, 0);
+      const when = at.toLocaleString("sv-SE", { timeZone: "America/Mexico_City" }).replace(" ", "T");
+      const req = await api("coordinacion.a", "/api/requests",
+        { patient_id: "PAC-0006", service_id: "SRV-02", scheduled_for: when, priority: "medium" });
+      if (!req.assignment_id) throw new Error(`ALTO: no se pudo crear la visita para ahora (${JSON.stringify(req)}).`);
+      if (req.caregiver_id !== "CUI-003") {
+        const moved = await api("coordinacion.a", `/api/assignments/${req.assignment_id}/reassign`, { caregiver_id: "CUI-003" });
+        if (moved.error) throw new Error(`ALTO: no se pudo pasar la visita a cui-003 (HTTP ${moved.error}).`);
+      }
+      console.log(`API: visita para ahora (${when}) de ${req.request_id} con cui-003`);
+      open = await openVisit();
+    }
     if (!open) throw new Error("ALTO: cui-003 no tiene ahora una visita con «Llegué» activo (se abre 60 min antes).");
     const w = await recorded("2.7", "cui-003", { viewport: { width: 430, height: 932 } });
     await w.page.goto(`${BASE}/mis-visitas`); await settle(w.page, 1500); w.mark();
