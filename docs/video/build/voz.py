@@ -103,14 +103,15 @@ def main() -> None:
         print(f"{a.salida}: {len(pcm) / 2 / rate:.1f} s")
         return
 
-    timing = {}
+    tfile = OUT / "audio" / "tiempos.json"
+    timing = json.loads(tfile.read_text(encoding="utf-8")) if tfile.exists() else {}   # keep the other scenes
     for s in scenes:
         pcm, rate, cues = synth_scene(voice, s)
         write_wav(OUT / "audio" / f"{s['id']}.wav", pcm, rate)
         timing[s["id"]] = {"seconds": round(len(pcm) / 2 / rate, 3), "cues": cues}
         print(f"escena {s['id']}: {timing[s['id']]['seconds']:.1f} s")
-    (OUT / "audio" / "tiempos.json").write_text(json.dumps(timing, ensure_ascii=False, indent=1), encoding="utf-8")
-    print(f"Total: {sum(v['seconds'] for v in timing.values()) / 60:.1f} min")
+    tfile.write_text(json.dumps(timing, ensure_ascii=False, indent=1), encoding="utf-8")
+    print(f"Total de estas escenas: {sum(timing[s['id']]['seconds'] for s in scenes) / 60:.1f} min")
 
 
 if __name__ == "__main__":
