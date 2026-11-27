@@ -103,7 +103,7 @@ Las frases son **sugeridas**: dichas con sus palabras suenan mejor que memorizad
 **Habla:** Persona 3 · **Opera:** Persona 2 · **Dura:** 1:20 · **Se ve:** `/contingencia` → «Aprobar todo» → `/tablero`; al final, `/demo` → «Volver a normal».
 
 - Hace un minuto simulamos mala calidad del aire en el oriente de la ciudad. El worker la detectó solo.
-- Enlaza propone cambios por institución: adelantar visitas de quienes tienen enfermedad pulmonar o del corazón y reacomodar al personal.
+- Enlaza propone cambios por institución: subir la prioridad de quienes tienen enfermedad del pulmón o del corazón, adelantar su oxigenoterapia y avisar a sus familias. El personal se reacomoda solo si además hay tráfico degradado (escenario «Contingencia + bloqueo en Iztapalapa»).
 - Nada cambia sin aprobación: coordinación revisa y aprueba todo.
 - Y el tablero ya muestra los cambios. Esto responde al incidente crítico del Problema Prototípico.
 - (Persona 2, sin decir nada, en la ventana de Dirección `/demo`: «Volver a normal», para que la contingencia no siga activa.)
