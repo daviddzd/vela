@@ -273,6 +273,8 @@ export const es = {
     upcomingTitle: "Próximas visitas de hoy y mañana",
     upcomingNone: "No hay visitas programadas para hoy ni mañana.",
     upcomingMore: "y {n} más",
+    newBadge: "Nueva",
+    newTitle: "Recién creadas o asignadas",
     alertGroupShow: "Ver las {n}",
     alertGroups: {
       labor: "{n} turnos nocturnos exceden la jornada legal (art. 61)",
