@@ -152,7 +152,15 @@ const VIDEO2 = {
     await click(form.getByRole("button", { name: "Solicitar servicio" }));
     await fam.page.waitForTimeout(2500);
     await fam.page.getByText(/Asignada/i).first().scrollIntoViewIfNeeded().catch(() => {});
-    await board.page.waitForTimeout(9000);   // the board updates by itself (WebSocket): no reload on camera
+    // the board updates by itself (WebSocket, no reload on camera); then it scrolls to the new row of this patient,
+    // whose name is read from the family's page ("Mi familiar: …"), not typed here
+    const who = (await fam.page.locator("h1").first().innerText()).replace(/^.*?:\s*/, "").trim();
+    await board.page.waitForTimeout(2500);
+    const row = board.page.locator("main li, main tr, main p").filter({ hasText: who }).filter({ hasText: "11:00" }).first();
+    await row.waitFor({ timeout: 15000 }).catch(() => console.log("aviso: la fila nueva no apareció en el tablero"));
+    await row.evaluate((el) => el.scrollIntoView({ behavior: "smooth", block: "center" })).catch(() => {});
+    await row.evaluate((el) => { el.style.outline = "4px solid #137273"; el.style.outlineOffset = "4px"; }).catch(() => {});
+    await board.page.waitForTimeout(7000);
     await fam.close(); await board.close();
   },
 
