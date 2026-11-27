@@ -30,7 +30,7 @@ body {{ width: 1920px; height: 1080px; font-family: Atkinson; color: #1B2B38; fo
        background: linear-gradient(180deg, #EAF4F8 0, #F4F9FB 260px, #fff 520px); padding: 72px 96px; position: relative; }}
 .logo {{ position: absolute; top: 56px; right: 96px; height: 64px; }}
 h1 {{ font-family: Jakarta; font-size: 72px; line-height: 1.1; color: #3A5B76; margin-bottom: 40px; max-width: 1450px; }}
-.foot {{ position: absolute; left: 96px; bottom: 44px; font-size: 26px; color: #4F5F6B; }}
+.foot {{ position: absolute; left: 96px; bottom: 160px; font-size: 26px; color: #4F5F6B; }}  /* above the burnt-in subtitles (bottom ~136 px) */
 .card {{ background: #fff; border: 3px solid rgba(58,91,118,.15); border-radius: 28px; padding: 30px 36px; }}
 .num {{ font-family: Jakarta; font-size: 68px; color: #137273; line-height: 1.05; }}
 .lbl {{ font-weight: 700; color: #3A5B76; }}
@@ -74,10 +74,11 @@ def body(s: dict) -> str:
                 f'<div>{esc(s["cifra_texto"])}</div><div class="note" style="margin-top:20px">Fuente: {esc(s["fuente"])}</div></div>'
                 f'<div class="grid">{rows}</div></div>')
     if t == "solucion":
-        items = "".join(f'<div class="card" style="font-size:33px"><div class="lbl" style="font-size:40px">{esc(a)}</div>{esc(b)}</div>'
-                        for a, b in s["puntos"])
-        return (f'<div class="frase">{esc(s["frase"])}</div>'
-                f'<div class="grid" style="grid-template-columns: repeat(3, 1fr)">{items}</div>')
+        # compact: six cards plus the note must end above the footer (subtitles below it)
+        items = "".join(f'<div class="card" style="font-size:31px;padding:16px 30px"><div class="lbl" style="font-size:38px">'
+                        f'{esc(a)}</div>{esc(b)}</div>' for a, b in s["puntos"])
+        return (f'<div class="frase" style="font-size:42px;margin-bottom:22px">{esc(s["frase"])}</div>'
+                f'<div class="grid" style="grid-template-columns: repeat(3, 1fr); gap: 20px">{items}</div>')
     if t in ("flujo", "enlace"):
         return steps(s["pasos"])
     if t == "analogia":
