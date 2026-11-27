@@ -37,7 +37,7 @@ Las frases son **sugeridas**: dichas con sus palabras suenan mejor que memorizad
 **Qué se dice:**
 
 - Buenos días. Somos el equipo de Enlaza, cuidado coordinado.
-- En diez minutos les mostramos el problema, cómo funciona la aplicación y por qué es un negocio viable.
+- En diez minutos les mostramos el problema, cómo funciona la aplicación y en qué condiciones es un negocio viable.
 
 ### Diapositiva 2 · El problema
 
@@ -185,7 +185,7 @@ Las frases son **sugeridas**: dichas con sus palabras suenan mejor que memorizad
 
 **Qué se dice:**
 
-- Vendemos una suscripción mensual por institución. (Señala la llamada 2.) El plan base tiene un VPN negativo, y lo decimos.
+- Vendemos una suscripción mensual por institución. (Señala la llamada 2.) El escenario base tiene un VPN negativo, y lo decimos.
 - (Señala la llamada 1.) El recomendado pide $1,011,746: VPN al 25 % de $1,207,425 y TIR de 65.6 %.
 - (Señala el recuadro de abajo.) Con una condición: supone el plan Gobierno y fundadores al 50 % el primer año; sin ambos, el VPN sería −$180,904.
 
@@ -197,7 +197,7 @@ Las frases son **sugeridas**: dichas con sus palabras suenan mejor que memorizad
 
 - (Señala la llamada 1.) Otra institución intentó ver un paciente de la Clínica Oriente: (señala la llamada 2) bloqueado y registrado.
 - (Señala las cifras.) La API ve 0 pacientes sin institución, 150 con una clínica y 400 como Dirección.
-- Sin consentimiento, la API bloquea, y el despachador respeta descanso y jornada.
+- Sin consentimiento, la API bloquea, y el despachador respeta el día de descanso y marca los turnos que exceden la jornada.
 
 ### Diapositiva 18 · Cierre
 
@@ -247,7 +247,7 @@ falta. Respuestas cortas: 20 a 30 s. Para mostrar una diapositiva de respaldo, e
 
 | # | Pregunta | Responde | Respuesta corta | Diapositiva |
 |---|---|---|---|---|
-| 1 | ¿Es viable el negocio? | Persona 4 | El plan base tiene VPN al 25 % de −$163,128; lo decimos. El recomendado limita la participación y crece por regiones: VPN $1,207,425, TIR 65.6 %, si se cumplen el plan Gobierno y el sueldo de fundadores al 50 %; sin ambos, −$180,904. | 21 |
+| 1 | ¿Es viable el negocio? | Persona 4 | El escenario base tiene VPN al 25 % de −$163,128; lo decimos. El recomendado limita la participación y crece por regiones: VPN $1,207,425, TIR 65.6 %, si se cumplen el plan Gobierno y el sueldo de fundadores al 50 %; sin ambos, −$180,904. | 21 |
 | 2 | ¿Qué tan grande es el mercado? | Persona 4 | Contado en el DENUE: 88 residencias privadas en la CDMX, más Estado de México, Jalisco y Nuevo León. Los públicos compran por licitación: van aparte. | 20 |
 | 3 | ¿Por qué la app dice 20.1? | Persona 3 | 20.2 es priorizar por riesgo; 20.1 es Enlaza con el límite de tiempo. Las dos se comparan contra los 23.6 de la asignación humana. | 22 |
 | 4 | ¿La máquina decide todo? | Persona 2 | No. Lo rutinario se asigna solo; lo de prioridad alta lo aprueba una persona. Solo lo urgente sin respuesta en 3 min se aplica con aviso, y coordinación lo puede cambiar. | 8 |

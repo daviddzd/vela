@@ -28,7 +28,7 @@ Las frases son **sugeridas**: dichas con sus palabras suenan mejor que memorizad
 **Qué se dice:**
 
 - Buenos días. Somos el equipo de Enlaza, cuidado coordinado.
-- En diez minutos les mostramos el problema, cómo funciona la aplicación y por qué es un negocio viable.
+- En diez minutos les mostramos el problema, cómo funciona la aplicación y en qué condiciones es un negocio viable.
 
 ### Diapositiva 2 · El problema {#d2}
 
@@ -176,7 +176,7 @@ Las frases son **sugeridas**: dichas con sus palabras suenan mejor que memorizad
 
 **Qué se dice:**
 
-- Vendemos una suscripción mensual por institución. (Señala la llamada 2.) El plan base tiene un VPN negativo, y lo decimos.
+- Vendemos una suscripción mensual por institución. (Señala la llamada 2.) El escenario base tiene un VPN negativo, y lo decimos.
 - (Señala la llamada 1.) El recomendado pide {{ bm.sc.recommended.investment }}: VPN al {{ bm.rate_25 }} de {{ bm.sc.recommended.npv25 }} y TIR de {{ bm.sc.recommended.tir }}.
 - (Señala el recuadro de abajo.) Con una condición: supone el plan Gobierno y fundadores al {{ neg.founder_salary_year1_recommended }} % el primer año; sin ambos, el VPN sería {{ bm.rec_wo_both }}.
 
@@ -188,7 +188,7 @@ Las frases son **sugeridas**: dichas con sus palabras suenan mejor que memorizad
 
 - (Señala la llamada 1.) Otra institución intentó ver un paciente de la Clínica Oriente: (señala la llamada 2) bloqueado y registrado.
 - (Señala las cifras.) La API ve {{ db.rls_patients_none }} pacientes sin institución, {{ db.rls_patients_insa }} con una clínica y {{ db.rls_patients_all }} como Dirección.
-- Sin consentimiento, la API bloquea, y el despachador respeta descanso y jornada.
+- Sin consentimiento, la API bloquea, y el despachador respeta el día de descanso y marca los turnos que exceden la jornada.
 
 ### Diapositiva 18 · Cierre {#d18}
 
@@ -238,7 +238,7 @@ falta. Respuestas cortas: 20 a 30 s. Para mostrar una diapositiva de respaldo, e
 
 | # | Pregunta | Responde | Respuesta corta | Diapositiva |
 |---|---|---|---|---|
-| 1 | ¿Es viable el negocio? | Persona 4 | El plan base tiene VPN al {{ bm.rate_25 }} de {{ bm.sc.base.npv25 }}; lo decimos. El recomendado limita la participación y crece por regiones: VPN {{ bm.sc.recommended.npv25 }}, TIR {{ bm.sc.recommended.tir }}, si se cumplen el plan Gobierno y el sueldo de fundadores al {{ neg.founder_salary_year1_recommended }} %; sin ambos, {{ bm.rec_wo_both }}. | 21 |
+| 1 | ¿Es viable el negocio? | Persona 4 | El escenario base tiene VPN al {{ bm.rate_25 }} de {{ bm.sc.base.npv25 }}; lo decimos. El recomendado limita la participación y crece por regiones: VPN {{ bm.sc.recommended.npv25 }}, TIR {{ bm.sc.recommended.tir }}, si se cumplen el plan Gobierno y el sueldo de fundadores al {{ neg.founder_salary_year1_recommended }} %; sin ambos, {{ bm.rec_wo_both }}. | 21 |
 | 2 | ¿Qué tan grande es el mercado? | Persona 4 | Contado en el DENUE: {{ neg.denue_residences_private_cdmx }} residencias privadas en la CDMX, más Estado de México, Jalisco y Nuevo León. Los públicos compran por licitación: van aparte. | 20 |
 | 3 | ¿Por qué la app dice {{ sim.normal.vela_timeout.high_wait_p90_min }}? | Persona 3 | {{ sim.normal.risk_priority.high_wait_p90_min }} es priorizar por riesgo; {{ sim.normal.vela_timeout.high_wait_p90_min }} es Enlaza con el límite de tiempo. Las dos se comparan contra los {{ sim.normal.human_dispatcher.high_wait_p90_min }} de la asignación humana. | 22 |
 | 4 | ¿La máquina decide todo? | Persona 2 | No. Lo rutinario se asigna solo; lo de prioridad alta lo aprueba una persona. Solo lo urgente sin respuesta en {{ cfg.auto_apply_after }} se aplica con aviso, y coordinación lo puede cambiar. | 8 |

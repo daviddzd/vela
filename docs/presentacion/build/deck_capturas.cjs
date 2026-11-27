@@ -297,11 +297,11 @@ function limitCard(s, t, x, y, w, h) {    // the honest limitation of each subje
   stepTag(s, "Paso 1 de 4");
   const v27 = fs.existsSync(path.join(CROPS, "v27_llegue.png"));
   const a = shot(s, "c03_nuevas", "Tablero de coordinación: la visita de Víctor Chávez aparece marcada Nueva, ya asignada a Fernanda Bautista",
-    M + 0.75, 1.45, (v27 ? 8.6 : W - 2 * M) - 0.75, 3.0,
-    [{ n: 1, side: "left", fy: 0.75, box: [0.0, 0.5, 1.0, 1.0] }, [2, 0.92, 0.86]]);
+    M + 0.75, 1.45, (v27 ? 8.6 : W - 2 * M) - 1.5, 3.0,
+    [{ n: 1, side: "left", fy: 0.75, box: [0.0, 0.5, 1.0, 1.0] }, { n: 2, side: "right", fy: 0.75 }]);
   if (v27) {
-    shot(s, "v27_llegue", "Celular del personal de cuidado: una visita asignada con el botón Llegué activo", a.x + a.w + 0.35, 1.45,
-      W - M - (a.x + a.w + 0.35), 5.2, [[3, 0.9, 0.36]]);
+    shot(s, "v27_llegue", "Celular del personal de cuidado: una visita asignada con el botón Llegué activo", a.x + a.w + 0.95, 1.45,
+      W - M - (a.x + a.w + 0.95), 5.2, [[3, 0.9, 0.36]]);
   }
   legend(s, [[1, "Víctor Chávez: aparece sola, marcada «Nueva»"], [2, "Elegida por habilidad, turno, descanso y tráfico"],
     ...(v27 ? [[3, "El personal la ve y toca «Llegué»"]] : [])], M, a.y + a.h + 0.35, 8.6, 0.8);
@@ -327,15 +327,15 @@ function limitCard(s, t, x, y, w, h) {    // the honest limitation of each subje
   title(s, ["Aprobada, ", ["en vivo"]]);
   stepTag(s, "Paso 2 de 4");
   const a = shot(s, "c06_nuevas", "Tablero de coordinación: la visita urgente de Joaquín Guerrero ya asignada a Fernanda Bautista, marcada Nueva",
-    M + 0.75, 1.45, 7.45, 3.6, [{ n: 1, side: "left", fy: 0.5, box: [0.0, 0.335, 1.0, 0.665] }, [2, 0.9, 0.57]]);
-  legend(s, [[1, "Joaquín Guerrero: aprobada"], [2, "Con quien propuso Enlaza"]], M, a.y + a.h + 0.35, 8.2, 0.8);
-  const x = 9.15, w = W - M - x;
-  card(s, x, 1.45, w, 5.25, C.warnSoft, "Regla de lo urgente");
+    M + 0.75, 1.45, 6.75, 3.6, [{ n: 1, side: "left", fy: 0.5, box: [0.0, 0.335, 1.0, 0.665] }, [2, 0.37, 0.63]]);
+  legend(s, [[1, "Joaquín Guerrero: aprobada"], [2, "Con quien propuso Enlaza"]], M, a.y + a.h + 0.35, 7.4, 0.8);
+  const x = 8.4, w = W - M - x;
+  card(s, x, 1.45, w, 5.3, C.warnSoft, "Regla de lo urgente");
   iconCircle(s, x + 0.25, 1.65, 0.85, "timer", C.warn, C.white);
   text(s, "Solo para lo urgente", { x: x + 1.25, y: 1.65, w: w - 1.4, h: 0.85, bold: true, valign: "middle" });
   text(s, `Si coordinación no responde en ${T("cfg.auto_apply_after")}, se aplica la propuesta, con aviso y en la bitácora.`,
-    { x: x + 0.3, y: 2.65, w: w - 0.6, h: 2.5 });
-  text(s, "Lo programado siempre espera a una persona.", { x: x + 0.3, y: 5.25, w: w - 0.6, h: 1.3, bold: true, color: C.warn });
+    { x: x + 0.3, y: 2.6, w: w - 0.6, h: 1.75 });
+  text(s, "Lo de prioridad alta que no es urgente siempre espera a una persona.", { x: x + 0.3, y: 4.5, w: w - 0.6, h: 2.1, bold: true, color: C.warn });
   source(s, "captura de la app en vivo (tablero de coordinación) · config/simulation.yaml · datos sintéticos");
 }
 
@@ -416,11 +416,11 @@ function limitCard(s, t, x, y, w, h) {    // the honest limitation of each subje
   { x: x + 0.2, y: 1.52, w: w - 0.4, h: 0.7, fontFace: HEAD, fontSize: 36, bold: true });
   text(s, `minutos de espera de lo urgente (${T("test.normal.high_wait_p90_min.risk_priority.p")})`, { x: x + 0.2, y: 2.22, w: w - 0.4, h: 1.3 });
   card(s, x, 3.72, w, 1.95, C.skySoft, "Aprobación lenta");
-  text(s, `Aprobar tarda ${T("sens.approval_delay.5-15.label")}:`, { x: x + 0.2, y: 3.78, w: w - 0.4, h: 0.85 });
+  text(s, `Aprobar en ${T("sens.approval_delay.5-15.label")}:`, { x: x + 0.2, y: 3.78, w: w - 0.4, h: 0.45 });
   text(s, [{ text: T("sens.approval_delay.5-15.vela_timeout.high_wait_p90_min"), options: { bold: true, color: C.tealText } },
-    { text: " con límite", options: { breakLine: true } },
+    { text: " con límite y reserva", options: { breakLine: true } },
     { text: T("sens.approval_delay.5-15.risk_plus_live_traffic.high_wait_p90_min"), options: { bold: true, color: C.deep } },
-    { text: " sin él" }], { x: x + 0.2, y: 4.65, w: w - 0.4, h: 0.95 });
+    { text: " sin ellos" }], { x: x + 0.2, y: 4.27, w: w - 0.4, h: 1.3 });
   limitCard(s, "datos sintéticos; con turnos largos difiere del historial.", M, 5.85, W - 2 * M, 0.85);
   source(s, `SIRAG-D · ${T("sim.runs_main")} corridas, ${T("cfg.replications")} réplicas · Friedman y Wilcoxon con Holm · captura de /simulacion`);
 }
@@ -461,20 +461,20 @@ function limitCard(s, t, x, y, w, h) {    // the honest limitation of each subje
   const s = slide("CONTENIDO");
   title(s, ["Un negocio viable, ", ["con su condición"]]);
   const a = shot(s, "c15_escenarios", "Modelo de negocio: base, conservador y recomendado lado a lado; el recomendado tiene VPN positivo",
-    M, 1.45, W - 2 * M, 2.5, [[1, 0.585, 0.94], [2, 0.147, 0.94]], "center");
-  legend(s, [[1, "Recomendado: VPN positivo"]], M, 4.1, 5.6, 0.6);
-  legend(s, [[2, "Plan base: VPN negativo, lo decimos"]], 6.4, 4.1, W - M - 6.4, 0.6);
+    M, 1.45, W - 2 * M, 2.2, [[1, 0.585, 0.94], [2, 0.147, 0.94]], "center");
+  // the legend stacked over the full width, so no number sits above one tile of the recommended scenario
+  legend(s, [[1, "Escenario recomendado: VPN positivo"], [2, "Escenario base: VPN negativo, lo decimos"]], M, 3.78, W - 2 * M, 0.56);
   const tiles = [[T("bm.sc.recommended.investment"), "inversión"], [T("bm.sc.recommended.npv25"), `VPN al ${T("bm.rate_25")}`],
     [T("bm.sc.recommended.tir"), "TIR anual"]];
-  const tw = (W - 2 * M - 2 * 0.25) / 3, ty = 4.75;
+  const tw = (W - 2 * M - 2 * 0.25) / 3, ty = 4.98;
   tiles.forEach(([big, label], i) => {
     const x = M + i * (tw + 0.25);
-    card(s, x, ty, tw, 1.0, C.sky, `Cifra ${label}`);
-    text(s, big, { x: x + 0.2, y: ty + 0.02, w: tw - 0.4, h: 0.55, fontFace: HEAD, fontSize: 28, bold: true, color: C.deep, valign: "middle" });
-    text(s, label, { x: x + 0.2, y: ty + 0.55, w: tw - 0.4, h: 0.42, valign: "middle" });
+    card(s, x, ty, tw, 0.98, C.sky, `Cifra ${label}`);
+    text(s, big, { x: x + 0.2, y: ty + 0.02, w: tw - 0.4, h: 0.52, fontFace: HEAD, fontSize: 28, bold: true, color: C.deep, valign: "middle" });
+    text(s, label, { x: x + 0.2, y: ty + 0.53, w: tw - 0.4, h: 0.42, valign: "middle" });
   });
   limitCard(s, `supone plan Gobierno y fundadores al ${T("neg.founder_salary_year1_recommended")} % el año 1; sin ambos, VPN ${T("bm.rec_wo_both")}.`,
-    M, 5.85, W - 2 * M, 0.88);
+    M, 6.06, W - 2 * M, 0.72);
   source(s, "captura de la app en vivo (/negocio) · data/business/assumptions.csv");
 }
 
@@ -486,18 +486,18 @@ function limitCard(s, t, x, y, w, h) {    // the honest limitation of each subje
     M + 0.75, 1.45, W - 2 * M - 1.5, 2.6, [{ n: 1, side: "left", fy: 0.62, box: [0.0, 0.27, 1.0, 0.99] }, { n: 2, side: "right", fy: 0.62 }]);
   legend(s, [[1, "Otra institución pidió un paciente de INS-A"]], M, a.y + a.h + 0.2, 6.6, 0.6);
   legend(s, [[2, "Bloqueado y registrado"]], 7.4, a.y + a.h + 0.2, W - M - 7.4, 0.6);
-  card(s, M, 4.75, 7.0, 1.95, C.sky, "Seguridad por fila");
-  text(s, "Pacientes que ve la API", { x: M + 0.25, y: 4.8, w: 6.5, h: 0.5, bold: true });
+  card(s, M, 4.75, 6.3, 1.95, C.sky, "Seguridad por fila");
+  text(s, "Pacientes que ve la API", { x: M + 0.25, y: 4.8, w: 5.8, h: 0.5, bold: true });
   [["db.rls_patients_none", "sin institución"], ["db.rls_patients_insa", "una clínica"], ["db.rls_patients_all", "Dirección"]]
     .forEach(([k, label], i) => {
-      const x = M + 0.25 + i * 2.25;
-      text(s, T(k), { x, y: 5.3, w: 2.1, h: 0.7, fontFace: HEAD, fontSize: 40, bold: true, color: i === 0 ? C.tealText : C.deep });
-      text(s, label, { x, y: 6.0, w: 2.2, h: 0.55 });
+      const x = M + 0.25 + [0, 2.2, 4.1][i];
+      text(s, T(k), { x, y: 5.3, w: 1.85, h: 0.7, fontFace: HEAD, fontSize: 40, bold: true, color: i === 0 ? C.tealText : C.deep });
+      text(s, label, { x, y: 6.0, w: [2.15, 1.85, 1.9][i], h: 0.55 });
     });
-  const x = 7.85, w = W - M - x;
-  [["file-check", "Sin consentimiento, la API bloquea"], ["calendar-clock", "Descanso y jornada de ley"]].forEach(([ic, t], i) => {
+  const x = 7.15, w = W - M - x;
+  [["file-check", "Sin consentimiento, la API bloquea"], ["calendar-clock", "Descanso respetado; jornada excedida, marcada"]].forEach(([ic, t], i) => {
     iconCircle(s, x, 4.8 + i * 1.0, 0.8, ic);
-    text(s, t, { x: x + 1.0, y: 4.8 + i * 1.0, w: w - 1.0, h: 0.8, valign: "middle" });
+    text(s, t, { x: x + 1.0, y: 4.72 + i * 1.0, w: w - 1.0, h: 0.96, valign: "middle" });
   });
   source(s, `captura de la app en vivo (/privacidad, Dirección) · PostgreSQL como vela_api · ${T("repo.tests_summary")}`);
 }
