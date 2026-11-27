@@ -10,7 +10,7 @@ import { RequestResult } from "../components/RequestResult";
 import { StatusBadge } from "../components/StatusBadge";
 import { Button, Card, IconCircle, Notice, PageHeader } from "../components/ui";
 import { AlertTriangle, CheckCircle2, COUNTER_ICON, Icon } from "../components/icons";
-import { RefreshCw, Radio } from "lucide-react";
+import { RefreshCw, Radio, Sparkles } from "lucide-react";
 import { es } from "../i18n/es";
 import { formatClock, formatLongDate, useServerClock } from "../lib/clock";
 import { formatWhen } from "../lib/format";
@@ -73,6 +73,7 @@ export function BoardPage() {
         <Card className="max-lg:order-2">
           <h2>{es.board.queueTitle}</h2>
           {board && board.queue.length === 0 && <AllClear board={board} />}
+          {board && board.queue.length > 0 && <NewOnes board={board} />}
           <ol className="mt-2 divide-y divide-navy/10">
             {board?.queue.map((q) => (
               <li key={q.request_id} className="flex flex-wrap items-center justify-between gap-2 py-2">
@@ -202,14 +203,36 @@ function AllClear({ board }: { board: Board }) {
     <p className="mt-2 text-xl font-bold text-ok">{es.board.allClear} <Icon as={CheckCircle2} /></p>
     <h3 className="mt-3 font-bold">{es.board.upcomingTitle}</h3>
     {board.upcoming.length === 0 ? <p className="mt-1">{es.board.upcomingNone}</p> : (
-      <ul className="mt-1 divide-y divide-navy/10">{shown.map((v, i) => (
-        <li key={v.request_id ?? `${v.patient_id}-${i}`} className="py-1.5">
-          <strong className="tabular-nums">{formatWhen(v.scheduled_for, now)}</strong>{" · "}
-          <Link to={`/pacientes/${v.patient_id}`} className="underline decoration-navy/40 hover:text-navy">{v.patient_name}</Link>
-          {" · "}{v.service_name}{" · "}
-          {v.caregiver_name ? <strong>{v.caregiver_name}</strong>
-            : <span className="text-muted">{v.status === "planned" ? es.family.plannedNote : es.family.pendingCaregiver}</span>}
-        </li>))}</ul>)}
+      <UpcomingList items={shown} now={now} />)}
     {board.upcoming.length > shown.length && <p className="mt-1 text-muted">{es.board.upcomingMore.replace("{n}", String(board.upcoming.length - shown.length))}</p>}
   </>);
+}
+
+/** Someone is waiting (the queue is shown instead of "Próximas visitas"): still show what was just created or
+ *  assigned, so a new request never arrives unseen. */
+function NewOnes({ board }: { board: Board }) {
+  const fresh = board.upcoming.filter((v) => v.is_new);
+  if (!fresh.length) return null;
+  return (<div className="mt-3 border-t border-navy/10 pt-2">
+    <h3 className="font-bold">{es.board.newTitle}</h3>
+    <UpcomingList items={fresh} now={new Date(board.now)} />
+  </div>);
+}
+
+/** One line per visit; a new one (created or assigned in the last minutes, sent first by the API) is marked with
+ *  an icon, a border and the word «Nueva»: never by colour alone. */
+function UpcomingList({ items, now }: { items: Board["upcoming"]; now: Date }) {
+  return (
+    <ul className="mt-1 divide-y divide-navy/10">{items.map((v, i) => (
+      <li key={v.request_id ?? `${v.patient_id}-${i}`}
+        className={v.is_new ? "my-1 rounded-xl border-2 border-teal-text bg-teal-soft px-3 py-1.5" : "py-1.5"}>
+        {v.is_new && <><span className="inline-flex items-center gap-1 rounded-full border-2 border-teal-text bg-white px-2 font-bold text-teal-text">
+          <Icon as={Sparkles} /> {es.board.newBadge}</span>{" "}</>}
+        <strong className="tabular-nums">{formatWhen(v.scheduled_for, now)}</strong>{" · "}
+        <Link to={`/pacientes/${v.patient_id}`} className="underline decoration-navy/40 hover:text-navy">{v.patient_name}</Link>
+        {" · "}{v.service_name}{" · "}
+        {v.caregiver_name ? <strong>{v.caregiver_name}</strong>
+          : <span className="text-muted">{v.status === "planned" ? es.family.plannedNote : es.family.pendingCaregiver}</span>}
+      </li>))}</ul>
+  );
 }

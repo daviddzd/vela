@@ -57,7 +57,8 @@ export type Board = {
     relay_caregiver_name: string | null; relay_at: string | null }[];
   staff: { caregiver_id: string; name: string; type: string; lat: number; lon: number }[];
   upcoming: { request_id?: string; patient_id: string; patient_name: string; service_name: string; scheduled_for: string;
-    status: string; caregiver_name?: string | null }[];       // status "planned" = care-plan visit not created yet
+    status: string; caregiver_name?: string | null;          // status "planned" = care-plan visit not created yet
+    is_new?: boolean }[];                                       // created or assigned in the last 10 min: shown first
 };
 export type Service = { service_id: string; name: string; duration_min: number };
 export type ServiceRequest = FamilyVisit & { priority: string; caregiver_id: string | null };

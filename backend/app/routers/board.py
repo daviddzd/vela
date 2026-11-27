@@ -18,6 +18,10 @@ TODAY = "(now() AT TIME ZONE 'America/Mexico_City')::date"
 # planned end yet (a 12-h night service that began yesterday). A visit from an earlier day that nobody marked as
 # finished (e.g. REQ-08939: arrived 22 Nov 15:09, never finished) is NOT "En visita" now.
 SERVICE_END = "(SELECT max(x.planned_end) FROM assignments x WHERE x.request_id = r.request_id AND x.status = 'active')"
+# Team decision (26 Nov 2026): a request created or assigned in the last NEW_MINUTES goes FIRST in "Próximas visitas"
+# and the board marks it «Nueva» (shape and word), even if it is for tomorrow. Before, a new visit for tomorrow could
+# be number 13 of a list that shows 12, so nobody saw it arrive. The WebSocket already makes the board reload.
+NEW_MINUTES = 10
 ON_BOARD = f"""((r.scheduled_for AT TIME ZONE 'America/Mexico_City')::date = {TODAY}
                OR (r.status = 'in_progress' AND {SERVICE_END} > now()))"""
 
@@ -87,14 +91,19 @@ def board(user: CurrentUser = Depends(require_role(COORDINATOR, OWNER)), db: Ses
     soon = db.execute(text(f"""
         SELECT r.request_id, r.patient_id, r.scheduled_for, r.status, s.name AS service_name,
                pe.first_name || ' ' || pe.paternal_surname AS patient_name,
-               c.first_name || ' ' || c.paternal_surname AS caregiver_name
+               c.first_name || ' ' || c.paternal_surname AS caregiver_name,
+               (r.created_at > now() - make_interval(mins => :new_min)
+                OR a.assigned_at > now() - make_interval(mins => :new_min)) IS TRUE AS is_new
         FROM service_requests r JOIN services s USING (service_id)
         JOIN patients pa ON pa.patient_id = r.patient_id JOIN persons pe ON pe.person_id = pa.person_id
         LEFT JOIN assignments a ON a.request_id = r.request_id AND a.status = 'active' AND a.leg = 1
         LEFT JOIN caregivers c ON c.caregiver_id = a.caregiver_id
         WHERE r.status IN ('validated','queued','assigned') AND r.scheduled_for > now()
-          AND (r.scheduled_for AT TIME ZONE 'America/Mexico_City')::date <= {TODAY} + 1""")).mappings().all()
-    upcoming = sorted([dict(v) for v in soon] + care_plans.forecast(db, days=2), key=lambda v: v["scheduled_for"])
+          AND (r.scheduled_for AT TIME ZONE 'America/Mexico_City')::date <= {TODAY} + 1"""),
+        {"new_min": NEW_MINUTES}).mappings().all()
+    # new ones first (each group by time); row-level security already limits `soon` to the user's institution
+    upcoming = sorted([dict(v) for v in soon] + care_plans.forecast(db, days=2),
+                      key=lambda v: (not v.get("is_new", False), v["scheduled_for"]))
 
     return {"now": ops.now().isoformat(), "counters": dict(counters), "queue": queue,
             "alerts": [dict(a) for a in alerts], "visits": [dict(v) for v in visits],
