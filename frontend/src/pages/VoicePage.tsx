@@ -112,9 +112,11 @@ export function VoicePage() {
         <Call911 />
       </div>
 
+      {/* justify-center-safe: centered when it fits; on a small phone it starts at the top and scrolls, so the title
+          and the close button are always reachable (plain justify-center pushed the title above the screen) */}
       {emergency === "amber" && (
         <div role="alertdialog" aria-modal="true" aria-labelledby="amber-title" aria-describedby="amber-signs"
-          className="fixed inset-0 z-50 flex flex-col items-center justify-center gap-5 overflow-y-auto border-[12px] border-warn bg-[#FFF4DC] p-6 text-center text-ink">
+          className="fixed inset-0 z-50 flex flex-col items-center justify-center-safe gap-5 overflow-y-auto border-[12px] border-warn bg-[#FFF4DC] p-6 text-center text-ink">
           <p id="amber-title" className="flex items-center gap-3 text-4xl font-bold"><Icon as={AlertTriangle} /> {t.amberTitle}</p>
           <div id="amber-signs" className="max-w-2xl text-left text-2xl">
             <p className="font-bold">{t.amberCallIf}</p>
@@ -130,7 +132,7 @@ export function VoicePage() {
 
       {emergency === "red" && (
         <div role="alertdialog" aria-modal="true" aria-labelledby="em-title"
-          className="fixed inset-0 z-50 flex flex-col items-center justify-center gap-6 bg-danger p-6 text-center text-white">
+          className="fixed inset-0 z-50 flex flex-col items-center justify-center-safe gap-6 overflow-y-auto bg-danger p-6 text-center text-white">
           <p id="em-title" className="text-4xl font-bold">{t.emergencyTitle}</p>
           <p className="text-3xl font-bold">{t.emergencyCall}</p>
           <a href="tel:911" className="inline-flex min-h-24 items-center gap-4 rounded-full bg-white px-10 text-4xl font-bold text-danger">
