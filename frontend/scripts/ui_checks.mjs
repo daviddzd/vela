@@ -118,6 +118,35 @@ for (const user of ["coordinacion.b", "coordinacion.c", "coordinacion.d", "coord
   await ctx.close();
 }
 
+// 14. Voice emergency screens on a small phone (390 x 844): the title and the close button can always be reached.
+// The voice API answer is faked with page.route, so no note is created; nothing here clicks a tel: link.
+{
+  const { ctx, page } = await session("fam-0001", { viewport: { width: 390, height: 844 } });
+  const answers = {
+    amber: { level: "emergency", emergency_source: "classifier", transcript: "prueba", ask_repeat: false, needs_human_review: true, support_line: null },
+    red: { level: "emergency", emergency_source: "rule", transcript: "prueba", ask_repeat: false, needs_human_review: true,
+      support_line: { name: "Línea de la Vida", phone: "800 911 2000", tel: "8009112000" } },
+  };
+  for (const [kind, answer] of Object.entries(answers)) {
+    await page.unroute("**/api/voice/text");
+    let sent = 0;
+    await page.route("**/api/voice/text", (r) => { sent++; r.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(answer) }); });
+    await page.goto(`${BASE}/voz`); await page.waitForTimeout(1500);
+    await page.getByRole("button", { name: "Escribir el mensaje" }).click();
+    await page.getByLabel("Escribe lo que pasa").fill("prueba");
+    await page.getByRole("button", { name: "Enviar mensaje" }).click();
+    const dialog = page.getByRole("alertdialog");
+    await dialog.waitFor({ timeout: 10000 }); await page.waitForTimeout(500);
+    const title = await dialog.locator("[id$='-title']").boundingBox();
+    check(`aviso ${kind} en celular: el título se ve completo arriba`, sent === 1 && title && title.y >= 0 && title.y + title.height <= 844, JSON.stringify(title));
+    await dialog.evaluate((d) => { d.scrollTop = d.scrollHeight; }); await page.waitForTimeout(300);
+    const close = await dialog.getByRole("button", { name: "Cerrar este aviso" }).boundingBox();
+    check(`aviso ${kind} en celular: «Cerrar este aviso» se alcanza`, close && close.y >= 0 && close.y + close.height <= 844, JSON.stringify(close));
+    await dialog.getByRole("button", { name: "Cerrar este aviso" }).click();
+  }
+  await ctx.close();
+}
+
 // 13. Texts: no jargon, no a.m./p.m., dates dd/mm/aaaa, map controls in Spanish (all screens of each role)
 for (const user of ["owner", "coordinacion.a", "cui-001", "cui-003", "fam-0001"]) {
   const { ctx, page, errors } = await session(user);
