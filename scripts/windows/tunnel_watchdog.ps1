@@ -13,6 +13,7 @@ param([switch]$Restart, [string]$PublicUrl = "https://enlaza.zenthinks.com")
 $logDir = Join-Path $env:LOCALAPPDATA "Enlaza"
 New-Item -ItemType Directory -Force -Path $logDir | Out-Null
 $log = Join-Path $logDir "tunel.log"
+$stamp = Join-Path $logDir "ultimo_reinicio.txt"   # when this script last restarted the tunnel
 function Say([string]$msg) {
     $line = "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') $msg"
     $old = @(Get-Content $log -ErrorAction SilentlyContinue | Select-Object -Last 299)
@@ -32,6 +33,11 @@ function PublicStatus {
 
 $why = $null
 if ($Restart) {
+    # Windows logs "network connected" more than once per change (seen: two events 5 s apart). If this script
+    # restarted cloudflared less than 30 s ago it is already reconnecting on the new network: a second restart only
+    # adds a blip. (A normal user cannot read the start time of the SYSTEM process, hence the file.)
+    $last = Get-Item $stamp -ErrorAction SilentlyContinue
+    if ($last -and ((Get-Date) - $last.LastWriteTime).TotalSeconds -lt 30) { exit 0 }
     $why = "cambió la red o despertó la laptop"
 } else {
     $n = ReadyConnections
@@ -41,6 +47,7 @@ if ($Restart) {
 if (-not $why) { exit 0 }   # connected: nothing to do, nothing to log
 
 try {
+    Set-Content -Path $stamp -Value (Get-Date -Format o)
     Restart-Service cloudflared -ErrorAction Stop
 } catch {
     Say "NO se pudo reiniciar ($why): $($_.Exception.Message). Falta correr configure_tunnel_service.ps1 como administrador."

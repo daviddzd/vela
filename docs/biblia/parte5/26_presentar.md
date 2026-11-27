@@ -33,7 +33,7 @@ Todo arranca solo al iniciar sesión en Windows:
 | Pieza | Cómo arranca |
 |---|---|
 | Túnel | servicio de Windows `cloudflared` (automático, desde que prende la laptop), con `--protocol http2` para que funcione también en el hotspot de un celular |
-| Reconexión del túnel | tareas «Enlaza - túnel»: al cambiar de red o al despertar la laptop reinician el túnel; cada 2 min revisan que esté conectado con Cloudflare y, si no, lo reinician. Vuelve solo en menos de un minuto |
+| Reconexión del túnel | tareas «Enlaza - túnel»: al cambiar de red o al despertar la laptop reinician el túnel; cada 2 min revisan que esté conectado con Cloudflare y, si no, lo reinician. Vuelve solo en menos de un minuto (prueba del 26 nov 2026: de wifi a hotspot volvió en 9 s, de regreso en 7 s) |
 | Docker Desktop | «Start Docker Desktop when you sign in» |
 | Contenedores | `restart: unless-stopped` y la tarea «Enlaza - arranque» (`scripts/autostart.sh`), que repara los que Docker levantó antes de que Ubuntu estuviera listo |
 | Ollama | acceso directo en la carpeta Inicio de Windows |
