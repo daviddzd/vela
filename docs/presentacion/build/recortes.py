@@ -41,6 +41,8 @@ CROPS = {
     "c15_completo": ("P15_negocio_tarjeta_07.png", (0, 0, 3732, 3069)),
     "c16_bitacora": ("P16_privacidad_tabla.png", (115, 307, 3706, 614)),
     "c17_ambar": ("C17_voz_ambar.png", (38, 38, 1089, 1975)),
+    # two zones of the same report card stacked into one image (rules on top, "no es diagnóstico" below)
+    "c11_medica": ("P11_reportes_voz_tarjeta_01.png", [(0, 0, 1839, 1310), (0, 2075, 1839, 2230)]),
 }
 
 
@@ -51,10 +53,24 @@ def main() -> None:
         if not src.exists():
             raise SystemExit(f"ERROR: falta la captura {src} (scripts/build_presentacion_capturas.sh --capturas)")
         im = Image.open(src).convert("RGB")
-        if box:
-            if box[2] > im.width or box[3] > im.height:
-                raise SystemExit(f"ERROR: el recorte {name} {box} sale de {file} ({im.width} x {im.height})")
-            im = im.crop(box)
+        boxes = box if isinstance(box, list) else [box] if box else []
+        for b in boxes:
+            if b[2] > im.width or b[3] > im.height:
+                raise SystemExit(f"ERROR: el recorte {name} {b} sale de {file} ({im.width} x {im.height})")
+        if len(boxes) == 1:
+            im = im.crop(boxes[0])
+        elif boxes:                       # stacked zones, with a thin grey line between them
+            parts = [im.crop(b) for b in boxes]
+            gap = 20
+            out = Image.new("RGB", (max(p.width for p in parts), sum(p.height for p in parts) + gap * (len(parts) - 1)), "white")
+            y = 0
+            for i, part in enumerate(parts):
+                out.paste(part, (0, y))
+                y += part.height
+                if i < len(parts) - 1:
+                    out.paste((213, 227, 234), (0, y + gap // 2 - 2, out.width, y + gap // 2 + 2))
+                    y += gap
+            im = out
         if im.width < MIN_W:
             k = MIN_W / im.width
             im = im.resize((MIN_W, round(im.height * k)), Image.LANCZOS)

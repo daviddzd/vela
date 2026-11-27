@@ -227,162 +227,107 @@ function limitCard(s, t, x, y, w, h) {    // the honest limitation of each subje
   source(s, "INEGI (Censo 2020, ENASEM 2024) · ENSANUT 2018-19: 2 o más de 7 condiciones crónicas, 60 años y más");
 }
 
-// ======================================================================= 3. La solución
+// ======================================================================= 3. La solución y cómo funciona
 {
   const s = slide("CONTENIDO");
-  title(s, ["Enlaza: ", ["una sola plataforma"], " para todo el cuidado"]);
-  text(s, "Asigna sola cada visita, deja lo delicado a una persona y avisa a tiempo de una emergencia.",
-    { x: M, y: 1.4, w: W - 2 * M, h: 0.9, fontSize: 28, color: C.ink });
-  const mods = [["clipboard-list", "Operación y tablero en vivo", "SIE"], ["chart-spline", "SIRAG-D · simulación", "Modelado y Simulación"],
-    ["mic", "Enlaza Voz", "Cómputo Cognitivo"], ["chart-column", "Panorama-AM · tableros", "Visualización"],
-    ["briefcase", "Modelo de negocio", "Emprendimiento"], ["shield-check", "Consentimientos y ética", "Práctica Profesional"]];
-  const cw = (W - 2 * M - 0.3) / 2, ch = 1.22;
-  mods.forEach(([ic, mod, subject], i) => {
-    const x = M + (i % 2) * (cw + 0.3), y = 2.6 + Math.floor(i / 2) * (ch + 0.2);
-    card(s, x, y, cw, ch, C.skySoft, `Módulo ${mod}`);
-    iconCircle(s, x + 0.25, y + (ch - 0.85) / 2, 0.85, ic);
-    s.addText([{ text: mod, options: { bold: true, color: C.ink, breakLine: true } }, { text: subject, options: { color: C.tealText } }],
-      { isTextBox: true, x: x + 1.35, y: y + 0.12, w: cw - 1.5, h: ch - 0.24, fontFace: BODY, fontSize: 24, margin: 0, valign: "middle" });
+  title(s, ["Una sola plataforma, ", ["por dentro"]]);
+  // the six modules in one compact row (short names; each subject has its own slide, 8 to 13)
+  const mods = [["clipboard-list", "SIE"], ["chart-spline", "Simulación"], ["mic", "Voz"], ["chart-column", "Tableros"],
+    ["briefcase", "Negocio"], ["shield-check", "Ética"]];
+  const gap = 0.12, cw = (W - 2 * M - 5 * gap) / 6;
+  mods.forEach(([ic, label], i) => {
+    const x = M + i * (cw + gap);
+    card(s, x, 1.45, cw, 1.45, C.skySoft, `Módulo ${label}`);
+    iconCircle(s, x + (cw - 0.7) / 2, 1.53, 0.7, ic);
+    text(s, label, { x: x + 0.05, y: 2.28, w: cw - 0.1, h: 0.5, bold: true, align: "center", valign: "middle" });
   });
-}
-
-// ======================================================================= 4. Cómo funciona por dentro
-{
-  const s = slide("CONTENIDO");
-  title(s, ["Cómo funciona ", ["por dentro"]]);
   // two lanes (visits, voice) of four boxes joined by arrows, and the database underneath
   const lane = (y, label, boxes, fills) => {
-    text(s, label, { x: M, y, w: 1.55, h: 1.6, bold: true, color: C.tealText, valign: "middle", objectName: `Carril ${label}` });
-    const x0 = M + 1.6, gap = 0.4, bw = (W - M - x0 - gap * (boxes.length - 1)) / boxes.length;
+    text(s, label, { x: M, y, w: 1.55, h: 1.3, bold: true, color: C.tealText, valign: "middle", objectName: `Carril ${label}` });
+    const x0 = M + 1.6, g = 0.4, bw = (W - M - x0 - g * (boxes.length - 1)) / boxes.length;
     boxes.forEach((t, i) => {
-      const x = x0 + i * (bw + gap);
-      card(s, x, y, bw, 1.6, fills[i], `Paso ${label} ${i + 1}`);
-      text(s, t, { x: x + 0.12, y: y + 0.08, w: bw - 0.24, h: 1.44, align: "center", valign: "middle" });
+      const x = x0 + i * (bw + g);
+      card(s, x, y, bw, 1.3, fills[i], `Paso ${label} ${i + 1}`);
+      text(s, t, { x: x + 0.1, y: y + 0.05, w: bw - 0.2, h: 1.2, align: "center", valign: "middle" });
       if (i < boxes.length - 1) {
-        s.addShape(pres.shapes.RIGHT_ARROW, { x: x + bw + 0.06, y: y + 0.62, w: gap - 0.12, h: 0.36, fill: { color: C.navy },
+        s.addShape(pres.shapes.RIGHT_ARROW, { x: x + bw + 0.06, y: y + 0.47, w: g - 0.12, h: 0.36, fill: { color: C.navy },
           line: { color: C.navy }, objectName: "Flecha" });
       }
     });
   };
-  lane(1.45, "Visitas", ["Llega una solicitud", "Se elige quién va", "Lo delicado lo aprueba una persona", "Tablero en vivo"],
+  lane(3.1, "Visitas", ["Llega una solicitud", "Se elige quién va", "Lo delicado lo aprueba una persona", "Tablero en vivo"],
     [C.sky, C.sky, C.warnSoft, C.tealSoft]);
-  lane(3.25, "Voz", ["Nota de voz o escrita", "Primero, reglas", "Luego, el clasificador", "Resumen sin diagnóstico"],
+  lane(4.55, "Voz", ["Nota de voz o escrita", "Primero, reglas", "Luego, el clasificador", "Resumen sin diagnóstico"],
     [C.sky, C.dangerSoft, C.warnSoft, C.tealSoft]);
-  card(s, M, 5.1, W - 2 * M, 1.6, C.skySoft, "Datos");
-  iconCircle(s, M + 0.3, 5.45, 0.9, "database");
-  text(s, [{ text: "Una sola base de datos con seguridad por fila: ", options: { bold: true } },
-    { text: "cada institución ve solo lo suyo, la API pide el consentimiento y la bitácora registra todo." }],
-  { x: M + 1.45, y: 5.15, w: W - 2 * M - 1.75, h: 1.5, valign: "middle" });
-  source(s, "config/simulation.yaml · config/emergency_rules.yaml · database/sql/004_row_level_security.sql");
+  card(s, M, 6.0, W - 2 * M, 0.75, C.skySoft, "Datos");
+  iconCircle(s, M + 0.15, 6.05, 0.65, "database");
+  text(s, [{ text: "Una sola base de datos: ", options: { bold: true } }, { text: "cada institución ve solo lo suyo." }],
+    { x: M + 1.0, y: 6.0, w: W - 2 * M - 1.2, h: 0.75, valign: "middle" });
 }
 
-// ======================================================================= 5. Paso 1 · La familia pide
+// ======================================================================= 4. Paso 1 · La familia pide y se asigna sola
 {
   const s = slide("CONTENIDO", "La app en capturas");
-  title(s, ["La familia pide ", ["para hoy"]]);
+  title(s, ["La familia pide ", ["y se asigna sola"]]);
   stepTag(s, "Paso 1 de 4");
-  const a = shot(s, "c01_solicitud", "Formulario de la familia en el celular: fecha de hoy, hora y Solicitar servicio", M, 1.45, 4.0, 5.25,
-    [[1, 0.93, 0.23], [2, 0.5, 0.61], [3, 0.93, 0.87]]);
-  shot(s, "c02_asignada", "Respuesta en el celular de la familia: visita de enfermería asignada y quién va", a.x + a.w + 0.35, 1.45, 4.0, 5.25,
-    [[4, 0.53, 0.66], [5, 0.93, 0.9]]);
-  legend(s, [[1, "Fecha de hoy"], [2, "En un par de horas"], [3, "Un solo botón"], [4, "Ya dice «Asignada»"], [5, "Y quién va"]],
-    9.25, 1.5, W - M - 9.25, 1.0);
-  source(s, "capturas de la app en vivo, vista de celular, cuenta de familia · datos sintéticos");
+  shot(s, "c02_asignada", "Celular de la familia: visita de enfermería para hoy, asignada, y quién va", M, 1.45, 5.0, 2.5,
+    [[1, 0.53, 0.66], [2, 0.93, 0.9]]);
+  legend(s, [[1, "Pidió para hoy: ya dice «Asignada»"], [2, "Y quién va"],
+    [3, "En el tablero: Víctor Chávez, marcada «Nueva»"]], 6.0, 1.5, W - M - 6.0, 0.85);
+  shot(s, "c03_nuevas", "Tablero de coordinación: la visita de Víctor Chávez aparece sola, marcada Nueva, ya asignada",
+    M + 0.75, 4.2, W - 2 * M - 0.75, 2.5, [{ n: 3, side: "left", fy: 0.75, box: [0.0, 0.5, 1.0, 1.0] }]);
+  source(s, "capturas de la app en vivo: celular de la familia y tablero de coordinación · datos sintéticos");
 }
 
-// ======================================================================= 6. Paso 1 · Se asigna sola
-{
-  const s = slide("CONTENIDO");
-  title(s, ["Se asigna ", ["sola"]]);
-  stepTag(s, "Paso 1 de 4");
-  const v27 = fs.existsSync(path.join(CROPS, "v27_llegue.png"));
-  const a = shot(s, "c03_nuevas", "Tablero de coordinación: la visita de Víctor Chávez aparece marcada Nueva, ya asignada a Fernanda Bautista",
-    M + 0.75, 1.45, (v27 ? 8.6 : W - 2 * M) - 1.5, 3.0,
-    [{ n: 1, side: "left", fy: 0.75, box: [0.0, 0.5, 1.0, 1.0] }, { n: 2, side: "right", fy: 0.75 }]);
-  if (v27) {
-    shot(s, "v27_llegue", "Celular del personal de cuidado: una visita asignada con el botón Llegué activo", a.x + a.w + 0.95, 1.45,
-      W - M - (a.x + a.w + 0.95), 5.2, [[3, 0.9, 0.36]]);
-  }
-  legend(s, [[1, "Víctor Chávez: aparece sola, marcada «Nueva»"], [2, "Elegida por habilidad, turno, descanso y tráfico"],
-    ...(v27 ? [[3, "El personal la ve y toca «Llegué»"]] : [])], M, a.y + a.h + 0.35, 8.6, 0.8);
-  source(s, "captura de la app en vivo (tablero) y cuadro del video de la app (escena 2.7, otra visita) · datos sintéticos");
-}
-
-// ======================================================================= 7. Paso 2 · Lo urgente lo decide una persona
+// ======================================================================= 5. Paso 2 · Lo urgente lo decide una persona
 {
   const s = slide("CONTENIDO");
   title(s, ["Lo urgente lo decide ", ["una persona"]]);
   stepTag(s, "Paso 2 de 4");
-  const a = shot(s, "c05_urgente", "Aprobaciones: solicitud urgente de prioridad alta con la persona propuesta y dos alternativas con su tiempo de viaje",
-    M, 1.45, W - 2 * M, 3.4, [[1, 0.89, 0.08], [2, 0.29, 0.55], [3, 0.6, 0.55], [4, 0.33, 0.79]]);
-  legend(s, [[1, `Prioridad alta, visita en menos de ${T("cfg.urgent_within")}`], [2, "Enlaza propone a quien llega antes"]],
-    M, a.y + a.h + 0.25, 6.0, 1.0);
-  legend(s, [[3, "Alternativas, con su tiempo de viaje"], [4, "Coordinación decide"]], 6.9, a.y + a.h + 0.25, W - M - 6.9, 1.0);
-  source(s, "captura de la app en vivo (/aprobaciones), solicitud urgente del panel de demostración · datos sintéticos");
+  shot(s, "c05_urgente", "Aprobaciones: solicitud urgente de prioridad alta con la persona propuesta y dos alternativas con su tiempo de viaje",
+    M, 1.45, W - 2 * M, 2.55, [[1, 0.89, 0.08], [2, 0.3, 0.44], [3, 0.6, 0.44]], "center");
+  legend(s, [[1, `Prioridad alta, visita en menos de ${T("cfg.urgent_within")}`], [2, "Enlaza propone a quien llega antes"],
+    [3, "Alternativas, con su tiempo de viaje"]], M, 4.15, 6.1, 0.86);
+  const x = 6.95, w = W - M - x;
+  card(s, x, 4.15, w, 2.6, C.warnSoft, "Regla de lo urgente");
+  text(s, [{ text: "Solo para lo urgente: ", options: { bold: true } },
+    { text: `sin respuesta en ${T("cfg.auto_apply_after")}, se aplica con aviso.` }],
+  { x: x + 0.25, y: 4.22, w: w - 0.5, h: 1.2 });
+  text(s, "Lo de prioridad alta que no es urgente siempre espera a una persona.", { x: x + 0.25, y: 5.45, w: w - 0.5, h: 1.25,
+    bold: true, color: C.warn });
+  source(s, "captura de la app en vivo (/aprobaciones), solicitud urgente del panel de demostración · config/simulation.yaml");
 }
 
-// ======================================================================= 8. Paso 2 · Aprobada, y la regla del límite
-{
-  const s = slide("CONTENIDO");
-  title(s, ["Aprobada, ", ["en vivo"]]);
-  stepTag(s, "Paso 2 de 4");
-  const a = shot(s, "c06_nuevas", "Tablero de coordinación: la visita urgente de Joaquín Guerrero ya asignada a Fernanda Bautista, marcada Nueva",
-    M + 0.75, 1.45, 6.75, 3.6, [{ n: 1, side: "left", fy: 0.5, box: [0.0, 0.335, 1.0, 0.665] }, [2, 0.37, 0.63]]);
-  legend(s, [[1, "Joaquín Guerrero: aprobada"], [2, "Con quien propuso Enlaza"]], M, a.y + a.h + 0.35, 7.4, 0.8);
-  const x = 8.4, w = W - M - x;
-  card(s, x, 1.45, w, 5.3, C.warnSoft, "Regla de lo urgente");
-  iconCircle(s, x + 0.25, 1.65, 0.85, "timer", C.warn, C.white);
-  text(s, "Solo para lo urgente", { x: x + 1.25, y: 1.65, w: w - 1.4, h: 0.85, bold: true, valign: "middle" });
-  text(s, `Si coordinación no responde en ${T("cfg.auto_apply_after")}, se aplica la propuesta, con aviso y en la bitácora.`,
-    { x: x + 0.3, y: 2.6, w: w - 0.6, h: 1.75 });
-  text(s, "Lo de prioridad alta que no es urgente siempre espera a una persona.", { x: x + 0.3, y: 4.5, w: w - 0.6, h: 2.1, bold: true, color: C.warn });
-  source(s, "captura de la app en vivo (tablero de coordinación) · config/simulation.yaml · datos sintéticos");
-}
-
-// ======================================================================= 9. Paso 3 · Contingencia en el oriente
+// ======================================================================= 6. Paso 3 · Contingencia en el oriente
 {
   const s = slide("CONTENIDO");
   title(s, ["Contingencia en el ", ["oriente"]]);
   stepTag(s, "Paso 3 de 4");
-  const m = shot(s, "c07_mapa", "Mapa de estaciones: Iztapalapa en Fase I por PM2.5, alcaldías vecinas en vigilancia", M, 1.45, 4.1, 3.2,
+  const m = shot(s, "c07_mapa", "Mapa de estaciones: Iztapalapa en Fase I por PM2.5, alcaldías vecinas en vigilancia", M, 1.45, 4.4, 3.5,
     [[1, 0.5, 0.33]]);
-  shot(s, "c08_aprobar", "Botones Aprobar todo, Aprobar selección y Rechazar todo: nada cambia hasta que coordinación aprueba",
-    M, m.y + m.h + 0.2, 4.1, 6.7 - (m.y + m.h + 0.2), [[4, 0.55, 0.14]]);
-  shot(s, "c08_propuesta", "Propuesta de Enlaza: subir la prioridad de dos pacientes sensibles, adelantar una oxigenoterapia y avisar a 16 familias",
-    m.x + m.w + 0.3, 1.45, 4.4, 5.25, [[2, 0.92, 0.205], [3, 0.8, 0.625]]);
+  text(s, "Nada cambia hasta que coordinación aprueba.", { x: M, y: m.y + m.h + 0.2, w: m.w, h: 0.9, bold: true, color: C.deep });
+  const q = shot(s, "c08_propuesta", "Propuesta de Enlaza: subir la prioridad de dos pacientes sensibles, adelantar una oxigenoterapia y avisar a 16 familias",
+    m.x + m.w + 0.85, 1.45, 3.6, 5.25, [{ n: 2, side: "left", fy: 0.19 }, { n: 3, side: "left", fy: 0.64 }]);
   legend(s, [[1, "Fase I por estación, no promediada"], [2, "Subir la prioridad de los sensibles"],
-    [3, "Adelantar la oxigenoterapia próxima"], [4, "Nada cambia sin aprobación"]], 9.65, 1.5, W - M - 9.65, 1.3);
+    [3, "Adelantar la oxigenoterapia próxima"]], q.x + q.w + 0.2, 1.5, W - M - (q.x + q.w + 0.2), 1.4);
   source(s, "captura de la app en vivo (/contingencia), escenario de demostración «Contingencia en el oriente» · datos sintéticos");
 }
 
-// ======================================================================= 10. Paso 4 · Nota de emergencia escrita
+// ======================================================================= 7. Paso 4 · Nota de emergencia y lo que recibe la médica
 {
   const s = slide("CONTENIDO");
-  title(s, ["Una nota de ", ["emergencia"]]);
+  title(s, ["Emergencia: ", ["rojo y reporte"]]);
   stepTag(s, "Paso 4 de 4");
-  const a = shot(s, "c09_escrita", "Asistente de voz en el celular: la familia escribe Mi mamá no puede respirar y tiene los labios morados",
-    M, 1.45, 3.8, 5.25, [{ n: 1, side: "right", fy: 0.25 }, { n: 2, side: "right", fy: 0.85 }]);
-  shot(s, "c10_roja", "Pantalla roja a pantalla completa: Esto puede ser una emergencia. Llama al 911 ahora", a.x + a.w + 0.85, 1.45, 2.9, 5.25,
-    [{ n: 3, side: "right", fy: 0.2 }, { n: 4, side: "right", fy: 0.9 }]);
-  legend(s, [[1, "Lo escribe la familia"], [2, "Enviar mensaje"], [3, "«Llama al 911 ahora», antes que la IA"],
-    [4, "Coordinación ya está avisada"]], 9.45, 1.5, W - M - 9.45, 1.25);
-  source(s, "capturas de la app en vivo, vista de celular, cuenta de familia · datos sintéticos");
+  const a = shot(s, "c10_roja", "Pantalla roja a pantalla completa: Esto puede ser una emergencia. Llama al 911 ahora", M, 1.45, 3.1, 3.95,
+    [{ n: 1, side: "right", fy: 0.3 }]);
+  shot(s, "c11_medica", "Reporte de voz para la médica: transcripción, regla que se activó, resumen y la limitación: no es diagnóstico",
+    a.x + a.w + 0.85, 1.45, W - M - (a.x + a.w + 0.85), 3.95, [[2, 0.9, 0.415], [3, 0.9, 0.975]]);
+  const cols = [[1, "«Llama al 911», antes que la IA"], [2, "La médica ve la regla que se activó"], [3, "«No es diagnóstico»"]];
+  cols.forEach(([n, t], i) => legend(s, [[n, t]], M + i * 4.1, 5.6, 3.95, 1.1));
+  source(s, "capturas de la app en vivo: celular de la familia y /reportes-voz de la médica · datos sintéticos");
 }
 
-// ======================================================================= 11. Paso 4 · Lo que recibe la médica
-{
-  const s = slide("CONTENIDO");
-  title(s, ["Lo que recibe ", ["la médica"]]);
-  stepTag(s, "Paso 4 de 4");
-  const a = shot(s, "c11_reporte", "Reporte de voz para la médica: transcripción, regla que se activó, confianza del clasificador y resumen",
-    M, 1.45, 6.6, 4.6, [[1, 0.95, 0.26], [2, 0.95, 0.41], [3, 0.95, 0.85]]);
-  shot(s, "c11_limite", "Limitaciones del reporte: transcripción automática; no es diagnóstico", M, a.y + a.h + 0.08, a.w, 0.7, [[4, 0.95, 0.5]]);
-  legend(s, [[1, "Transcripción textual"], [2, "La regla que se activó"], [3, "Un resumen de lo que se dijo"], [4, "«No es diagnóstico»"]],
-    7.75, 1.5, W - M - 7.75, 1.15);
-  source(s, "captura de la app en vivo (/reportes-voz), cuenta de médica · resumen del modelo de lenguaje local · datos sintéticos");
-}
-
-// ======================================================================= 12. SIE
+// ======================================================================= 8. SIE
 {
   const s = slide("CONTENIDO", "Las seis materias");
   title(s, ["SIE: la operación ", ["en un solo lugar"]]);
@@ -401,7 +346,7 @@ function limitCard(s, t, x, y, w, h) {    // the honest limitation of each subje
   source(s, `captura de la app en vivo (/personal, INS-B) · historial sintético de ${T("seed.history_days")} días (database/seed/)`);
 }
 
-// ======================================================================= 13. Modelado y Simulación
+// ======================================================================= 9. Modelado y Simulación
 {
   const s = slide("CONTENIDO");
   title(s, ["La simulación nos dijo ", ["cómo asignar"]]);
@@ -425,7 +370,7 @@ function limitCard(s, t, x, y, w, h) {    // the honest limitation of each subje
   source(s, `SIRAG-D · ${T("sim.runs_main")} corridas, ${T("cfg.replications")} réplicas · Friedman y Wilcoxon con Holm · captura de /simulacion`);
 }
 
-// ======================================================================= 14. Visualización
+// ======================================================================= 10. Visualización
 {
   const s = slide("CONTENIDO");
   title(s, ["Panorama-AM: ", ["ver para decidir"]]);
@@ -439,7 +384,7 @@ function limitCard(s, t, x, y, w, h) {    // the honest limitation of each subje
   source(s, "captura de la app en vivo (/panorama, Dirección) · personas calibradas con Censo 2020, ENSANUT y ENASEM");
 }
 
-// ======================================================================= 15. Cómputo Cognitivo
+// ======================================================================= 11. Cómputo Cognitivo
 {
   const s = slide("CONTENIDO");
   title(s, ["Enlaza Voz: ", ["dos niveles"], " de aviso"]);
@@ -456,29 +401,34 @@ function limitCard(s, t, x, y, w, h) {    // the honest limitation of each subje
   source(s, `evaluación a ciegas (holdout) con ${T("voz.holdout.n")} frases que el modelo no vio · capturas de la app en celular`);
 }
 
-// ======================================================================= 16. Emprendimiento
+// ======================================================================= 12. Emprendimiento
 {
   const s = slide("CONTENIDO");
   title(s, ["Un negocio viable, ", ["con su condición"]]);
-  const a = shot(s, "c15_escenarios", "Modelo de negocio: base, conservador y recomendado lado a lado; el recomendado tiene VPN positivo",
-    M, 1.45, W - 2 * M, 2.2, [[1, 0.585, 0.94], [2, 0.147, 0.94]], "center");
-  // the legend stacked over the full width, so no number sits above one tile of the recommended scenario
-  legend(s, [[1, "Escenario recomendado: VPN positivo"], [2, "Escenario base: VPN negativo, lo decimos"]], M, 3.78, W - 2 * M, 0.56);
-  const tiles = [[T("bm.sc.recommended.investment"), "inversión"], [T("bm.sc.recommended.npv25"), `VPN al ${T("bm.rate_25")}`],
-    [T("bm.sc.recommended.tir"), "TIR anual"]];
-  const tw = (W - 2 * M - 2 * 0.25) / 3, ty = 4.98;
-  tiles.forEach(([big, label], i) => {
-    const x = M + i * (tw + 0.25);
-    card(s, x, ty, tw, 0.98, C.sky, `Cifra ${label}`);
-    text(s, big, { x: x + 0.2, y: ty + 0.02, w: tw - 0.4, h: 0.52, fontFace: HEAD, fontSize: 28, bold: true, color: C.deep, valign: "middle" });
-    text(s, label, { x: x + 0.2, y: ty + 0.53, w: tw - 0.4, h: 0.42, valign: "middle" });
+  shot(s, "c15_escenarios", "Modelo de negocio: base, conservador y recomendado lado a lado", M, 1.45, W - 2 * M, 1.55, [], "center");
+  // what is pointed at: the big tiles (recommended and base) and the condition, not the table
+  const tiles = [[T("bm.sc.recommended.investment"), "inversión · recomendado", C.sky, C.deep, 0],
+    [T("bm.sc.recommended.npv25"), `VPN al ${T("bm.rate_25")} · recomendado`, C.tealSoft, C.tealText, 1],
+    [T("bm.sc.recommended.tir"), "TIR anual · recomendado", C.sky, C.deep, 0],
+    [T("bm.sc.base.npv25"), `VPN al ${T("bm.rate_25")} · escenario base`, C.dangerSoft, C.danger, 2]];
+  const gap = 0.25, tw = (W - 2 * M - 3 * gap) / 4, ty = 3.78;
+  tiles.forEach(([big, label, fill, color, n], i) => {
+    const x = M + i * (tw + gap);
+    card(s, x, ty, tw, 1.55, fill, `Cifra ${label}`);
+    text(s, big, { x: x + 0.2, y: ty + 0.1, w: tw - 0.4, h: 0.6, fontFace: HEAD, fontSize: 28, bold: true, color, valign: "middle" });
+    text(s, label, { x: x + 0.2, y: ty + 0.72, w: tw - 0.4, h: 0.78 });
+    if (n) numberDot(s, n, x + tw - DOT - 0.08, ty - DOT - 0.04, `Llamada ${n}`);
   });
-  limitCard(s, `supone plan Gobierno y fundadores al ${T("neg.founder_salary_year1_recommended")} % el año 1; sin ambos, VPN ${T("bm.rec_wo_both")}.`,
-    M, 6.06, W - 2 * M, 0.72);
+  card(s, M, 5.48, W - 2 * M, 1.25, C.warnSoft, "Condición del escenario");
+  iconCircle(s, M + 0.2, 5.7, 0.8, "triangle-alert", C.warn, C.white);
+  text(s, [{ text: "Condición: ", options: { bold: true } },
+    { text: `supone plan Gobierno y fundadores al ${T("neg.founder_salary_year1_recommended")} % el año 1; sin ambos, VPN ${T("bm.rec_wo_both")}.` }],
+  { x: M + 1.2, y: 5.5, w: W - 2 * M - 2.1, h: 1.2, valign: "middle" });
+  numberDot(s, 3, W - M - DOT - 0.15, 5.48 + (1.25 - DOT) / 2, "Llamada 3");
   source(s, "captura de la app en vivo (/negocio) · data/business/assumptions.csv");
 }
 
-// ======================================================================= 17. Práctica Profesional
+// ======================================================================= 13. Práctica Profesional
 {
   const s = slide("CONTENIDO");
   title(s, ["Privacidad y ética ", ["desde la base de datos"]]);
@@ -502,36 +452,18 @@ function limitCard(s, t, x, y, w, h) {    // the honest limitation of each subje
   source(s, `captura de la app en vivo (/privacidad, Dirección) · PostgreSQL como vela_api · ${T("repo.tests_summary")}`);
 }
 
-// ======================================================================= 18. Cierre
-{
-  const s = slide("OSCURO", "Cierre");
-  text(s, "Lo que logramos y lo que sigue", { x: M, y: 0.5, w: W - 2 * M, h: 0.9, fontFace: HEAD, fontSize: 36, bold: true, color: C.white });
-  const cols = [["circle-check", "Logramos", ["Seis materias en una sola app", "La simulación cambió el producto", T("repo.tests_summary")]],
-    ["triangle-alert", "Límites honestos", ["Datos sintéticos", `${T("voz.holdout.fa100")} falsas alarmas por 100 notas`, "Falta una institución real"]],
-    ["arrow-right", "Siguientes pasos", ["Piloto con una residencia", "Voz con hablantes reales", "Diagnóstico de campo"]]];
-  const cw = (W - 2 * M - 2 * 0.3) / 3;
-  cols.forEach(([ic, head, items], i) => {
-    const x = M + i * (cw + 0.3);
-    card(s, x, 1.55, cw, 4.9, C.navy, head);
-    iconCircle(s, x + 0.3, 1.85, 0.8, ic, C.deep, "BFE7E7");
-    text(s, head, { x: x + 1.25, y: 1.85, w: cw - 1.45, h: 0.8, bold: true, color: C.white, valign: "middle" });
-    s.addText(items.map((t, j) => ({ text: t, options: { bullet: { indent: 18 }, breakLine: j < items.length - 1 } })),
-      { isTextBox: true, x: x + 0.3, y: 2.8, w: cw - 0.5, h: 3.05, fontFace: BODY, fontSize: 24, color: C.white, margin: 0,
-        valign: "top", paraSpaceAfter: 8 });
-  });
-}
-
-// ======================================================================= 19. Gracias (stays on screen during the questions)
+// ======================================================================= 14. Gracias (stays on screen during the questions)
 {
   const s = slide("OSCURO", "Preguntas");
   image(s, LOGO_WHITE, M, 0.6, 3.8, "Enlaza · cuidado coordinado");
-  text(s, "Gracias", { x: M, y: 2.0, w: 7.8, h: 1.5, fontFace: HEAD, fontSize: 80, bold: true, color: C.white });
-  text(s, "¿Preguntas?", { x: M, y: 3.6, w: 7.8, h: 0.9, fontFace: HEAD, fontSize: 40, bold: true, color: "7FD3D3" });
+  text(s, "Gracias", { x: M, y: 1.85, w: 7.8, h: 1.4, fontFace: HEAD, fontSize: 80, bold: true, color: C.white });
+  text(s, "¿Preguntas?", { x: M, y: 3.25, w: 7.8, h: 0.85, fontFace: HEAD, fontSize: 40, bold: true, color: "7FD3D3" });
+  text(s, "Siguiente paso: piloto con una residencia real", { x: M, y: 4.3, w: 7.9, h: 0.9, color: C.white });
   qrCard(s, "La app sigue en vivo");
   namesBand(s);
 }
 
-// ======================================================================= 20. Respaldo · Mercado (DENUE)
+// ======================================================================= 15. Respaldo · Mercado (DENUE)
 {
   const s = slide("CONTENIDO", "Respaldo (no se presenta)");
   title(s, ["Respaldo: un mercado contado en el ", ["DENUE"]]);
@@ -554,7 +486,7 @@ function limitCard(s, t, x, y, w, h) {    // the honest limitation of each subje
   source(s, "INEGI, DENUE, sector 62 (mayo 2026) · data/business/assumptions.csv (lo mismo que /negocio)");
 }
 
-// ======================================================================= 21. Respaldo · Escenarios
+// ======================================================================= 16. Respaldo · Escenarios
 {
   const s = slide("CONTENIDO");
   title(s, ["Respaldo: los tres ", ["escenarios"]]);
@@ -563,7 +495,7 @@ function limitCard(s, t, x, y, w, h) {    // the honest limitation of each subje
   source(s, "captura de la app en vivo (/negocio) · data/business/assumptions.csv");
 }
 
-// ======================================================================= 22. Respaldo · Las cinco políticas (20.1 y 20.2)
+// ======================================================================= 17. Respaldo · Las cinco políticas (20.1 y 20.2)
 const ERRBARS = [];
 {
   const s = slide("CONTENIDO");

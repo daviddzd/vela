@@ -52,5 +52,5 @@ bash scripts/build_presentacion_capturas.sh --capturas-dia  # antes: capturas de
 - Guardia (`build/guardia.cjs`, probado por `build/test_guardia.cjs` antes de capturar): nunca hace clic en «Llamar al 911»,
   «800 911 2000», enlaces `tel:`, «Mostrar contraseña» ni «Usuarios de prueba», y se detiene si la contraseña se vería. Inicia
   sesión por la API. `reset_demo.py` antes y después; no correrlo mientras alguien grabe o ensaye con la app.
-- El guion debe durar entre 9:30 y 10:00 y no pedir más de 2.6 palabras por segundo; si no, el build se detiene.
+- El guion debe durar entre 9:30 y 9:45 y no pedir más de 2.6 palabras por segundo; si no, el build se detiene.
 - Misma verificación que la otra versión: `out_capturas/verificacion.md` e imágenes en `out_capturas/diapositivas/`.

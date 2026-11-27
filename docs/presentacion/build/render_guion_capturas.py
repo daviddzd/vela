@@ -4,7 +4,7 @@
 
 The script of the version WITHOUT live demo. It reuses fill() and parts() of render_guion.py (the live-demo version,
 unchanged) and adds:
-- the total must be between 9:30 and 10:00, otherwise the build stops;
+- the total must be between 9:30 and 9:45, otherwise the build stops;
 - a cumulative stopwatch: every slide gets «Cronómetro: start → end»; {{ crono_dN }} is the time at the end of slide N;
 - no slide may ask for more than 2.6 spoken words per second (what is in parentheses is an action and is not counted);
 - {{ reparto }} becomes the table of who speaks how long.
@@ -25,7 +25,7 @@ import render_guion as rg  # noqa: E402  (fill, parts, mmss, secs and the number
 
 PRES = rg.PRES
 OUT = PRES / "out_capturas"
-MIN_TOTAL, MAX_TOTAL = 9 * 60 + 30, 10 * 60
+MIN_TOTAL, MAX_TOTAL = 9 * 60 + 30, 9 * 60 + 45
 MAX_WPS = 2.6
 
 
@@ -57,8 +57,8 @@ def main() -> None:
         sys.exit("ERROR: " + "; ".join(problems))
 
     rows = ["| Parte | Diapositivas | Tiempo | Cronómetro al terminar |", "|---|---|---|---|"]
-    blocks = [("Problema, solución y cómo funciona", 1, 4), ("La app en capturas: los cuatro pasos", 5, 11),
-              ("Las seis materias", 12, 17), ("Cierre y gracias", 18, 19)]
+    blocks = [("Problema, solución y cómo funciona", 1, 3), ("La app en capturas: los cuatro pasos", 4, 7),
+              ("Las seis materias", 8, 13), ("Gracias y siguiente paso", 14, 14)]
     for name, a, b in blocks:
         ids = [f"d{i}" for i in range(a, b + 1)]
         rows.append(f"| {name} | {a}–{b} | {rg.mmss(sum(p['secs'] for p in slides if p['id'] in ids))} | {rg.mmss(clock[ids[-1]][1])} |")
