@@ -75,6 +75,7 @@ Las frases son **sugeridas**: dichas con sus palabras suenan mejor que memorizad
 
 - Desde el celular, con datos móviles, la familia pide una visita de enfermería para hoy, en un par de horas.
 - Fíjense en el tablero: aparece sola, sin recargar, en un par de segundos.
+- (Señala la fila por el nombre del paciente; puede haber otras marcadas «Nueva» por el plan de cuidado.)
 - Ya tiene a alguien asignado: el despachador eligió a quien tiene la habilidad, está en turno, no está en su día de descanso y llega antes con el tráfico de esa hora.
 - Es prioridad media, así que no necesitó aprobación.
 
@@ -86,6 +87,7 @@ Las frases son **sugeridas**: dichas con sus palabras suenan mejor que memorizad
 - Ahora una solicitud urgente: prioridad alta, visita en menos de {{ cfg.urgent_within }}.
 - Lo urgente no se asigna solo: Enlaza propone a la mejor persona y coordinación decide. Aquí está, en Aprobaciones.
 - Apruebo, y en el tablero cambia en vivo.
+- (Señala la fila por el nombre del paciente; puede haber otras marcadas «Nueva» por el plan de cuidado.)
 - Si coordinación no contesta en {{ cfg.auto_apply_after }}, se aplica con aviso; eso lo decidimos por lo que nos mostró la simulación, se los cuento en un momento.
 
 #### 3:45–5:05 · Paso 3 · Contingencia en el oriente
@@ -202,7 +204,7 @@ perfiles o navegadores distintos.
 
 | Paso | Qué se hace | Qué se debe ver | Plan B |
 |---|---|---|---|
-| 1. La familia solicita | Celular: «Solicitar servicio», visita de enfermería, para hoy, en un par de horas (la fecha de hoy y la primera hora disponible unas dos horas después de la hora actual) | En el tablero del proyector aparece la solicitud, ya asignada y marcada «Nueva», sin recargar | Sin señal en el celular: Persona 2 lo hace en la ventana «Respaldo». Si el tablero no se mueve: recargar (F5) |
+| 1. La familia solicita | Celular: «Solicitar servicio», visita de enfermería, para hoy, en un par de horas (la fecha de hoy y la primera hora disponible unas dos horas después de la hora actual) | En el tablero del proyector aparece la solicitud, ya asignada y marcada «Nueva», sin recargar. Se señala por el nombre del paciente: puede haber otras marcadas «Nueva» por el plan de cuidado | Sin señal en el celular: Persona 2 lo hace en la ventana «Respaldo». Si el tablero no se mueve: recargar (F5) |
 | 2. Urgente | Ventana Dirección: «Contingencia en el oriente» (para el paso 3) y «Crear solicitud urgente» → Coordinación `/aprobaciones` → «Aprobar» → `/tablero` | La solicitud pasa de Aprobaciones al tablero, en vivo | Si no aparece en Aprobaciones: recargar. Si se pasa de {{ cfg.auto_apply_after }}, sale «aprobada por tiempo»: se explica que esa es la regla |
 | 3. Contingencia | Coordinación `/contingencia` → «Aprobar todo» → `/tablero`; después, Dirección `/demo` → «Volver a normal» | Propuesta por institución; tras aprobar, los cambios en el tablero | Si aún no hay propuesta (el worker revisa cada minuto): seguir con el paso 4 y volver al final; si no llega, diapositiva 12 (Respaldo). Siempre «Volver a normal» al terminar |
 | 4. Voz | Ventana Familia `/voz`: grabar «Mi mamá no puede respirar y tiene los labios morados.» | Pantalla roja «Llama al 911 ahora» | Micrófono falla: «Escribir el mensaje» y pegar la misma frase. Servicio de voz caído: también escrito |
